@@ -8,6 +8,8 @@ Qopnet Platform (@qopnet) handle these apps:
 - Qopnet Concierge
 - Qopnet POS
 
+Check the complete technical documentation in [the `docs` folder](./docs/README.md).
+
 ## Monorepo with Nx Workspace
 
 This project was generated using [Nx](https://nx.dev).
