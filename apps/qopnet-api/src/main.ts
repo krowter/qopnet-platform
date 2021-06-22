@@ -3,17 +3,21 @@
  * This is only a minimal backend to get started.
  */
 
-import * as express from 'express';
+import * as express from 'express'
 
-const app = express();
+const app = express()
 
 app.get('/api', (req, res) => {
-  res.send({ message: 'Welcome to qopnet-api!' });
-});
+  res.send({ message: 'Welcome to Qopnet API!' })
+})
 
-const port = process.env.port || 4000;
+app.get('/api/hello', (req, res) => {
+  res.send({ message: 'Hello from Qopnet API!' })
+})
+
+const port = process.env.port || 4000
 const server = app.listen(port, () => {
-  console.log(`Listening at http://localhost:${port}/api`);
-});
+  console.log(`Listening at http://localhost:${port}/api`)
+})
 
-server.on('error', console.error);
+server.on('error', console.error)
