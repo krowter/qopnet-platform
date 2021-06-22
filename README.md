@@ -1,6 +1,14 @@
+# Qopnet Platform
 
+Qopnet Platform (@qopnet) handle these apps:
 
-# Qopnet
+- Qopnet API - Express
+- Qopnet Admin - React.js
+- Qopnet Commerce - Next.js
+- Qopnet Concierge
+- Qopnet POS
+
+## Monorepo with Nx Workspace
 
 This project was generated using [Nx](https://nx.dev).
 
@@ -78,8 +86,6 @@ Run `nx dep-graph` to see a diagram of the dependencies of your projects.
 ## Further help
 
 Visit the [Nx Documentation](https://nx.dev) to learn more.
-
-
 
 ## ☁ Nx Cloud
 

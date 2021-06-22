@@ -1,7 +1,12 @@
 {
   "recommendations": [
-    
+    "artdiniz.quitcontrol-vscode",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "kisstkondoros.vscode-gutter-preview",
+    "knisterpeter.vscode-commitizen",
+    "mikestead.dotenv",
     "nrwl.angular-console",
-    "esbenp.prettier-vscode"
+    "prisma.prisma"
   ]
 }
