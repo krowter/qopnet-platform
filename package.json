@@ -1,7 +1,7 @@
 {
   "name": "qopnet",
-  "version": "0.0.0",
-  "license": "MIT",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
     "nx": "nx",
     "start": "nx serve",
@@ -25,7 +25,6 @@
     "dep-graph": "nx dep-graph",
     "help": "nx help"
   },
-  "private": true,
   "dependencies": {
     "tslib": "^2.0.0"
   },
