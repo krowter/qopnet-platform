@@ -27,7 +27,9 @@
     "help": "nx help"
   },
   "dependencies": {
+    "cors": "2.8.5",
     "express": "4.17.1",
+    "morgan": "1.10.0",
     "tslib": "^2.0.0"
   },
   "devDependencies": {
