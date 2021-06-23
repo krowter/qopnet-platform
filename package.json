@@ -1,6 +1,6 @@
 {
   "name": "qopnet-platform",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "private": true,
   "scripts": {
     "nx": "nx",
@@ -9,7 +9,10 @@
     "serve:admin": "nx run qopnet-admin:serve",
     "start": "npm run start:api",
     "start:api": "node dist/apps/qopnet-api/main",
+    "start:admin": "serve dist/apps/qopnet-admin",
     "build": "nx build",
+    "build:api": "nx run qopnet-api:build",
+    "build:admin": "nx run qopnet-admin:build`",
     "test": "nx test",
     "lint": "nx workspace-lint && nx lint",
     "e2e": "nx e2e",
@@ -85,6 +88,7 @@
     "eslint-plugin-react-hooks": "4.2.0",
     "jest": "27.0.3",
     "prettier": "2.2.1",
+    "serve": "12.0.0",
     "ts-jest": "27.0.3",
     "ts-node": "~9.1.1",
     "typescript": "~4.2.4"
