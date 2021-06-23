@@ -14,6 +14,10 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(logger('dev'))
 
+app.get('/', (req, res) => {
+  res.send({ message: 'This is the root of qopnet-api' })
+})
+
 app.get('/api', (req, res) => {
   res.send({ message: 'Welcome to Qopnet API!' })
 })
