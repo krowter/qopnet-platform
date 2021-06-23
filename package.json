@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "nx": "nx",
-    "start": "nx serve",
+    "serve": "nx serve",
+    "start": "node dist/apps/qopnet-api/main",
     "build": "nx build",
     "test": "nx test",
     "lint": "nx workspace-lint && nx lint",
