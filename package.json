@@ -27,6 +27,8 @@
     "help": "nx help"
   },
   "dependencies": {
+    "@sentry/node": "6.7.2",
+    "@sentry/tracing": "6.7.2",
     "cors": "2.8.5",
     "express": "4.17.1",
     "morgan": "1.10.0",
@@ -42,6 +44,7 @@
     "@nrwl/nx-cloud": "latest",
     "@nrwl/tao": "12.4.0",
     "@nrwl/workspace": "12.4.0",
+    "@types/dotenv": "8.2.0",
     "@types/express": "4.17.0",
     "@types/jest": "26.0.8",
     "@types/node": "14.14.33",
