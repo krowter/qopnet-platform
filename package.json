@@ -1,6 +1,6 @@
 {
   "name": "qopnet-platform",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "private": true,
   "scripts": {
     "nx": "nx",
@@ -12,7 +12,7 @@
     "start:admin": "serve dist/apps/qopnet-admin",
     "build": "nx build",
     "build:api": "nx run qopnet-api:build",
-    "build:admin": "nx run qopnet-admin:build`",
+    "build:admin": "nx run qopnet-admin:build",
     "test": "nx test",
     "lint": "nx workspace-lint && nx lint",
     "e2e": "nx e2e",
