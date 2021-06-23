@@ -1,10 +1,11 @@
 {
-  "name": "qopnet",
-  "version": "0.1.0",
+  "name": "qopnet-platform",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "nx": "nx",
-    "start": "nx serve",
+    "serve": "nx serve",
+    "start": "node dist/apps/qopnet-api/main",
     "build": "nx build",
     "test": "nx test",
     "lint": "nx workspace-lint && nx lint",
@@ -26,16 +27,32 @@
     "help": "nx help"
   },
   "dependencies": {
+    "cors": "2.8.5",
+    "express": "4.17.1",
+    "morgan": "1.10.0",
     "tslib": "^2.0.0"
   },
   "devDependencies": {
     "@nrwl/cli": "12.4.0",
+    "@nrwl/eslint-plugin-nx": "12.4.0",
+    "@nrwl/express": "12.4.0",
+    "@nrwl/jest": "12.4.0",
+    "@nrwl/linter": "12.4.0",
+    "@nrwl/node": "12.4.0",
     "@nrwl/nx-cloud": "latest",
     "@nrwl/tao": "12.4.0",
     "@nrwl/workspace": "12.4.0",
+    "@types/express": "4.17.0",
+    "@types/jest": "26.0.8",
     "@types/node": "14.14.33",
+    "@typescript-eslint/eslint-plugin": "4.19.0",
+    "@typescript-eslint/parser": "4.19.0",
     "dotenv": "8.2.0",
+    "eslint": "7.22.0",
+    "eslint-config-prettier": "8.1.0",
+    "jest": "27.0.3",
     "prettier": "2.2.1",
+    "ts-jest": "27.0.3",
     "ts-node": "~9.1.1",
     "typescript": "~4.2.4"
   }
