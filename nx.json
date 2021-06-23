@@ -14,17 +14,16 @@
     "default": {
       "runner": "@nrwl/nx-cloud",
       "options": {
-        "cacheableOperations": [
-          "build",
-          "lint",
-          "test",
-          "e2e"
-        ],
+        "cacheableOperations": ["build", "lint", "test", "e2e"],
         "accessToken": "NDNiMTVhNmItZGZkYi00YjkxLTliZjMtZjNjMDFkYzQxMDA4fHJlYWQtd3JpdGU=",
         "canTrackAnalytics": false,
         "showUsageWarnings": true
       }
     }
   },
-  "projects": {}
+  "projects": {
+    "qopnet-api": {
+      "tags": []
+    }
+  }
 }
