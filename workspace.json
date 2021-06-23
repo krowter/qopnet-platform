@@ -16,6 +16,7 @@
             "polyfills": "apps/qopnet-admin/src/polyfills.ts",
             "tsConfig": "apps/qopnet-admin/tsconfig.app.json",
             "assets": [
+              "apps/qopnet-admin/src/_redirects",
               "apps/qopnet-admin/src/favicon.ico",
               "apps/qopnet-admin/src/assets"
             ],
