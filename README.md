@@ -2,9 +2,9 @@
 
 Qopnet Platform (@qopnet) handle these apps:
 
-- Qopnet API - Express
-- Qopnet Admin - React.js
-- Qopnet Commerce - Next.js
+- [Qopnet API](https://api.qopnet.id)
+- [Qopnet Admin](https://admin.qopnet.id)
+- Qopnet Commerce
 - Qopnet Concierge
 - Qopnet POS
 
@@ -12,11 +12,11 @@ Check the complete technical documentation in [the `docs` folder](./docs/README.
 
 ## Monorepo with Nx Workspace
 
-This project was generated using [Nx](https://nx.dev).
+This project was generated using [Nx](https://nx.dev) workspace.
 
 <p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="450"></p>
 
-🔎 **Smart, Extensible Build Framework**
+🔎 **Nx is a smart, extensible build framework**
 
 ## Adding capabilities to your workspace
 
@@ -24,20 +24,18 @@ Nx supports many plugins which add capabilities for developing different types o
 
 These capabilities include generating applications, libraries, etc as well as the devtools to test, and build projects as well.
 
-Below are our core plugins:
+Below are Nx core plugins:
 
+- [Node](https://nodejs.org)
+  - `npm install --save-dev @nrwl/node`
+- [Express](https://expressjs.com)
+  - `npm install --save-dev @nrwl/express`
+- [Nest](https://nestjs.com)
+  - `npm install --save-dev @nrwl/nest`
 - [React](https://reactjs.org)
   - `npm install --save-dev @nrwl/react`
 - Web (no framework frontends)
   - `npm install --save-dev @nrwl/web`
-- [Angular](https://angular.io)
-  - `npm install --save-dev @nrwl/angular`
-- [Nest](https://nestjs.com)
-  - `npm install --save-dev @nrwl/nest`
-- [Express](https://expressjs.com)
-  - `npm install --save-dev @nrwl/express`
-- [Node](https://nodejs.org)
-  - `npm install --save-dev @nrwl/node`
 
 There are also many [community plugins](https://nx.dev/nx-community) you could add.
 
@@ -99,4 +97,4 @@ Nx Cloud pairs with Nx in order to enable you to build and test code more rapidl
 
 Teams using Nx gain the advantage of building full-stack applications with their preferred framework alongside Nx’s advanced code generation and project dependency graph, plus a unified experience for both frontend and backend developers.
 
-Visit [Nx Cloud](https://nx.app/) to learn more.
+Visit [Nx Cloud](https://nx.app) to learn more.

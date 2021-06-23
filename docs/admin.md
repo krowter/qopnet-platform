@@ -1,6 +1,6 @@
-# Qopnet API Specification
+# Qopnet Admin Specification
 
-The Qopnet API spec/schema will be defined using Postman collection or Swagger.
+The Qopnet Admin spec is used to manage the data within Qopnet API
 These all based on the diagrams of Qopnet System on Whimsical.
 
 ---
