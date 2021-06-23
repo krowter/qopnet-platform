@@ -1,3 +1,3 @@
 module.exports = {
-  projects: ['<rootDir>/apps/qopnet-api'],
-};
+  projects: ['<rootDir>/apps/qopnet-api', '<rootDir>/apps/qopnet-admin'],
+}
