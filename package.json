@@ -16,6 +16,7 @@
     "test": "nx test",
     "lint": "nx workspace-lint && nx lint",
     "e2e": "nx e2e",
+    "e2e:admin": "nx run qopnet-admin-e2e:e2e",
     "affected:apps": "nx affected:apps",
     "affected:libs": "nx affected:libs",
     "affected:build": "nx affected:build",
@@ -33,6 +34,7 @@
     "help": "nx help"
   },
   "dependencies": {
+    "@chakra-ui/react": "1.6.4",
     "@emotion/react": "11.1.5",
     "@emotion/styled": "11.1.5",
     "@sentry/node": "6.7.2",
@@ -41,9 +43,11 @@
     "cors": "2.8.5",
     "document-register-element": "1.13.1",
     "express": "4.17.1",
+    "framer-motion": "4.1.17",
     "morgan": "1.10.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
+    "react-icons": "4.2.0",
     "react-router-dom": "5.2.0",
     "regenerator-runtime": "0.13.7",
     "tslib": "^2.0.0"
