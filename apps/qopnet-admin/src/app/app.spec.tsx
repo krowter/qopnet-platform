@@ -22,6 +22,6 @@ describe('App', () => {
       </BrowserRouter>
     )
 
-    expect(getByText('Welcome to qopnet-admin!')).toBeTruthy()
+    expect(getByText('Admin Dashboard')).toBeTruthy()
   })
 })
