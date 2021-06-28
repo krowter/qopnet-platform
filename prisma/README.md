@@ -4,18 +4,17 @@
 
 Since we're using Supabase, there is a special `auth.users` table for Supabase Auth. The schema is in `auth`, not `public`. Meanwhile, Prisma uses `public` table by default and cannot access `auth` PostgreSQL schema.
 
-Therefore the initial migration file consist of this special SQL command:
+Therefore the initial migration file should consist of this special SQL command:
 
 ```sql
 CREATE TABLE "Profile" (
     "id" uuid REFERENCES auth.users NOT NULL,
-    "name" TEXT NOT NULL,
     "handle" CITEXT NOT NULL,
-    PRIMARY KEY ("id")
+    -- ...
 );
 ```
 
-Basically, after we migrate Prisma Schema into SQL migration files, we have to make sure the data type and reference are set correctly.
+Basically, after we migrate Prisma Schema into SQL migration files, we have to make sure the data type and reference are set correctly. Because currently Prisma doesn't support cross reference/schema foreign key.
 
 ## Setup Environment
 

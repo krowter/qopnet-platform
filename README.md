@@ -10,6 +10,15 @@ Qopnet Platform (@qopnet) handle these apps:
 
 Check the complete technical documentation in [the `docs` folder](./docs/README.md).
 
+## Known URL (host and port)
+
+- `http://localhost:5555` - Prisma Studio
+- `http://localhost:4000` - Qopnet API
+- `http://localhost:4200` - Qopnet Admin UI
+- `http://localhost:3000` - Qopnet Commerce
+- `http://localhost:` - Qopnet Concierge
+- `http://localhost:` - Qopnet POS
+
 ## Monorepo with Nx Workspace
 
 This project was generated using [Nx](https://nx.dev) workspace.

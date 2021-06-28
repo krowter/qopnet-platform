@@ -6,7 +6,7 @@ CREATE TABLE "Profile" (
     PRIMARY KEY ("id")
 );
 -- CreateTable
-CREATE TABLE "SupplierOrganization" (
+CREATE TABLE "Supplier" (
     "id" TEXT NOT NULL,
     "handle" TEXT NOT NULL,
     "name" TEXT NOT NULL,
@@ -19,7 +19,7 @@ CREATE TABLE "SupplierOrganization" (
     PRIMARY KEY ("id")
 );
 -- CreateTable
-CREATE TABLE "MerchantOrganization" (
+CREATE TABLE "Merchant" (
     "id" TEXT NOT NULL,
     "handle" TEXT NOT NULL,
     "name" TEXT NOT NULL,
@@ -54,9 +54,9 @@ CREATE TABLE "MerchantProduct" (
 -- CreateIndex
 CREATE UNIQUE INDEX "Profile.handle_unique" ON "Profile"("handle");
 -- CreateIndex
-CREATE UNIQUE INDEX "SupplierOrganization.handle_unique" ON "SupplierOrganization"("handle");
+CREATE UNIQUE INDEX "Supplier.handle_unique" ON "Supplier"("handle");
 -- CreateIndex
-CREATE UNIQUE INDEX "MerchantOrganization.handle_unique" ON "MerchantOrganization"("handle");
+CREATE UNIQUE INDEX "Merchant.handle_unique" ON "Merchant"("handle");
 -- CreateIndex
 CREATE UNIQUE INDEX "SupplierProduct.slug_unique" ON "SupplierProduct"("slug");
 -- CreateIndex
