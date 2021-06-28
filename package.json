@@ -2,8 +2,12 @@
   "name": "qopnet-platform",
   "version": "0.4.0",
   "private": true,
+  "engines": {
+    "node": ">=12.2.0"
+  },
   "scripts": {
     "nx": "nx",
+    "many": "nx run-many --target=serve --all --parallel",
     "serve": "nx serve",
     "serve:api": "nx run qopnet-api:serve",
     "serve:admin": "nx run qopnet-admin:serve",
@@ -31,12 +35,19 @@
     "update": "nx migrate latest",
     "workspace-generator": "nx workspace-generator",
     "dep-graph": "nx dep-graph",
-    "help": "nx help"
+    "help": "nx help",
+    "prisma:reset": "prisma migrate reset",
+    "prisma:init": "prisma migrate dev --name init",
+    "prisma:push": "prisma db push",
+    "prisma:generate": "prisma generate",
+    "prisma:studio": "prisma studio",
+    "postinstall": "npm run prisma:migrate && npm run prisma:generate"
   },
   "dependencies": {
     "@chakra-ui/react": "1.6.4",
     "@emotion/react": "11.1.5",
     "@emotion/styled": "11.1.5",
+    "@prisma/client": "2.25.0",
     "@sentry/node": "6.7.2",
     "@sentry/tracing": "6.7.2",
     "core-js": "^3.6.5",
@@ -92,6 +103,7 @@
     "eslint-plugin-react-hooks": "4.2.0",
     "jest": "27.0.3",
     "prettier": "2.2.1",
+    "prisma": "2.25.0",
     "serve": "12.0.0",
     "ts-jest": "27.0.3",
     "ts-node": "~9.1.1",

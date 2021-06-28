@@ -4,6 +4,11 @@ import * as logger from 'morgan'
 import * as Sentry from '@sentry/node'
 import * as Tracing from '@sentry/tracing'
 
+// import { PrismaClient } from '@prisma/client'
+// const prisma = new PrismaClient()
+
+import profiles from './app/profiles'
+
 const app = express()
 
 app.use(cors())
@@ -34,6 +39,10 @@ app.get('/', (req, res) => {
   res.send({ message: 'This is the root of qopnet-api' })
 })
 
+app.get('/graphql', (req, res) => {
+  res.send({ message: 'The GraphQL API is not ready yet.' })
+})
+
 app.get('/api', (req, res) => {
   res.send({ message: 'Welcome to Qopnet API!' })
 })
@@ -42,9 +51,7 @@ app.get('/api/hello', (req, res) => {
   res.send({ message: 'Hello from Qopnet API!' })
 })
 
-app.get('/graphql', (req, res) => {
-  res.send({ message: 'The GraphQL API is not ready yet.' })
-})
+app.use('/api/profiles', profiles)
 
 // The error handler must be before any other error middleware
 // and after all controllers
@@ -61,7 +68,7 @@ app.use(function onError(err, req, res, next) {
 
 const port = process.env.PORT || 4000
 const server = app.listen(port, () => {
-  console.log(`qopnet-api listening at host:${port}/api`)
+  console.log(`qopnet-api listening at :${port}/api`)
 })
 
 server.on('error', console.error)

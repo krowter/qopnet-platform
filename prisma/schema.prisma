@@ -1,0 +1,59 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Profile {
+  id     String @id
+  handle String @unique @db.Citext
+  name   String
+}
+
+model SupplierOrganization {
+  id                  String  @id @default(cuid())
+  handle              String  @unique
+  name                String
+  avatar_url          String?
+  national_tax_number String?
+  certification_file  String?
+  classification      String? // enum: producer | distributor
+  address             String? // relation
+  warehouses          String? // relation
+}
+
+model MerchantOrganization {
+  id         String  @id @default(cuid())
+  handle     String  @unique
+  name       String
+  avatar_url String?
+  address    String? // relation
+}
+
+model SupplierProduct {
+  id          String  @id @default(cuid())
+  slug        String  @unique
+  sku         String
+  name        String
+  description String
+  image_url   String
+  price       Decimal @db.Money
+  price_max   Decimal @db.Money
+  price_min   Decimal @db.Money
+}
+
+model MerchantProduct {
+  id          String  @id @default(cuid())
+  slug        String  @unique
+  sku         String
+  name        String
+  description String
+  image_url   String
+  price       Decimal @db.Money
+}
