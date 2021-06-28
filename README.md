@@ -10,13 +10,33 @@ Qopnet Platform (@qopnet) handle these apps:
 
 Check the complete technical documentation in [the `docs` folder](./docs/README.md).
 
+## Known URL (host and port)
+
+- `http://localhost:5555` - Prisma Studio
+- `http://localhost:4000` - Qopnet API
+- `http://localhost:4200` - Qopnet Admin UI
+- `http://localhost:3000` - Qopnet Commerce
+- `http://localhost:` - Qopnet Concierge
+- `http://localhost:` - Qopnet POS
+
 ## Monorepo with Nx Workspace
 
 This project was generated using [Nx](https://nx.dev) workspace.
 
-<p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="450"></p>
-
 🔎 **Nx is a smart, extensible build framework**
+
+## Setup environment variables
+
+Environment variables declared in `.env` and `.env.local` are automatically made available to Prisma.
+
+- See the documentation for more detail: https://pris.ly/d/prisma-schema#using-environment-variables
+- Prisma supports the native connection string format for PostgreSQL, MySQL, SQL Server and SQLite.
+- See the documentation for all the connection string options: https://pris.ly/d/connection-strings
+
+### References
+
+- https://dev.to/prisma/set-up-a-free-postgresql-database-on-supabase-to-use-with-prisma-3pk6
+- https://www.prisma.io/blog/full-stack-typesafety-with-angular-nest-nx-and-prisma-CcMK7fbQfTWc
 
 ## Adding capabilities to your workspace
 
