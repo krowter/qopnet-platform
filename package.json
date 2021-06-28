@@ -41,7 +41,7 @@
     "prisma:push": "prisma db push",
     "prisma:generate": "prisma generate",
     "prisma:studio": "prisma studio",
-    "postinstall": "npm run prisma:migrate && npm run prisma:generate"
+    "postinstall": "npm run prisma:push"
   },
   "dependencies": {
     "@chakra-ui/react": "1.6.4",
