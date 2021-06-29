@@ -1,4 +1,5 @@
 import useSWR from 'swr'
+import { Box, Heading, Text } from '@chakra-ui/react'
 
 export const Profiles = () => {
   const fetcher = (url: string) =>
@@ -11,12 +12,14 @@ export const Profiles = () => {
 
   return (
     <div>
-      <h1>Profiles</h1>
+      <Heading as="h1" size="xl">
+        Profiles
+      </Heading>
       {data.map((profile: any) => {
         return (
-          <div>
-            <h1>{profile.name}</h1>
-          </div>
+          <Box bg="gray.100" w="100%" p={4}>
+            <Text>{profile.name}</Text>
+          </Box>
         )
       })}
     </div>
