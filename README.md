@@ -19,6 +19,15 @@ Check the complete technical documentation in [the `docs` folder](./docs/README.
 - `http://localhost:` - Qopnet Concierge
 - `http://localhost:` - Qopnet POS
 
+## Workflow
+
+### Backend
+
+1. API documentation / Swagger spec
+2. Implement API endpoints
+
+### Frontend
+
 ## Monorepo with Nx Workspace
 
 This project was generated using [Nx](https://nx.dev) workspace.

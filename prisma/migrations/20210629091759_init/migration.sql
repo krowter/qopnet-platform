@@ -1,7 +1,7 @@
 -- CreateTable
 CREATE TABLE "Profile" (
     "id" uuid REFERENCES auth.users NOT NULL,
-    "handle" CITEXT NOT NULL,
+    "handle" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     PRIMARY KEY ("id")
 );
@@ -11,9 +11,9 @@ CREATE TABLE "Supplier" (
     "handle" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "avatar_url" TEXT,
-    "national_tax_number" TEXT,
-    "certification_file" TEXT,
-    "classification" TEXT,
+    "national_tax_number" TEXT NOT NULL,
+    "certification_file" TEXT NOT NULL,
+    "classification" TEXT NOT NULL,
     "address" TEXT,
     "warehouses" TEXT,
     PRIMARY KEY ("id")
