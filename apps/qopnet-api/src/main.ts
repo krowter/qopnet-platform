@@ -4,9 +4,7 @@ import * as logger from 'morgan'
 import * as Sentry from '@sentry/node'
 import * as Tracing from '@sentry/tracing'
 
-// import { PrismaClient } from '@prisma/client'
-// const prisma = new PrismaClient()
-
+import root from './app/root'
 import profiles from './app/profiles'
 
 const app = express()
@@ -16,6 +14,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(logger('dev'))
 
+// Sentry error tracking and reporting
 Sentry.init({
   environment: process.env.NODE_ENV || 'production',
   dsn: process.env.SENTRY_DSN,
@@ -29,29 +28,13 @@ Sentry.init({
   // We recommend adjusting this value in production
   tracesSampleRate: 1.0,
 })
-
 // RequestHandler creates a separate execution context using domains,
 // so that every transaction/span/breadcrumb is attached to its own Hub instance
 app.use(Sentry.Handlers.requestHandler())
 // TracingHandler creates a trace for every incoming request
 app.use(Sentry.Handlers.tracingHandler())
 
-app.get('/', (req, res) => {
-  res.send({ message: 'This is the root of qopnet-api' })
-})
-
-app.get('/graphql', (req, res) => {
-  res.send({ message: 'The GraphQL API is not ready yet.' })
-})
-
-app.get('/api', (req, res) => {
-  res.send({ message: 'Welcome to Qopnet API!' })
-})
-
-app.get('/api/hello', (req, res) => {
-  res.send({ message: 'Hello from Qopnet API!' })
-})
-
+app.use('/', root)
 app.use('/api/profiles', profiles)
 
 // The error handler must be before any other error middleware
@@ -60,7 +43,7 @@ app.use(Sentry.Handlers.errorHandler())
 
 // Optional fallthrough error handler
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-app.use(function onError(err, req, res, next) {
+app.use((err, req, res, next) => {
   // The error id is attached to `res.sentry` to be returned
   // and optionally displayed to the user for support.
   res.statusCode = 500
