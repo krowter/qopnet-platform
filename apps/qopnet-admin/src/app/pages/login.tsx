@@ -1,26 +1,43 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
 import {
-  VStack,
+  Button,
+  FormControl,
+  FormHelperText,
+  FormLabel,
   Heading,
   Image,
-  FormControl,
-  FormLabel,
   Input,
-  Stack,
-  FormHelperText,
   InputGroup,
   InputRightElement,
-  Button,
+  Stack,
   VisuallyHidden,
+  VStack,
 } from '@chakra-ui/react'
+import { useForm, SubmitHandler } from 'react-hook-form'
 
 import { BlankLayout } from '../layouts'
 import QopnetIcon from '../../assets/qopnet-icon.png'
 
+type LoginInputs = {
+  email?: string
+  password?: string
+}
+
 export const Login = () => {
+  // Password input
   const [show, setShow] = useState(false)
   const handleClick = () => setShow(!show)
+
+  // Form submit
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginInputs>()
+  const onSubmit: SubmitHandler<LoginInputs> = (data) => {
+    console.log({ data })
+  }
+
   return (
     <BlankLayout>
       <VStack id="login-container" mt={20} spacing={10}>
@@ -30,13 +47,22 @@ export const Login = () => {
             Log in to Qopnet Admin
           </Heading>
         </VStack>
-        <Stack as="form" id="login-form">
+
+        <Stack as="form" id="login-form" onSubmit={handleSubmit(onSubmit)}>
           <FormControl id="email">
             <VisuallyHidden>
               <FormLabel>Email address</FormLabel>
             </VisuallyHidden>
-            <Input type="email" placeholder="email@example.com" />
+            <Input
+              type="email"
+              placeholder="email@example.com"
+              {...register('email', { required: true })}
+            />
+            <FormHelperText color="red.500">
+              {errors.email && <span>Email is required</span>}
+            </FormHelperText>
           </FormControl>
+
           <FormControl>
             <VisuallyHidden>
               <FormLabel>Password</FormLabel>
@@ -46,6 +72,7 @@ export const Login = () => {
                 pr="4.5rem"
                 type={show ? 'text' : 'password'}
                 placeholder="Enter password"
+                {...register('password', { required: true })}
               />
               <InputRightElement width="4.5rem">
                 <Button h="1.75rem" size="sm" onClick={handleClick}>
@@ -53,6 +80,9 @@ export const Login = () => {
                 </Button>
               </InputRightElement>
             </InputGroup>
+            <FormHelperText color="red.500">
+              {errors.password && <span>Password is required</span>}
+            </FormHelperText>
           </FormControl>
 
           <Button
