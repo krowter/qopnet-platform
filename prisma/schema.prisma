@@ -12,7 +12,7 @@ generator client {
 
 model Profile {
   id     String @id
-  handle String @unique @db.Citext
+  handle String @unique
   name   String
 }
 
@@ -21,9 +21,9 @@ model Supplier {
   handle              String  @unique
   name                String
   avatar_url          String?
-  national_tax_number String?
-  certification_file  String?
-  classification      String? // enum: producer | distributor
+  national_tax_number String
+  certification_file  String
+  classification      String // enum: producer | distributor
   address             String? // relation
   warehouses          String? // relation
 }
