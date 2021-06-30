@@ -21,12 +21,23 @@ Check the complete technical documentation in [the `docs` folder](./docs/README.
 
 ## Workflow
 
+### General
+
+1. Start development with `git flow feature start issue-name`.
+2. Sync the branch with `git push origin feature/issue-name`.
+3. Create pull request (PR).
+4. PR will be reviewed and merged to `develop` as staging.
+5. `develop` will be reviewed and released to `main` as production.
+
 ### Backend
 
-1. API documentation / Swagger spec
-2. Implement API endpoints
+1. API documentation with Postman API collections.
+2. Implement API endpoints.
 
 ### Frontend
+
+1. UI/UX with Figma.
+2. Implement pages and components with Chakra UI.
 
 ## Monorepo with Nx Workspace
 
