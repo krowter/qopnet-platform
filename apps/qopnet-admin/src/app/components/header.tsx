@@ -25,9 +25,9 @@ export const Header = () => {
         </Heading>
       </HStack>
       <HStack>
-        <Avatar size="xs" name="Arya Aditiara" borderRadius={3} />
+        <Avatar size="xs" name="Qopnet Admin" borderRadius={3} />
         <Text as="span" fontSize="xs">
-          arya@qopnet.id
+          admin@qopnet.id
         </Text>
       </HStack>
     </HStack>

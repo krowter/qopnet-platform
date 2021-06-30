@@ -12,8 +12,10 @@ import {
   Stack,
   VisuallyHidden,
   VStack,
+  useToast,
 } from '@chakra-ui/react'
 import { useForm, SubmitHandler } from 'react-hook-form'
+import { useHistory } from 'react-router-dom'
 
 import { BlankLayout } from '../layouts'
 import QopnetIcon from '../../assets/qopnet-icon.png'
@@ -24,6 +26,9 @@ type LoginInputs = {
 }
 
 export const Login = () => {
+  const history = useHistory()
+  const toast = useToast()
+
   // Password input
   const [show, setShow] = useState(false)
   const handleClick = () => setShow(!show)
@@ -34,8 +39,24 @@ export const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<LoginInputs>()
-  const onSubmit: SubmitHandler<LoginInputs> = (data) => {
-    console.log({ data })
+
+  const onSubmitLogin: SubmitHandler<LoginInputs> = (data) => {
+    if (data) {
+      toast({
+        title: 'Login success',
+        description: 'You are logged in',
+        status: 'success',
+        isClosable: true,
+      })
+      history.push('/')
+    } else {
+      toast({
+        title: 'Login failed',
+        description: 'Your email/password is wrong',
+        status: 'error',
+        isClosable: true,
+      })
+    }
   }
 
   return (
@@ -48,7 +69,7 @@ export const Login = () => {
           </Heading>
         </VStack>
 
-        <Stack as="form" id="login-form" onSubmit={handleSubmit(onSubmit)}>
+        <Stack as="form" id="login-form" onSubmit={handleSubmit(onSubmitLogin)}>
           <FormControl id="email">
             <VisuallyHidden>
               <FormLabel>Email address</FormLabel>
