@@ -17,6 +17,7 @@ app.use(express.urlencoded({ extended: false }))
 app.use(logger('dev'))
 
 Sentry.init({
+  environment: process.env.NODE_ENV || 'production',
   dsn: process.env.SENTRY_DSN,
   integrations: [
     new Sentry.Integrations.Http({ tracing: true }), // HTTP calls tracing
