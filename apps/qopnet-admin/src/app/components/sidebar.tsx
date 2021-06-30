@@ -9,18 +9,24 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react'
-import packageData from '../../../../../package.json'
+import * as packageData from '../../../../../package.json'
 
 export const Sidebar = () => {
   return (
-    <Stack justify="space-between">
-      <Stack as="nav" bg="gray.200" height="100vh" py={5} spacing={5}>
+    <Stack
+      justify="space-between"
+      bg="gray.200"
+      height="100vh"
+      py={5}
+      spacing={5}
+    >
+      <Stack as="nav">
         <SidebarUser />
         <SidebarAuth />
         <SidebarLinks />
       </Stack>
-      <Text>
-        <code>qopnet-admin v{packageData.version}</code>
+      <Text as="pre" fontSize="xs" px={5} color="gray.500">
+        <code>v{packageData.version}</code>
       </Text>
     </Stack>
   )
