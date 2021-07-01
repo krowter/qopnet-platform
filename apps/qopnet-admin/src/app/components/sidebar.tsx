@@ -19,7 +19,14 @@ export const Sidebar = () => {
   const bg = useColorModeValue('gray.100', 'gray.900')
 
   return (
-    <Stack justify="space-between" bg={bg} height="100vh" py={5}>
+    <Stack
+      justify="space-between"
+      bg={bg}
+      height="100vh"
+      py={5}
+      borderRight="1px solid gray"
+      borderColor="gray.700"
+    >
       <Stack as="nav" w="max-content" spacing={5}>
         <SidebarUser />
         <SidebarAuth />
