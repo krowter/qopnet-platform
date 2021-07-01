@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import useSWR from 'swr'
 import { Box, Heading, Text } from '@chakra-ui/react'
 
@@ -17,7 +18,7 @@ export const Profiles = () => {
       </Heading>
       {data.map((profile: any) => {
         return (
-          <Box bg="gray.100" w="100%" p={4}>
+          <Box key={profile.id} bg="gray.100" w="100%" p={4}>
             <Text>{profile.name}</Text>
           </Box>
         )
