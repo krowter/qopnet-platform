@@ -53,7 +53,7 @@ Check the complete technical documentation in [the `docs` folder](./docs/README.
 
 ## Setup environment variables
 
-Environment variables was declared in `.env` (copied from `.env.example`). But now we're using Doppler to easily manage them.
+Use Doppler to easily manage the environment variables. They were declared in `.env` (copied from `.env.example`), but not anymore, although you can still use it.
 
 ### Doppler
 
@@ -64,7 +64,7 @@ doppler login
 doppler setup
 ```
 
-Fetch the env variables and use it with npm.
+Run `doppler` to fetch the env variables and use it along with npm.
 
 ```sh
 doppler run -- npm run <command>

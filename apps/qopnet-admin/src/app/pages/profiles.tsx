@@ -1,5 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import useSWR from 'swr'
-import { Box, Heading, Text } from '@chakra-ui/react'
+import {
+  Box,
+  Heading,
+  Spinner,
+  Text,
+  useColorModeValue,
+} from '@chakra-ui/react'
+
+import { DefaultLayout } from '../layouts'
+import { Header } from '../components'
 
 export const Profiles = () => {
   const fetcher = (url: string) =>
@@ -7,21 +17,51 @@ export const Profiles = () => {
 
   const { data, error } = useSWR('/api/profiles', fetcher)
 
-  if (error) return <div>failed to load</div>
-  if (!data) return <div>loading...</div>
+  return (
+    <DefaultLayout>
+      <Header>
+        <Heading as="h1" size="md">
+          Profiles
+        </Heading>
+        <Text>{data?.length} profiles</Text>
+      </Header>
+
+      {error ? (
+        <Box>Failed to load profiles</Box>
+      ) : !data ? (
+        <Box px={5} py={3}>
+          <Spinner color="orange.500" />
+        </Box>
+      ) : (
+        <Box>
+          <ProfileRows data={data} />
+        </Box>
+      )}
+    </DefaultLayout>
+  )
+}
+
+export const ProfileRows = ({ data }: { data: any[] }) => {
+  const bg = useColorModeValue('gray.50', 'gray.900')
+  const border = useColorModeValue('gray.200', 'gray.700')
 
   return (
-    <div>
-      <Heading as="h1" size="xl">
-        Profiles
-      </Heading>
-      {data.map((profile: any) => {
+    <>
+      {data.map((profile: any, index: number) => {
         return (
-          <Box bg="gray.100" w="100%" p={4}>
+          <Box
+            key={profile.id}
+            w="100%"
+            px={5}
+            py={3}
+            bg={bg}
+            borderBottom="1px solid gray"
+            borderColor={border}
+          >
             <Text>{profile.name}</Text>
           </Box>
         )
       })}
-    </div>
+    </>
   )
 }

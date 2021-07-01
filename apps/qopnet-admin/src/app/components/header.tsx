@@ -1,35 +1,21 @@
-import { Avatar, Heading, HStack, IconButton, Text } from '@chakra-ui/react'
-import { FaBars as MenuIcon } from 'react-icons/fa'
+import { HStack, useColorModeValue } from '@chakra-ui/react'
 
-export const Header = () => {
+export const Header = ({
+  children,
+}: {
+  children: JSX.Element | JSX.Element[]
+}) => {
+  const border = useColorModeValue('gray.200', 'gray.700')
+
   return (
     <HStack
       as="header"
-      bg="orange.900"
-      color="white"
-      justify="space-between"
-      p={3}
-      spacing={3}
+      p={5}
+      spacing={5}
+      borderBottom="1px solid gray"
+      borderColor={border}
     >
-      <HStack>
-        <IconButton
-          aria-label="Menu"
-          bg="transparent"
-          borderRadius={3}
-          colorScheme="orange"
-          icon={<MenuIcon />}
-          size="xs"
-        />
-        <Heading as="h1" size="sm">
-          Admin Dashboard
-        </Heading>
-      </HStack>
-      <HStack>
-        <Avatar size="xs" name="Qopnet Admin" borderRadius={3} />
-        <Text as="span" fontSize="xs">
-          admin@qopnet.id
-        </Text>
-      </HStack>
+      {children}
     </HStack>
   )
 }

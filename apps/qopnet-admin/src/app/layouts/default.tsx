@@ -9,7 +9,7 @@ export const DefaultLayout: React.FC<Props> = ({ children }) => {
   return (
     <Flex>
       <Sidebar />
-      <Box>{children}</Box>
+      <Box w="100%">{children}</Box>
     </Flex>
   )
 }

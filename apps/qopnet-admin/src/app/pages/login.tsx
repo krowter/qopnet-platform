@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   Button,
   FormControl,
@@ -16,6 +16,7 @@ import {
 } from '@chakra-ui/react'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { useHistory } from 'react-router-dom'
+import { useUser, useSupabase } from 'use-supabase'
 
 import { BlankLayout } from '../layouts'
 import QopnetIcon from '../../assets/qopnet-icon.png'
@@ -26,10 +27,22 @@ type LoginInputs = {
 }
 
 export const Login = () => {
+  const user = useUser()
   const history = useHistory()
-  const toast = useToast()
 
-  // Password input
+  useEffect(() => {
+    // Redirect to home page if already authenticated
+    if (user) {
+      history.replace('/')
+    }
+  }, [user, history])
+
+  // Login process
+  const [loading, setLoading] = useState(false)
+  const toast = useToast()
+  const { auth } = useSupabase()
+
+  // Password input show and hide
   const [show, setShow] = useState(false)
   const handleClick = () => setShow(!show)
 
@@ -40,21 +53,37 @@ export const Login = () => {
     formState: { errors },
   } = useForm<LoginInputs>()
 
-  const onSubmitLogin: SubmitHandler<LoginInputs> = (data) => {
-    if (data) {
+  const onSubmitLogin: SubmitHandler<LoginInputs> = async (data) => {
+    // Login via API later
+    // Login via Supabase currently
+    setLoading(true)
+    const { user, error } = await auth.signIn({
+      email: data.email,
+      password: data.password,
+    })
+    setLoading(false)
+
+    if (user) {
+      // If login is success
       toast({
         title: 'Login success',
         description: 'You are logged in',
         status: 'success',
-        isClosable: true,
       })
       history.push('/')
-    } else {
+    } else if (error) {
+      // If login is error
       toast({
         title: 'Login failed',
-        description: 'Your email/password is wrong',
+        description: error.message,
         status: 'error',
-        isClosable: true,
+      })
+    } else {
+      // If login is failed
+      toast({
+        title: 'Login failed',
+        description: 'Unknown reason',
+        status: 'error',
       })
     }
   }
@@ -107,7 +136,7 @@ export const Login = () => {
           </FormControl>
 
           <Button
-            isLoading={false}
+            isLoading={loading}
             loadingText="Logging in"
             colorScheme="orange"
             type="submit"

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import {
   chakra,
   Avatar,
@@ -8,19 +8,24 @@ import {
   Image,
   Stack,
   Text,
+  useColorModeValue,
+  useToast,
 } from '@chakra-ui/react'
+import { useSupabase } from 'use-supabase'
+
 import * as packageData from '../../../../../package.json'
 
 export const Sidebar = () => {
   return (
     <Stack
       justify="space-between"
-      bg="gray.200"
+      bg={useColorModeValue('gray.100', 'gray.900')}
       height="100vh"
       py={5}
-      spacing={5}
+      borderRight="1px solid gray"
+      borderColor={useColorModeValue('gray.200', 'gray.700')}
     >
-      <Stack as="nav">
+      <Stack as="nav" w="max-content" spacing={5}>
         <SidebarUser />
         <SidebarAuth />
         <SidebarLinks />
@@ -37,7 +42,10 @@ export const SidebarUser = () => {
     <HStack spacing={10} px={5}>
       <Link to="/">
         <Image
-          src="../../assets/qopnet-logo.png"
+          src={useColorModeValue(
+            '../../assets/qopnet-logo.png',
+            '../../assets/qopnet-logo-dark.png'
+          )}
           alt="Qopnet"
           height="25px"
           width="80px"
@@ -49,12 +57,35 @@ export const SidebarUser = () => {
 }
 
 export const SidebarAuth = () => {
+  const history = useHistory()
+  const { auth } = useSupabase()
+  const toast = useToast()
+
+  const handleLogout = async () => {
+    const { error } = await auth.signOut()
+    if (!error) {
+      // If logout is success
+      toast({
+        title: 'Log out success',
+        description: 'You are logged out',
+      })
+      history.replace('/login')
+    } else {
+      // If logout is error
+      toast({
+        title: 'Log out error',
+        description: error.message,
+        status: 'error',
+      })
+    }
+  }
+
   return (
     <ButtonGroup px={5}>
       <Button colorScheme="orange" size="xs">
         Settings
       </Button>
-      <Button colorScheme="red" size="xs">
+      <Button colorScheme="red" size="xs" onClick={handleLogout}>
         Log out
       </Button>
     </ButtonGroup>
@@ -84,16 +115,17 @@ export const SidebarLink = ({
   children: string | JSX.Element
   isActive?: boolean
 }) => {
+  const bg = useColorModeValue('gray.200', 'gray.700')
   return (
     <chakra.a
       as={Link}
       to={to}
       px={2}
       py={1}
-      rounded="md"
-      bg={isActive ? 'gray.300' : ''}
+      rounded="base"
+      bg={isActive ? bg : ''}
       _hover={{
-        bg: 'gray.300',
+        bg: bg,
       }}
     >
       {children}
