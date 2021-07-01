@@ -27,11 +27,13 @@ type LoginInputs = {
 }
 
 export const Login = () => {
+  // Login process
+  const [loading, setLoading] = useState(false)
   const history = useHistory()
   const toast = useToast()
   const { auth } = useSupabase()
 
-  // Password input
+  // Password input show and hide
   const [show, setShow] = useState(false)
   const handleClick = () => setShow(!show)
 
@@ -45,10 +47,12 @@ export const Login = () => {
   const onSubmitLogin: SubmitHandler<LoginInputs> = async (data) => {
     // Login via API later
     // Login via Supabase currently
+    setLoading(true)
     const { user, error } = await auth.signIn({
       email: data.email,
       password: data.password,
     })
+    setLoading(false)
 
     if (user) {
       // If login is success
@@ -56,7 +60,6 @@ export const Login = () => {
         title: 'Login success',
         description: 'You are logged in',
         status: 'success',
-        isClosable: true,
       })
       history.push('/')
     } else if (error) {
@@ -65,7 +68,6 @@ export const Login = () => {
         title: 'Login failed',
         description: error.message,
         status: 'error',
-        isClosable: true,
       })
     } else {
       // If login is failed
@@ -73,7 +75,6 @@ export const Login = () => {
         title: 'Login failed',
         description: 'Unknown reason',
         status: 'error',
-        isClosable: true,
       })
     }
   }
@@ -126,7 +127,7 @@ export const Login = () => {
           </FormControl>
 
           <Button
-            isLoading={false}
+            isLoading={loading}
             loadingText="Logging in"
             colorScheme="orange"
             type="submit"

@@ -9,7 +9,10 @@ import {
   Stack,
   Text,
   useColorModeValue,
+  useToast,
 } from '@chakra-ui/react'
+import { useSupabase } from 'use-supabase'
+
 import * as packageData from '../../../../../package.json'
 
 export const Sidebar = () => {
@@ -46,12 +49,33 @@ export const SidebarUser = () => {
 }
 
 export const SidebarAuth = () => {
+  const { auth } = useSupabase()
+  const toast = useToast()
+
+  const handleLogout = async () => {
+    const { error } = await auth.signOut()
+    if (!error) {
+      // If logout is success
+      toast({
+        title: 'Log out success',
+        description: 'You are logged out',
+      })
+    } else {
+      // If logout is error
+      toast({
+        title: 'Log out error',
+        description: error.message,
+        status: 'error',
+      })
+    }
+  }
+
   return (
     <ButtonGroup px={5}>
       <Button colorScheme="orange" size="xs">
         Settings
       </Button>
-      <Button colorScheme="red" size="xs">
+      <Button colorScheme="red" size="xs" onClick={handleLogout}>
         Log out
       </Button>
     </ButtonGroup>
