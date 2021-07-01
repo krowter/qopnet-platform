@@ -1,6 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import useSWR from 'swr'
-import { Box, Heading, Text, useColorModeValue } from '@chakra-ui/react'
+import {
+  Box,
+  Heading,
+  Spinner,
+  Text,
+  useColorModeValue,
+} from '@chakra-ui/react'
 
 import { DefaultLayout } from '../layouts'
 import { Header } from '../components'
@@ -23,7 +29,9 @@ export const Profiles = () => {
       {error ? (
         <Box>Failed to load profiles</Box>
       ) : !data ? (
-        <Box>Loading...</Box>
+        <Box px={5} py={3}>
+          <Spinner color="orange.500" />
+        </Box>
       ) : (
         <Box>
           <ProfileRows data={data} />

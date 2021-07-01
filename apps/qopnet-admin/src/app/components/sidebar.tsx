@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import {
   chakra,
   Avatar,
@@ -57,6 +57,7 @@ export const SidebarUser = () => {
 }
 
 export const SidebarAuth = () => {
+  const history = useHistory()
   const { auth } = useSupabase()
   const toast = useToast()
 
@@ -68,6 +69,7 @@ export const SidebarAuth = () => {
         title: 'Log out success',
         description: 'You are logged out',
       })
+      history.replace('/login')
     } else {
       // If logout is error
       toast({

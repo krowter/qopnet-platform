@@ -1,5 +1,5 @@
 import { Route, Switch, useHistory } from 'react-router-dom'
-import { useUser } from 'use-supabase'
+import { useUser, useSupabase } from 'use-supabase'
 
 import { Profiles, Home, About, Login, NotFound } from './pages'
 import { useEffect } from 'react'
@@ -7,23 +7,24 @@ import { useEffect } from 'react'
 export const App = () => {
   const user = useUser()
   const history = useHistory()
-
-  const isAuthenticated = !!user
+  const { auth } = useSupabase()
 
   useEffect(() => {
-    // Redirect to login page if not authenticated
-    if (!isAuthenticated) {
-      history.replace('/login')
-    } else {
-      history.replace('/')
+    const checkSession = async () => {
+      const session = await auth.session()
+      // Redirect to login page if not authenticated / no session
+      if (!session) {
+        history.replace('/login')
+      }
     }
-  }, [isAuthenticated, history])
+    checkSession()
+  }, [auth, history])
 
   if (user) {
     return (
       <Switch>
-        <Route exact path="/login" component={Login} />
         <Route exact path="/" component={Home} />
+        <Route exact path="/login" component={Login} />
         <Route exact path="/about" component={About} />
         <Route exact path="/profiles" component={Profiles} />
         <Route component={NotFound} />

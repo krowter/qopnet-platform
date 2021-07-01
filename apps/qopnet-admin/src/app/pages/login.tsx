@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   Button,
   FormControl,
@@ -16,7 +16,7 @@ import {
 } from '@chakra-ui/react'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { useHistory } from 'react-router-dom'
-import { useSupabase } from 'use-supabase'
+import { useUser, useSupabase } from 'use-supabase'
 
 import { BlankLayout } from '../layouts'
 import QopnetIcon from '../../assets/qopnet-icon.png'
@@ -27,9 +27,18 @@ type LoginInputs = {
 }
 
 export const Login = () => {
+  const user = useUser()
+  const history = useHistory()
+
+  useEffect(() => {
+    // Redirect to home page if already authenticated
+    if (user) {
+      history.replace('/')
+    }
+  }, [user, history])
+
   // Login process
   const [loading, setLoading] = useState(false)
-  const history = useHistory()
   const toast = useToast()
   const { auth } = useSupabase()
 
