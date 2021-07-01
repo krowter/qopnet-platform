@@ -64,10 +64,14 @@ export const Home = () => {
 }
 
 export const HomeLayout = ({ children }: { children: JSX.Element[] }) => {
-  const color = useColorModeValue('orange.900', 'orange.100')
-
   return (
-    <Stack id="home-layout" px={10} py={5} color={color} spacing={10}>
+    <Stack
+      id="home-layout"
+      px={10}
+      py={5}
+      spacing={10}
+      color={useColorModeValue('orange.900', 'orange.100')}
+    >
       {children}
     </Stack>
   )
@@ -88,10 +92,13 @@ export const DashboardCard = ({
   withHelpText?: boolean
   children?: JSX.Element | JSX.Element[]
 }) => {
-  const bg = useColorModeValue('gray.50', 'gray.900')
-
   return (
-    <Box p={5} boxShadow="xs" bg={bg} rounded="base">
+    <Box
+      p={5}
+      boxShadow="xs"
+      rounded="base"
+      bg={useColorModeValue('gray.50', 'gray.900')}
+    >
       <Stat as={Stack} mb={5}>
         <StatLabel as={Heading} size="md">
           {name}

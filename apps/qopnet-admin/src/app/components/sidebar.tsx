@@ -16,16 +16,14 @@ import { useSupabase } from 'use-supabase'
 import * as packageData from '../../../../../package.json'
 
 export const Sidebar = () => {
-  const bg = useColorModeValue('gray.100', 'gray.900')
-
   return (
     <Stack
       justify="space-between"
-      bg={bg}
+      bg={useColorModeValue('gray.100', 'gray.900')}
       height="100vh"
       py={5}
       borderRight="1px solid gray"
-      borderColor="gray.700"
+      borderColor={useColorModeValue('gray.200', 'gray.700')}
     >
       <Stack as="nav" w="max-content" spacing={5}>
         <SidebarUser />
@@ -40,15 +38,18 @@ export const Sidebar = () => {
 }
 
 export const SidebarUser = () => {
-  const logo = useColorModeValue(
-    '../../assets/qopnet-logo.png',
-    '../../assets/qopnet-logo-dark.png'
-  )
-
   return (
     <HStack spacing={10} px={5}>
       <Link to="/">
-        <Image src={logo} alt="Qopnet" height="25px" width="80px" />
+        <Image
+          src={useColorModeValue(
+            '../../assets/qopnet-logo.png',
+            '../../assets/qopnet-logo-dark.png'
+          )}
+          alt="Qopnet"
+          height="25px"
+          width="80px"
+        />
       </Link>
       <Avatar size="xs" name="Qopnet Admin" />
     </HStack>
@@ -113,7 +114,6 @@ export const SidebarLink = ({
   isActive?: boolean
 }) => {
   const bg = useColorModeValue('gray.200', 'gray.700')
-
   return (
     <chakra.a
       as={Link}

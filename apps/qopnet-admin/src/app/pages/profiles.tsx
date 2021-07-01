@@ -29,7 +29,6 @@ export const Profiles = () => {
 
 export const ProfileRows = ({ data }: { data: any[] }) => {
   const bg = useColorModeValue('gray.100', 'gray.900')
-
   return (
     <>
       {data.map((profile: any) => {
