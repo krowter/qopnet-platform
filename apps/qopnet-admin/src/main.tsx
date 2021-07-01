@@ -14,13 +14,13 @@ const supabase = createClient(
 
 ReactDOM.render(
   <StrictMode>
-    <SupabaseContextProvider client={supabase}>
-      <ChakraProvider>
-        <BrowserRouter>
+    <ChakraProvider>
+      <BrowserRouter>
+        <SupabaseContextProvider client={supabase}>
           <App />
-        </BrowserRouter>
-      </ChakraProvider>
-    </SupabaseContextProvider>
+        </SupabaseContextProvider>
+      </BrowserRouter>
+    </ChakraProvider>
   </StrictMode>,
   document.getElementById('root')
 )

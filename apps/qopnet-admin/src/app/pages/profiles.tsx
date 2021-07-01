@@ -11,9 +11,6 @@ export const Profiles = () => {
 
   const { data, error } = useSWR('/api/profiles', fetcher)
 
-  if (error) return <div>failed to load</div>
-  if (!data) return <div>loading...</div>
-
   return (
     <DefaultLayout>
       <Header>
@@ -22,25 +19,36 @@ export const Profiles = () => {
         </Heading>
         <Text>{data?.length} profiles</Text>
       </Header>
-      <ProfileRows data={data} />
+
+      {error ? (
+        <Box>Failed to load profiles</Box>
+      ) : !data ? (
+        <Box>Loading...</Box>
+      ) : (
+        <Box>
+          <ProfileRows data={data} />
+        </Box>
+      )}
     </DefaultLayout>
   )
 }
 
 export const ProfileRows = ({ data }: { data: any[] }) => {
-  const bg = useColorModeValue('gray.100', 'gray.900')
+  const bg = useColorModeValue('gray.50', 'gray.900')
+  const border = useColorModeValue('gray.200', 'gray.700')
+
   return (
     <>
-      {data.map((profile: any) => {
+      {data.map((profile: any, index: number) => {
         return (
           <Box
             key={profile.id}
-            bg={bg}
             w="100%"
             px={5}
             py={3}
+            bg={bg}
             borderBottom="1px solid gray"
-            borderColor="gray.700"
+            borderColor={border}
           >
             <Text>{profile.name}</Text>
           </Box>

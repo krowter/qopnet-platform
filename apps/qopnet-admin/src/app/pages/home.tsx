@@ -8,8 +8,6 @@ import {
   StatLabel,
   StatNumber,
   StatHelpText,
-  StatArrow,
-  StatGroup,
   Button,
   useColorModeValue,
 } from '@chakra-ui/react'
