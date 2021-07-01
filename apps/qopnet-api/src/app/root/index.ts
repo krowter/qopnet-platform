@@ -1,3 +1,4 @@
+import * as packageData from '../../../../../package.json'
 import * as express from 'express'
 const router = express.Router()
 
@@ -5,6 +6,7 @@ router.get('/', (req, res) => {
   res.send({
     message: 'This is the root of qopnet-api',
     environment: process.env.NODE_ENV,
+    version: packageData.version,
   })
 })
 
