@@ -16,6 +16,7 @@ import {
 } from '@chakra-ui/react'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { useHistory } from 'react-router-dom'
+import { useSupabase } from 'use-supabase'
 
 import { BlankLayout } from '../layouts'
 import QopnetIcon from '../../assets/qopnet-icon.png'
@@ -28,6 +29,7 @@ type LoginInputs = {
 export const Login = () => {
   const history = useHistory()
   const toast = useToast()
+  const { auth } = useSupabase()
 
   // Password input
   const [show, setShow] = useState(false)
@@ -40,8 +42,16 @@ export const Login = () => {
     formState: { errors },
   } = useForm<LoginInputs>()
 
-  const onSubmitLogin: SubmitHandler<LoginInputs> = (data) => {
-    if (data) {
+  const onSubmitLogin: SubmitHandler<LoginInputs> = async (data) => {
+    // Login via API later
+    // Login via Supabase currently
+    const { user, error } = await auth.signIn({
+      email: data.email,
+      password: data.password,
+    })
+
+    if (user) {
+      // If login is success
       toast({
         title: 'Login success',
         description: 'You are logged in',
@@ -49,10 +59,19 @@ export const Login = () => {
         isClosable: true,
       })
       history.push('/')
-    } else {
+    } else if (error) {
+      // If login is error
       toast({
         title: 'Login failed',
-        description: 'Your email/password is wrong',
+        description: error.message,
+        status: 'error',
+        isClosable: true,
+      })
+    } else {
+      // If login is failed
+      toast({
+        title: 'Login failed',
+        description: 'Unknown reason',
         status: 'error',
         isClosable: true,
       })
