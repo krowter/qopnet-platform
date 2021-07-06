@@ -55,8 +55,9 @@ export const Sidebar = () => {
             height="100vh"
             justify="space-between"
             py={5}
+            minWidth="250px"
           >
-            <Stack as="nav" w="max-content" spacing={6}>
+            <Stack as="nav" w="auto" spacing={6}>
               <DrawerCloseButton left="0px" ml={3} />
               <SidebarUser />
               <SidebarAuth />
@@ -72,12 +73,13 @@ export const Sidebar = () => {
         bg={useColorModeValue('gray.100', 'gray.900')}
         borderColor={useColorModeValue('gray.200', 'gray.700')}
         borderRight="1px solid gray"
-        display={{ base: 'none', md: 'unset' }}
+        display={{ base: 'none', md: 'flex' }}
         height="100vh"
         justify="space-between"
         py={5}
+        minWidth="250px"
       >
-        <Stack as="nav" w="max-content" spacing={5}>
+        <Stack as="nav" w="auto" spacing={5}>
           <SidebarUser />
           <SidebarAuth />
           <SidebarLinks />
@@ -92,7 +94,7 @@ export const Sidebar = () => {
 
 export const SidebarUser = () => {
   return (
-    <HStack spacing={10} px={5}>
+    <HStack spacing={10} px={5} justifyContent="center">
       <Link to="/">
         <Image
           src={useColorModeValue(
@@ -134,7 +136,7 @@ export const SidebarAuth = () => {
   }
 
   return (
-    <ButtonGroup px={5}>
+    <ButtonGroup px={5} justifyContent="center" display="flex">
       <Button colorScheme="orange" size="xs">
         Settings
       </Button>
@@ -162,12 +164,13 @@ export const SidebarLinks = () => {
         />
       </SidebarNestedLink>
       <Collapse in={suppliers.isOpen}>
-        <Flex flexDirection="column" alignItems="flex-start" px={2}>
+        <Flex flexDirection="column" alignItems="flex-start" px={4}>
+          <SidebarLink to="/suppliers">All Suppliers</SidebarLink>
           <SidebarLink to="/suppliers/products">Suppliers Products</SidebarLink>
           <SidebarLink to="/suppliers/purchase-orders">
             Purchase Orders (PO)
           </SidebarLink>
-          <SidebarLink to="/suppliers/invoice">Suppliers Invoices</SidebarLink>
+          <SidebarLink to="/suppliers/invoices">Suppliers Invoices</SidebarLink>
         </Flex>
       </Collapse>
       <SidebarNestedLink onClick={merchants.onToggle}>
@@ -179,10 +182,10 @@ export const SidebarLinks = () => {
         />
       </SidebarNestedLink>
       <Collapse in={merchants.isOpen}>
-        <Flex flexDirection="column" alignItems="flex-start" px={2}>
+        <Flex flexDirection="column" alignItems="flex-start" px={4}>
           <SidebarLink to="/merchant/products">Merchant Products</SidebarLink>
           <SidebarLink to="/merchant/orders">Merchant Orders</SidebarLink>
-          <SidebarLink to="/merchant/invoice">Merchant Invoices</SidebarLink>
+          <SidebarLink to="/merchant/invoices">Merchant Invoices</SidebarLink>
         </Flex>
       </Collapse>
       <SidebarLink to="/logistics">Logistics</SidebarLink>
