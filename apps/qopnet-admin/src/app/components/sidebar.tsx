@@ -1,45 +1,100 @@
+import { ReactNode } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import {
-  chakra,
   Avatar,
   Button,
   ButtonGroup,
+  chakra,
+  Collapse,
+  Drawer,
+  DrawerCloseButton,
+  DrawerContent,
+  DrawerOverlay,
+  Flex,
   HStack,
+  Icon,
+  IconButton,
   Image,
   Stack,
   Text,
   useColorModeValue,
+  useDisclosure,
   useToast,
 } from '@chakra-ui/react'
 import { useSupabase } from 'use-supabase'
-
 import * as packageData from '../../../../../package.json'
+import { MdKeyboardArrowRight } from 'react-icons/md'
+import { IconType } from 'react-icons/lib'
+import { FiMenu } from 'react-icons/fi'
 
 export const Sidebar = () => {
+  const sidebar = useDisclosure()
   return (
-    <Stack
-      justify="space-between"
-      bg={useColorModeValue('gray.100', 'gray.900')}
-      height="100vh"
-      py={5}
-      borderRight="1px solid gray"
-      borderColor={useColorModeValue('gray.200', 'gray.700')}
-    >
-      <Stack as="nav" w="max-content" spacing={5}>
-        <SidebarUser />
-        <SidebarAuth />
-        <SidebarLinks />
+    <>
+      <IconButton
+        aria-label="Menu"
+        bg="none"
+        display={{ base: 'inline-flex', md: 'none' }}
+        icon={<FiMenu />}
+        onClick={sidebar.onOpen}
+        size="md"
+      />
+      <Drawer
+        isFullHeight
+        isOpen={sidebar.isOpen}
+        onClose={sidebar.onClose}
+        placement="left"
+        size="xs"
+      >
+        <DrawerOverlay />
+        <DrawerContent style={{ width: 'auto' }}>
+          <Stack
+            bg={useColorModeValue('gray.100', 'gray.900')}
+            borderColor={useColorModeValue('gray.200', 'gray.700')}
+            borderRight="1px solid gray"
+            height="100vh"
+            justify="space-between"
+            py={5}
+            minWidth="250px"
+          >
+            <Stack as="nav" w="auto" spacing={6}>
+              <DrawerCloseButton left="0px" ml={3} />
+              <SidebarUser />
+              <SidebarAuth />
+              <SidebarLinks />
+            </Stack>
+            <Text as="pre" fontSize="xs" px={5} color="gray.500">
+              <code>v{packageData.version}</code>
+            </Text>
+          </Stack>
+        </DrawerContent>
+      </Drawer>
+      <Stack
+        bg={useColorModeValue('gray.100', 'gray.900')}
+        borderColor={useColorModeValue('gray.200', 'gray.700')}
+        borderRight="1px solid gray"
+        display={{ base: 'none', md: 'flex' }}
+        height="100vh"
+        justify="space-between"
+        py={5}
+        minWidth="250px"
+      >
+        <Stack as="nav" w="auto" spacing={5}>
+          <SidebarUser />
+          <SidebarAuth />
+          <SidebarLinks />
+        </Stack>
+        <Text as="pre" fontSize="xs" px={5} color="gray.500">
+          <code>v{packageData.version}</code>
+        </Text>
       </Stack>
-      <Text as="pre" fontSize="xs" px={5} color="gray.500">
-        <code>v{packageData.version}</code>
-      </Text>
-    </Stack>
+    </>
   )
 }
 
 export const SidebarUser = () => {
   return (
-    <HStack spacing={10} px={5}>
+    <HStack spacing={10} px={5} justifyContent="center">
       <Link to="/">
         <Image
           src={useColorModeValue(
@@ -81,7 +136,7 @@ export const SidebarAuth = () => {
   }
 
   return (
-    <ButtonGroup px={5}>
+    <ButtonGroup px={5} justifyContent="center" display="flex">
       <Button colorScheme="orange" size="xs">
         Settings
       </Button>
@@ -93,13 +148,46 @@ export const SidebarAuth = () => {
 }
 
 export const SidebarLinks = () => {
+  const suppliers = useDisclosure()
+  const merchants = useDisclosure()
   return (
     <Stack fontSize="sm" fontWeight="500" spacing={0} px={3}>
       <SidebarLink to="/">Home</SidebarLink>
       <SidebarLink to="/users">Users</SidebarLink>
       <SidebarLink to="/profiles">Profiles</SidebarLink>
-      <SidebarLink to="/suppliers">Suppliers</SidebarLink>
-      <SidebarLink to="/merchants">Merchants</SidebarLink>
+      <SidebarNestedLink onClick={suppliers.onToggle}>
+        Suppliers
+        <Icon
+          as={MdKeyboardArrowRight}
+          ml="auto"
+          transform={suppliers.isOpen ? 'rotate(90deg)' : 'none'}
+        />
+      </SidebarNestedLink>
+      <Collapse in={suppliers.isOpen}>
+        <Flex flexDirection="column" alignItems="flex-start" px={4}>
+          <SidebarLink to="/suppliers">All Suppliers</SidebarLink>
+          <SidebarLink to="/suppliers/products">Suppliers Products</SidebarLink>
+          <SidebarLink to="/suppliers/purchase-orders">
+            Purchase Orders (PO)
+          </SidebarLink>
+          <SidebarLink to="/suppliers/invoices">Suppliers Invoices</SidebarLink>
+        </Flex>
+      </Collapse>
+      <SidebarNestedLink onClick={merchants.onToggle}>
+        Merchants
+        <Icon
+          as={MdKeyboardArrowRight}
+          ml="auto"
+          transform={merchants.isOpen ? 'rotate(90deg)' : 'none'}
+        />
+      </SidebarNestedLink>
+      <Collapse in={merchants.isOpen}>
+        <Flex flexDirection="column" alignItems="flex-start" px={4}>
+          <SidebarLink to="/merchant/products">Merchant Products</SidebarLink>
+          <SidebarLink to="/merchant/orders">Merchant Orders</SidebarLink>
+          <SidebarLink to="/merchant/invoices">Merchant Invoices</SidebarLink>
+        </Flex>
+      </Collapse>
       <SidebarLink to="/logistics">Logistics</SidebarLink>
       <SidebarLink to="/customers">Customers</SidebarLink>
     </Stack>
@@ -112,8 +200,10 @@ export const SidebarLink = ({
   isActive,
 }: {
   to: string
-  children: string | JSX.Element
+  children: ReactNode
   isActive?: boolean
+  icon?: IconType
+  onClick?: React.MouseEventHandler<HTMLButtonElement>
 }) => {
   const bg = useColorModeValue('gray.200', 'gray.700')
   return (
@@ -130,5 +220,46 @@ export const SidebarLink = ({
     >
       {children}
     </chakra.a>
+  )
+}
+
+const SidebarNestedLink = ({
+  children,
+  isActive,
+  icon,
+  onClick,
+}: {
+  children: ReactNode
+  isActive?: boolean
+  icon?: IconType
+  onClick: React.MouseEventHandler
+}) => {
+  const bg = useColorModeValue('gray.200', 'gray.700')
+  return (
+    <Flex
+      align="center"
+      bg={isActive ? bg : ''}
+      _hover={{
+        bg: bg,
+      }}
+      cursor="pointer"
+      onClick={onClick}
+      px={2}
+      py={1}
+      role="group"
+      transition=".15s ease"
+    >
+      {icon && (
+        <Icon
+          as={icon}
+          boxSize="4"
+          mr="2"
+          _groupHover={{
+            color: 'gray.600',
+          }}
+        />
+      )}
+      {children}
+    </Flex>
   )
 }
