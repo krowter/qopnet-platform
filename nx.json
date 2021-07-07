@@ -39,6 +39,9 @@
       "tags": [],
       "implicitDependencies": ["qopnet-commerce"]
     },
+    "qopnet-ui": {
+      "tags": []
+    },
     "util-supabase": {
       "tags": []
     }

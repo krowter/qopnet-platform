@@ -231,6 +231,27 @@
         }
       }
     },
+    "qopnet-ui": {
+      "root": "libs/qopnet-ui",
+      "sourceRoot": "libs/qopnet-ui/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/qopnet-ui/**/*.{ts,tsx,js,jsx}"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/qopnet-ui"],
+          "options": {
+            "jestConfig": "libs/qopnet-ui/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "util-supabase": {
       "root": "libs/util-supabase",
       "sourceRoot": "libs/util-supabase/src",
