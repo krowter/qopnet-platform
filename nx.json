@@ -31,6 +31,9 @@
     },
     "qopnet-api": {
       "tags": []
+    },
+    "util-supabase": {
+      "tags": []
     }
   }
 }

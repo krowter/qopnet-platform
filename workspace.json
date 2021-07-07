@@ -153,6 +153,27 @@
           }
         }
       }
+    },
+    "util-supabase": {
+      "root": "libs/util-supabase",
+      "sourceRoot": "libs/util-supabase/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/util-supabase/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/util-supabase"],
+          "options": {
+            "jestConfig": "libs/util-supabase/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   },
   "cli": {
