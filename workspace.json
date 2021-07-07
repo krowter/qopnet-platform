@@ -154,6 +154,83 @@
         }
       }
     },
+    "qopnet-commerce": {
+      "root": "apps/qopnet-commerce",
+      "sourceRoot": "apps/qopnet-commerce",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/next:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "root": "apps/qopnet-commerce",
+            "outputPath": "dist/apps/qopnet-commerce"
+          },
+          "configurations": {
+            "production": {}
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/next:server",
+          "options": {
+            "buildTarget": "qopnet-commerce:build",
+            "dev": true
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "qopnet-commerce:build:production",
+              "dev": false
+            }
+          }
+        },
+        "export": {
+          "executor": "@nrwl/next:export",
+          "options": {
+            "buildTarget": "qopnet-commerce:build:production"
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/qopnet-commerce"],
+          "options": {
+            "jestConfig": "apps/qopnet-commerce/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/qopnet-commerce/**/*.{ts,tsx,js,jsx}"]
+          }
+        }
+      }
+    },
+    "qopnet-commerce-e2e": {
+      "root": "apps/qopnet-commerce-e2e",
+      "sourceRoot": "apps/qopnet-commerce-e2e/src",
+      "projectType": "application",
+      "targets": {
+        "e2e": {
+          "executor": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/qopnet-commerce-e2e/cypress.json",
+            "tsConfig": "apps/qopnet-commerce-e2e/tsconfig.e2e.json",
+            "devServerTarget": "qopnet-commerce:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "qopnet-commerce:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/qopnet-commerce-e2e/**/*.{js,ts}"]
+          }
+        }
+      }
+    },
     "util-supabase": {
       "root": "libs/util-supabase",
       "sourceRoot": "libs/util-supabase/src",
@@ -195,6 +272,12 @@
         "style": "@emotion/styled",
         "linter": "eslint",
         "strict": true
+      }
+    },
+    "@nrwl/next": {
+      "application": {
+        "style": "@emotion/styled",
+        "linter": "eslint"
       }
     }
   }

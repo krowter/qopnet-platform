@@ -32,6 +32,13 @@
     "qopnet-api": {
       "tags": []
     },
+    "qopnet-commerce": {
+      "tags": []
+    },
+    "qopnet-commerce-e2e": {
+      "tags": [],
+      "implicitDependencies": ["qopnet-commerce"]
+    },
     "util-supabase": {
       "tags": []
     }
