@@ -3,5 +3,7 @@ module.exports = {
     '<rootDir>/apps/qopnet-api',
     '<rootDir>/apps/qopnet-admin',
     '<rootDir>/libs/util-supabase',
+    '<rootDir>/apps/qopnet-commerce',
+    '<rootDir>/libs/qopnet-ui',
   ],
 }

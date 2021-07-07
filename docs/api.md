@@ -4,13 +4,16 @@ The Qopnet API spec/schema is mostly defined using Postman API collection for no
 
 Base URL:
 
-```
+```sh
+# development
 http://localhost:4000
 
+# staging
 https://api-staging.qopnet.id
-https://qopnet-platform-staging.up.railway.app
+https://qopnet-api-staging.up.railway.app
 
+# production
 https://api.qopnet.id
 https://qopnet-api.catamyst.com
-https://qopnet-platform-production.up.railway.app
+https://qopnet-api.up.railway.app
 ```
