@@ -1,13 +1,13 @@
 import { getGreeting } from '../support/app.po'
 
-describe('qopnet-commerce', () => {
+describe('Qopnet Commerce Home', () => {
   beforeEach(() => cy.visit('/'))
 
-  it('should display welcome message', () => {
+  it('Show header message', () => {
     // Custom command example, see `../support/commands.ts` file
-    cy.login('my-email@something.com', 'myPassword')
+    // cy.login('name@something.com', 'the_secret_word')
 
     // Function helper example, see `../support/app.po.ts` file
-    getGreeting().contains('Welcome to qopnet-commerce!')
+    getGreeting().contains('Qopnet Header')
   })
 })
