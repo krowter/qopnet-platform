@@ -5,6 +5,7 @@ import * as Sentry from '@sentry/node'
 import * as Tracing from '@sentry/tracing'
 
 import root from './app/root'
+import auth from './app/auth'
 import profiles from './app/profiles'
 
 const app = express()
@@ -35,6 +36,7 @@ app.use(Sentry.Handlers.requestHandler())
 app.use(Sentry.Handlers.tracingHandler())
 
 app.use('/', root)
+app.use('/api/auth', auth)
 app.use('/api/profiles', profiles)
 
 // The error handler must be before any other error middleware

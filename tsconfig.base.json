@@ -9,7 +9,9 @@
     "lib": ["es2017", "dom"],
     "module": "esnext",
     "moduleResolution": "node",
-    "paths": {},
+    "paths": {
+      "@qopnet/util-supabase": ["libs/util-supabase/src/index.ts"]
+    },
     "resolveJsonModule": true,
     "rootDir": ".",
     "skipDefaultLibCheck": true,
