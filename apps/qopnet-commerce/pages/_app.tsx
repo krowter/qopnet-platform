@@ -1,25 +1,25 @@
 import { AppProps } from 'next/app'
 import Head from 'next/head'
-import { ReactComponent as NxLogo } from '../public/nx-logo-white.svg'
+import { ChakraProvider } from '@chakra-ui/react'
+
+import { Header } from '@qopnet/qopnet-ui'
 import './styles.css'
 
-function CustomApp({ Component, pageProps }: AppProps) {
+function QopnetCommerce({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <title>Welcome to qopnet-commerce!</title>
+        <title>Qopnet</title>
       </Head>
-      <div className="app">
-        <header className="flex">
-          <NxLogo width="75" height="50" />
-          <h1>Welcome to qopnet-commerce!</h1>
-        </header>
+
+      <ChakraProvider>
+        <Header />
         <main>
           <Component {...pageProps} />
         </main>
-      </div>
+      </ChakraProvider>
     </>
   )
 }
 
-export default CustomApp
+export default QopnetCommerce

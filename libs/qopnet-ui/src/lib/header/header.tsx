@@ -1,17 +1,13 @@
-import styled from '@emotion/styled'
+import { Box } from '@chakra-ui/react'
 
 /* eslint-disable-next-line */
 export interface HeaderProps {}
 
-const StyledHeader = styled.div`
-  color: pink;
-`
-
-export function Header(props: HeaderProps) {
+export const Header = (props: HeaderProps) => {
   return (
-    <StyledHeader>
-      <h1>Welcome to header!</h1>
-    </StyledHeader>
+    <Box>
+      <h1>Qopnet Header</h1>
+    </Box>
   )
 }
 
