@@ -2,19 +2,15 @@
 
 ## Preparation
 
-Since we're using Supabase, there is a special `auth.users` table for Supabase Auth. The schema is in `auth`, not `public`. Meanwhile, Prisma uses `public` table by default and cannot access `auth` PostgreSQL schema.
+Since we're using Supabase for authentication/authorization, there is a special `auth.users` table for Supabase Auth. The schema is in `auth`, not `public`. Meanwhile, Prisma uses `public` table by default and cannot access or cross reference the `auth` schema.
 
-Therefore the initial migration file should consist of this special SQL command:
+Therefore this is how we organize them:
 
-```sql
-CREATE TABLE "Profile" (
-    "id" uuid REFERENCES auth.users NOT NULL,
-    "handle" CITEXT NOT NULL,
-    -- ...
-);
-```
+1. Prisma Schema contains model of `User`, `Profile`, `AdminProfile`.
+2. As declared in `copy-users.sql` it has a PostgreSQL function and trigger to copy newly signed up user to `public.users` table. So it copy `auth.users` `id` to `public.users` `id`.
+3. `Profile` and `AdminProfile` can reference the `userId` to `public.users` id. Which can also be used to track back into `auth.users`.
 
-Basically, after we migrate Prisma Schema into SQL migration files, we have to make sure the data type and reference are set correctly. Because currently Prisma doesn't support cross reference/schema foreign key.
+Basically, after we migrate Prisma Schema into SQL migration files, we have to make sure the data type and reference are set correctly. Because currently Prisma currently doesn't support cross reference/schema foreign key.
 
 ## Setup Environment
 
@@ -26,20 +22,28 @@ Optionally, you can still use `.env` file without Doppler although you need to k
 DATABASE_URL=postgres://postgres:developmentPassword@db.development.supabase.co:5432/postgres
 ```
 
+## Run Generate
+
+Generate Prisma Schema to be used in the app. Only used once.
+
+```sh
+doppler run -- npm run prisma:generate
+```
+
 ## Run Migrate
 
-Run the SQL migration files.
+Create the SQL migration files.
 
 ```sh
 doppler run -- npm run prisma:migrate
 ```
 
-## Run Generate
+## Run Push
 
-Generate Prisma Schema to be used in the app.
+Run and push the SQL migration files to the database.
 
 ```sh
-doppler run -- npm run prisma:generate
+doppler run -- npm run prisma:push
 ```
 
 ## Run Studio
