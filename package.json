@@ -35,11 +35,12 @@
     "dep-graph": "nx dep-graph",
     "help": "nx help",
     "prisma:reset": "prisma migrate reset",
-    "prisma:init": "prisma migrate dev --name init",
-    "prisma:migrate": "prisma migrate dev --name",
+    "prisma:init": "prisma migrate dev --create-only --name init",
+    "prisma:migrate": "prisma migrate dev --create-only --name",
     "prisma:push": "prisma db push",
     "prisma:generate": "prisma generate",
-    "prisma:studio": "prisma studio"
+    "prisma:studio": "prisma studio",
+    "prisma:format": "prisma format"
   },
   "dependencies": {
     "@chakra-ui/react": "1.6.4",

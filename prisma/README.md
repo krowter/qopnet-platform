@@ -18,7 +18,9 @@ Basically, after we migrate Prisma Schema into SQL migration files, we have to m
 
 ## Setup Environment
 
-The `.env` used is in the root. The `DATABASE_URL` should use PostgreSQL string from Qopnet Development.
+Use Doppler to manage environment variables on `development`, `staging`, and `production` as mentioned in the project [README](../README.md). The `DATABASE_URL` should use PostgreSQL string from Qopnet Development when you're developing locally.
+
+Optionally, you can still use `.env` file without Doppler although you need to keep up to date with the variables.
 
 ```
 DATABASE_URL=postgres://postgres:developmentPassword@db.development.supabase.co:5432/postgres
@@ -29,7 +31,7 @@ DATABASE_URL=postgres://postgres:developmentPassword@db.development.supabase.co:
 Run the SQL migration files.
 
 ```sh
-npm run prisma:migrate
+doppler run -- npm run prisma:migrate
 ```
 
 ## Run Generate
@@ -37,7 +39,7 @@ npm run prisma:migrate
 Generate Prisma Schema to be used in the app.
 
 ```sh
-npm run prisma:generate
+doppler run -- npm run prisma:generate
 ```
 
 ## Run Studio
@@ -45,5 +47,13 @@ npm run prisma:generate
 Preview database with GUI.
 
 ```sh
-npm run prisma:studio
+doppler run -- npm run prisma:studio
+```
+
+## Run Format
+
+Check the Prisma Schema formatting.
+
+```sh
+doppler run -- npm run prisma:format
 ```

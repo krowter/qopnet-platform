@@ -10,30 +10,134 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// -----------------------------------------------------------------------------
+// User and Profile
+// Email and password are in User
+// Other fields are in Profile
+
+// Copy of auth.users
+model User {
+  id           String        @id
+  email        String
+  profile      Profile?
+  adminProfile AdminProfile?
+
+  @@map(name: "users")
+}
+
 model Profile {
-  id     String @id
+  id        String  @id @default(cuid())
+  handle    String? @unique
+  name      String?
+  avatarUrl String?
+  phone     String?
+
+  // Relations
+  userId      String
+  user        User         @relation(fields: [userId], references: [id])
+  addresses   Address[]
+  wholesalers Wholesaler[]
+  suppliers   Supplier[]
+  merchants   Merchant[]
+
+  // Timestamp
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@map(name: "profiles")
+}
+
+model AdminProfile {
+  id String @id @default(cuid())
+
+  // Relations
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  // Timestamp
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@map(name: "admin_profiles")
+}
+
+// -----------------------------------------------------------------------------
+// Address can be used for Profile, Wholesaler, Supplier, Merchant, Customer
+
+model Address {
+  id            String @id @default(cuid())
+  street        String // Jl. Street Name
+  streetDetails String // Optional details such as floor number
+  city          String
+  state         String // Province
+  zip           String // Postal code
+  countryCode   String // Save as ID, not Indonesia
+
+  // Relations
+  profileId    String?
+  profile      Profile?    @relation(fields: [profileId], references: [id])
+  wholesalerId String?
+  wholesaler   Wholesaler? @relation(fields: [wholesalerId], references: [id])
+  supplierId   String?
+  supplier     Supplier?   @relation(fields: [supplierId], references: [id])
+  merchantId   String?
+  merchant     Merchant?   @relation(fields: [merchantId], references: [id])
+
+  // Timestamp
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@map(name: "addresses")
+}
+
+// -----------------------------------------------------------------------------
+// Wholesaler
+
+model Wholesaler {
+  id     String @id @default(cuid())
   handle String @unique
   name   String
+
+  // Relations
+  addresses Address[]
+  ownerId   String // Currently the owner should only be Qopnet Admin
+  owner     Profile   @relation(fields: [ownerId], references: [id])
+
+  // Timestamp
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@map(name: "wholesalers")
+}
+
+// -----------------------------------------------------------------------------
+// Supplier
+
+enum SupplierCategory {
+  PRODUCER
+  DISTRIBUTOR
 }
 
 model Supplier {
-  id                  String  @id @default(cuid())
-  handle              String  @unique
-  name                String
-  avatar_url          String?
-  national_tax_number String
-  certification_file  String
-  classification      String // enum: producer | distributor
-  address             String? // relation
-  warehouses          String? // relation
-}
+  id                String            @id @default(cuid())
+  handle            String            @unique
+  name              String
+  avatarUrl         String?
+  nationalTax       String
+  certificationFile String
+  category          SupplierCategory?
 
-model Merchant {
-  id         String  @id @default(cuid())
-  handle     String  @unique
-  name       String
-  avatar_url String?
-  address    String? // relation
+  // Relations
+  ownerId          String?
+  owner            Profile?          @relation(fields: [ownerId], references: [id])
+  addresses        Address[]
+  supplierProducts SupplierProduct[]
+
+  // Timestamp
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@map(name: "suppliers")
 }
 
 model SupplierProduct {
@@ -42,18 +146,39 @@ model SupplierProduct {
   sku         String
   name        String
   description String
-  image_url   String
+  imageUrl    String
   price       Decimal @db.Money
-  price_max   Decimal @db.Money
-  price_min   Decimal @db.Money
+  priceMax    Decimal @db.Money
+  priceMin    Decimal @db.Money
+
+  // Relations
+  supplierId String
+  supplier   Supplier @relation(fields: [supplierId], references: [id])
+
+  // Timestamp
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@map(name: "supplier_products")
 }
 
-model MerchantProduct {
-  id          String  @id @default(cuid())
-  slug        String  @unique
-  sku         String
-  name        String
-  description String
-  image_url   String
-  price       Decimal @db.Money
+// -----------------------------------------------------------------------------
+// Merchant
+
+model Merchant {
+  id        String  @id @default(cuid())
+  handle    String  @unique
+  name      String
+  avatarUrl String?
+
+  // Relations
+  ownerId   String?
+  owner     Profile?  @relation(fields: [ownerId], references: [id])
+  addresses Address[]
+
+  // Timestamp
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@map(name: "merchants")
 }
