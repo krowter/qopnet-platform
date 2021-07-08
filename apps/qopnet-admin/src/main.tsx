@@ -6,6 +6,7 @@ import { createClient } from '@supabase/supabase-js'
 import { SupabaseContextProvider } from 'use-supabase'
 
 import App from './app/app'
+import './mocks'
 
 const supabase = createClient(
   `${process.env.NX_SUPABASE_URL}`,

@@ -18,7 +18,8 @@
             "assets": [
               "apps/qopnet-admin/src/_redirects",
               "apps/qopnet-admin/src/favicon.ico",
-              "apps/qopnet-admin/src/assets"
+              "apps/qopnet-admin/src/assets",
+              "apps/qopnet-admin/src/mockServiceWorker.js"
             ],
             "styles": [],
             "scripts": [],
