@@ -8,8 +8,17 @@ router.post('/signup', async (req, res) => {
     email: req.body.email,
     password: req.body.password,
   })
-  if (error) res.status(500).json({ error })
-  else res.json({ user })
+  if (error) {
+    res.status(500).json({
+      message: 'Sign up error',
+      error,
+    })
+  } else {
+    res.json({
+      message: 'Sign up success',
+      user,
+    })
+  }
 })
 
 router.post('/signin', async (req, res) => {
@@ -18,15 +27,32 @@ router.post('/signin', async (req, res) => {
     password: req.body.password,
   })
 
-  if (error) res.status(500).json({ error })
-  else res.json({ session })
+  if (error) {
+    res.status(500).json({
+      message: 'Sign in error',
+      error,
+    })
+  } else {
+    res.json({
+      message: 'Sign in success',
+      session,
+    })
+  }
 })
 
 router.post('/signout', async (req, res) => {
   const { error } = await supabase.auth.signOut()
 
-  if (error) res.status(500).json({ error })
-  else res.json({ message: 'User signed out' })
+  if (error) {
+    res.status(500).json({
+      message: 'Sign out error',
+      error,
+    })
+  } else {
+    res.json({
+      message: 'Sign out success',
+    })
+  }
 })
 
 export default router

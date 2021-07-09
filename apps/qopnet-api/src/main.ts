@@ -36,7 +36,7 @@ app.use(Sentry.Handlers.requestHandler())
 app.use(Sentry.Handlers.tracingHandler())
 
 app.use('/', root)
-app.use('/api/auth', auth)
+app.use('/auth', auth)
 app.use('/api/profiles', profiles)
 
 // The error handler must be before any other error middleware
