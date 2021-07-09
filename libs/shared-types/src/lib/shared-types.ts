@@ -66,11 +66,11 @@ export enum SupplierCategory {
 
 export type Supplier = {
   id: string
-  handle: string
-  name: string
+  handle?: string // seller.domain ala tokopedia/shopify
+  name?: string
   avatarUrl?: string
-  nationalTax: string
-  certificationFile: string
+  nationalTax?: string
+  certificationFile?: string
   category?: SupplierCategory
 
   // Relations
@@ -95,6 +95,9 @@ export type SupplierProduct = {
   priceMax: number
   priceMin: number
 
+  // Custom data
+  images: Image[]
+
   // Relations
   supplierId: string
   supplier: Supplier
@@ -102,6 +105,12 @@ export type SupplierProduct = {
   // Timestamp
   createdAt?: string
   updatedAt?: string
+}
+
+export type Image = {
+  id: string
+  objectId?: string // object id of image in Supabase Storage
+  position?: number // position of image in the images
 }
 
 export type Merchant = {
