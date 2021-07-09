@@ -1,5 +1,7 @@
 export * from './home'
 export * from './users'
+export * from './suppliers'
+export * from './merchants'
 export * from './profiles'
 export * from './about'
 export * from './login'

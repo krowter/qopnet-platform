@@ -1,7 +1,16 @@
 import { Route, Switch, useHistory } from 'react-router-dom'
 import { useUser, useSupabase } from 'use-supabase'
 
-import { Profiles, Home, About, Users, Login, NotFound } from './pages'
+import {
+  Profiles,
+  Home,
+  About,
+  Users,
+  Suppliers,
+  Merchants,
+  Login,
+  NotFound,
+} from './pages'
 import { useEffect } from 'react'
 
 export const App = () => {
@@ -26,6 +35,8 @@ export const App = () => {
         <Route exact path="/" component={Home} />
         <Route exact path="/login" component={Login} />
         <Route exact path="/users" component={Users} />
+        <Route exact path="/suppliers" component={Suppliers} />
+        <Route exact path="/merchants" component={Merchants} />
         <Route exact path="/about" component={About} />
         <Route exact path="/profiles" component={Profiles} />
         <Route component={NotFound} />

@@ -183,9 +183,10 @@ export const SidebarLinks = () => {
       </SidebarNestedLink>
       <Collapse in={merchants.isOpen}>
         <Flex flexDirection="column" alignItems="flex-start" px={4}>
-          <SidebarLink to="/merchant/products">Merchant Products</SidebarLink>
-          <SidebarLink to="/merchant/orders">Merchant Orders</SidebarLink>
-          <SidebarLink to="/merchant/invoices">Merchant Invoices</SidebarLink>
+          <SidebarLink to="/merchants">All Merchants</SidebarLink>
+          <SidebarLink to="/merchants/products">Merchant Products</SidebarLink>
+          <SidebarLink to="/merchants/orders">Merchant Orders</SidebarLink>
+          <SidebarLink to="/merchants/invoices">Merchant Invoices</SidebarLink>
         </Flex>
       </Collapse>
       <SidebarLink to="/logistics">Logistics</SidebarLink>
