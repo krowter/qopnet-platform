@@ -120,11 +120,11 @@ enum SupplierCategory {
 
 model Supplier {
   id                String            @id @default(cuid())
-  handle            String            @unique
-  name              String
+  handle            String?           @unique
+  name              String?
   avatarUrl         String?
-  nationalTax       String
-  certificationFile String
+  nationalTax       String?
+  certificationFile String?
   category          SupplierCategory?
 
   // Relations
@@ -141,19 +141,19 @@ model Supplier {
 }
 
 model SupplierProduct {
-  id          String  @id @default(cuid())
-  slug        String  @unique
-  sku         String
-  name        String
-  description String
-  imageUrl    String
-  price       Decimal @db.Money
-  priceMax    Decimal @db.Money
-  priceMin    Decimal @db.Money
+  id          String   @id @default(cuid())
+  slug        String?  @unique
+  sku         String?
+  name        String?
+  description String?
+  price       Decimal? @db.Money
+  priceMax    Decimal? @db.Money
+  priceMin    Decimal? @db.Money
+  images      Json?
 
   // Relations
-  supplierId String
-  supplier   Supplier @relation(fields: [supplierId], references: [id])
+  supplierId String?
+  supplier   Supplier? @relation(fields: [supplierId], references: [id])
 
   // Timestamp
   createdAt DateTime @default(now())
