@@ -42,6 +42,9 @@
     "qopnet-ui": {
       "tags": []
     },
+    "shared-types": {
+      "tags": []
+    },
     "util-supabase": {
       "tags": []
     }

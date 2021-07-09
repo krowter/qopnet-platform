@@ -11,6 +11,7 @@
     "moduleResolution": "node",
     "paths": {
       "@qopnet/qopnet-ui": ["libs/qopnet-ui/src/index.ts"],
+      "@qopnet/shared-types": ["libs/shared-types/src/index.ts"],
       "@qopnet/util-supabase": ["libs/util-supabase/src/index.ts"]
     },
     "resolveJsonModule": true,
