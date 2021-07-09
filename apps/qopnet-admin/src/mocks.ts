@@ -13,14 +13,6 @@ const myResourceHandler = [
             avatarUrl: '',
             phone: '08123456789',
             userId: '211182da-c301-4fe9-8801-6225adacb0df',
-            address: {
-              street: '',
-              streetDetails: '',
-              city: '',
-              state: '',
-              zip: '',
-              countryCode: '',
-            },
           },
         },
         {
@@ -31,14 +23,6 @@ const myResourceHandler = [
             avatarUrl: '',
             phone: '08123456799',
             userId: '211182da-c301-4fe9-8801-6225adacb0dg',
-            address: {
-              street: '',
-              streetDetails: '',
-              city: '',
-              state: '',
-              zip: '',
-              countryCode: '',
-            },
           },
         },
       ])
@@ -54,14 +38,6 @@ const myResourceHandler = [
           avatarUrl: '',
           nationalTax: '01354876545',
           certificationFile: '',
-          address: {
-            street: '',
-            streetDetails: '',
-            city: '',
-            state: '',
-            zip: '',
-            countryCode: '',
-          },
         },
         {
           handle: 'thalia',
@@ -69,14 +45,6 @@ const myResourceHandler = [
           avatarUrl: '',
           nationalTax: '2154978564',
           certificationFile: '',
-          address: {
-            street: '',
-            streetDetails: '',
-            city: '',
-            state: '',
-            zip: '',
-            countryCode: '',
-          },
         },
       ])
     )
@@ -88,26 +56,10 @@ const myResourceHandler = [
         {
           handle: 'rkub',
           name: 'Rumah Kreasi Usaha Bersama',
-          address: {
-            street: '',
-            streetDetails: '',
-            city: '',
-            state: '',
-            zip: '',
-            countryCode: '',
-          },
         },
         {
           handle: 'suka-makmur',
           name: 'Toko Suka Makmur',
-          address: {
-            street: '',
-            streetDetails: '',
-            city: '',
-            state: '',
-            zip: '',
-            countryCode: '',
-          },
         },
       ])
     )
