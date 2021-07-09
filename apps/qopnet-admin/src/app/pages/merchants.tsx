@@ -15,25 +15,11 @@ import {
 import useSWR from 'swr'
 
 import { DefaultLayout } from '../layouts'
+import { Merchant } from '@qopnet/shared-types'
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json())
 
-type Address = {
-  city: string
-  countryCode: string
-  state: string
-  street: string
-  streetDetails: string
-  zip: string
-}
-
-type Merchant = {
-  handle: string
-  name: string
-  address: Address
-}
-
-export const Merchants = () => {
+export const MerchantsPage = () => {
   const { data, error } = useSWR('/api/merchants', fetcher)
   if (error) return <div>failed to load</div>
   if (!data) return <div>loading ...</div>

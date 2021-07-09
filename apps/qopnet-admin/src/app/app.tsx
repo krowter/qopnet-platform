@@ -6,8 +6,8 @@ import {
   Home,
   About,
   Users,
-  Suppliers,
-  Merchants,
+  SuppliersPage,
+  MerchantsPage,
   Login,
   NotFound,
 } from './pages'
@@ -35,8 +35,8 @@ export const App = () => {
         <Route exact path="/" component={Home} />
         <Route exact path="/login" component={Login} />
         <Route exact path="/users" component={Users} />
-        <Route exact path="/suppliers" component={Suppliers} />
-        <Route exact path="/merchants" component={Merchants} />
+        <Route exact path="/suppliers" component={SuppliersPage} />
+        <Route exact path="/merchants" component={MerchantsPage} />
         <Route exact path="/about" component={About} />
         <Route exact path="/profiles" component={Profiles} />
         <Route component={NotFound} />

@@ -15,28 +15,10 @@ import {
 import useSWR from 'swr'
 
 import { DefaultLayout } from '../layouts'
-
+import { Supplier } from '@qopnet/shared-types'
 const fetcher = (url: string) => fetch(url).then((r) => r.json())
 
-type Address = {
-  city: string
-  countryCode: string
-  state: string
-  street: string
-  streetDetails: string
-  zip: string
-}
-
-type Supplier = {
-  handle: string
-  name: string
-  avatarUrl: string
-  nationalTax: string
-  certificationFile: string
-  address: Address
-}
-
-export const Suppliers = () => {
+export const SuppliersPage = () => {
   const { data, error } = useSWR('/api/suppliers', fetcher)
   if (error) return <div>failed to load</div>
   if (!data) return <div>loading ...</div>

@@ -15,32 +15,9 @@ import {
 import useSWR from 'swr'
 
 import { DefaultLayout } from '../layouts'
-import { useState } from 'react'
+import { User } from '@qopnet/shared-types'
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json())
-
-type Address = {
-  city: string
-  countryCode: string
-  state: string
-  street: string
-  streetDetails: string
-  zip: string
-}
-
-type Profile = {
-  address: Address
-  avatarUrl: string
-  handle: string
-  name: string
-  phone: string
-  userId: string
-}
-
-type User = {
-  email: string
-  profile: Profile
-}
 
 export const Users = () => {
   const { data, error } = useSWR('/api/users', fetcher)
