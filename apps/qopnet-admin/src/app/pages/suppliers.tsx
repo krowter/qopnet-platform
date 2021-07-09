@@ -19,9 +19,9 @@ import { Supplier } from '@qopnet/shared-types'
 const fetcher = (url: string) => fetch(url).then((r) => r.json())
 
 export const SuppliersPage = () => {
-  const { data, error } = useSWR('/api/suppliers', fetcher)
-  if (error) return <div>failed to load</div>
-  if (!data) return <div>loading ...</div>
+  const { data: suppliers, error } = useSWR('/api/suppliers', fetcher)
+  if (error) return <div>failed to load suppliers</div>
+  if (!suppliers) return <div>loading suppliers...</div>
   return (
     <DefaultLayout>
       <Box p={5}>
@@ -31,19 +31,19 @@ export const SuppliersPage = () => {
             All suppliers
           </Text>
           <Text ml={5} fontWeight={500}>
-            {data.length} suppliers
+            {suppliers.length} suppliers
           </Text>
           <Box ml="auto" h={5} w={5} borderRadius={20} bg="#4C2602" />
         </Flex>
         <VStack id="suppliers-all" mt={5} spacing={10}>
           <Table variant="simple" size="sm">
             <Tbody>
-              {data.map((item: Supplier, index: number) => {
+              {suppliers.map((supplier: Supplier, index: number) => {
                 //generates a random color -> #56eec7
                 const randomColor =
                   '#' + Math.floor(Math.random() * 16777215).toString(16)
                 return (
-                  <Tr key={`${item?.name ?? ''}-${index}`}>
+                  <Tr key={`${supplier?.name ?? ''}-${index}`}>
                     <Td>#{index}</Td>
                     <Td>
                       <Box
@@ -53,10 +53,10 @@ export const SuppliersPage = () => {
                         borderRadius={20}
                       />
                     </Td>
-                    <Td>{item?.handle}</Td>
-                    <Td>{item?.name}</Td>
-                    <Td>{item?.nationalTax}</Td>
-                    <Td>{item?.certificationFile}</Td>
+                    <Td>{supplier?.handle}</Td>
+                    <Td>{supplier?.name}</Td>
+                    <Td>{supplier?.nationalTax}</Td>
+                    <Td>{supplier?.certificationFile}</Td>
                   </Tr>
                 )
               })}
