@@ -124,7 +124,7 @@ export const SidebarAuth = () => {
         title: 'Log out success',
         description: 'You are logged out',
       })
-      history.replace('/login')
+      history.replace('/signin')
     } else {
       // If logout is error
       toast({

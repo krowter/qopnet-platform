@@ -3,13 +3,13 @@ import { useUser, useSupabase } from 'use-supabase'
 
 import {
   Profiles,
-  Home,
-  About,
-  Users,
+  HomePage,
+  AboutPage,
+  UsersPage,
   SuppliersPage,
   MerchantsPage,
-  Login,
-  NotFound,
+  SignInPage,
+  NotFoundPage,
 } from './pages'
 import { useEffect } from 'react'
 
@@ -23,7 +23,7 @@ export const App = () => {
       const session = await auth.session()
       // Redirect to login page if not authenticated / no session
       if (!session) {
-        history.replace('/login')
+        history.replace('/signin')
       }
     }
     checkSession()
@@ -32,21 +32,21 @@ export const App = () => {
   if (user) {
     return (
       <Switch>
-        <Route exact path="/" component={Home} />
-        <Route exact path="/login" component={Login} />
-        <Route exact path="/users" component={Users} />
+        <Route exact path="/" component={HomePage} />
+        <Route exact path="/signin" component={SignInPage} />
+        <Route exact path="/users" component={UsersPage} />
         <Route exact path="/suppliers" component={SuppliersPage} />
         <Route exact path="/merchants" component={MerchantsPage} />
-        <Route exact path="/about" component={About} />
+        <Route exact path="/about" component={AboutPage} />
         <Route exact path="/profiles" component={Profiles} />
-        <Route component={NotFound} />
+        <Route component={NotFoundPage} />
       </Switch>
     )
   } else {
     return (
       <Switch>
-        <Route exact path="/login" component={Login} />
-        <Route exact path="/about" component={About} />
+        <Route exact path="/signin" component={SignInPage} />
+        <Route exact path="/about" component={AboutPage} />
       </Switch>
     )
   }

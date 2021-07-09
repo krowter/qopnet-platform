@@ -26,7 +26,7 @@ type LoginInputs = {
   password?: string
 }
 
-export const Login = () => {
+export const SignInPage = () => {
   const user = useUser()
   const history = useHistory()
 

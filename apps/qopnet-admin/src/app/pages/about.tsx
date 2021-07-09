@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 
 import { DefaultLayout } from '../layouts'
 
-export const About = () => {
+export const AboutPage = () => {
   return (
     <DefaultLayout>
       <h1>About</h1>

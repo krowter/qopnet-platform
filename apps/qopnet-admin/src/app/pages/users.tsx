@@ -19,7 +19,7 @@ import { User } from '@qopnet/shared-types'
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json())
 
-export const Users = () => {
+export const UsersPage = () => {
   const { data, error } = useSWR('/api/users', fetcher)
   if (error) return <div>failed to load</div>
   if (!data) return <div>loading ...</div>
