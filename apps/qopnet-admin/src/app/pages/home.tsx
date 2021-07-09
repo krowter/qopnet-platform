@@ -14,7 +14,7 @@ import {
 
 import { DefaultLayout } from '../layouts'
 
-export const Home = () => {
+export const HomePage = () => {
   return (
     <DefaultLayout>
       <HomeLayout>

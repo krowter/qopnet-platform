@@ -15,28 +15,14 @@ import {
 import useSWR from 'swr'
 
 import { DefaultLayout } from '../layouts'
+import { Merchant } from '@qopnet/shared-types'
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json())
 
-type Address = {
-  city: string
-  countryCode: string
-  state: string
-  street: string
-  streetDetails: string
-  zip: string
-}
-
-type Merchant = {
-  handle: string
-  name: string
-  address: Address
-}
-
-export const Merchants = () => {
-  const { data, error } = useSWR('/api/merchants', fetcher)
-  if (error) return <div>failed to load</div>
-  if (!data) return <div>loading ...</div>
+export const MerchantsPage = () => {
+  const { data: merchants, error } = useSWR('/api/merchants', fetcher)
+  if (error) return <div>failed to load merchants</div>
+  if (!merchants) return <div>loading merchants...</div>
   return (
     <DefaultLayout>
       <Box p={5}>
@@ -46,19 +32,19 @@ export const Merchants = () => {
             All merchants
           </Text>
           <Text ml={5} fontWeight={500}>
-            {data.length} merchants
+            {merchants.length} merchants
           </Text>
           <Box ml="auto" h={5} w={5} borderRadius={20} bg="#4C2602" />
         </Flex>
         <VStack id="merchants-all" mt={5} spacing={10}>
           <Table variant="simple" size="sm">
             <Tbody>
-              {data.map((item: Merchant, index: number) => {
+              {merchants.map((merchant: Merchant, index: number) => {
                 //generates a random color -> #56eec7
                 const randomColor =
                   '#' + Math.floor(Math.random() * 16777215).toString(16)
                 return (
-                  <Tr key={`${item?.name ?? ''}-${index}`}>
+                  <Tr key={`${merchant?.name ?? ''}-${index}`}>
                     <Td>#{index}</Td>
                     <Td>
                       <Box
@@ -68,8 +54,8 @@ export const Merchants = () => {
                         borderRadius={20}
                       />
                     </Td>
-                    <Td>{item?.handle}</Td>
-                    <Td>{item?.name}</Td>
+                    <Td>{merchant?.handle}</Td>
+                    <Td>{merchant?.name}</Td>
                   </Tr>
                 )
               })}

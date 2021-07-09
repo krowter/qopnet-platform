@@ -5,5 +5,6 @@ module.exports = {
     '<rootDir>/libs/util-supabase',
     '<rootDir>/apps/qopnet-commerce',
     '<rootDir>/libs/qopnet-ui',
+    '<rootDir>/libs/shared-types',
   ],
 }

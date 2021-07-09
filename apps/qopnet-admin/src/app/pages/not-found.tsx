@@ -3,7 +3,7 @@ import { Link as ChakraLink, Heading, VStack } from '@chakra-ui/react'
 
 import { BlankLayout } from '../layouts'
 
-export const NotFound = () => {
+export const NotFoundPage = () => {
   return (
     <BlankLayout>
       <VStack id="not-found-container" mt={20} spacing={10}>
