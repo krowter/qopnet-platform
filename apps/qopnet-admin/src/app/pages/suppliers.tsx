@@ -15,7 +15,6 @@ import {
 import useSWR from 'swr'
 
 import { DefaultLayout } from '../layouts'
-import { useState } from 'react'
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json())
 
@@ -28,22 +27,17 @@ type Address = {
   zip: string
 }
 
-type Profile = {
-  address: Address
-  avatarUrl: string
+type Supplier = {
   handle: string
   name: string
-  phone: string
-  userId: string
+  avatarUrl: string
+  nationalTax: string
+  certificationFile: string
+  address: Address
 }
 
-type User = {
-  email: string
-  profile: Profile
-}
-
-export const Users = () => {
-  const { data, error } = useSWR('/api/users', fetcher)
+export const Suppliers = () => {
+  const { data, error } = useSWR('/api/suppliers', fetcher)
   if (error) return <div>failed to load</div>
   if (!data) return <div>loading ...</div>
   return (
@@ -52,22 +46,22 @@ export const Users = () => {
         <Flex alignItems="center">
           <Box h={5} w={5} borderRadius={20} bg="#4C2602" />
           <Text ml={5} fontWeight={700}>
-            All users
+            All suppliers
           </Text>
           <Text ml={5} fontWeight={500}>
-            {data.length} users
+            {data.length} suppliers
           </Text>
           <Box ml="auto" h={5} w={5} borderRadius={20} bg="#4C2602" />
         </Flex>
-        <VStack id="users-all" mt={5} spacing={10}>
+        <VStack id="suppliers-all" mt={5} spacing={10}>
           <Table variant="simple" size="sm">
             <Tbody>
-              {data.map((item: User, index: number) => {
+              {data.map((item: Supplier, index: number) => {
                 //generates a random color -> #56eec7
                 const randomColor =
                   '#' + Math.floor(Math.random() * 16777215).toString(16)
                 return (
-                  <Tr key={`${item?.profile?.name ?? ''}-${index}`}>
+                  <Tr key={`${item?.name ?? ''}-${index}`}>
                     <Td>#{index}</Td>
                     <Td>
                       <Box
@@ -77,10 +71,10 @@ export const Users = () => {
                         borderRadius={20}
                       />
                     </Td>
-                    <Td>{item?.profile?.handle}</Td>
-                    <Td>{item?.profile?.name}</Td>
-                    <Td>{item?.email}</Td>
-                    <Td>{item?.profile?.phone}</Td>
+                    <Td>{item?.handle}</Td>
+                    <Td>{item?.name}</Td>
+                    <Td>{item?.nationalTax}</Td>
+                    <Td>{item?.certificationFile}</Td>
                   </Tr>
                 )
               })}
