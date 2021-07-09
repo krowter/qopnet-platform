@@ -152,8 +152,8 @@ model SupplierProduct {
   images      Json?
 
   // Relations
-  supplierId String
-  supplier   Supplier @relation(fields: [supplierId], references: [id])
+  supplierId String?
+  supplier   Supplier? @relation(fields: [supplierId], references: [id])
 
   // Timestamp
   createdAt DateTime @default(now())
