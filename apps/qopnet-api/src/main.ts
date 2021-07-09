@@ -7,6 +7,7 @@ import * as Tracing from '@sentry/tracing'
 import root from './app/root'
 import auth from './app/auth'
 import profiles from './app/profiles'
+import supplierProducts from './app/suppliers/products'
 
 const app = express()
 
@@ -35,9 +36,11 @@ app.use(Sentry.Handlers.requestHandler())
 // TracingHandler creates a trace for every incoming request
 app.use(Sentry.Handlers.tracingHandler())
 
+// Our API endpoints
 app.use('/', root)
 app.use('/auth', auth)
 app.use('/api/profiles', profiles)
+app.use('/api/suppliers/products', supplierProducts)
 
 // The error handler must be before any other error middleware
 // and after all controllers
