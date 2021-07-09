@@ -15,7 +15,6 @@ import {
 import useSWR from 'swr'
 
 import { DefaultLayout } from '../layouts'
-import { ModalContainer } from '../components/modalContainer'
 import { useState } from 'react'
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json())
@@ -45,7 +44,6 @@ type User = {
 
 export const Users = () => {
   const { data, error } = useSWR('/api/users', fetcher)
-  const [userDetail, toggleUserDetail] = useState(false)
   if (error) return <div>failed to load</div>
   if (!data) return <div>loading ...</div>
   return (
@@ -69,10 +67,7 @@ export const Users = () => {
                 const randomColor =
                   '#' + Math.floor(Math.random() * 16777215).toString(16)
                 return (
-                  <Tr
-                    key={`${item?.profile?.name ?? ''}-${index}`}
-                    onClick={() => toggleUserDetail(!userDetail)}
-                  >
+                  <Tr key={`${item?.profile?.name ?? ''}-${index}`}>
                     <Td>#{index}</Td>
                     <Td>
                       <Box
@@ -91,14 +86,6 @@ export const Users = () => {
               })}
             </Tbody>
           </Table>
-          <ModalContainer
-            onClose={() => toggleUserDetail(false)}
-            title="User Detail"
-            open={userDetail}
-            size="xl"
-          >
-            <Text>test</Text>
-          </ModalContainer>
         </VStack>
       </Box>
     </DefaultLayout>
