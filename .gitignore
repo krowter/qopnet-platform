@@ -40,6 +40,7 @@ Thumbs.db
 
 # Environment
 .env
+.env.*
 
 # Exports from Figma
 _exports

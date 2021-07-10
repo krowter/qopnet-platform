@@ -18,7 +18,7 @@ generator client {
 // Copy of auth.users
 model User {
   id           String        @id
-  email        String
+  email        String        @unique @db.Citext
   profile      Profile?
   adminProfile AdminProfile?
 
@@ -27,7 +27,7 @@ model User {
 
 model Profile {
   id        String  @id @default(cuid())
-  handle    String? @unique
+  handle    String? @unique @db.Citext
   name      String?
   avatarUrl String?
   phone     String?
@@ -95,7 +95,7 @@ model Address {
 
 model Wholesaler {
   id     String @id @default(cuid())
-  handle String @unique
+  handle String @unique @db.Citext
   name   String
 
   // Relations
@@ -120,7 +120,7 @@ enum SupplierCategory {
 
 model Supplier {
   id                String            @id @default(cuid())
-  handle            String?           @unique
+  handle            String?           @unique @db.Citext
   name              String?
   avatarUrl         String?
   nationalTax       String?
@@ -142,7 +142,7 @@ model Supplier {
 
 model SupplierProduct {
   id          String   @id @default(cuid())
-  slug        String?  @unique
+  slug        String?  @unique @db.Citext
   sku         String?
   name        String?
   description String?
@@ -167,7 +167,7 @@ model SupplierProduct {
 
 model Merchant {
   id        String  @id @default(cuid())
-  handle    String  @unique
+  handle    String  @unique @db.Citext
   name      String
   avatarUrl String?
 
