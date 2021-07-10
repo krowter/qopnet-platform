@@ -1,10 +1,14 @@
+import slugify from 'slugify'
+
 import { PrismaClient, Prisma } from '@prisma/client'
 const prisma = new PrismaClient()
+
 import * as express from 'express'
 const router = express.Router()
 
 router.get('/', async (req, res) => {
   const supplierProducts = await prisma.supplierProduct.findMany({})
+
   res.json({
     message: 'Get all supplier products',
     supplierProducts,
@@ -12,22 +16,34 @@ router.get('/', async (req, res) => {
 })
 
 router.post('/', async (req, res, next) => {
-  try {
-    const supplierProduct: Prisma.SupplierProductCreateInput = req.body.supplierProduct
-    supplierProduct.createdAt = new Date()
-    supplierProduct.updatedAt = new Date()
+  const supplierProduct: Prisma.SupplierProductCreateInput =
+    req.body.supplierProduct
+  const supplierProductSlug = slugify(supplierProduct.name.toLowerCase())
 
-    const createSupplierProduct = await prisma.supplierProduct.create({
-      data: supplierProduct,
+  try {
+    const newSupplierProduct = await prisma.supplierProduct.create({
+      data: {
+        ...supplierProduct,
+        slug: supplierProductSlug,
+      },
     })
 
     res.json({
-      message: 'Create Supplier Product',
-      supplierProduct: createSupplierProduct,
+      message: 'Create new supplier product',
+      supplierProduct: newSupplierProduct,
     })
-  } catch (e) {
-    res.json(e)
-    return next(e)
+  } catch (error) {
+    if (error.code === 'P2002') {
+      res.json({
+        message: `Failed to create unique slug`,
+        slug: supplierProductSlug,
+        error,
+      })
+      return next(error)
+    } else {
+      res.json(error)
+      return next(error)
+    }
   }
 })
 
@@ -38,11 +54,11 @@ router.get('/:slug', async (req, res, next) => {
       where: { slug },
     })
     res.json({
-      message: 'Get supplier product by product slug',
+      message: 'Get one supplier product by supplierProductParam',
       supplierProduct,
     })
-  } catch (e) {
-    next(e)
+  } catch (error) {
+    next(error)
   }
 })
 
