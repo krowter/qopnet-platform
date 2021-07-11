@@ -5,7 +5,6 @@ import {
   Button,
   ButtonGroup,
   chakra,
-  Collapse,
   Drawer,
   DrawerCloseButton,
   DrawerContent,
@@ -155,40 +154,22 @@ export const SidebarLinks = () => {
       <SidebarLink to="/">Home</SidebarLink>
       <SidebarLink to="/users">Users</SidebarLink>
       <SidebarLink to="/profiles">Profiles</SidebarLink>
-      <SidebarNestedLink onClick={suppliers.onToggle}>
-        Suppliers
-        <Icon
-          as={MdKeyboardArrowRight}
-          ml="auto"
-          transform={suppliers.isOpen ? 'rotate(90deg)' : 'none'}
-        />
-      </SidebarNestedLink>
-      <Collapse in={suppliers.isOpen}>
-        <Flex flexDirection="column" alignItems="flex-start" px={4}>
-          <SidebarLink to="/suppliers">All Suppliers</SidebarLink>
-          <SidebarLink to="/suppliers/products">Suppliers Products</SidebarLink>
-          <SidebarLink to="/suppliers/purchase-orders">
-            Purchase Orders (PO)
-          </SidebarLink>
-          <SidebarLink to="/suppliers/invoices">Suppliers Invoices</SidebarLink>
-        </Flex>
-      </Collapse>
-      <SidebarNestedLink onClick={merchants.onToggle}>
-        Merchants
-        <Icon
-          as={MdKeyboardArrowRight}
-          ml="auto"
-          transform={merchants.isOpen ? 'rotate(90deg)' : 'none'}
-        />
-      </SidebarNestedLink>
-      <Collapse in={merchants.isOpen}>
-        <Flex flexDirection="column" alignItems="flex-start" px={4}>
-          <SidebarLink to="/merchants">All Merchants</SidebarLink>
-          <SidebarLink to="/merchants/products">Merchant Products</SidebarLink>
-          <SidebarLink to="/merchants/orders">Merchant Orders</SidebarLink>
-          <SidebarLink to="/merchants/invoices">Merchant Invoices</SidebarLink>
-        </Flex>
-      </Collapse>
+      <SidebarNestedLink>Suppliers</SidebarNestedLink>
+      <Flex flexDirection="column" alignItems="flex-start" px={4}>
+        <SidebarLink to="/suppliers">All Suppliers</SidebarLink>
+        <SidebarLink to="/suppliers/products">Suppliers Products</SidebarLink>
+        <SidebarLink to="/suppliers/purchase-orders">
+          Purchase Orders (PO)
+        </SidebarLink>
+        <SidebarLink to="/suppliers/invoices">Suppliers Invoices</SidebarLink>
+      </Flex>
+      <SidebarNestedLink>Merchants</SidebarNestedLink>
+      <Flex flexDirection="column" alignItems="flex-start" px={4}>
+        <SidebarLink to="/merchants">All Merchants</SidebarLink>
+        <SidebarLink to="/merchants/products">Merchant Products</SidebarLink>
+        <SidebarLink to="/merchants/orders">Merchant Orders</SidebarLink>
+        <SidebarLink to="/merchants/invoices">Merchant Invoices</SidebarLink>
+      </Flex>
       <SidebarLink to="/logistics">Logistics</SidebarLink>
       <SidebarLink to="/customers">Customers</SidebarLink>
     </Stack>
@@ -233,7 +214,7 @@ const SidebarNestedLink = ({
   children: ReactNode
   isActive?: boolean
   icon?: IconType
-  onClick: React.MouseEventHandler
+  onClick?: React.MouseEventHandler
 }) => {
   const bg = useColorModeValue('gray.200', 'gray.700')
   return (
