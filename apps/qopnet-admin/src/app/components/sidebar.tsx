@@ -77,6 +77,7 @@ export const Sidebar = () => {
         justify="space-between"
         py={5}
         minWidth="250px"
+        h="auto"
       >
         <Stack as="nav" w="auto" spacing={5}>
           <SidebarUser />
@@ -137,10 +138,10 @@ export const SidebarAuth = () => {
   return (
     <ButtonGroup px={5} justifyContent="center" display="flex">
       <Button colorScheme="orange" size="xs">
-        Settings
+        Pengaturan
       </Button>
       <Button colorScheme="red" size="xs" onClick={handleLogout}>
-        Log out
+        Keluar
       </Button>
     </ButtonGroup>
   )
@@ -151,19 +152,19 @@ export const SidebarLinks = () => {
   const merchants = useDisclosure()
   return (
     <Stack fontSize="sm" fontWeight="500" spacing={0} px={3}>
-      <SidebarLink to="/">Home</SidebarLink>
-      <SidebarLink to="/users">Users</SidebarLink>
-      <SidebarLink to="/profiles">Profiles</SidebarLink>
-      <SidebarNestedLink>Suppliers</SidebarNestedLink>
+      <SidebarLink to="/">Halaman Utama</SidebarLink>
+      <SidebarLink to="/users">Pengguna</SidebarLink>
+      <SidebarLink to="/profiles">Profil</SidebarLink>
+      <SidebarNestedLink>Supplier</SidebarNestedLink>
       <Flex flexDirection="column" alignItems="flex-start" px={4}>
-        <SidebarLink to="/suppliers">All Suppliers</SidebarLink>
-        <SidebarLink to="/suppliers/products">Suppliers Products</SidebarLink>
-        <SidebarLink to="/suppliers/purchase-orders">
+        <SidebarLink to="/suppliers">Semua Supplier</SidebarLink>
+        <SidebarLink to="/suppliers/products">Produk Supplier</SidebarLink>
+        {/* <SidebarLink to="/suppliers/purchase-orders">
           Purchase Orders (PO)
         </SidebarLink>
-        <SidebarLink to="/suppliers/invoices">Suppliers Invoices</SidebarLink>
+        <SidebarLink to="/suppliers/invoices">Suppliers Invoices</SidebarLink> */}
       </Flex>
-      <SidebarNestedLink>Merchants</SidebarNestedLink>
+      {/* <SidebarNestedLink>Merchants</SidebarNestedLink>
       <Flex flexDirection="column" alignItems="flex-start" px={4}>
         <SidebarLink to="/merchants">All Merchants</SidebarLink>
         <SidebarLink to="/merchants/products">Merchant Products</SidebarLink>
@@ -171,7 +172,7 @@ export const SidebarLinks = () => {
         <SidebarLink to="/merchants/invoices">Merchant Invoices</SidebarLink>
       </Flex>
       <SidebarLink to="/logistics">Logistics</SidebarLink>
-      <SidebarLink to="/customers">Customers</SidebarLink>
+      <SidebarLink to="/customers">Customers</SidebarLink> */}
     </Stack>
   )
 }

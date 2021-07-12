@@ -1,6 +1,8 @@
 import {
+  Avatar,
   Box,
   Flex,
+  Spinner,
   Table,
   TableCaption,
   Tbody,
@@ -20,8 +22,6 @@ const fetcher = (url: string) => fetch(url).then((r) => r.json())
 
 export const SuppliersPage = () => {
   const { data: suppliers, error } = useSWR('/api/suppliers', fetcher)
-  if (error) return <div>failed to load suppliers</div>
-  if (!suppliers) return <div>loading suppliers...</div>
   return (
     <DefaultLayout>
       <Box p={5}>
@@ -31,38 +31,41 @@ export const SuppliersPage = () => {
             All suppliers
           </Text>
           <Text ml={5} fontWeight={500}>
-            {suppliers.length} suppliers
+            {suppliers?.length ?? 0} suppliers
           </Text>
           <Box ml="auto" h={5} w={5} borderRadius={20} bg="#4C2602" />
         </Flex>
-        <VStack id="suppliers-all" mt={5} spacing={10}>
-          <Table variant="simple" size="sm">
-            <Tbody>
-              {suppliers.map((supplier: Supplier, index: number) => {
-                //generates a random color -> #56eec7
-                const randomColor =
-                  '#' + Math.floor(Math.random() * 16777215).toString(16)
-                return (
-                  <Tr key={`${supplier?.name ?? ''}-${index}`}>
-                    <Td>#{index}</Td>
-                    <Td>
-                      <Box
-                        w={5}
-                        h={5}
-                        bgColor={randomColor}
-                        borderRadius={20}
-                      />
-                    </Td>
-                    <Td>{supplier?.handle}</Td>
-                    <Td>{supplier?.name}</Td>
-                    <Td>{supplier?.nationalTax}</Td>
-                    <Td>{supplier?.certificationFile}</Td>
-                  </Tr>
-                )
-              })}
-            </Tbody>
-          </Table>
-        </VStack>
+        {error ? (
+          <Box px={5} py={3}>
+            {' '}
+            Failed to load suppliers
+          </Box>
+        ) : !suppliers ? (
+          <Box px={5} py={3}>
+            <Spinner color="orange.500" />
+          </Box>
+        ) : (
+          <VStack id="suppliers-all" mt={5} spacing={10}>
+            <Table variant="simple" size="sm">
+              <Tbody>
+                {suppliers.map((supplier: Supplier, index: number) => {
+                  return (
+                    <Tr key={`${supplier?.name ?? ''}-${index}`}>
+                      <Td>#{index}</Td>
+                      <Td>
+                        <Avatar size="xs" name={supplier.name} />
+                      </Td>
+                      <Td>{supplier?.handle}</Td>
+                      <Td>{supplier?.name}</Td>
+                      <Td>{supplier?.nationalTax}</Td>
+                      <Td>{supplier?.certificationFile}</Td>
+                    </Tr>
+                  )
+                })}
+              </Tbody>
+            </Table>
+          </VStack>
+        )}
       </Box>
     </DefaultLayout>
   )

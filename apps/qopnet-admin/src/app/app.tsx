@@ -7,6 +7,8 @@ import {
   AboutPage,
   UsersPage,
   SuppliersPage,
+  SuppliersProductsPage,
+  SuppliersProductsSlugPage,
   MerchantsPage,
   SignInPage,
   NotFoundPage,
@@ -36,6 +38,16 @@ export const App = () => {
         <Route exact path="/signin" component={SignInPage} />
         <Route exact path="/users" component={UsersPage} />
         <Route exact path="/suppliers" component={SuppliersPage} />
+        <Route
+          exact
+          path="/suppliers/products"
+          component={SuppliersProductsPage}
+        />
+        <Route
+          exact
+          path="/suppliers/:supplierParam/products/:productParam"
+          component={SuppliersProductsSlugPage}
+        />
         <Route exact path="/merchants" component={MerchantsPage} />
         <Route exact path="/about" component={AboutPage} />
         <Route exact path="/profiles" component={Profiles} />
