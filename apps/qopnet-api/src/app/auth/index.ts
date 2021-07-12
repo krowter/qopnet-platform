@@ -3,6 +3,8 @@ import { supabase } from '@qopnet/util-supabase'
 import * as express from 'express'
 const router = express.Router()
 
+import { checkUser } from './middleware'
+
 router.post('/signup', async (req, res) => {
   const { user, error } = await supabase.auth.signUp({
     email: req.body.email,
@@ -53,6 +55,13 @@ router.post('/signout', async (req, res) => {
       message: 'Sign out success',
     })
   }
+})
+
+router.get('/check-user', checkUser, async (req, res) => {
+  res.status(200).json({
+    message: 'Check user success',
+    user: req.user,
+  })
 })
 
 export default router
