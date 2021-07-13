@@ -21,8 +21,8 @@ const fetcher = (url: string) => fetch(url).then((r) => r.json())
 
 export const MerchantsPage = () => {
   const { data: merchants, error } = useSWR('/api/merchants', fetcher)
-  if (error) return <div>failed to load merchants</div>
-  if (!merchants) return <div>loading merchants...</div>
+  if (error) return <div>Gagal memuat para merchant</div>
+  if (!merchants) return <div>Memuat para merchant...</div>
   return (
     <DefaultLayout>
       <Box p={5}>

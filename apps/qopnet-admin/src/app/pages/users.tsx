@@ -1,26 +1,14 @@
-import {
-  Box,
-  Flex,
-  Table,
-  TableCaption,
-  Tbody,
-  Td,
-  Text,
-  Tfoot,
-  Th,
-  Thead,
-  Tr,
-  VStack,
-} from '@chakra-ui/react'
+import { Box, Flex, Table, Tbody, Td, Text, Tr, Stack } from '@chakra-ui/react'
 import useSWR from 'swr'
 
-import { DefaultLayout } from '../layouts'
 import { User } from '@qopnet/shared-types'
+import { DefaultLayout } from '../layouts'
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json())
 
 export const UsersPage = () => {
-  const { data: users, error } = useSWR('/api/users', fetcher)
+  const { data, error } = useSWR('/api/users', fetcher)
+  const { users } = data || []
 
   return (
     <DefaultLayout>
@@ -31,19 +19,19 @@ export const UsersPage = () => {
             All users
           </Text>
           <Text ml={5} fontWeight={500}>
-            {users ? users.length : 0} users
+            {users ? users.length : 0} Users
           </Text>
           <Box ml="auto" h={5} w={5} borderRadius={20} bg="#4C2602" />
         </Flex>
 
-        <VStack id="users-all" mt={5} spacing={10}>
-          {error && <div>Failed to load users</div>}
-          {!users && <div>Loading users...</div>}
-          {users && (
+        <Stack id="users-all" mt={5} spacing={10}>
+          {error && <div>Gagal memuat para pengguna</div>}
+          {!error && !users && <div>Memuat para pengguna...</div>}
+          {users?.length && (
             <Table variant="simple" size="sm">
               <Tbody>
                 {users.map((user: User, index: number) => {
-                  //generates a random color -> #56eec7
+                  // Generate random color with hexacode format -> #56eec7
                   const randomColor =
                     '#' + Math.floor(Math.random() * 16777215).toString(16)
                   return (
@@ -67,7 +55,7 @@ export const UsersPage = () => {
               </Tbody>
             </Table>
           )}
-        </VStack>
+        </Stack>
       </Box>
     </DefaultLayout>
   )

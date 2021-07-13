@@ -9,7 +9,12 @@ type Props = {
 }
 export const MerchantSlugPage: React.FC<Props> = (props) => {
   const { data, error } = useSWR('/api/merchants', fetcher)
-  if (error) return <div>failed to load</div>
-  if (!data) return <div>loading ...</div>
-  return <DefaultLayout>{props.children}</DefaultLayout>
+
+  return (
+    <DefaultLayout>
+      {error && <div>Gagal memuat merchant</div>}
+      {!error && !data && <div>Memuat merchant...</div>}
+      {data && props.children}
+    </DefaultLayout>
+  )
 }
