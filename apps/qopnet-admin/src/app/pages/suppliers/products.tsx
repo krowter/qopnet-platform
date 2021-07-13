@@ -18,9 +18,10 @@ import useSWR from 'swr'
 import { useHistory } from 'react-router-dom'
 
 import { DefaultLayout } from '../../layouts'
-import { Supplier } from '@qopnet/shared-types'
 import { Prisma } from '@prisma/client'
-const fetcher = (url: string) => fetch(url).then((r) => r.json())
+
+const fetcher = (url: string) =>
+  fetch(process.env.NX_API_URL + url).then((res) => res.json())
 
 const truncateString = (str: string, num: number) => {
   // If the length of str is less than or equal to num
@@ -35,9 +36,10 @@ const truncateString = (str: string, num: number) => {
 export const SuppliersProductsPage = () => {
   const history = useHistory()
   const { data: { supplierProducts = [], message } = [], error } = useSWR(
-    'http://localhost:4000/api/suppliers/products',
+    '/api/suppliers/products',
     fetcher
   )
+
   return (
     <DefaultLayout>
       <Box p={5}>
@@ -51,16 +53,17 @@ export const SuppliersProductsPage = () => {
           </Text>
           <Box ml="auto" h={5} w={5} borderRadius={20} bg="#4C2602" />
         </Flex>
-        {error ? (
+        {error && (
           <Box px={5} py={3}>
-            {' '}
-            {message ? message : 'Gagal memuat produk supplier'}
+            Gagal memuat produk supplier
           </Box>
-        ) : supplierProducts.length === 0 ? (
+        )}
+        {!supplierProducts && (
           <Box px={5} py={3}>
             <Spinner color="orange.500" />
           </Box>
-        ) : (
+        )}
+        {supplierProducts?.length && (
           <VStack id="suppliers-all" mt={5} spacing={10}>
             <Table variant="simple" size="sm">
               <Tbody>

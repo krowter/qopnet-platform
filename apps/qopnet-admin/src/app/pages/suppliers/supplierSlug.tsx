@@ -7,7 +7,7 @@ const fetcher = (url: string) => fetch(url).then((r) => r.json())
 type Props = {
   children?: JSX.Element | JSX.Element[]
 }
-export const SuppliersSlugPage: React.FC<Props> = (props) => {
+export const SupplierSlugPage: React.FC<Props> = (props) => {
   const { data, error } = useSWR('/api/merchants', fetcher)
 
   return (
