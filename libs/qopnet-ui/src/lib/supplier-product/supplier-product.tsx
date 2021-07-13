@@ -41,6 +41,12 @@ const supplierProductCategories = [
   { name: 'snack', text: 'Makanan Ringan', color: 'blue.500' },
 ]
 
+const defaultProductImages = [
+  'https://ik.imagekit.io/qopnetlabs/images/telur.jpg',
+  'https://ik.imagekit.io/qopnetlabs/images/kasur.jpg',
+  'https://ik.imagekit.io/qopnetlabs/images/rangka-kasur.jpg',
+]
+
 export interface HomeProductCategoryProps {
   id?: string | ''
   supplierProducts: SupplierProduct[]
@@ -114,23 +120,23 @@ export const HomeProductSpecial = (props: HomeProductSpecialProps) => {
 }
 
 export const SupplierProductCard = ({ product }: SupplierProductCardProps) => {
-  // @ts-ignore
-  const productImageFirst = product.images[0]
-  const defaultImages = [
-    'https://ik.imagekit.io/qopnetlabs/images/kasur.jpg',
-    'https://ik.imagekit.io/qopnetlabs/images/rangka-kasur.jpg',
-  ]
+  const productImages = product.images as string[]
+  const productImageThumbnail = productImages?.length
+    ? productImages[0]
+    : defaultProductImages[0]
 
   return (
     <NextLink href={`/products/${product.slug}`} passHref>
       <Stack as="a" spacing={3} py={5}>
-        <NextImage
-          src={productImageFirst || defaultImages[1]}
-          alt={product.name || 'Product image'}
-          layout="responsive"
-          width={300}
-          height={300}
-        />
+        {productImageThumbnail && (
+          <NextImage
+            src={productImageThumbnail}
+            alt={product.name || 'Product image'}
+            layout="responsive"
+            width={300}
+            height={300}
+          />
+        )}
         <Heading as="h3" size="md" fontWeight="black">
           {product.name}
         </Heading>
@@ -202,9 +208,9 @@ export const SupplierProductContainer = ({
   supplierProduct,
 }: SupplierProductContainer) => {
   const product = supplierProduct
-  const productImages = product?.images as string[]
+  const productImages = (product?.images as string[]) || defaultProductImages
   // @ts-ignore
-  const productImageFirst = product?.images[0] as string
+  const productImageFirst = productImages[0] as string
 
   return (
     <Box pt={10}>
@@ -221,10 +227,10 @@ export const SupplierProductContainer = ({
             />
           </Box>
           <Stack direction="row">
-            {productImages.map((imageUrl: string, index) => {
+            {productImages.map((imageUrl: string) => {
               return (
                 <ChakraImage
-                  key={product.slug}
+                  key={product.slug + product.id}
                   src={imageUrl}
                   alt={product.name || 'Small product image'}
                   layout="fixed"
