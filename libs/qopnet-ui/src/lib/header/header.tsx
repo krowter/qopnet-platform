@@ -1,22 +1,25 @@
 import NextLink from 'next/link'
 import {
-  HStack,
+  Box,
   Heading,
-  useColorModeValue,
+  HStack,
+  IconButton,
   Input,
-  Button,
+  InputGroup,
+  InputRightElement,
   Link,
+  useColorMode,
+  useColorModeValue,
 } from '@chakra-ui/react'
 
 import { NextLinkButton } from '../next-link-button/next-link-button'
+import { Icon } from '../icon/icon'
 
 /* eslint-disable-next-line */
 export interface HeaderProps {}
 
 export const Header = (props: HeaderProps) => {
-  const handleChangeColorMode = () => {
-    console.log('')
-  }
+  const { colorMode, toggleColorMode } = useColorMode()
 
   return (
     <HStack
@@ -34,14 +37,28 @@ export const Header = (props: HeaderProps) => {
         </Heading>
       </HStack>
 
-      <Input
-        placeholder="Ketik kata kunci..."
-        w="420px"
-        bg={useColorModeValue('white', 'black')}
-      />
+      <Box>
+        <InputGroup>
+          <Input
+            placeholder="Ketik kata kunci..."
+            w="420px"
+            bg={useColorModeValue('white', 'black')}
+          />
+          <InputRightElement color="green.500">
+            <Icon name="search" />
+          </InputRightElement>
+        </InputGroup>
+      </Box>
 
       <HStack>
-        <Button onClick={handleChangeColorMode}>O</Button>
+        <IconButton
+          aria-label="Change color mode"
+          variant="ghost"
+          rounded="full"
+          onClick={toggleColorMode}
+        >
+          {colorMode === 'light' ? <Icon name="moon" /> : <Icon name="sun" />}
+        </IconButton>
         <NextLinkButton href="/signin" colorScheme="yellow">
           Masuk
         </NextLinkButton>
