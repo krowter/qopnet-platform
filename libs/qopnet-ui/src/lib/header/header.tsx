@@ -27,7 +27,7 @@ export interface HeaderProps {
 }
 
 export const Header = (props: HeaderProps) => {
-  const user = {}
+  const user = false
   const { cart = {} } = props
   const { colorMode, toggleColorMode } = useColorMode()
   const router = useRouter()
@@ -50,7 +50,7 @@ export const Header = (props: HeaderProps) => {
     >
       <HStack w={500} spacing={3}>
         <NextLink href="/" passHref>
-          <chakra.a display="block">
+          <chakra.a display="block" className="next-image-container">
             <NextImage
               alt="Qopnet logo"
               src={useColorModeValue(
@@ -65,7 +65,6 @@ export const Header = (props: HeaderProps) => {
         <IconButton
           aria-label="Change color mode"
           variant="ghost"
-          rounded="full"
           onClick={toggleColorMode}
         >
           {colorMode === 'light' ? <Icon name="moon" /> : <Icon name="sun" />}

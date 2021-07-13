@@ -24,6 +24,7 @@
     "e2e:commerce": "nx e2e qopnet-commerce-e2e",
     "test": "nx test",
     "lint": "nx workspace-lint && nx lint",
+    "lint:commerce": "nx lint qopnet-commerce",
     "e2e": "nx e2e",
     "affected": "nx affected",
     "affected:apps": "nx affected:apps",

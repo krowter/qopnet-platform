@@ -6,12 +6,10 @@ import {
   HomeProductSpecial,
   HomeFaq,
 } from '@qopnet/qopnet-ui'
-import { useSWR } from '@qopnet/util-swr'
-
-import { fetcher } from '../utils/fetcher'
+import { useSWR } from '../utils/swr'
 
 export const Home = () => {
-  const { data, error } = useSWR(`/api/suppliers/products`, fetcher)
+  const { data, error } = useSWR(`/api/suppliers/products`)
   const supplierProducts = data?.supplierProducts || []
 
   return (

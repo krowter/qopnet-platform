@@ -2,8 +2,7 @@ import { useRouter } from 'next/router'
 
 import { Layout } from '@qopnet/qopnet-ui'
 
-const searchPage = () => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
+const SearchPage = () => {
   const router = useRouter()
   const { q: keyword } = router.query
 
@@ -15,4 +14,4 @@ const searchPage = () => {
   )
 }
 
-export default searchPage
+export default SearchPage

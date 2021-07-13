@@ -5,6 +5,8 @@ import {
   FaSearch as Search,
   FaShoppingCart as Cart,
   FaSignOutAlt as SignOut,
+  FaPlus as Increment,
+  FaMinus as Decrement,
 
   // Category
   FaBoxes as All,
@@ -37,6 +39,10 @@ export const Icon = (props: IconProps) => {
       return <Cart />
     case 'signout':
       return <SignOut />
+    case 'increment':
+      return <Increment />
+    case 'decrement':
+      return <Decrement />
 
     /**
      * Category

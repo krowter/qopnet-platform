@@ -1,11 +1,18 @@
+import { useRouter } from 'next/router'
+import { Box, Heading } from '@chakra-ui/react'
+
 import { Layout } from '@qopnet/qopnet-ui'
 
-const supplierProductParamPage = () => {
+const SupplierProductParamPage = () => {
+  const router = useRouter()
+  const { supplierProductParam } = router.query
+
   return (
     <Layout>
-      <h1>One product page</h1>
+      <Heading>One product page</Heading>
+      {supplierProductParam && <Box>{supplierProductParam}</Box>}
     </Layout>
   )
 }
 
-export default supplierProductParamPage
+export default SupplierProductParamPage

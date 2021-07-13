@@ -1,8 +1,25 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import NextLink from 'next/link'
 import NextImage from 'next/image'
 import { SupplierProduct } from '@prisma/client'
 import { Decimal } from '@prisma/client/runtime'
-import { Text, Heading, SimpleGrid, VStack, Stack } from '@chakra-ui/react'
+import {
+  Text,
+  Heading,
+  SimpleGrid,
+  VStack,
+  Stack,
+  Box,
+  Image as ChakraImage,
+  Flex,
+  Divider,
+  Button,
+  IconButton,
+  HStack,
+  ButtonGroup,
+  NumberInput,
+  NumberInputField,
+} from '@chakra-ui/react'
 
 import { Icon } from '@qopnet/qopnet-ui'
 
@@ -41,6 +58,11 @@ export interface SupplierProductCardProps {
 export interface SupplierProductPriceProps {
   product: SupplierProduct
   fontSize?: string // sm, md, lg
+}
+
+export interface SupplierProductContainer {
+  supplierProductParam: string
+  supplierProduct: SupplierProduct
 }
 
 export const HomeProductCategory = (props: HomeProductCategoryProps) => {
@@ -92,7 +114,6 @@ export const HomeProductSpecial = (props: HomeProductSpecialProps) => {
 }
 
 export const SupplierProductCard = ({ product }: SupplierProductCardProps) => {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const productImageFirst = product.images[0]
   const defaultImages = [
@@ -138,7 +159,7 @@ export const SupplierProductPrice = ({
   } else if (product.priceMin && product.priceMax) {
     return (
       <Text fontWeight="bold" fontSize={fontSize}>
-        {formatPrice(product.priceMin)} - {formatPrice(product.priceMax)}
+        {formatPrice(product.priceMin)} – {formatPrice(product.priceMax)}
       </Text>
     )
   } else if (product.priceMin) {
@@ -171,4 +192,97 @@ export const formatPrice = (price: number | Decimal) => {
     .replace(/\D00$/, '')
 
   return formattedPrice
+}
+
+/**
+ * Don't request here because this is a shared lib
+ */
+export const SupplierProductContainer = ({
+  supplierProductParam,
+  supplierProduct,
+}: SupplierProductContainer) => {
+  const product = supplierProduct
+  const productImages = product?.images as string[]
+  // @ts-ignore
+  const productImageFirst = product?.images[0] as string
+
+  return (
+    <Box pt={10}>
+      <Stack direction="row" spacing={10}>
+        <Stack id="product-images" spacing={5}>
+          <Box display="inherit">
+            <NextImage
+              key={product.slug + '-first'}
+              src={productImageFirst}
+              alt={product.name || 'First product image'}
+              layout="fixed"
+              width={420}
+              height={420}
+            />
+          </Box>
+          <Stack direction="row">
+            {productImages.map((imageUrl: string, index) => {
+              return (
+                <ChakraImage
+                  key={product.slug}
+                  src={imageUrl}
+                  alt={product.name || 'Small product image'}
+                  layout="fixed"
+                  width={100}
+                  height={100}
+                />
+              )
+            })}
+          </Stack>
+        </Stack>
+
+        <Stack id="product-info-sections" spacing={5}>
+          <Stack id="product-info-name-price">
+            <Heading as="h2">{product.name}</Heading>
+
+            <Stack id="product-price-unit" spacing={0}>
+              <Box color="green.500">
+                <SupplierProductPrice product={product} fontSize="2xl" />
+              </Box>
+              <Text>Harga per 1 set. 22 kg per set</Text>
+            </Stack>
+
+            <ButtonGroup
+              id="product-cart-modifier"
+              spacing={5}
+              alignItems="center"
+              variant="ghost"
+            >
+              <IconButton aria-label="Kurangi produk">
+                <Icon name="decrement" />
+              </IconButton>
+              <NumberInput defaultValue={0} max={10} clampValueOnBlur={false}>
+                <NumberInputField w={100} />
+              </NumberInput>
+              <IconButton aria-label="Tambah produk">
+                <Icon name="increment" />
+              </IconButton>
+            </ButtonGroup>
+          </Stack>
+
+          <Divider />
+
+          <Stack id="product-detail">
+            <Text>Kode SKU: {product.sku}</Text>
+            <Text>Berat: 22 Kg</Text>
+            <Text>{product.description}</Text>
+          </Stack>
+
+          <Divider />
+
+          <Stack id="supplier-info">
+            <Text>Toko Supplier: {product.supplierId}</Text>
+            <Text>Pemilik: {product.ownerId}</Text>
+            <Text>Dijual mulai {product.createdAt}</Text>
+            <Text>Terakhir diubah {product.updatedAt}</Text>
+          </Stack>
+        </Stack>
+      </Stack>
+    </Box>
+  )
 }
