@@ -4,8 +4,10 @@ import {
   HomeBanner,
   HomeProductCategory,
   HomeProductSpecial,
+  HomeFaq,
 } from '@qopnet/qopnet-ui'
 import { useSWR } from '@qopnet/util-swr'
+
 import { fetcher } from '../utils/fetcher'
 
 export const Home = () => {
@@ -23,7 +25,7 @@ export const Home = () => {
         id="product-special"
         supplierProducts={supplierProducts}
       />
-      <Box id="faq">Pertanyaan yang sering ditanya</Box>
+      <HomeFaq />
     </Stack>
   )
 }

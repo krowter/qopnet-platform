@@ -1,8 +1,8 @@
 import NextLink from 'next/link'
 import NextImage from 'next/image'
-import { Prisma, SupplierProduct } from '@prisma/client'
+import { SupplierProduct } from '@prisma/client'
 import { Decimal } from '@prisma/client/runtime'
-import { Box, Text, Heading, SimpleGrid, VStack, Stack } from '@chakra-ui/react'
+import { Text, Heading, SimpleGrid, VStack, Stack } from '@chakra-ui/react'
 
 import { Icon } from '@qopnet/qopnet-ui'
 
@@ -19,7 +19,7 @@ const supplierProductCategories = [
   { name: 'vegetable', text: 'Sayuran', color: 'orange.500' },
   { name: 'carb', text: 'Beras, Mie, Roti', color: 'gray.500' },
   { name: 'protein', text: 'Protein', color: 'orange.900' },
-  { name: 'dairy', text: 'Susu, Telur, dan Keju', color: 'yellow.200' },
+  { name: 'dairy', text: 'Susu, Telur, Keju', color: 'yellow.200' },
   { name: 'baby', text: 'Makanan Bayi', color: 'orange.500' },
   { name: 'snack', text: 'Makanan Ringan', color: 'blue.500' },
 ]
@@ -36,6 +36,11 @@ export interface HomeProductSpecialProps {
 
 export interface SupplierProductCardProps {
   product: SupplierProduct
+}
+
+export interface SupplierProductPriceProps {
+  product: SupplierProduct
+  fontSize?: string // sm, md, lg
 }
 
 export const HomeProductCategory = (props: HomeProductCategoryProps) => {
@@ -87,26 +92,37 @@ export const HomeProductSpecial = (props: HomeProductSpecialProps) => {
 }
 
 export const SupplierProductCard = ({ product }: SupplierProductCardProps) => {
-  const defaultImageSrc = 'https://ik.imagekit.io/qopnetlabs/images/kasur.jpg'
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const productImageFirst = product.images[0]
+  const defaultImages = [
+    'https://ik.imagekit.io/qopnetlabs/images/kasur.jpg',
+    'https://ik.imagekit.io/qopnetlabs/images/rangka-kasur.jpg',
+  ]
 
   return (
-    <Stack spacing={3} p={5}>
-      <NextImage
-        src={defaultImageSrc}
-        alt={product.name || 'Product image'}
-        layout="responsive"
-        width={300}
-        height={300}
-      />
-      <Heading as="h3" size="md">
-        {product.name}
-      </Heading>
-      <SupplierProductPrice product={product} />
-    </Stack>
+    <NextLink href={`/products/${product.slug}`} passHref>
+      <Stack as="a" spacing={3} py={5}>
+        <NextImage
+          src={productImageFirst || defaultImages[1]}
+          alt={product.name || 'Product image'}
+          layout="responsive"
+          width={300}
+          height={300}
+        />
+        <Heading as="h3" size="md" fontWeight="black">
+          {product.name}
+        </Heading>
+        <SupplierProductPrice product={product} />
+      </Stack>
+    </NextLink>
   )
 }
 
-export const SupplierProductPrice = ({ product }: SupplierProductCardProps) => {
+export const SupplierProductPrice = ({
+  product,
+  fontSize = 'lg',
+}: SupplierProductPriceProps) => {
   /**
    * 1. Price
    * 2. Min - Max
@@ -114,19 +130,35 @@ export const SupplierProductPrice = ({ product }: SupplierProductCardProps) => {
    * 4. Max
    */
   if (product.price) {
-    return <Text fontSize="lg">{formatPrice(product.price)}</Text>
+    return (
+      <Text fontWeight="bold" fontSize={fontSize}>
+        {formatPrice(product.price)}
+      </Text>
+    )
   } else if (product.priceMin && product.priceMax) {
     return (
-      <Text>
+      <Text fontWeight="bold" fontSize={fontSize}>
         {formatPrice(product.priceMin)} - {formatPrice(product.priceMax)}
       </Text>
     )
   } else if (product.priceMin) {
-    return <Text>{formatPrice(product.priceMin)}</Text>
+    return (
+      <Text fontWeight="bold" fontSize={fontSize}>
+        {formatPrice(product.priceMin)}
+      </Text>
+    )
   } else if (product.priceMax) {
-    return <Text>{formatPrice(product.priceMax)}</Text>
+    return (
+      <Text fontWeight="bold" fontSize={fontSize}>
+        {formatPrice(product.priceMax)}
+      </Text>
+    )
   } else {
-    return <Text>0</Text>
+    return (
+      <Text fontWeight="bold" fontSize={fontSize}>
+        Rp 0
+      </Text>
+    )
   }
 }
 

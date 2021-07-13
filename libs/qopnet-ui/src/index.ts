@@ -4,5 +4,6 @@ export * from './lib/header/header'
 export * from './lib/footer/footer'
 export * from './lib/icon/icon'
 export * from './lib/next-link-button/next-link-button'
-export * from './lib/home-banner/home-banner'
+
+export * from './lib/home/home'
 export * from './lib/supplier-product/supplier-product'

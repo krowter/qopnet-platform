@@ -1,6 +1,6 @@
-import { useState } from 'react'
 import NextImage from 'next/image'
-import { Box } from '@chakra-ui/react'
+import { useState } from 'react'
+import { Box, Heading, Text } from '@chakra-ui/react'
 
 const bannerImages = [
   'https://ik.imagekit.io/qopnetlabs/banners/qopnet-banner-1_cWUHg0qnmC.jpeg',
@@ -31,4 +31,11 @@ export function HomeBanner(props: HomeBannerProps) {
   )
 }
 
-export default HomeBanner
+export const HomeFaq = () => {
+  return (
+    <Box id="faq">
+      <Heading>Pertanyaan</Heading>
+      <Text>Pertanyaan yang sering ditanya</Text>
+    </Box>
+  )
+}
