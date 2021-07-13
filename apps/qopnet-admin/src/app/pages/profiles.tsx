@@ -15,10 +15,8 @@ const fetcher = (url: string) =>
   fetch(process.env.NX_API_URL + url).then((res) => res.json())
 
 export const Profiles = () => {
-  const {
-    data: { profiles },
-    error,
-  } = useSWR('/api/profiles', fetcher)
+  const { data, error } = useSWR('/api/profiles', fetcher)
+  const { profiles } = data || []
 
   return (
     <DefaultLayout>
