@@ -1,6 +1,7 @@
+import NextImage from 'next/image'
 import NextLink from 'next/link'
 import {
-  Box,
+  Image as ChakraImage,
   Heading,
   HStack,
   IconButton,
@@ -28,8 +29,18 @@ export const Header = (props: HeaderProps) => {
       color={useColorModeValue('orange.900', 'orange.100')}
       bg={useColorModeValue('orange.100', 'orange.900')}
       justify="space-between"
+      spacing={5}
     >
-      <HStack>
+      <HStack spacing={10} w={500}>
+        <NextImage
+          alt="Qopnet logo"
+          src={useColorModeValue(
+            '/images/qopnet-logo.png',
+            '/images/qopnet-logo-dark.png'
+          )}
+          width={161}
+          height={50}
+        />
         <Heading as="h1" size="md">
           <NextLink href="/shop">
             <Link>Belanja</Link>
@@ -37,18 +48,15 @@ export const Header = (props: HeaderProps) => {
         </Heading>
       </HStack>
 
-      <Box>
-        <InputGroup>
-          <Input
-            placeholder="Ketik kata kunci..."
-            w="420px"
-            bg={useColorModeValue('white', 'black')}
-          />
-          <InputRightElement color="green.500">
-            <Icon name="search" />
-          </InputRightElement>
-        </InputGroup>
-      </Box>
+      <InputGroup w="100%">
+        <Input
+          placeholder="Ketik kata kunci..."
+          bg={useColorModeValue('white', 'black')}
+        />
+        <InputRightElement color="green.500">
+          <Icon name="search" />
+        </InputRightElement>
+      </InputGroup>
 
       <HStack>
         <IconButton
