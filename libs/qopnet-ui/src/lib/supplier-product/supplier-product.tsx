@@ -1,7 +1,28 @@
+import NextLink from 'next/link'
 import NextImage from 'next/image'
 import { Prisma, SupplierProduct } from '@prisma/client'
 import { Decimal } from '@prisma/client/runtime'
 import { Box, Text, Heading, SimpleGrid, VStack, Stack } from '@chakra-ui/react'
+
+import { Icon } from '@qopnet/qopnet-ui'
+
+const supplierProductCategories = [
+  { name: 'all', text: 'Semua Produk', color: 'orange.500' },
+  { name: 'cheap', text: 'Jaminan Murah', color: 'teal.500' },
+  { name: 'saving', text: 'Hemat Waktu!', color: 'purple.500' },
+  { name: 'promo', text: 'Spesial Promo', color: 'cyan.500' },
+  { name: 'new', text: 'Terbaru', color: 'pink.300' },
+  { name: 'organic', text: 'Organik', color: 'green.500' },
+  { name: 'breakfast', text: 'Sarapan', color: 'orange.500' },
+  { name: 'spices', text: 'Minyak, Bumbu, Saus', color: 'red.500' },
+  { name: 'fruits', text: 'Buah Segar', color: 'yellow.500' },
+  { name: 'vegetable', text: 'Sayuran', color: 'orange.500' },
+  { name: 'carb', text: 'Beras, Mie, Roti', color: 'gray.500' },
+  { name: 'protein', text: 'Protein', color: 'orange.900' },
+  { name: 'dairy', text: 'Susu, Telur, dan Keju', color: 'yellow.200' },
+  { name: 'baby', text: 'Makanan Bayi', color: 'orange.500' },
+  { name: 'snack', text: 'Makanan Ringan', color: 'blue.500' },
+]
 
 export interface HomeProductCategoryProps {
   id?: string | ''
@@ -23,8 +44,23 @@ export const HomeProductCategory = (props: HomeProductCategoryProps) => {
       <Heading as="h2" size="lg">
         Kategori Produk
       </Heading>
-      <SimpleGrid spacing={5} columns={4}>
-        kategori
+      <SimpleGrid spacing={5} columns={8}>
+        {supplierProductCategories.map((category) => {
+          return (
+            <NextLink
+              key={category.name}
+              href={`/products/${category.name}`}
+              passHref
+            >
+              <VStack as="a">
+                <Text fontSize="5xl" color={category.color}>
+                  <Icon name={category.name} />
+                </Text>
+                <Text textAlign="center">{category.text}</Text>
+              </VStack>
+            </NextLink>
+          )
+        })}
       </SimpleGrid>
     </VStack>
   )
