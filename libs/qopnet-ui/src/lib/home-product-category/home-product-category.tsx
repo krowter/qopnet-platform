@@ -1,5 +1,5 @@
 import { SupplierProduct } from '@prisma/client'
-import { Box, Heading } from '@chakra-ui/react'
+import { Box, Text, Heading, SimpleGrid, VStack } from '@chakra-ui/react'
 
 export interface HomeProductCategoryProps {
   id?: string | ''
@@ -8,14 +8,24 @@ export interface HomeProductCategoryProps {
 
 export function HomeProductCategory(props: HomeProductCategoryProps) {
   return (
-    <Box id={props.id}>
-      <Heading as="h2" size="xl">
+    <VStack id={props.id} py={20} spacing={10}>
+      <Heading as="h2" size="lg">
         Kategori Produk
       </Heading>
-      {props.supplierProducts?.map((product, index) => {
-        return <Box key={product.slug || index}>{product.name}</Box>
-      })}
-    </Box>
+      <SimpleGrid spacing={5} columns={4}>
+        {props.supplierProducts?.map((product, index) => {
+          return (
+            <Box key={product.slug || index} boxShadow="md" p={5}>
+              <Heading as="h3" size="md">
+                {product.name}
+              </Heading>
+              <Text>{product.description}</Text>
+              <Text fontSize="lg">{product.price}</Text>
+            </Box>
+          )
+        })}
+      </SimpleGrid>
+    </VStack>
   )
 }
 

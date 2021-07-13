@@ -33,7 +33,14 @@ export interface FooterProps {}
  */
 export const Footer = (props: FooterProps) => {
   return (
-    <Stack as="footer" spacing={10} p={5} color="orange.50" bg="orange.900">
+    <Stack
+      as="footer"
+      spacing={10}
+      p={5}
+      color="orange.50"
+      bg="orange.900"
+      mt={60}
+    >
       <Stack>
         <Heading as="h4" size="sm" textTransform="uppercase">
           Peta situs
