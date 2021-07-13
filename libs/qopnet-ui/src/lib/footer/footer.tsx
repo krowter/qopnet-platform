@@ -33,19 +33,22 @@ export interface FooterProps {}
  */
 export const Footer = (props: FooterProps) => {
   return (
-    <Stack as="footer" spacing={3} p={5} color="orange.50" bg="orange.900">
-      <Heading as="h4" size="sm">
-        Sitemap
-      </Heading>
-      <SimpleGrid spacing={1} columns={3} maxW={720}>
-        {linkToPages.map((link) => {
-          return (
-            <NextLink key={link.href} href={link.href} passHref>
-              <Link>{link.text}</Link>
-            </NextLink>
-          )
-        })}
-      </SimpleGrid>
+    <Stack as="footer" spacing={10} p={5} color="orange.50" bg="orange.900">
+      <Stack>
+        <Heading as="h4" size="sm" textTransform="uppercase">
+          Peta situs
+        </Heading>
+        <SimpleGrid spacing={1} columns={3} maxW={720}>
+          {linkToPages.map((link) => {
+            return (
+              <NextLink key={link.href} href={link.href} passHref>
+                <Link>{link.text}</Link>
+              </NextLink>
+            )
+          })}
+        </SimpleGrid>
+      </Stack>
+
       <Text fontSize="sm">Copyright &copy; 2015-2021 Qopnet</Text>
     </Stack>
   )

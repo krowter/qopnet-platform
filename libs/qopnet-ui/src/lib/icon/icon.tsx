@@ -3,6 +3,8 @@ import {
   FaMoon as MoonIcon, // Light Icon
   FaSun as SunIcon, // Dark Icon
   FaSearch as SearchIcon,
+  FaShoppingCart as CartIcon,
+  FaSignOutAlt as SignOutIcon,
 } from 'react-icons/fa'
 
 export interface IconProps {
@@ -22,6 +24,10 @@ export const Icon = (props: IconProps) => {
       return <MoonIcon />
     case 'search':
       return <SearchIcon />
+    case 'cart':
+      return <CartIcon />
+    case 'signout':
+      return <SignOutIcon />
 
     /**
      * When nothing found
