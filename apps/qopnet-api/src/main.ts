@@ -7,6 +7,7 @@ import * as Tracing from '@sentry/tracing'
 import root from './app/root'
 import auth from './app/auth'
 import profiles from './app/profiles'
+import suppliers from './app/suppliers'
 import supplierProducts from './app/suppliers/products'
 
 const app = express()
@@ -40,6 +41,7 @@ app.use(Sentry.Handlers.tracingHandler())
 app.use('/', root)
 app.use('/auth', auth)
 app.use('/api/profiles', profiles)
+app.use('/api/suppliers', suppliers)
 app.use('/api/suppliers/products', supplierProducts)
 
 // The error handler must be before any other error middleware
@@ -57,7 +59,7 @@ app.use((err, req, res, next) => {
 
 const port = process.env.PORT || 4000
 const server = app.listen(port, () => {
-  console.log(`qopnet-api listening at :${port}/api`)
+  console.info(`qopnet-api listening at :${port}/api`)
 })
 
 server.on('error', console.error)
