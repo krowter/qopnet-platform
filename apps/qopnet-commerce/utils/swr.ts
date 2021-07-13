@@ -9,13 +9,16 @@ import {
 
 /**
  * Set apiUrl based on variable availability
- * There is still an issue on Vercel deployment
+ * Because there is still an issue on Vercel deployment
  */
-
 const apiUrl =
-  process.env.NEXT_PUBLIC_NX_API_URL ||
-  process.env.NEXT_PUBLIC_API_URL ||
-  'https://qopnet-api.catamyst.com'
+  process.env.NEXT_PUBLIC_VERCEL_ENV === 'preview'
+    ? 'https://qopnet-api-staging.up.railway.app'
+    : process.env.NEXT_PUBLIC_NX_API_URL ||
+      process.env.NEXT_PUBLIC_API_URL ||
+      process.env.API_URL ||
+      'https://qopnet-api.catamyst.com'
+
 console.info({ apiUrl })
 
 /**
