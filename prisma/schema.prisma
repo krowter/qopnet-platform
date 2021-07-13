@@ -23,6 +23,7 @@ model User {
   adminProfile AdminProfile?
 
   @@map(name: "users")
+  SupplierProduct SupplierProduct[]
 }
 
 model Profile {
@@ -154,6 +155,8 @@ model SupplierProduct {
   // Relations
   supplierId String?
   supplier   Supplier? @relation(fields: [supplierId], references: [id])
+  ownerId    String
+  owner      User      @relation(fields: [ownerId], references: [id])
 
   // Timestamp
   createdAt DateTime @default(now())

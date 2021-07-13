@@ -1,4 +1,5 @@
 import slugify from 'slugify'
+import { checkUser } from '../../auth/middleware'
 
 import { PrismaClient, Prisma } from '@prisma/client'
 const prisma = new PrismaClient()
@@ -15,7 +16,21 @@ router.get('/', async (req, res) => {
   })
 })
 
-router.post('/', async (req, res, next) => {
+router.post('/', checkUser, async (req, res, next) => {
+  console.log(req.user)
+  const userId = req.user.sub
+
+  // check if user exist by userId
+  try {
+    const user = await prisma.user.findUnique({ where: { id: userId } })
+    if (!user) throw new Error('User not found')
+  } catch (error) {
+    res.json({
+      message: error.message,
+    })
+    return next(error)
+  }
+
   const supplierProduct: Prisma.SupplierProductCreateInput =
     req.body.supplierProduct
   const supplierProductSlug = slugify(supplierProduct.name.toLowerCase())
