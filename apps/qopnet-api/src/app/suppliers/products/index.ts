@@ -1,7 +1,7 @@
 import slugify from 'slugify'
 import { checkUser } from '../../auth/middleware'
 
-import { PrismaClient, Prisma } from '@prisma/client'
+import { PrismaClient, Prisma, SupplierProduct } from '@prisma/client'
 const prisma = new PrismaClient()
 
 import * as express from 'express'
@@ -17,8 +17,7 @@ router.get('/', async (req, res) => {
 })
 
 router.post('/', checkUser, async (req, res, next) => {
-  console.log(req.user)
-  const userId = req.user.sub
+  const userId = req.user.sub!
 
   // check if user exist by userId
   try {
@@ -30,15 +29,15 @@ router.post('/', checkUser, async (req, res, next) => {
     })
     return next(error)
   }
-
   const supplierProduct: Prisma.SupplierProductCreateInput =
     req.body.supplierProduct
   const supplierProductSlug = slugify(supplierProduct.name.toLowerCase())
 
   try {
-    const newSupplierProduct = await prisma.supplierProduct.create({
+    const newSupplierProduct: SupplierProduct = await prisma.supplierProduct.create({
       data: {
         ...supplierProduct,
+        ownerId: userId,
         slug: supplierProductSlug,
       },
     })
@@ -55,6 +54,12 @@ router.post('/', checkUser, async (req, res, next) => {
         error,
       })
       return next(error)
+    } else if (error.code === 'P2011') {
+      res.json({
+        message: `Field cannot be empty`,
+        field: error.meta.constraint,
+        error,
+      })
     } else {
       res.json(error)
       return next(error)
