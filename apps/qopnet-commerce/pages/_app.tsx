@@ -2,8 +2,10 @@ import NextHead from 'next/head'
 import { AppProps } from 'next/app'
 import { DefaultSeo } from 'next-seo'
 import { ChakraProvider } from '@chakra-ui/react'
+import { SWRConfig } from 'swr'
 
 import { Header, Footer } from '@qopnet/qopnet-ui'
+import { swrConfig } from '@qopnet/util-swr'
 
 import './styles.css'
 import SEO from '../next-seo.config'
@@ -27,9 +29,11 @@ function QopnetCommerceApp({ Component, pageProps }: AppProps) {
 
       <DefaultSeo {...SEO} />
 
-      <Header />
-      <Component {...pageProps} />
-      <Footer />
+      <SWRConfig value={swrConfig}>
+        <Header />
+        <Component {...pageProps} />
+        <Footer />
+      </SWRConfig>
     </ChakraProvider>
   )
 }

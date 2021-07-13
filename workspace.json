@@ -294,6 +294,27 @@
           }
         }
       }
+    },
+    "util-swr": {
+      "root": "libs/util-swr",
+      "sourceRoot": "libs/util-swr/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/util-swr/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/util-swr"],
+          "options": {
+            "jestConfig": "libs/util-swr/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
   },
   "cli": {

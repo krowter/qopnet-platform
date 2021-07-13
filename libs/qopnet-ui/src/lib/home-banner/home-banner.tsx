@@ -11,7 +11,7 @@ const bannerImages = [
 
 /* eslint-disable-next-line */
 export interface HomeBannerProps {
-  id: string | ''
+  id?: string | ''
 }
 
 export function HomeBanner(props: HomeBannerProps) {
