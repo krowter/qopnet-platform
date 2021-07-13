@@ -152,13 +152,15 @@ export const SidebarLinks = () => {
   const merchants = useDisclosure()
   return (
     <Stack fontSize="sm" fontWeight="500" spacing={0} px={3}>
-      <SidebarLink to="/">Halaman Utama</SidebarLink>
+      <SidebarLink to="/">Beranda</SidebarLink>
       <SidebarLink to="/users">Pengguna</SidebarLink>
       <SidebarLink to="/profiles">Profil</SidebarLink>
       <SidebarNestedLink>Supplier</SidebarNestedLink>
       <Flex flexDirection="column" alignItems="flex-start" px={4}>
         <SidebarLink to="/suppliers">Semua Supplier</SidebarLink>
-        <SidebarLink to="/suppliers/products">Produk Supplier</SidebarLink>
+        <SidebarLink to="/suppliers/products">
+          Semua Produk Supplier
+        </SidebarLink>
         {/* <SidebarLink to="/suppliers/purchase-orders">
           Purchase Orders (PO)
         </SidebarLink>
