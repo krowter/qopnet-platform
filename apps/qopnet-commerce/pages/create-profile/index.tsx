@@ -1,8 +1,10 @@
+import { Layout } from '@qopnet/qopnet-ui'
+
 const createProfilePage = () => {
   return (
-    <div>
+    <Layout>
       <h1>Buat profil</h1>
-    </div>
+    </Layout>
   )
 }
 

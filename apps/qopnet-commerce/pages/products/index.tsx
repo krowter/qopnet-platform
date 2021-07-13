@@ -1,8 +1,10 @@
+import { Layout } from '@qopnet/qopnet-ui'
+
 const supplierProductsPage = () => {
   return (
-    <div>
+    <Layout>
       <h1>Semua produk supplier</h1>
-    </div>
+    </Layout>
   )
 }
 

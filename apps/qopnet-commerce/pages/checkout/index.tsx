@@ -1,8 +1,10 @@
+import { Layout } from '@qopnet/qopnet-ui'
+
 const checkoutPage = () => {
   return (
-    <div>
+    <Layout>
       <h1>Halaman bayar untuk checkout</h1>
-    </div>
+    </Layout>
   )
 }
 

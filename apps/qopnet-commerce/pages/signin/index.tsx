@@ -1,8 +1,10 @@
+import { Layout } from '@qopnet/qopnet-ui'
+
 const signInPage = () => {
   return (
-    <div>
+    <Layout>
       <h1>Masuk sebagai pengguna</h1>
-    </div>
+    </Layout>
   )
 }
 

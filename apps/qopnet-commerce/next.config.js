@@ -17,16 +17,13 @@ const defaultNextConfig = {
   },
 }
 
+const pwaNextConfig = withPWA({ ...defaultNextConfig, pwa: { dest: 'public' } })
+
 /**
  * Only run next-pwa when not in development
  * Setup is ready for Vercel
  */
 const nextConfig =
-  process.env.NODE_ENV !== 'development'
-    ? withPWA({
-        ...defaultNextConfig,
-        pwa: { dest: 'public' },
-      })
-    : defaultNextConfig
+  process.env.NODE_ENV === 'development' ? defaultNextConfig : pwaNextConfig
 
 module.exports = withNx(nextConfig)

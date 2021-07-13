@@ -1,8 +1,10 @@
+import { Layout } from '@qopnet/qopnet-ui'
+
 const searchPage = () => {
   return (
-    <div>
+    <Layout>
       <h1>Cari produk dan toko supplier</h1>
-    </div>
+    </Layout>
   )
 }
 

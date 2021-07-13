@@ -1,15 +1,17 @@
 import { NextSeo } from 'next-seo'
-import { Box } from '@chakra-ui/react'
+import { Heading, Text } from '@chakra-ui/react'
+
+import { Layout } from '@qopnet/qopnet-ui'
 
 const OfflinePage = () => {
   return (
     <>
       <NextSeo title="Offline? - M Haidar Hanif" />
 
-      <Box>
-        <h1>Looks like you're offline</h1>
-        <p>Try to refresh or check your connection</p>
-      </Box>
+      <Layout>
+        <Heading as="h1">Looks like you're offline</Heading>
+        <Text>Try to refresh or check your connection</Text>
+      </Layout>
     </>
   )
 }

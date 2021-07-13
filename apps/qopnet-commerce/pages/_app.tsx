@@ -3,6 +3,8 @@ import { AppProps } from 'next/app'
 import { DefaultSeo } from 'next-seo'
 import { ChakraProvider } from '@chakra-ui/react'
 
+import { Header, Footer } from '@qopnet/qopnet-ui'
+
 import './styles.css'
 import SEO from '../next-seo.config'
 
@@ -25,7 +27,9 @@ function QopnetCommerceApp({ Component, pageProps }: AppProps) {
 
       <DefaultSeo {...SEO} />
 
+      <Header />
       <Component {...pageProps} />
+      <Footer />
     </ChakraProvider>
   )
 }

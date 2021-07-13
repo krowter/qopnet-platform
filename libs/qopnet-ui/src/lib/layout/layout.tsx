@@ -9,7 +9,7 @@ export function Layout(props: LayoutProps) {
 
   return (
     <Container spacing={10} maxW={1200}>
-      <Box minH="80vh">{children}</Box>
+      <Box height="80vh">{children}</Box>
     </Container>
   )
 }

@@ -1,8 +1,10 @@
+import { Layout } from '@qopnet/qopnet-ui'
+
 const shopPage = () => {
   return (
-    <div>
+    <Layout>
       <h1>Belanja semua produk supplier</h1>
-    </div>
+    </Layout>
   )
 }
 

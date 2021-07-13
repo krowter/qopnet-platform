@@ -1,8 +1,10 @@
+import { Layout } from '@qopnet/qopnet-ui'
+
 const cartPage = () => {
   return (
-    <div>
+    <Layout>
       <h1>Halaman keranjang belanja</h1>
-    </div>
+    </Layout>
   )
 }
 

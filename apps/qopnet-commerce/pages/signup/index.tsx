@@ -1,8 +1,10 @@
+import { Layout } from '@qopnet/qopnet-ui'
+
 const signUpPage = () => {
   return (
-    <div>
+    <Layout>
       <h1>Daftar baru pengguna</h1>
-    </div>
+    </Layout>
   )
 }
 

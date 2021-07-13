@@ -1,8 +1,10 @@
+import { Layout } from '@qopnet/qopnet-ui'
+
 const supplierParamPage = () => {
   return (
-    <div>
+    <Layout>
       <h1>One supplier page</h1>
-    </div>
+    </Layout>
   )
 }
 
