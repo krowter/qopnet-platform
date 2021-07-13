@@ -74,7 +74,7 @@ router.post('/:supplierParam/products', checkUser, async (req, res, next) => {
     return next(error)
   }
 
-  const supplierProduct: Prisma.SupplierProductCreateInput =
+  const supplierProduct: Prisma.SupplierProductUncheckedCreateInput =
     req.body.supplierProduct
   const supplierProductSlug = slugify(supplierProduct.name.toLowerCase())
 
