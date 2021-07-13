@@ -23,12 +23,12 @@ import { Icon } from '../icon/icon'
 
 /* eslint-disable-next-line */
 export interface HeaderProps {
-  cart: unknown
+  cart?: unknown
 }
 
 export const Header = (props: HeaderProps) => {
   const user = {}
-  const { cart } = props
+  const { cart = {} } = props
   const { colorMode, toggleColorMode } = useColorMode()
   const router = useRouter()
 
