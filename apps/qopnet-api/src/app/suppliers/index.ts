@@ -24,19 +24,73 @@ router.get('/:id/products', async (req, res, next) => {
   }
 })
 
-router.get('/:handle/products', async (req, res, next) => {
+router.get('/:supplierParam/products', async (req, res, next) => {
+  const { supplierParam } = req.params
+
   try {
-    const { handle } = req.params
-    console.log(handle)
-    const supplierProduct = await prisma.supplier.findUnique({
-      where: { handle },
+    // get supplierId
+    const supplier = await prisma.supplier.findUnique({
+      where: { handle: supplierParam },
+    })
+    if (!supplier)
+      throw new Error("Couldn't find a supplier with specific supplier param")
+
+    const supplierId = supplier.id
+
+    // get supplier product
+    const supplierProducts = await prisma.supplierProduct.findMany({
+      where: { supplierId: supplierId },
     })
     res.json({
-      message: 'Get all supplier products by supplier handle',
-      supplierProduct,
+      message: 'Get all supplier products by supplier supplierParam',
+      supplierProducts,
+      supplierParam
     })
-  } catch (e) {
-    next(e)
+  } catch (error) {
+    res.json({
+      message: error.message,
+      supplierParam,
+      error,
+    })
+    next(error)
+  }
+})
+
+router.get('/:supplierParam/products/:supplierProductParam', async (req, res, next) => {
+  const { supplierParam, supplierProductParam } = req.params
+
+  try {
+    // get supplierId
+    const supplier = await prisma.supplier.findUnique({
+      where: { handle: supplierParam },
+    })
+    if (!supplier)
+      throw new Error("Couldn't find a supplier with specific supplier param")
+
+    const supplierId = supplier.id
+
+    // get supplier product
+    const supplierProducts = await prisma.supplierProduct.findMany({
+      where: { 
+        supplierId: supplierId,
+        slug: supplierProductParam
+      },
+    })
+    if (!supplierProductParam) throw new Error('Couldn\'t find a supplier product with specific params')
+    res.json({
+      message: 'Get all supplier products by supplier supplierParam',
+      supplierParam,
+      supplierProductParam,
+      supplierProducts,
+    })
+  } catch (error) {
+    res.json({
+      message: error.message,
+      supplierParam,
+      supplierProductParam,
+      error,
+    })
+    next(error)
   }
 })
 
