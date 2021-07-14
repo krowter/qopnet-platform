@@ -1,4 +1,4 @@
-import { PrismaClient, Prisma, SupplierProduct } from '@prisma/client'
+import { PrismaClient, Prisma, SupplierProduct, Supplier } from '@prisma/client'
 const prisma = new PrismaClient()
 import * as express from 'express'
 const router = express.Router()
@@ -135,15 +135,16 @@ router.post('/:supplierParam/products', checkUser, async (req, res, next) => {
   const supplierProductSlug = slugify(supplierProduct.name.toLowerCase())
 
   try {
-    const newSupplierProduct: SupplierProduct =
-      await prisma.supplierProduct.create({
+    const newSupplierProduct: SupplierProduct = await prisma.supplierProduct.create(
+      {
         data: {
           ...supplierProduct,
           ownerId: userId,
           supplierId: supplierId,
           slug: supplierProductSlug,
         },
-      })
+      }
+    )
 
     res.json({
       message: 'Create new supplier product',
@@ -172,6 +173,21 @@ router.post('/:supplierParam/products', checkUser, async (req, res, next) => {
         error,
       })
     }
+  }
+})
+
+router.get('/', async (req, res, next) => {
+  try {
+    const supplier: Supplier[] = await prisma.supplier.findMany({})
+    res.json({
+      message: 'Get all suppliers',
+      supplier,
+    })
+  } catch (error) {
+    res.json({
+      message: 'Failed to get all suppliers',
+      error,
+    })
   }
 })
 
