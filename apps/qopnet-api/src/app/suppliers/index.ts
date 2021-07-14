@@ -5,6 +5,43 @@ const router = express.Router()
 import slugify from 'slugify'
 import { checkUser } from '../auth/middleware'
 
+router.get('/', async (req, res, next) => {
+  try {
+    const supplier: Supplier[] = await prisma.supplier.findMany({})
+    res.json({
+      message: 'Get all suppliers',
+      supplier,
+    })
+  } catch (error) {
+    res.json({
+      message: 'Failed to get all suppliers',
+      error,
+    })
+  }
+})
+
+router.get('/:supplierParam', async (req, res, next) => {
+  const { supplierParam } = req.params
+  try {
+    const supplier = await prisma.supplier.findUnique({
+      where: {
+        handle: supplierParam
+      }
+    })
+    res.json({
+      message: 'Get one supplier by supplier param',
+      supplierParam,
+      supplier
+    })
+  } catch (error) {
+    res.json({
+      message: 'Failed to get one supplier by supplier param',
+      supplierParam,
+      error
+    })
+  }
+})
+
 /**
  * Get supplier products by two ways:
  * 1. :id
@@ -173,21 +210,6 @@ router.post('/:supplierParam/products', checkUser, async (req, res, next) => {
         error,
       })
     }
-  }
-})
-
-router.get('/', async (req, res, next) => {
-  try {
-    const supplier: Supplier[] = await prisma.supplier.findMany({})
-    res.json({
-      message: 'Get all suppliers',
-      supplier,
-    })
-  } catch (error) {
-    res.json({
-      message: 'Failed to get all suppliers',
-      error,
-    })
   }
 })
 
