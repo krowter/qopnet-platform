@@ -23,7 +23,6 @@ model User {
   adminProfile AdminProfile?
 
   @@map(name: "users")
-  SupplierProduct SupplierProduct[]
 }
 
 model Profile {
@@ -34,12 +33,13 @@ model Profile {
   phone     String?
 
   // Relations
-  userId      String
-  user        User         @relation(fields: [userId], references: [id])
-  addresses   Address[]
-  wholesalers Wholesaler[]
-  suppliers   Supplier[]
-  merchants   Merchant[]
+  userId           String
+  user             User              @relation(fields: [userId], references: [id])
+  addresses        Address[]
+  wholesalers      Wholesaler[]
+  suppliers        Supplier[]
+  supplierProducts SupplierProduct[]
+  merchants        Merchant[]
 
   // Timestamp
   createdAt DateTime @default(now())
@@ -156,7 +156,7 @@ model SupplierProduct {
   supplierId String?
   supplier   Supplier? @relation(fields: [supplierId], references: [id])
   ownerId    String
-  owner      User      @relation(fields: [ownerId], references: [id])
+  owner      Profile   @relation(fields: [ownerId], references: [id])
 
   // Timestamp
   createdAt DateTime @default(now())
