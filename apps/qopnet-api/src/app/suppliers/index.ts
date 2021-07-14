@@ -25,19 +25,19 @@ router.get('/:supplierParam', async (req, res, next) => {
   try {
     const supplier = await prisma.supplier.findUnique({
       where: {
-        handle: supplierParam
-      }
+        handle: supplierParam,
+      },
     })
     res.json({
       message: 'Get one supplier by supplier param',
       supplierParam,
-      supplier
+      supplier,
     })
   } catch (error) {
     res.json({
       message: 'Failed to get one supplier by supplier param',
       supplierParam,
-      error
+      error,
     })
   }
 })
@@ -133,6 +133,77 @@ router.get(
     }
   }
 )
+
+router.post('/', checkUser, async (req, res, next) => {
+  const userId = req.user.sub
+  const supplier: Supplier = req.body
+  const supplierHandle = slugify(supplier.name)
+  let user: any
+
+  // Check if user exist by userId
+  try {
+    user = await prisma.user.findUnique({
+      where: { id: userId },
+      include: {
+        adminProfile: true,
+        profile: true,
+      },
+    })
+    if (!user) throw new Error()
+  } catch (error) {
+    res.json({
+      message: 'Create supplier failed because user not found',
+      error,
+    })
+  }
+
+  const profileId = user.profile.id
+
+  try {
+    const newSupplier = await prisma.supplier.create({
+      data: {
+        ...supplier,
+        handle: supplierHandle,
+        ownerId: profileId,
+      },
+    })
+
+    res.json({
+      message: 'Create new supplier product',
+      supplierProduct: newSupplier,
+    })
+  } catch (error) {
+    if (error.code === 'P2002') {
+      res.json({
+        message:
+          'Create new supplier  failed because name/handle need to be unique',
+        handle: supplierHandle,
+        error,
+      })
+      return next(error)
+    } else if (error.code === 'P2003') {
+      res.json({
+        message:
+          'Create new supplier failed because ownerId value is not in CUID format',
+        handle: supplierHandle,
+        error,
+      })
+      return next(error)
+    } else if (error.code === 'P2011') {
+      res.json({
+        message:
+          'Create new supplier failed because some fields cannot be empty',
+        field: error.meta.constraint,
+        error,
+      })
+    } else {
+      res.json({
+        message: 'Create new supplier failed',
+        error,
+      })
+    }
+  }
+})
 
 router.post('/:supplierParam/products', checkUser, async (req, res, next) => {
   const userId = req.user.sub
