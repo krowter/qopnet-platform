@@ -6,5 +6,6 @@ module.exports = {
     '<rootDir>/apps/qopnet-commerce',
     '<rootDir>/libs/qopnet-ui',
     '<rootDir>/libs/shared-types',
+    '<rootDir>/libs/util-swr',
   ],
 }

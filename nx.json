@@ -47,6 +47,9 @@
     },
     "util-supabase": {
       "tags": []
+    },
+    "util-swr": {
+      "tags": []
     }
   }
 }
