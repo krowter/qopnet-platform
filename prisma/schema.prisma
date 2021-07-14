@@ -27,7 +27,7 @@ model User {
 
 model Profile {
   id        String  @id @default(cuid())
-  handle    String? @unique
+  handle    String? @unique // username
   name      String?
   avatarUrl String?
   phone     String?
