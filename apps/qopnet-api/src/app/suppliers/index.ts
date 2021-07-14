@@ -1,11 +1,17 @@
-import { PrismaClient, Prisma, SupplierProduct, Supplier } from '@prisma/client'
+import {
+  PrismaClient,
+  Prisma,
+  SupplierProduct,
+  Supplier,
+  User,
+} from '@prisma/client'
 const prisma = new PrismaClient()
 import * as express from 'express'
 const router = express.Router()
 import slugify from 'slugify'
 import { checkUser } from '../auth/middleware'
 
-router.get('/', async (req, res, next) => {
+router.get('/', async (req, res) => {
   try {
     const supplier: Supplier[] = await prisma.supplier.findMany({})
     res.json({
@@ -20,7 +26,7 @@ router.get('/', async (req, res, next) => {
   }
 })
 
-router.get('/:supplierParam', async (req, res, next) => {
+router.get('/:supplierParam', async (req, res) => {
   const { supplierParam } = req.params
   try {
     const supplier = await prisma.supplier.findUnique({
@@ -134,77 +140,85 @@ router.get(
   }
 )
 
+/**
+ * POST /api/suppliers
+ */
 router.post('/', checkUser, async (req, res, next) => {
   const userId = req.user.sub
   const supplier: Supplier = req.body
   const supplierHandle = slugify(supplier.name)
-  let user: any
 
   // Check if user exist by userId
+  // This user findUnique can be a middleware later like in checkUser
   try {
-    user = await prisma.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: { id: userId },
-      include: {
-        adminProfile: true,
-        profile: true,
-      },
+      include: { profile: true },
     })
     if (!user) throw new Error()
+
+    // Assign profileId once get the user
+    const profileId = user.profile.id
+
+    try {
+      const newSupplier = await prisma.supplier.create({
+        data: {
+          ...supplier,
+          handle: supplierHandle,
+          ownerId: profileId,
+        },
+      })
+
+      // 200 OK
+      res.json({
+        message: 'Create new supplier',
+        supplier: newSupplier,
+      })
+    } catch (error) {
+      // 400 Client Error
+      if (error.code === 'P2002') {
+        res.status(400).json({
+          message:
+            'Create new supplier failed because name/handle need to be unique',
+          name: supplier.name,
+          handle: supplierHandle,
+          error,
+        })
+        return next(error)
+      } else if (error.code === 'P2003') {
+        res.status(400).json({
+          message:
+            'Create new supplier failed because ownerId value is not in CUID format',
+          error,
+        })
+        return next(error)
+      } else if (error.code === 'P2011') {
+        res.status(400).json({
+          message:
+            'Create new supplier failed because some fields cannot be empty',
+          fields: error.meta.constraint,
+          error,
+        })
+      } else {
+        // 500 Server Error
+        res.status(500).json({
+          message: 'Create new supplier failed',
+          error,
+        })
+      }
+    }
   } catch (error) {
+    // 404 Client Error
     res.json({
-      message: 'Create supplier failed because user not found',
+      message: 'Create new supplier failed because user not found',
       error,
     })
   }
-
-  const profileId = user.profile.id
-
-  try {
-    const newSupplier = await prisma.supplier.create({
-      data: {
-        ...supplier,
-        handle: supplierHandle,
-        ownerId: profileId,
-      },
-    })
-
-    res.json({
-      message: 'Create new supplier product',
-      supplierProduct: newSupplier,
-    })
-  } catch (error) {
-    if (error.code === 'P2002') {
-      res.json({
-        message:
-          'Create new supplier  failed because name/handle need to be unique',
-        handle: supplierHandle,
-        error,
-      })
-      return next(error)
-    } else if (error.code === 'P2003') {
-      res.json({
-        message:
-          'Create new supplier failed because ownerId value is not in CUID format',
-        handle: supplierHandle,
-        error,
-      })
-      return next(error)
-    } else if (error.code === 'P2011') {
-      res.json({
-        message:
-          'Create new supplier failed because some fields cannot be empty',
-        field: error.meta.constraint,
-        error,
-      })
-    } else {
-      res.json({
-        message: 'Create new supplier failed',
-        error,
-      })
-    }
-  }
 })
 
+/**
+ * POST /api/suppliers/:supplierParam/products
+ */
 router.post('/:supplierParam/products', checkUser, async (req, res, next) => {
   const userId = req.user.sub
   const { supplierParam } = req.params
@@ -243,16 +257,15 @@ router.post('/:supplierParam/products', checkUser, async (req, res, next) => {
   const supplierProductSlug = slugify(supplierProduct.name.toLowerCase())
 
   try {
-    const newSupplierProduct: SupplierProduct = await prisma.supplierProduct.create(
-      {
+    const newSupplierProduct: SupplierProduct =
+      await prisma.supplierProduct.create({
         data: {
           ...supplierProduct,
           ownerId: userId,
           supplierId: supplierId,
           slug: supplierProductSlug,
         },
-      }
-    )
+      })
 
     res.json({
       message: 'Create new supplier product',

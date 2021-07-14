@@ -16,6 +16,9 @@ export const checkUser = async (req, res, next) => {
         res.status(403).json({ message: 'Failed to check user and decode JWT' })
       } else {
         req.user = userInJWT // { sub: "a1b2c3-d4e5f6" }
+
+        // TODO: Can check valid user later here via Prisma
+
         next()
       }
     } else {
