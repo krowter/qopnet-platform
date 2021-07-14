@@ -1,5 +1,9 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// Prisma schema
+// https://pris.ly/d/prisma-schema
+
+// Don't use citext in the time being
+// https://github.com/prisma/prisma/issues/6944
+// https://github.com/prisma/prisma/issues/5772
 
 datasource db {
   provider = "postgresql"
@@ -18,7 +22,7 @@ generator client {
 // Copy of auth.users
 model User {
   id           String        @id
-  email        String
+  email        String        @unique
   profile      Profile?
   adminProfile AdminProfile?
 
@@ -33,12 +37,13 @@ model Profile {
   phone     String?
 
   // Relations
-  userId      String
-  user        User         @relation(fields: [userId], references: [id])
-  addresses   Address[]
-  wholesalers Wholesaler[]
-  suppliers   Supplier[]
-  merchants   Merchant[]
+  userId           String
+  user             User              @relation(fields: [userId], references: [id])
+  addresses        Address[]
+  wholesalers      Wholesaler[]
+  suppliers        Supplier[]
+  supplierProducts SupplierProduct[]
+  merchants        Merchant[]
 
   // Timestamp
   createdAt DateTime @default(now())
@@ -154,6 +159,8 @@ model SupplierProduct {
   // Relations
   supplierId String?
   supplier   Supplier? @relation(fields: [supplierId], references: [id])
+  ownerId    String
+  owner      Profile   @relation(fields: [ownerId], references: [id])
 
   // Timestamp
   createdAt DateTime @default(now())

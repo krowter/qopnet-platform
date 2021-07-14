@@ -8,6 +8,7 @@ import root from './app/root'
 import auth from './app/auth'
 import users from './app/users'
 import profiles from './app/profiles'
+import suppliers from './app/suppliers'
 import supplierProducts from './app/suppliers/products'
 
 const app = express()
@@ -38,11 +39,13 @@ app.use(Sentry.Handlers.requestHandler())
 app.use(Sentry.Handlers.tracingHandler())
 
 // Our API endpoints
+// The order is very important
 app.use('/', root)
 app.use('/auth', auth)
 app.use('/api/users', users)
 app.use('/api/profiles', profiles)
 app.use('/api/suppliers/products', supplierProducts)
+app.use('/api/suppliers', suppliers)
 
 // The error handler must be before any other error middleware
 // and after all controllers
@@ -59,7 +62,7 @@ app.use((err, req, res, next) => {
 
 const port = process.env.PORT || 4000
 const server = app.listen(port, () => {
-  console.log(`qopnet-api listening at :${port}/api`)
+  console.info(`qopnet-api listening at :${port}/api`)
 })
 
 server.on('error', console.error)
