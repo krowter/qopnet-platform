@@ -1,11 +1,15 @@
-import { Box, Text } from '@chakra-ui/react'
+import { Text } from '@chakra-ui/react'
 
-export function Index() {
+import { Layout } from '@qopnet/qopnet-ui'
+
+import { Home } from '../components'
+
+export function HomePage() {
   return (
-    <Box>
-      <Text>This is the homepage</Text>
-    </Box>
+    <Layout>
+      <Home />
+    </Layout>
   )
 }
 
-export default Index
+export default HomePage

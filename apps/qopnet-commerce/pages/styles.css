@@ -2,3 +2,11 @@ html,
 body {
   margin: 0;
 }
+
+img {
+  object-fit: cover;
+}
+
+.next-image-container > div {
+  display: block !important;
+}

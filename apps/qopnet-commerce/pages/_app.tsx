@@ -1,25 +1,41 @@
+import NextHead from 'next/head'
 import { AppProps } from 'next/app'
-import Head from 'next/head'
+import { DefaultSeo } from 'next-seo'
 import { ChakraProvider } from '@chakra-ui/react'
+import { SWRConfig } from 'swr'
 
-import { Header } from '@qopnet/qopnet-ui'
+import { Header, Footer } from '@qopnet/qopnet-ui'
+import { swrConfig } from '@qopnet/util-swr'
+
 import './styles.css'
+import SEO from '../next-seo.config'
 
-function QopnetCommerce({ Component, pageProps }: AppProps) {
+function QopnetCommerceApp({ Component, pageProps }: AppProps) {
   return (
-    <>
-      <Head>
-        <title>Qopnet</title>
-      </Head>
+    <ChakraProvider>
+      <NextHead>
+        <meta
+          name="viewport"
+          content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover"
+        />
+        <meta name="application-name" content={SEO.title} />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content={SEO.title} />
+        <meta name="description" content={SEO.shortDescription} />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="mobile-web-app-capable" content="yes" />
+      </NextHead>
 
-      <ChakraProvider>
+      <DefaultSeo {...SEO} />
+
+      <SWRConfig value={swrConfig}>
         <Header />
-        <main>
-          <Component {...pageProps} />
-        </main>
-      </ChakraProvider>
-    </>
+        <Component {...pageProps} />
+        <Footer />
+      </SWRConfig>
+    </ChakraProvider>
   )
 }
 
-export default QopnetCommerce
+export default QopnetCommerceApp
