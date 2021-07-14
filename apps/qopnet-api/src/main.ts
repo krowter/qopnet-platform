@@ -38,11 +38,12 @@ app.use(Sentry.Handlers.requestHandler())
 app.use(Sentry.Handlers.tracingHandler())
 
 // Our API endpoints
+// The order is very important
 app.use('/', root)
 app.use('/auth', auth)
 app.use('/api/profiles', profiles)
-app.use('/api/suppliers', suppliers)
 app.use('/api/suppliers/products', supplierProducts)
+app.use('/api/suppliers', suppliers)
 
 // The error handler must be before any other error middleware
 // and after all controllers

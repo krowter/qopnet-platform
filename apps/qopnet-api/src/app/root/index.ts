@@ -30,4 +30,10 @@ router.get('/api/hello', (req, res) => {
   })
 })
 
+router.get('/api/stats', (req, res) => {
+  res.send({
+    message: 'Get all stats',
+  })
+})
+
 export default router
