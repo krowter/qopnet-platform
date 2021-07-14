@@ -1,5 +1,9 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// Prisma schema
+// https://pris.ly/d/prisma-schema
+
+// Don't use citext in the time being
+// https://github.com/prisma/prisma/issues/6944
+// https://github.com/prisma/prisma/issues/5772
 
 datasource db {
   provider = "postgresql"
@@ -18,7 +22,7 @@ generator client {
 // Copy of auth.users
 model User {
   id           String        @id
-  email        String        @unique @db.Citext
+  email        String        @unique
   profile      Profile?
   adminProfile AdminProfile?
 
@@ -27,7 +31,7 @@ model User {
 
 model Profile {
   id        String  @id @default(cuid())
-  handle    String? @unique @db.Citext
+  handle    String? @unique
   name      String?
   avatarUrl String?
   phone     String?
@@ -96,7 +100,7 @@ model Address {
 
 model Wholesaler {
   id     String @id @default(cuid())
-  handle String @unique @db.Citext
+  handle String @unique
   name   String
 
   // Relations
@@ -121,7 +125,7 @@ enum SupplierCategory {
 
 model Supplier {
   id                String            @id @default(cuid())
-  handle            String?           @unique @db.Citext
+  handle            String?           @unique
   name              String?
   avatarUrl         String?
   nationalTax       String?
@@ -143,7 +147,7 @@ model Supplier {
 
 model SupplierProduct {
   id          String   @id @default(cuid())
-  slug        String?  @unique @db.Citext
+  slug        String?  @unique
   sku         String?
   name        String?
   description String?
@@ -170,7 +174,7 @@ model SupplierProduct {
 
 model Merchant {
   id        String  @id @default(cuid())
-  handle    String  @unique @db.Citext
+  handle    String  @unique
   name      String
   avatarUrl String?
 
