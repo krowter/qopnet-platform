@@ -32,10 +32,5 @@ export function HomeBanner(props: HomeBannerProps) {
 }
 
 export const HomeFaq = () => {
-  return (
-    <Box id="faq">
-      <Heading>Pertanyaan</Heading>
-      <Text>Pertanyaan yang sering ditanya</Text>
-    </Box>
-  )
+  return <Box id="faq"></Box>
 }

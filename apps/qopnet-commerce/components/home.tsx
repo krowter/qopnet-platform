@@ -1,4 +1,4 @@
-import { Stack, Box } from '@chakra-ui/react'
+import { Stack } from '@chakra-ui/react'
 
 import {
   HomeBanner,
@@ -10,19 +10,13 @@ import { useSWR } from '../utils/swr'
 
 export const Home = () => {
   const { data, error } = useSWR(`/api/suppliers/products`)
-  const supplierProducts = data?.supplierProducts || []
+  const { supplierProducts } = data || {}
 
   return (
     <Stack>
       <HomeBanner id="slider-promo" />
-      <HomeProductCategory
-        id="product-category"
-        supplierProducts={supplierProducts}
-      />
-      <HomeProductSpecial
-        id="product-special"
-        supplierProducts={supplierProducts}
-      />
+      <HomeProductCategory id="product-category" />
+      <HomeProductSpecial supplierProducts={supplierProducts} error={error} />
       <HomeFaq />
     </Stack>
   )

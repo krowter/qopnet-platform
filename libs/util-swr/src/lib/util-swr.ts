@@ -22,9 +22,12 @@ export const fetcher = async (
   // apiUrl need to be configured in the frontend app
   // Because process.env is not allowed here
   const fullUrl = apiUrl + endpoint
-  const res = await fetch(fullUrl, {
-    headers: new Headers({ Authorization: 'Bearer ' + accessToken || '' }),
-  })
+
+  const fetchConfig = accessToken
+    ? { headers: new Headers({ Authorization: 'Bearer ' + accessToken }) }
+    : {}
+
+  const res = await fetch(fullUrl, fetchConfig)
 
   // If the status code is not in the range 200-299
   if (!res.ok) {

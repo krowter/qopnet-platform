@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import NextLink from 'next/link'
 import NextImage from 'next/image'
@@ -48,13 +49,13 @@ const defaultProductImages = [
 ]
 
 export interface HomeProductCategoryProps {
-  id?: string | ''
-  supplierProducts: SupplierProduct[]
+  id?: string
 }
 
 export interface HomeProductSpecialProps {
-  id?: string | ''
+  id?: string
   supplierProducts: SupplierProduct[]
+  error: any
 }
 
 export interface SupplierProductCardProps {
@@ -100,21 +101,28 @@ export const HomeProductCategory = (props: HomeProductCategoryProps) => {
 }
 
 export const HomeProductSpecial = (props: HomeProductSpecialProps) => {
+  const { id, supplierProducts, error } = props
+
   return (
-    <VStack id={props.id} py={20} spacing={10}>
+    <VStack id={id} py={20} spacing={10}>
       <Heading as="h2" size="lg">
         Produk Pilihan
       </Heading>
-      <SimpleGrid spacing={5} columns={4}>
-        {props.supplierProducts?.map((product, index) => {
-          return (
-            <SupplierProductCard
-              key={product.slug || index}
-              product={product}
-            />
-          )
-        })}
-      </SimpleGrid>
+
+      {error && <Text>Gagal mengambil produk pilihan</Text>}
+      {!error && !supplierProducts && <Text>Memuat produk pilihan...</Text>}
+      {!error && supplierProducts && (
+        <SimpleGrid spacing={5} columns={4}>
+          {supplierProducts?.map((product, index) => {
+            return (
+              <SupplierProductCard
+                key={product.slug || index}
+                product={product}
+              />
+            )
+          })}
+        </SimpleGrid>
+      )}
     </VStack>
   )
 }
@@ -227,10 +235,10 @@ export const SupplierProductContainer = ({
             />
           </Box>
           <Stack direction="row">
-            {productImages.map((imageUrl: string) => {
+            {productImages.map((imageUrl: string, index) => {
               return (
                 <ChakraImage
-                  key={product.slug + product.id}
+                  key={`${product.slug}-${index}-${product.id}`}
                   src={imageUrl}
                   alt={product.name || 'Small product image'}
                   layout="fixed"
