@@ -5,20 +5,22 @@ import NextImage from 'next/image'
 import { SupplierProduct } from '@prisma/client'
 import { Decimal } from '@prisma/client/runtime'
 import {
-  Text,
-  Heading,
-  SimpleGrid,
-  VStack,
-  Stack,
   Box,
-  Image as ChakraImage,
-  Divider,
-  IconButton,
   ButtonGroup,
+  Divider,
+  Flex,
+  Heading,
+  IconButton,
+  Image as ChakraImage,
+  ListItem,
   NumberInput,
   NumberInputField,
-  ListItem,
+  SimpleGrid,
+  Stack,
+  Text,
   UnorderedList,
+  useMediaQuery,
+  VStack,
 } from '@chakra-ui/react'
 
 import { formatDateTime } from '@qopnet/util-format'
@@ -220,10 +222,12 @@ export const SupplierProductContainer = ({
   // @ts-ignore
   const productImageFirst = productImages[0] as string
 
+  const [isDesktop] = useMediaQuery('(min-width: 60em)')
+
   return (
     <Stack pt={10} spacing={20}>
-      <Stack direction="row" spacing={10}>
-        <Stack id="product-images" spacing={5}>
+      <Stack direction={isDesktop ? 'row' : 'column'} spacing={10}>
+        <Stack id="product-images">
           <Box display="inherit">
             <NextImage
               key={product.slug + '-first'}
@@ -237,46 +241,61 @@ export const SupplierProductContainer = ({
           <Stack direction="row">
             {productImages.map((imageUrl: string, index) => {
               return (
-                <ChakraImage
-                  key={`${product.slug}-${index}-${product.id}`}
-                  src={imageUrl}
-                  alt={product.name || 'Small product image'}
-                  layout="fixed"
-                  width={100}
-                  height={100}
-                />
+                <Box display="inherit">
+                  <NextImage
+                    key={`${product.slug}-${index}-${product.id}`}
+                    src={imageUrl}
+                    alt={product.name || 'Small product image'}
+                    layout="fixed"
+                    width={100}
+                    height={100}
+                  />
+                </Box>
               )
             })}
           </Stack>
         </Stack>
 
-        <Stack id="product-info-sections" spacing={5}>
+        <Stack id="product-info-sections" spacing={5} w="100%">
           <Stack id="product-info-name-price">
-            <Heading as="h2">{product.name}</Heading>
+            <Heading as="h2" size="lg">
+              {product.name}
+            </Heading>
 
-            <Stack id="product-price-unit" spacing={0}>
-              <Box color="green.500">
-                <SupplierProductPrice product={product} fontSize="2xl" />
-              </Box>
+            <Stack id="product-price-unit" spacing={3}>
               <Text>Detail tidak diketahui</Text>
+              <Flex alignItems="center">
+                <Box color="green.500">
+                  <SupplierProductPrice product={product} fontSize="3xl" />
+                </Box>
+                <Text ml={3}> / 1 crate / 15 kg</Text>
+              </Flex>
             </Stack>
+          </Stack>
 
+          <Divider />
+
+          <Stack>
+            <Heading as="h4" size="sm">
+              Atur jumlah pesanan
+            </Heading>
             <ButtonGroup
               id="product-cart-modifier"
-              spacing={5}
+              spacing={3}
               alignItems="center"
-              variant="ghost"
+              variant="outline"
             >
               <IconButton aria-label="Kurangi produk">
                 <Icon name="decrement" />
               </IconButton>
-              <NumberInput defaultValue={0} max={10} clampValueOnBlur={false}>
+              <NumberInput defaultValue={0} max={10}>
                 <NumberInputField w={100} />
               </NumberInput>
               <IconButton aria-label="Tambah produk">
                 <Icon name="increment" />
               </IconButton>
             </ButtonGroup>
+            <Text fontSize="xs">Max. pembelian 10 pcs</Text>
           </Stack>
 
           <Divider />
@@ -322,22 +341,22 @@ export const SupplierProductContainer = ({
           </Heading>
           <Stack>
             <Heading as="h5" size="md">
-              Fitur utama
+              Deskripsi
             </Heading>
             <Text>Produk ini sangat bagus.</Text>
           </Stack>
           <Stack>
             <Heading as="h5" size="md">
-              Ukuran produk
+              Ukuran
             </Heading>
+            <Box>
+              <UnorderedList>
+                <ListItem>Panjang: 200 cm</ListItem>
+                <ListItem>Tinggi: 78 cm</ListItem>
+                <ListItem>Lebar: 120 cm</ListItem>
+              </UnorderedList>
+            </Box>
           </Stack>
-          <Box>
-            <UnorderedList>
-              <ListItem>Panjang: 200 cm</ListItem>
-              <ListItem>Tinggi: 78 cm</ListItem>
-              <ListItem>Lebar: 120 cm</ListItem>
-            </UnorderedList>
-          </Box>
         </Stack>
       </Stack>
     </Stack>

@@ -18,6 +18,7 @@ import {
   useColorMode,
   useColorModeValue,
   useToast,
+  useMediaQuery,
 } from '@chakra-ui/react'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { useSupabase, useUser } from 'use-supabase'
@@ -32,10 +33,19 @@ export interface HeaderProps {
 
 export const Header = (props: HeaderProps) => {
   const { colorMode, toggleColorMode } = useColorMode()
-  const router = useRouter()
   const supabase = useSupabase()
   const user = useUser()
   const toast = useToast()
+
+  const [isDesktop] = useMediaQuery('(min-width: 60em)')
+  const qopnetLogoDesktop = useColorModeValue(
+    '/images/qopnet-logo.png',
+    '/images/qopnet-logo-dark.png'
+  )
+  const qopnetLogoMobile = useColorModeValue(
+    '/images/qopnet-icon.png',
+    '/images/qopnet-icon.png'
+  )
 
   // Should be passed down from props of respective app
   // Because useSWR
@@ -60,15 +70,23 @@ export const Header = (props: HeaderProps) => {
       <HStack w={500} spacing={3}>
         <NextLink href="/" passHref>
           <chakra.a display="block" className="next-image-container">
-            <NextImage
-              alt="Qopnet logo"
-              src={useColorModeValue(
-                '/images/qopnet-logo.png',
-                '/images/qopnet-logo-dark.png'
-              )}
-              width={161}
-              height={50}
-            />
+            {isDesktop ? (
+              <NextImage
+                alt="Qopnet logo"
+                src={qopnetLogoDesktop}
+                width={161}
+                height={50}
+                layout="fixed"
+              />
+            ) : (
+              <NextImage
+                alt="Qopnet small logo"
+                src={qopnetLogoMobile}
+                width={50}
+                height={50}
+                layout="fixed"
+              />
+            )}
           </chakra.a>
         </NextLink>
         <IconButton

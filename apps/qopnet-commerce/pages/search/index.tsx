@@ -41,7 +41,7 @@ export const SearchResults = ({ keyword }) => {
   const { count, supplierProducts } = data || {}
 
   return (
-    <Stack pt={10} spacing={5}>
+    <Stack pt={10} spacing={3}>
       <Heading as="h1" size="xl">
         Cari produk dan toko supplier
       </Heading>
@@ -56,16 +56,19 @@ export const SearchResults = ({ keyword }) => {
         </Flex>
       )}
       {!error && supplierProducts && (
-        <SimpleGrid spacing={5} columns={[1, 2, 4]}>
-          {supplierProducts?.map((product, index) => {
-            return (
-              <SupplierProductCard
-                key={product.slug || index}
-                product={product}
-              />
-            )
-          })}
-        </SimpleGrid>
+        <Stack>
+          <Text>{count} produk ditemukan</Text>
+          <SimpleGrid spacing={5} columns={[1, 2, 4]}>
+            {supplierProducts?.map((product, index) => {
+              return (
+                <SupplierProductCard
+                  key={product.slug || index}
+                  product={product}
+                />
+              )
+            })}
+          </SimpleGrid>
+        </Stack>
       )}
     </Stack>
   )
