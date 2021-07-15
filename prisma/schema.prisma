@@ -31,14 +31,16 @@ model User {
 
 model Profile {
   id        String  @id @default(cuid())
-  handle    String? @unique
+  handle    String? @unique // username
   name      String?
   avatarUrl String?
   phone     String?
 
-  // Relations
-  userId           String
-  user             User              @relation(fields: [userId], references: [id])
+  // User Relations
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  // Data Relations
   addresses        Address[]
   wholesalers      Wholesaler[]
   suppliers        Supplier[]

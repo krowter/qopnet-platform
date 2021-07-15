@@ -8,7 +8,7 @@
   "scripts": {
     "nx": "nx",
     "many": "nx run-many --target=serve --all --parallel",
-    "serve": "nx serve",
+    "serve": "prisma generate && nx serve",
     "serve:api": "prisma generate && nx serve",
     "serve:admin": "nx serve qopnet-admin --port=4200",
     "serve:commerce": "nx serve qopnet-commerce --port=3000",

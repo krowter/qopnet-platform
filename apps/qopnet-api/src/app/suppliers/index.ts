@@ -1,4 +1,4 @@
-import { PrismaClient, Prisma, SupplierProduct, Supplier } from '@prisma/client'
+import { PrismaClient, SupplierProduct, Supplier } from '@prisma/client'
 const prisma = new PrismaClient()
 import * as express from 'express'
 const router = express.Router()

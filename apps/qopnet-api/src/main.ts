@@ -6,6 +6,7 @@ import * as Tracing from '@sentry/tracing'
 
 import root from './app/root'
 import auth from './app/auth'
+import users from './app/users'
 import profiles from './app/profiles'
 import suppliers from './app/suppliers'
 import supplierProducts from './app/suppliers/products'
@@ -41,6 +42,7 @@ app.use(Sentry.Handlers.tracingHandler())
 // The order is very important
 app.use('/', root)
 app.use('/auth', auth)
+app.use('/api/users', users)
 app.use('/api/profiles', profiles)
 app.use('/api/suppliers/products', supplierProducts)
 app.use('/api/suppliers', suppliers)
