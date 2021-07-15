@@ -56,10 +56,13 @@ export interface HomeProductCategoryProps {
 
 export interface HomeProductSpecialProps {
   id?: string
-  supplierProducts: SupplierProduct[]
   error: any
+  supplierProducts: SupplierProduct[]
 }
 
+export interface SupplierProductsGridProps {
+  supplierProducts: SupplierProduct[]
+}
 export interface SupplierProductCardProps {
   product: SupplierProduct
 }
@@ -80,7 +83,7 @@ export const HomeProductCategory = (props: HomeProductCategoryProps) => {
       <Heading as="h2" size="lg">
         Kategori Produk
       </Heading>
-      <SimpleGrid spacing={5} columns={8}>
+      <SimpleGrid spacing={5} columns={[4, 6, 8]}>
         {supplierProductCategories.map((category) => {
           return (
             <NextLink
@@ -114,18 +117,23 @@ export const HomeProductSpecial = (props: HomeProductSpecialProps) => {
       {error && <Text>Gagal mengambil produk pilihan</Text>}
       {!error && !supplierProducts && <Text>Memuat produk pilihan...</Text>}
       {!error && supplierProducts && (
-        <SimpleGrid spacing={5} columns={4}>
-          {supplierProducts?.map((product, index) => {
-            return (
-              <SupplierProductCard
-                key={product.slug || index}
-                product={product}
-              />
-            )
-          })}
-        </SimpleGrid>
+        <SupplierProductsGrid supplierProducts={supplierProducts} />
       )}
     </VStack>
+  )
+}
+
+export const SupplierProductsGrid = ({
+  supplierProducts,
+}: SupplierProductsGridProps) => {
+  return (
+    <SimpleGrid spacing={5} columns={[2, 2, 4]}>
+      {supplierProducts?.map((product, index) => {
+        return (
+          <SupplierProductCard key={product.slug || index} product={product} />
+        )
+      })}
+    </SimpleGrid>
   )
 }
 
@@ -147,7 +155,7 @@ export const SupplierProductCard = ({ product }: SupplierProductCardProps) => {
             height={300}
           />
         )}
-        <Heading as="h3" size="md" fontWeight="black">
+        <Heading as="h3" size={'md'} fontWeight="black">
           {product.name}
         </Heading>
         <SupplierProductPrice product={product} />

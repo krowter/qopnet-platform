@@ -1,3 +1,4 @@
+import NextLink from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import {
@@ -6,14 +7,14 @@ import {
   FormHelperText,
   FormLabel,
   Heading,
+  IconButton,
   Input,
   InputGroup,
   InputRightElement,
+  Link,
   Stack,
-  IconButton,
-  VisuallyHidden,
-  VStack,
   Text,
+  VStack,
   useToast,
 } from '@chakra-ui/react'
 import { useForm, SubmitHandler } from 'react-hook-form'
@@ -84,10 +85,20 @@ export const SignInForm = () => {
   return (
     <div>
       <VStack mt={20} spacing={10}>
-        <Heading as="h1" size="xl">
-          Masuk ke akun Qopnet
-        </Heading>
-        <Text>Silakan masuk ke akun Anda untuk mengelola profil dan toko.</Text>
+        <VStack>
+          <Heading as="h1" size="xl">
+            Masuk ke akun Qopnet
+          </Heading>
+          <Text>
+            Silakan masuk ke akun Anda untuk mengelola profil dan toko.
+          </Text>
+          <Text>
+            Belum punya akun?{' '}
+            <NextLink href="/signup">
+              <Link color="orange.500">Daftar sekarang</Link>
+            </NextLink>
+          </Text>
+        </VStack>
 
         <Stack as="form" onSubmit={handleSubmit(onSubmitLogin)}>
           <FormControl id="email">

@@ -8,7 +8,7 @@ import {
   SimpleGrid,
 } from '@chakra-ui/react'
 
-import { Layout, SupplierProductCard } from '@qopnet/qopnet-ui'
+import { Layout, SupplierProductsGrid } from '@qopnet/qopnet-ui'
 import { useSWR } from '../../utils/swr'
 
 const SearchPage = () => {
@@ -58,16 +58,7 @@ export const SearchResults = ({ keyword }) => {
       {!error && supplierProducts && (
         <Stack>
           <Text>{count} produk ditemukan</Text>
-          <SimpleGrid spacing={5} columns={[1, 2, 4]}>
-            {supplierProducts?.map((product, index) => {
-              return (
-                <SupplierProductCard
-                  key={product.slug || index}
-                  product={product}
-                />
-              )
-            })}
-          </SimpleGrid>
+          <SupplierProductsGrid supplierProducts={supplierProducts} />
         </Stack>
       )}
     </Stack>
