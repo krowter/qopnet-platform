@@ -27,7 +27,7 @@ import { useParams, useHistory } from 'react-router'
 import { DefaultLayout } from '../../layouts'
 import { useSWR } from '../../utils/swr'
 
-export const truncateString = (str: string, num: number) => {
+const truncateString = (str: string, num: number) => {
   // If the length of str is less than or equal to num
   // just return str, don't truncate it.
   if (str.length <= num) {
