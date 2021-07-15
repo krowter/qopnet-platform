@@ -1,29 +1,22 @@
+import { Prisma } from '@prisma/client'
 import {
   Avatar,
   Box,
   Flex,
   Spinner,
   Table,
-  TableCaption,
   Tbody,
   Td,
   Text,
-  Tfoot,
-  Th,
-  Thead,
   Tr,
   VStack,
 } from '@chakra-ui/react'
-import useSWR from 'swr'
 import { useHistory } from 'react-router-dom'
 
 import { DefaultLayout } from '../../layouts'
-import { Prisma } from '@prisma/client'
+import { useSWR } from '../../utils/swr'
 
-const fetcher = (url: string) =>
-  fetch(process.env.NX_API_URL + url).then((res) => res.json())
-
-const truncateString = (str: string, num: number) => {
+export const truncateString = (str: string, num: number) => {
   // If the length of str is less than or equal to num
   // just return str--don't truncate it.
   if (str.length <= num) {
@@ -35,10 +28,9 @@ const truncateString = (str: string, num: number) => {
 
 export const SuppliersProductsPage = () => {
   const history = useHistory()
-  const { data: { supplierProducts = [], message } = [], error } = useSWR(
-    '/api/suppliers/products',
-    fetcher
-  )
+  const { data, error } = useSWR('/api/suppliers/products')
+
+  const { supplierProducts = [], message } = data
 
   return (
     <DefaultLayout>

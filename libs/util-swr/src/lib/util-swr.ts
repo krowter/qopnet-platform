@@ -1,8 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import useSWR, { mutate } from 'swr'
 
 export const swrConfig = {
-  onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
+  onErrorRetry: (
+    error: { status: number },
+    revalidate: (arg0: { retryCount: any }) => any,
+    { retryCount }: any
+  ) => {
     // Never retry on 404 error.
     if (error.status === 404) return
     // Only retry several times.
