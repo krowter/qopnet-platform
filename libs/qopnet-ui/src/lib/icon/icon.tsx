@@ -7,6 +7,12 @@ import {
   FaSignOutAlt as SignOut,
   FaPlus as Increment,
   FaMinus as Decrement,
+  FaHome as Home,
+  FaUser as Users,
+  FaIdBadge as Profiles,
+  FaBuilding as Supplier,
+  FaRegBuilding as Suppliers,
+  FaCarrot as SuppliersProducts,
 
   // Category
   FaBoxes as All,
@@ -17,6 +23,7 @@ import {
   FaCarrot as Vegetable,
   FaPercentage as Promo,
 } from 'react-icons/fa'
+import { FiMenu as Menu } from 'react-icons/fi'
 
 export interface IconProps {
   name: string | ''
@@ -43,6 +50,20 @@ export const Icon = (props: IconProps) => {
       return <Increment />
     case 'decrement':
       return <Decrement />
+    case 'home':
+      return <Home />
+    case 'users':
+      return <Users />
+    case 'profiles':
+      return <Profiles />
+    case 'supplier':
+      return <Supplier />
+    case 'suppliers':
+      return <Suppliers />
+    case 'suppliers-products':
+      return <SuppliersProducts />
+    case 'menu':
+      return <Menu />
 
     /**
      * Category

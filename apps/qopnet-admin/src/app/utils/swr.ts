@@ -14,16 +14,12 @@ import {
 const apiProduction = 'https://qopnet-api.catamyst.com'
 const apiStaging = 'https://qopnet-api-staging.up.railway.app'
 const apiDevelopment =
-  process.env.NEXT_PUBLIC_NX_API_URL ||
-  process.env.NEXT_PUBLIC_API_URL ||
-  process.env.NX_API_URL ||
-  process.env.API_URL ||
-  'http://localhost:4000'
+  process.env.NX_API_URL || process.env.API_URL || 'http://localhost:4000'
 
 const apiUrl =
-  process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'
+  process.env.NODE_ENV === 'production'
     ? apiProduction
-    : process.env.NEXT_PUBLIC_VERCEL_ENV === 'preview'
+    : process.env.NODE_ENV === 'staging'
     ? apiStaging
     : apiDevelopment
 
@@ -33,13 +29,14 @@ console.info({ apiUrl })
  * Dynamic fetcher which use apiUrl automatically
  */
 export const fetcher = async (endpoint: string) => {
+  // Get from localStorage, but still string
   const supabaseAuthToken =
     window.localStorage.getItem('supabase.auth.token') || '{}'
-
+  // Parse string into object
   const parsedObject = JSON.parse(supabaseAuthToken) || {
     currentSession: { access_token: '' },
   }
-
+  // Get only the accessToken
   const accessToken = parsedObject.currentSession.access_token
 
   return await utilFetcher(apiUrl, endpoint, accessToken)

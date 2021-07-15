@@ -11,7 +11,6 @@ import {
   DrawerOverlay,
   Flex,
   HStack,
-  Icon,
   IconButton,
   Image,
   Stack,
@@ -21,10 +20,9 @@ import {
   useToast,
 } from '@chakra-ui/react'
 import { useSupabase } from 'use-supabase'
+
 import * as packageData from '../../../../../package.json'
-import { MdKeyboardArrowRight } from 'react-icons/md'
-import { IconType } from 'react-icons/lib'
-import { FiMenu } from 'react-icons/fi'
+import { Icon, ToggleColorModeButton } from '@qopnet/qopnet-ui'
 
 export const Sidebar = () => {
   const sidebar = useDisclosure()
@@ -34,9 +32,13 @@ export const Sidebar = () => {
         aria-label="Menu"
         bg="none"
         display={{ base: 'inline-flex', md: 'none' }}
-        icon={<FiMenu />}
+        icon={<Icon name="menu" />}
         onClick={sidebar.onOpen}
-        size="md"
+        m={2}
+        size="sm"
+        position="fixed"
+        top={0}
+        left={0}
       />
       <Drawer
         isFullHeight
@@ -49,43 +51,52 @@ export const Sidebar = () => {
         <DrawerContent style={{ width: 'auto' }}>
           <Stack
             bg={useColorModeValue('gray.100', 'gray.900')}
-            borderColor={useColorModeValue('gray.200', 'gray.700')}
             borderRight="1px solid gray"
+            borderColor={useColorModeValue('gray.200', 'gray.700')}
             height="100vh"
             justify="space-between"
-            py={5}
+            p={2}
             minWidth="250px"
           >
-            <Stack as="nav" w="auto" spacing={6}>
-              <DrawerCloseButton left="0px" ml={3} />
+            <Stack as="nav" w="auto" spacing={3} mx={2} mt={6}>
+              <DrawerCloseButton left={0} ml={2} />
               <SidebarUser />
               <SidebarAuth />
               <SidebarLinks />
             </Stack>
-            <Text as="pre" fontSize="xs" px={5} color="gray.500">
-              <code>v{packageData.version}</code>
-            </Text>
+            <HStack px={5}>
+              <Text as="code" fontSize="xs" color="gray.500">
+                v{packageData.version}
+              </Text>
+              <ToggleColorModeButton size="xs" />
+            </HStack>
           </Stack>
         </DrawerContent>
       </Drawer>
+
       <Stack
+        id="sidebar-stack"
+        h="100vh"
         bg={useColorModeValue('gray.100', 'gray.900')}
-        borderColor={useColorModeValue('gray.200', 'gray.700')}
         borderRight="1px solid gray"
+        borderColor={useColorModeValue('gray.200', 'gray.700')}
         display={{ base: 'none', md: 'flex' }}
         height="100vh"
         justify="space-between"
         py={5}
         minWidth="250px"
       >
-        <Stack as="nav" w="auto" spacing={5}>
+        <Stack as="nav" w="auto" spacing={5} mx={4}>
           <SidebarUser />
           <SidebarAuth />
           <SidebarLinks />
         </Stack>
-        <Text as="pre" fontSize="xs" px={5} color="gray.500">
-          <code>v{packageData.version}</code>
-        </Text>
+        <HStack px={5}>
+          <Text as="code" fontSize="xs" color="gray.500">
+            v{packageData.version}
+          </Text>
+          <ToggleColorModeButton size="xs" />
+        </HStack>
       </Stack>
     </>
   )
@@ -93,7 +104,7 @@ export const Sidebar = () => {
 
 export const SidebarUser = () => {
   return (
-    <HStack spacing={10} px={5} justifyContent="center">
+    <HStack spacing={10} justifyContent="space-between">
       <Link to="/">
         <Image
           src={useColorModeValue(
@@ -135,111 +146,128 @@ export const SidebarAuth = () => {
   }
 
   return (
-    <ButtonGroup px={5} justifyContent="center" display="flex">
+    <ButtonGroup id="sidebar-auth-buttons">
       <Button colorScheme="orange" size="xs">
-        Settings
+        Pengaturan
       </Button>
       <Button colorScheme="red" size="xs" onClick={handleLogout}>
-        Log out
+        Keluar
       </Button>
     </ButtonGroup>
   )
 }
 
 export const SidebarLinks = () => {
-  const suppliers = useDisclosure()
-  const merchants = useDisclosure()
   return (
-    <Stack fontSize="sm" fontWeight="500" spacing={0} px={3}>
-      <SidebarLink to="/">Home</SidebarLink>
-      <SidebarLink to="/users">Users</SidebarLink>
-      <SidebarLink to="/profiles">Profiles</SidebarLink>
-      <SidebarNestedLink>Suppliers</SidebarNestedLink>
-      <Flex flexDirection="column" alignItems="flex-start" px={4}>
-        <SidebarLink to="/suppliers">All Suppliers</SidebarLink>
-        <SidebarLink to="/suppliers/products">Suppliers Products</SidebarLink>
-        <SidebarLink to="/suppliers/purchase-orders">
+    <Stack id="sidebar-links" fontSize="sm" fontWeight="500" spacing={0}>
+      <SidebarLink name="home" to="/">
+        Beranda
+      </SidebarLink>
+      <SidebarLink name="users" to="/users">
+        Pengguna
+      </SidebarLink>
+      <SidebarLink name="profiles" to="/profiles">
+        Profil
+      </SidebarLink>
+
+      <SidebarNestedLink name="supplier" to="/suppliers">
+        Supplier
+      </SidebarNestedLink>
+      <Flex flexDirection="column" pl={4}>
+        <SidebarLink name="suppliers" to="/suppliers">
+          Semua Supplier
+        </SidebarLink>
+        <SidebarLink name="suppliers-products" to="/suppliers/products">
+          Semua Produk Supplier
+        </SidebarLink>
+        {/* <SidebarLink to="/suppliers/purchase-orders">
           Purchase Orders (PO)
         </SidebarLink>
-        <SidebarLink to="/suppliers/invoices">Suppliers Invoices</SidebarLink>
+        <SidebarLink to="/suppliers/invoices">Suppliers Invoices</SidebarLink> */}
       </Flex>
-      <SidebarNestedLink>Merchants</SidebarNestedLink>
+
+      {/* <SidebarNestedLink>Merchants</SidebarNestedLink>
       <Flex flexDirection="column" alignItems="flex-start" px={4}>
         <SidebarLink to="/merchants">All Merchants</SidebarLink>
         <SidebarLink to="/merchants/products">Merchant Products</SidebarLink>
         <SidebarLink to="/merchants/orders">Merchant Orders</SidebarLink>
         <SidebarLink to="/merchants/invoices">Merchant Invoices</SidebarLink>
       </Flex>
+
       <SidebarLink to="/logistics">Logistics</SidebarLink>
-      <SidebarLink to="/customers">Customers</SidebarLink>
+      <SidebarLink to="/customers">Customers</SidebarLink> */}
     </Stack>
   )
 }
 
 export const SidebarLink = ({
+  name,
   to,
   children,
   isActive,
 }: {
+  name: string
   to: string
   children: ReactNode
   isActive?: boolean
-  icon?: IconType
   onClick?: React.MouseEventHandler<HTMLButtonElement>
 }) => {
   const bg = useColorModeValue('gray.200', 'gray.700')
   return (
-    <chakra.a
+    <Flex
       as={Link}
       to={to}
       px={2}
       py={1}
       rounded="base"
-      bg={isActive ? bg : ''}
-      _hover={{
-        bg: bg,
-      }}
-    >
-      {children}
-    </chakra.a>
-  )
-}
-
-const SidebarNestedLink = ({
-  children,
-  isActive,
-  icon,
-  onClick,
-}: {
-  children: ReactNode
-  isActive?: boolean
-  icon?: IconType
-  onClick?: React.MouseEventHandler
-}) => {
-  const bg = useColorModeValue('gray.200', 'gray.700')
-  return (
-    <Flex
       align="center"
       bg={isActive ? bg : ''}
       _hover={{
         bg: bg,
       }}
+    >
+      {name && (
+        <chakra.span mr="2" _groupHover={{ color: 'gray.600' }}>
+          <Icon name={name} />
+        </chakra.span>
+      )}
+      {children}
+    </Flex>
+  )
+}
+
+const SidebarNestedLink = ({
+  name,
+  to,
+  children,
+  isActive,
+  onClick,
+}: {
+  name: string
+  to: string
+  children: ReactNode
+  isActive?: boolean
+  onClick?: React.MouseEventHandler
+}) => {
+  const bg = useColorModeValue('gray.200', 'gray.700')
+  return (
+    <Flex
+      as={Link}
+      to={to}
+      align="center"
       cursor="pointer"
       onClick={onClick}
       px={2}
       py={1}
       role="group"
       transition=".15s ease"
+      bg={isActive ? bg : ''}
+      _hover={{ bg: bg }}
     >
-      {icon && (
-        <Icon
-          as={icon}
-          boxSize="4"
-          mr="2"
-          _groupHover={{
-            color: 'gray.600',
-          }}
-        />
+      {name && (
+        <chakra.span mr="2" _groupHover={{ color: 'gray.600' }}>
+          <Icon name={name} />
+        </chakra.span>
       )}
       {children}
     </Flex>

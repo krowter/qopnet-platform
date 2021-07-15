@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import useSWR from 'swr'
 import {
   Box,
   Heading,
@@ -10,12 +9,11 @@ import {
 
 import { DefaultLayout } from '../layouts'
 import { Header } from '../components'
+import { useSWR } from '../utils/swr'
 
 export const Profiles = () => {
-  const fetcher = (url: string) =>
-    fetch(process.env.NX_API_URL + url).then((res) => res.json())
-
-  const { data, error } = useSWR('/api/profiles', fetcher)
+  const { data, error } = useSWR('/api/profiles')
+  const { profiles } = data || {}
 
   return (
     <DefaultLayout>
@@ -23,31 +21,33 @@ export const Profiles = () => {
         <Heading as="h1" size="md">
           Profiles
         </Heading>
-        <Text>{data?.length} profiles</Text>
+        <Text>{profiles?.length} profiles</Text>
       </Header>
-
-      {error ? (
-        <Box>Failed to load profiles</Box>
-      ) : !data ? (
+      {error && <Box> Failed to load profiles</Box>}
+      {!profiles && (
         <Box px={5} py={3}>
           <Spinner color="orange.500" />
         </Box>
-      ) : (
+      )}
+      {profiles && (
         <Box>
-          <ProfileRows data={data} />
+          <ProfileRows profiles={profiles} />
         </Box>
       )}
     </DefaultLayout>
   )
 }
 
-export const ProfileRows = ({ data }: { data: any[] }) => {
+export const ProfileRows = ({ profiles }: { profiles: any[] }) => {
   const bg = useColorModeValue('gray.50', 'gray.900')
   const border = useColorModeValue('gray.200', 'gray.700')
 
+  if (!profiles) {
+    return <div>No profiles</div>
+  }
   return (
     <>
-      {data.map((profile: any, index: number) => {
+      {profiles.map((profile: any, index: number) => {
         return (
           <Box
             key={profile.id}

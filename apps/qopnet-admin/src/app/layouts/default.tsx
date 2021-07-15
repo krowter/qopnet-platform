@@ -1,5 +1,6 @@
-import { Sidebar } from '../components'
 import { Flex, Box } from '@chakra-ui/react'
+
+import { Sidebar } from '../components'
 
 type Props = {
   children?: JSX.Element | JSX.Element[]

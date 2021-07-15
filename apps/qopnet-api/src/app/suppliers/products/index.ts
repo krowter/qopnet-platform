@@ -4,6 +4,9 @@ const prisma = new PrismaClient()
 import * as express from 'express'
 const router = express.Router()
 
+/**
+ * GET /api/suppliers/products
+ */
 router.get('/', async (req, res) => {
   try {
     const supplierProducts: SupplierProduct[] =
@@ -21,6 +24,9 @@ router.get('/', async (req, res) => {
   }
 })
 
+/**
+ * GET /api/suppliers/search?q=keyword
+ */
 router.get('/search', async (req, res) => {
   const searchQuery: string = req.query.q as string
 
@@ -52,6 +58,9 @@ router.get('/search', async (req, res) => {
   }
 })
 
+/**
+ * GET /api/suppliers/products/:supplierProductParam
+ */
 router.get('/:supplierProductParam', async (req, res) => {
   const { supplierProductParam } = req.params
 
