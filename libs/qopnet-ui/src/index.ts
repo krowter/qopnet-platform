@@ -1,3 +1,4 @@
+export * from './lib/color-mode/color-mode'
 export * from './lib/qopnet-ui'
 export * from './lib/layout/layout'
 export * from './lib/header/header'

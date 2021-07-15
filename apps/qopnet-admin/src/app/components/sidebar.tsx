@@ -11,7 +11,6 @@ import {
   DrawerOverlay,
   Flex,
   HStack,
-  Icon,
   IconButton,
   Image,
   Stack,
@@ -21,10 +20,9 @@ import {
   useToast,
 } from '@chakra-ui/react'
 import { useSupabase } from 'use-supabase'
+
 import * as packageData from '../../../../../package.json'
-import { MdKeyboardArrowRight } from 'react-icons/md'
-import { IconType } from 'react-icons/lib'
-import { FiMenu } from 'react-icons/fi'
+import { Icon } from '@qopnet/qopnet-ui'
 
 export const Sidebar = () => {
   const sidebar = useDisclosure()
@@ -34,7 +32,7 @@ export const Sidebar = () => {
         aria-label="Menu"
         bg="none"
         display={{ base: 'inline-flex', md: 'none' }}
-        icon={<FiMenu />}
+        icon={<Icon name="menu" />}
         onClick={sidebar.onOpen}
         size="md"
       />
@@ -152,13 +150,21 @@ export const SidebarLinks = () => {
   const merchants = useDisclosure()
   return (
     <Stack fontSize="sm" fontWeight="500" spacing={0} px={3}>
-      <SidebarLink to="/">Beranda</SidebarLink>
-      <SidebarLink to="/users">Pengguna</SidebarLink>
-      <SidebarLink to="/profiles">Profil</SidebarLink>
-      <SidebarNestedLink>Supplier</SidebarNestedLink>
-      <Flex flexDirection="column" alignItems="flex-start" px={4}>
-        <SidebarLink to="/suppliers">Semua Supplier</SidebarLink>
-        <SidebarLink to="/suppliers/products">
+      <SidebarLink name="home" to="/">
+        Beranda
+      </SidebarLink>
+      <SidebarLink name="users" to="/users">
+        Pengguna
+      </SidebarLink>
+      <SidebarLink name="profiles" to="/profiles">
+        Profil
+      </SidebarLink>
+      <SidebarNestedLink name="supplier">Supplier</SidebarNestedLink>
+      <Flex flexDirection="column" pl={4}>
+        <SidebarLink name="suppliers" to="/suppliers">
+          Semua Supplier
+        </SidebarLink>
+        <SidebarLink name="suppliers-products" to="/suppliers/products">
           Semua Produk Supplier
         </SidebarLink>
         {/* <SidebarLink to="/suppliers/purchase-orders">
@@ -180,43 +186,50 @@ export const SidebarLinks = () => {
 }
 
 export const SidebarLink = ({
+  name,
   to,
   children,
   isActive,
 }: {
+  name: string
   to: string
   children: ReactNode
   isActive?: boolean
-  icon?: IconType
   onClick?: React.MouseEventHandler<HTMLButtonElement>
 }) => {
   const bg = useColorModeValue('gray.200', 'gray.700')
   return (
-    <chakra.a
+    <Flex
       as={Link}
       to={to}
       px={2}
       py={1}
       rounded="base"
+      align="center"
       bg={isActive ? bg : ''}
       _hover={{
         bg: bg,
       }}
     >
+      {name && (
+        <chakra.span mr="2" _groupHover={{ color: 'gray.600' }}>
+          <Icon name={name} />
+        </chakra.span>
+      )}
       {children}
-    </chakra.a>
+    </Flex>
   )
 }
 
 const SidebarNestedLink = ({
+  name,
   children,
   isActive,
-  icon,
   onClick,
 }: {
+  name: string
   children: ReactNode
   isActive?: boolean
-  icon?: IconType
   onClick?: React.MouseEventHandler
 }) => {
   const bg = useColorModeValue('gray.200', 'gray.700')
@@ -224,9 +237,7 @@ const SidebarNestedLink = ({
     <Flex
       align="center"
       bg={isActive ? bg : ''}
-      _hover={{
-        bg: bg,
-      }}
+      _hover={{ bg: bg }}
       cursor="pointer"
       onClick={onClick}
       px={2}
@@ -234,15 +245,10 @@ const SidebarNestedLink = ({
       role="group"
       transition=".15s ease"
     >
-      {icon && (
-        <Icon
-          as={icon}
-          boxSize="4"
-          mr="2"
-          _groupHover={{
-            color: 'gray.600',
-          }}
-        />
+      {name && (
+        <chakra.span mr="2" _groupHover={{ color: 'gray.600' }}>
+          <Icon name={name} />
+        </chakra.span>
       )}
       {children}
     </Flex>
