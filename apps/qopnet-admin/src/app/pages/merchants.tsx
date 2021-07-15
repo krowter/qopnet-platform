@@ -12,15 +12,14 @@ import {
   Tr,
   VStack,
 } from '@chakra-ui/react'
-import useSWR from 'swr'
 
-import { DefaultLayout } from '../layouts'
 import { Merchant } from '@qopnet/shared-types'
-
-const fetcher = (url: string) => fetch(url).then((r) => r.json())
+import { DefaultLayout } from '../layouts'
+import { useSWR } from '../utils/swr'
 
 export const MerchantsPage = () => {
-  const { data: merchants, error } = useSWR('/api/merchants', fetcher)
+  const { data: merchants, error } = useSWR('/api/merchants')
+
   if (error) return <div>Gagal memuat para merchant</div>
   if (!merchants) return <div>Memuat para merchant...</div>
   return (

@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import useSWR from 'swr'
 import {
   Box,
   Heading,
@@ -10,12 +9,10 @@ import {
 
 import { DefaultLayout } from '../layouts'
 import { Header } from '../components'
-
-const fetcher = (url: string) =>
-  fetch(process.env.NX_API_URL + url).then((res) => res.json())
+import { useSWR } from '../utils/swr'
 
 export const Profiles = () => {
-  const { data, error } = useSWR('/api/profiles', fetcher)
+  const { data, error } = useSWR('/api/profiles')
   const { profiles } = data || []
 
   return (

@@ -1,13 +1,11 @@
 import { Box, Flex, Table, Tbody, Td, Text, Tr, Stack } from '@chakra-ui/react'
-import useSWR from 'swr'
 
 import { User } from '@qopnet/shared-types'
 import { DefaultLayout } from '../layouts'
-
-const fetcher = (url: string) => fetch(url).then((r) => r.json())
+import { useSWR } from '../utils/swr'
 
 export const UsersPage = () => {
-  const { data, error } = useSWR('/api/users', fetcher)
+  const { data, error } = useSWR('/api/users')
   const { users } = data || []
 
   return (

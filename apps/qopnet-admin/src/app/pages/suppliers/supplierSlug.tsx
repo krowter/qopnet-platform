@@ -1,14 +1,11 @@
-import useSWR from 'swr'
-
 import { DefaultLayout } from '../../layouts'
-
-const fetcher = (url: string) => fetch(url).then((r) => r.json())
+import { useSWR } from '../../utils/swr'
 
 type Props = {
   children?: JSX.Element | JSX.Element[]
 }
 export const SupplierSlugPage: React.FC<Props> = (props) => {
-  const { data, error } = useSWR('/api/merchants', fetcher)
+  const { data, error } = useSWR('/api/merchants')
 
   return (
     <DefaultLayout>

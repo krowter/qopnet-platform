@@ -1,30 +1,19 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  Avatar,
   Box,
   Button,
   CloseButton,
   Flex,
   HStack,
   Spinner,
-  Table,
-  TableCaption,
-  Tbody,
-  Td,
   Text,
-  Tfoot,
-  Th,
-  Thead,
-  Tr,
   VStack,
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
-  BreadcrumbSeparator,
   Input,
   FormControl,
   FormLabel,
-  FormErrorMessage,
-  FormHelperText,
   InputLeftElement,
   InputGroup,
   Textarea,
@@ -32,17 +21,14 @@ import {
 } from '@chakra-ui/react'
 import { ChevronRightIcon } from '@chakra-ui/icons'
 
-import useSWR from 'swr'
 import { useParams, useHistory } from 'react-router'
 
 import { DefaultLayout } from '../../layouts'
-import { Supplier } from '@qopnet/shared-types'
-import { Prisma } from '@prisma/client'
-const fetcher = (url: string) => fetch(url).then((r) => r.json())
+import { useSWR } from '../../utils/swr'
 
 const truncateString = (str: string, num: number) => {
   // If the length of str is less than or equal to num
-  // just return str--don't truncate it.
+  // just return str, don't truncate it.
   if (str.length <= num) {
     return str
   }
@@ -57,17 +43,20 @@ export const SuppliersProductsSlugPage = () => {
     productParam,
   }: { supplierParam: string; productParam: string } = useParams()
   const { data: { supplierProducts = [], message } = [], error } = useSWR(
-    'http://localhost:4000/api/suppliers/products',
-    fetcher
+    `/api/suppliers/products/${productParam}`
   )
+
   let filteredSupplierProducts
+
   if (supplierProducts) {
     console.log('supplierProducts data: ', supplierProducts)
     filteredSupplierProducts = supplierProducts.filter(
       (supplier: any) => supplier.slug === productParam
     )[0]
   }
+
   console.log('filteredSupplierProducts data: ', filteredSupplierProducts)
+
   return (
     <DefaultLayout>
       <Box
