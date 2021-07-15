@@ -169,7 +169,10 @@ export const SidebarLinks = () => {
       <SidebarLink name="profiles" to="/profiles">
         Profil
       </SidebarLink>
-      <SidebarNestedLink name="supplier">Supplier</SidebarNestedLink>
+
+      <SidebarNestedLink name="supplier" to="/suppliers">
+        Supplier
+      </SidebarNestedLink>
       <Flex flexDirection="column" pl={4}>
         <SidebarLink name="suppliers" to="/suppliers">
           Semua Supplier
@@ -182,6 +185,7 @@ export const SidebarLinks = () => {
         </SidebarLink>
         <SidebarLink to="/suppliers/invoices">Suppliers Invoices</SidebarLink> */}
       </Flex>
+
       {/* <SidebarNestedLink>Merchants</SidebarNestedLink>
       <Flex flexDirection="column" alignItems="flex-start" px={4}>
         <SidebarLink to="/merchants">All Merchants</SidebarLink>
@@ -189,6 +193,7 @@ export const SidebarLinks = () => {
         <SidebarLink to="/merchants/orders">Merchant Orders</SidebarLink>
         <SidebarLink to="/merchants/invoices">Merchant Invoices</SidebarLink>
       </Flex>
+
       <SidebarLink to="/logistics">Logistics</SidebarLink>
       <SidebarLink to="/customers">Customers</SidebarLink> */}
     </Stack>
@@ -233,11 +238,13 @@ export const SidebarLink = ({
 
 const SidebarNestedLink = ({
   name,
+  to,
   children,
   isActive,
   onClick,
 }: {
   name: string
+  to: string
   children: ReactNode
   isActive?: boolean
   onClick?: React.MouseEventHandler
@@ -245,15 +252,17 @@ const SidebarNestedLink = ({
   const bg = useColorModeValue('gray.200', 'gray.700')
   return (
     <Flex
+      as={Link}
+      to={to}
       align="center"
-      bg={isActive ? bg : ''}
-      _hover={{ bg: bg }}
       cursor="pointer"
       onClick={onClick}
       px={2}
       py={1}
       role="group"
       transition=".15s ease"
+      bg={isActive ? bg : ''}
+      _hover={{ bg: bg }}
     >
       {name && (
         <chakra.span mr="2" _groupHover={{ color: 'gray.600' }}>
