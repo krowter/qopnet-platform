@@ -16,20 +16,17 @@ const apiStaging = 'https://qopnet-api-staging.up.railway.app'
 const apiDevelopment =
   process.env.NEXT_PUBLIC_NX_API_URL ||
   process.env.NEXT_PUBLIC_API_URL ||
-  process.env.NX_API_URL ||
-  process.env.API_URL ||
   'http://localhost:4000'
 
 const apiUrl =
-  process.env.NEXT_PUBLIC_VERCEL_ENV === 'development'
-    ? apiDevelopment
-    : process.env.NEXT_PUBLIC_VERCEL_ENV === 'preview'
+  process.env.NEXT_PUBLIC_ENV === 'production'
+    ? apiProduction
+    : process.env.NEXT_PUBLIC_ENV === 'staging'
     ? apiStaging
-    : apiProduction
+    : apiDevelopment // development
 
 console.info({
-  // env: process.env,
-  // vercelEnv: process.env.NEXT_PUBLIC_VERCEL_ENV,
+  env: process.env.NEXT_PUBLIC_ENV,
   apiUrl,
 })
 
@@ -37,16 +34,17 @@ console.info({
  * Dynamic fetcher which use apiUrl automatically
  */
 export const fetcher = async (endpoint: string) => {
-  // const supabaseAuthToken =
-  //   window.localStorage.getItem('supabase.auth.token') || '{}'
+  // Be careful when dealing with localStorage
+  const supabaseAuthToken = window.localStorage.getItem('supabase.auth.token')
 
-  // const parsedObject = JSON.parse(supabaseAuthToken) || {
-  //   currentSession: { access_token: '' },
-  // }
-
-  // const accessToken = parsedObject.currentSession.access_token
-
-  return await utilFetcher(apiUrl, endpoint)
+  // Only use headers auth when have accessToken
+  if (supabaseAuthToken) {
+    const parsedObject = JSON.parse(supabaseAuthToken)
+    const accessToken = parsedObject.currentSession.access_token || ''
+    return await utilFetcher(apiUrl, endpoint, accessToken)
+  } else {
+    return await utilFetcher(apiUrl, endpoint)
+  }
 }
 
 /**
