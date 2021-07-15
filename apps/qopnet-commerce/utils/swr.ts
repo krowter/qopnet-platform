@@ -27,7 +27,11 @@ const apiUrl =
     ? apiStaging
     : apiDevelopment
 
-console.info({ apiUrl })
+console.info({
+  env: process.env,
+  vercelEnv: process.env.NEXT_PUBLIC_VERCEL_ENV,
+  apiUrl,
+})
 
 /**
  * Dynamic fetcher which use apiUrl automatically
