@@ -14,6 +14,8 @@ import {
   NotFoundPage,
 } from './pages'
 import { useEffect } from 'react'
+import { SWRConfig } from 'swr'
+import { swrConfig } from '@qopnet/util-swr'
 
 export const App = () => {
   const user = useUser()
@@ -31,37 +33,40 @@ export const App = () => {
     checkSession()
   }, [auth, history])
 
-  if (user) {
-    return (
+  return (
+    <SWRConfig value={swrConfig}>
       <Switch>
-        <Route exact path="/" component={HomePage} />
-        <Route exact path="/signin" component={SignInPage} />
-        <Route exact path="/users" component={UsersPage} />
-        <Route exact path="/suppliers" component={SuppliersPage} />
-        <Route
-          exact
-          path="/suppliers/products"
-          component={SuppliersProductsPage}
-        />
-        <Route
-          exact
-          path="/suppliers/:supplierParam/products/:productParam"
-          component={SuppliersProductsSlugPage}
-        />
-        <Route exact path="/merchants" component={MerchantsPage} />
-        <Route exact path="/about" component={AboutPage} />
-        <Route exact path="/profiles" component={Profiles} />
-        <Route component={NotFoundPage} />
+        {user && (
+          <>
+            <Route exact path="/" component={HomePage} />
+            <Route exact path="/signin" component={SignInPage} />
+            <Route exact path="/users" component={UsersPage} />
+            <Route exact path="/suppliers" component={SuppliersPage} />
+            <Route
+              exact
+              path="/suppliers/products"
+              component={SuppliersProductsPage}
+            />
+            <Route
+              exact
+              path="/suppliers/:supplierParam/products/:productParam"
+              component={SuppliersProductsSlugPage}
+            />
+            <Route exact path="/merchants" component={MerchantsPage} />
+            <Route exact path="/about" component={AboutPage} />
+            <Route exact path="/profiles" component={Profiles} />
+          </>
+        )}
+        {!user && (
+          <>
+            <Route component={NotFoundPage} />
+            <Route exact path="/signin" component={SignInPage} />
+            <Route exact path="/about" component={AboutPage} />
+          </>
+        )}
       </Switch>
-    )
-  } else {
-    return (
-      <Switch>
-        <Route exact path="/signin" component={SignInPage} />
-        <Route exact path="/about" component={AboutPage} />
-      </Switch>
-    )
-  }
+    </SWRConfig>
+  )
 }
 
 export default App

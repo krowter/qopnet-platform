@@ -29,7 +29,19 @@ console.info({ apiUrl })
  * Dynamic fetcher which use apiUrl automatically
  */
 export const fetcher = async (endpoint: string) => {
-  return await utilFetcher(apiUrl, endpoint)
+  // Get from localStorage, but still string
+  const supabaseAuthToken =
+    window.localStorage.getItem('supabase.auth.token') || '{}'
+  // Parse string into object
+  const parsedObject = JSON.parse(supabaseAuthToken) || {
+    currentSession: { access_token: '' },
+  }
+  // Get only the accessToken
+  const accessToken = supabaseAuthToken ? parsedObject : ''
+
+  console.log()
+
+  return await utilFetcher(apiUrl, endpoint, accessToken)
 }
 
 /**
