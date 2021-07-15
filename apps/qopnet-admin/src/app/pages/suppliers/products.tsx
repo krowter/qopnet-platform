@@ -11,7 +11,7 @@ import {
   Tr,
   VStack,
 } from '@chakra-ui/react'
-import { useHistory } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 
 import { DefaultLayout } from '../../layouts'
 import { useSWR } from '../../utils/swr'
@@ -29,7 +29,7 @@ export const truncateString = (str: string, num: number) => {
 export const SuppliersProductsPage = () => {
   const history = useHistory()
   const { data, error } = useSWR('/api/suppliers/products')
-  const { supplierProducts } = data || []
+  const { supplierProducts } = data || {}
 
   return (
     <DefaultLayout>
@@ -63,14 +63,18 @@ export const SuppliersProductsPage = () => {
                     supplierProduct: Prisma.SupplierProductCreateInput,
                     index: number
                   ) => {
+                    /**
+                     * Temporary until :supplierParam can be
+                     * retrieved from supplierProduct.supplier.handle
+                     */
+                    const supplier = { handle: 'placeholder' }
+
                     return (
                       <Tr
+                        as={Link}
                         key={`${supplierProduct.id}`}
-                        onClick={() =>
-                          history.push(
-                            `/suppliers/${supplierProduct.name}/products/${supplierProduct.slug}`
-                          )
-                        }
+                        to={`/suppliers/${supplier.handle}/products/${supplierProduct.slug}`}
+                        display="table-row"
                       >
                         <Td>#{index}</Td>
                         <Td>

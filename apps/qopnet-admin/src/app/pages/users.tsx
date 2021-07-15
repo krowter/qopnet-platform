@@ -6,7 +6,7 @@ import { useSWR } from '../utils/swr'
 
 export const UsersPage = () => {
   const { data, error } = useSWR('/api/users')
-  const { users } = data || []
+  const { users } = data || {}
 
   return (
     <DefaultLayout>

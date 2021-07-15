@@ -18,6 +18,7 @@ import {
   InputGroup,
   Textarea,
   Grid,
+  useColorModeValue,
 } from '@chakra-ui/react'
 import { ChevronRightIcon } from '@chakra-ui/icons'
 
@@ -26,7 +27,7 @@ import { useParams, useHistory } from 'react-router'
 import { DefaultLayout } from '../../layouts'
 import { useSWR } from '../../utils/swr'
 
-const truncateString = (str: string, num: number) => {
+export const truncateString = (str: string, num: number) => {
   // If the length of str is less than or equal to num
   // just return str, don't truncate it.
   if (str.length <= num) {
@@ -36,7 +37,7 @@ const truncateString = (str: string, num: number) => {
   return str.slice(0, num) + '...'
 }
 
-export const SuppliersProductsSlugPage = () => {
+export const SupplierProductSlugPage = () => {
   const history = useHistory()
   const {
     supplierParam,
@@ -55,18 +56,21 @@ export const SuppliersProductsSlugPage = () => {
     )[0]
   }
 
-  console.log('filteredSupplierProducts data: ', filteredSupplierProducts)
-
   return (
     <DefaultLayout>
       <Box
         m={2}
-        border="1px solid gray"
-        borderRadius="20px"
+        rounded={10}
         minHeight="98vh"
-        // pb={5}
+        border="1px solid gray"
+        borderColor={useColorModeValue('gray.300', 'gray.600')}
       >
-        <Flex p={3} alignItems="center" borderBottom="1px solid gray">
+        <Flex
+          p={3}
+          alignItems="center"
+          borderBottom="1px solid gray"
+          borderColor={useColorModeValue('gray.100', 'gray.700')}
+        >
           <CloseButton onClick={() => history.goBack()} />
           <Text ml={3} fontWeight={700}>
             {productParam}

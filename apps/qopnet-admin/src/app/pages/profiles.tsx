@@ -13,7 +13,7 @@ import { useSWR } from '../utils/swr'
 
 export const Profiles = () => {
   const { data, error } = useSWR('/api/profiles')
-  const { profiles } = data || []
+  const { profiles } = data || {}
 
   return (
     <DefaultLayout>

@@ -25,7 +25,7 @@ export const SuppliersPage = () => {
    * Quick fix because currently /api/suppliers returns
    * { supplier: [] } not { suppliers: [] }
    */
-  const { supplier: suppliers } = data
+  const { supplier: suppliers } = data || {}
 
   return (
     <DefaultLayout>
