@@ -1,6 +1,6 @@
 {
   "name": "qopnet-platform",
-  "version": "0.13.1",
+  "version": "0.13.2",
   "private": true,
   "engines": {
     "node": ">=12.2.0"
