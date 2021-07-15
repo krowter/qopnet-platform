@@ -13,22 +13,25 @@ export const checkUser = async (req, res, next) => {
       const userInJWT = jwt.decode(jwtInHeader)
 
       if (!userInJWT) {
-        res.status(403).json({ message: 'Failed to check user and decode JWT' })
+        res.status(403).json({
+          message: 'Check user is failed because there is no user in JWT',
+        })
       } else {
         req.user = userInJWT // { sub: "a1b2c3-d4e5f6" }
 
-        // TODO: Can check valid user later here via Prisma
+        // TODO: Can check valid user later here via Prisma.user.findUnique
 
         next()
       }
     } else {
       res.status(400).json({
-        message: 'Failed to check user because there is no JWT',
+        message: 'Check user is failed because there is no JWT',
       })
     }
   } catch (error) {
     res.status(500).json({
-      message: 'Failed to check user and decode JWT',
+      message:
+        'Check user is failed because request is not authorized and cannot decode JWT',
       error,
     })
   }

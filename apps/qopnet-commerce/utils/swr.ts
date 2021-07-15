@@ -21,11 +21,11 @@ const apiDevelopment =
   'http://localhost:4000'
 
 const apiUrl =
-  process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'
-    ? apiProduction
+  process.env.NEXT_PUBLIC_VERCEL_ENV === 'development'
+    ? apiDevelopment
     : process.env.NEXT_PUBLIC_VERCEL_ENV === 'preview'
     ? apiStaging
-    : apiDevelopment
+    : apiProduction
 
 console.info({
   env: process.env,
