@@ -12,17 +12,14 @@ import {
   Stack,
   Box,
   Image as ChakraImage,
-  Flex,
   Divider,
-  Button,
   IconButton,
-  HStack,
   ButtonGroup,
   NumberInput,
   NumberInputField,
 } from '@chakra-ui/react'
 
-import { Icon } from '@qopnet/qopnet-ui'
+import { Icon } from '../icon/icon'
 
 const supplierProductCategories = [
   { name: 'all', text: 'Semua Produk', color: 'orange.500' },
