@@ -70,23 +70,14 @@ export const Header = (props: HeaderProps) => {
       <HStack w={500} spacing={3}>
         <NextLink href="/" passHref>
           <chakra.a display="block" className="next-image-container">
-            {isDesktop ? (
-              <NextImage
-                alt="Qopnet logo"
-                src={qopnetLogoDesktop}
-                width={161}
-                height={50}
-                layout="fixed"
-              />
-            ) : (
-              <NextImage
-                alt="Qopnet small logo"
-                src={qopnetLogoMobile}
-                width={50}
-                height={50}
-                layout="fixed"
-              />
-            )}
+            <NextImage
+              key="qopnet-logo"
+              alt="Qopnet logo"
+              src={qopnetLogoDesktop}
+              width={161}
+              height={50}
+              layout="fixed"
+            />
           </chakra.a>
         </NextLink>
         <IconButton

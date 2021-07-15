@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { Text, Heading, SimpleGrid, VStack } from '@chakra-ui/react'
+import { Text, Heading, VStack } from '@chakra-ui/react'
 
-import { SupplierProductGrid } from '@qopnet/qopnet-ui'
+import { SupplierProductsGrid } from '@qopnet/qopnet-ui'
 import { useSWR } from '../utils/swr'
 
 export const ShopProducts = () => {
@@ -18,7 +18,7 @@ export const ShopProducts = () => {
       {error && <Text>Gagal mengambil semua produk</Text>}
       {!error && !supplierProducts && <Text>Memuat semua produk...</Text>}
       {!error && supplierProducts && (
-        <SupplierProductGrid supplierProducts={supplierProducts} />
+        <SupplierProductsGrid supplierProducts={supplierProducts} />
       )}
     </VStack>
   )
