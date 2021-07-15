@@ -30,13 +30,15 @@ export interface HeaderProps {
 }
 
 export const Header = (props: HeaderProps) => {
+  const { colorMode, toggleColorMode } = useColorMode()
+  const router = useRouter()
   const supabase = useSupabase()
   const user = useUser()
   const toast = useToast()
 
+  // Should be passed down from props of respective app
+  // Because useSWR
   const { cart = {} } = props
-  const { colorMode, toggleColorMode } = useColorMode()
-  const router = useRouter()
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSubmitSearch = (event: any) => {
@@ -117,12 +119,14 @@ export const Header = (props: HeaderProps) => {
             <ButtonGroup id="user-action-buttons" spacing={3} size="md">
               <IconButton
                 id="shopping-cart-button"
+                colorScheme="green"
                 aria-label="Keranjang belanja"
               >
                 <Icon name="cart" />
               </IconButton>
               <IconButton
                 id="signout-button"
+                colorScheme="red"
                 aria-label="Keluar"
                 onClick={handleSignOut}
               >

@@ -13,6 +13,7 @@ import {
   IconButton,
   VisuallyHidden,
   VStack,
+  Text,
   useToast,
 } from '@chakra-ui/react'
 import { useForm, SubmitHandler } from 'react-hook-form'
@@ -66,16 +67,17 @@ export const SignInForm = () => {
     email,
     password,
   }) => {
-    setLoading(true)
-    const { user, error } = await supabase.auth.signIn({ email, password })
-    setLoading(false)
-    if (user) {
-      toast({ title: 'Berhasil masuk', status: 'success' })
-      router.push('/')
-    } else if (error) {
-      toast({ title: 'Gagal masuk', status: 'error' })
-    } else {
-      toast({ title: 'Gagal masuk', status: 'error' })
+    try {
+      setLoading(true)
+      const { user, error } = await supabase.auth.signIn({ email, password })
+      if (user) {
+        toast({ title: 'Berhasil masuk akun', status: 'success' })
+        router.push('/')
+      } else if (error) throw new Error('Gagal masuk akun')
+    } catch (error) {
+      toast({ title: 'Gagal masuk akun', status: 'error' })
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -85,12 +87,11 @@ export const SignInForm = () => {
         <Heading as="h1" size="xl">
           Masuk ke akun Qopnet
         </Heading>
+        <Text>Silakan masuk ke akun Anda untuk mengelola profil dan toko.</Text>
 
         <Stack as="form" onSubmit={handleSubmit(onSubmitLogin)}>
           <FormControl id="email">
-            <VisuallyHidden>
-              <FormLabel>Email</FormLabel>
-            </VisuallyHidden>
+            <FormLabel>Email</FormLabel>
             <Input
               type="email"
               placeholder="email@contoh.com"
@@ -102,9 +103,7 @@ export const SignInForm = () => {
           </FormControl>
 
           <FormControl id="password">
-            <VisuallyHidden>
-              <FormLabel>Kata sandi</FormLabel>
-            </VisuallyHidden>
+            <FormLabel>Kata sandi</FormLabel>
             <InputGroup size="md">
               <Input
                 pr="6.5rem"
@@ -118,8 +117,9 @@ export const SignInForm = () => {
                   size="sm"
                   h="1.75rem"
                   aria-label={show ? 'Sembunyi' : 'Muncul'}
-                  icon={<Icon name={show ? 'hide' : 'show'} />}
-                />
+                >
+                  <Icon name={show ? 'hide' : 'show'} />
+                </IconButton>
               </InputRightElement>
             </InputGroup>
             <FormHelperText color="red.500">
