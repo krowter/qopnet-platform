@@ -14,9 +14,12 @@ import {
   InputGroup,
   InputRightElement,
   Link,
+  ButtonGroup,
   useColorMode,
   useColorModeValue,
+  useToast,
 } from '@chakra-ui/react'
+import { useSupabase, useUser } from 'use-supabase'
 
 import { NextLinkButton } from '../next-link-button/next-link-button'
 import { Icon } from '../icon/icon'
@@ -27,7 +30,10 @@ export interface HeaderProps {
 }
 
 export const Header = (props: HeaderProps) => {
-  const user = false
+  const supabase = useSupabase()
+  const user = useUser()
+  const toast = useToast()
+
   const { cart = {} } = props
   const { colorMode, toggleColorMode } = useColorMode()
   const router = useRouter()
@@ -37,6 +43,13 @@ export const Header = (props: HeaderProps) => {
     event.preventDefault()
     const keyword = 'telur'
     router.push(`/search?q=${keyword}`)
+  }
+
+  // Handle sign out via Header, user action button
+  const handleSignOut = async () => {
+    const { error } = await supabase.auth.signOut()
+    if (!error) toast({ title: 'Berhasil keluar' })
+    else toast({ title: 'Gagal keluar', status: 'error' })
   }
 
   return (
@@ -90,36 +103,44 @@ export const Header = (props: HeaderProps) => {
 
       <HStack spacing={3}>
         {user && (
-          <HStack id="user-buttons">
+          <HStack id="user-buttons" spacing={3}>
             <Avatar
               id="user-avatar-button"
-              name="User Name"
+              name={user.email || 'Unknown'}
               size="sm"
               rounded="base"
+              height="40px"
+              width="40px"
             >
               <AvatarBadge boxSize="1.25em" bg="green.500" />
             </Avatar>
-            <IconButton
-              id="shopping-cart-button"
-              aria-label="Keranjang belanja"
-            >
-              <Icon name="cart" />
-            </IconButton>
-            <IconButton id="signout-button" aria-label="Keluar">
-              <Icon name="signout" />
-            </IconButton>
+            <ButtonGroup id="user-action-buttons" spacing={3} size="md">
+              <IconButton
+                id="shopping-cart-button"
+                aria-label="Keranjang belanja"
+              >
+                <Icon name="cart" />
+              </IconButton>
+              <IconButton
+                id="signout-button"
+                aria-label="Keluar"
+                onClick={handleSignOut}
+              >
+                <Icon name="signout" />
+              </IconButton>
+            </ButtonGroup>
           </HStack>
         )}
 
         {!user && (
-          <HStack id="non-user-buttons">
+          <ButtonGroup id="non-user-buttons" spacing={3}>
             <NextLinkButton href="/signin" colorScheme="yellow">
               Masuk
             </NextLinkButton>
             <NextLinkButton href="/signup" colorScheme="orange">
               Daftar
             </NextLinkButton>
-          </HStack>
+          </ButtonGroup>
         )}
       </HStack>
     </HStack>
