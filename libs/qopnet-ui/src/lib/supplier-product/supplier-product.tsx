@@ -19,6 +19,7 @@ import {
   NumberInputField,
 } from '@chakra-ui/react'
 
+import { formatDateTime } from '@qopnet/util-format'
 import { Icon } from '../icon/icon'
 
 const supplierProductCategories = [
@@ -289,8 +290,8 @@ export const SupplierProductContainer = ({
           <Stack id="supplier-info">
             <Text>Toko Supplier: {product.supplierId}</Text>
             <Text>Pemilik: {product.ownerId}</Text>
-            <Text>Dijual mulai {product.createdAt}</Text>
-            <Text>Terakhir diubah {product.updatedAt}</Text>
+            <Text>Dijual mulai {formatDateTime(product.createdAt)}</Text>
+            <Text>Terakhir diubah {formatDateTime(product.updatedAt)}</Text>
           </Stack>
         </Stack>
       </Stack>
