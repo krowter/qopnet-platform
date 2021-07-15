@@ -22,7 +22,7 @@ import {
 import { useSupabase } from 'use-supabase'
 
 import * as packageData from '../../../../../package.json'
-import { Icon } from '@qopnet/qopnet-ui'
+import { Icon, ToggleColorModeButton } from '@qopnet/qopnet-ui'
 
 export const Sidebar = () => {
   const sidebar = useDisclosure()
@@ -34,7 +34,11 @@ export const Sidebar = () => {
         display={{ base: 'inline-flex', md: 'none' }}
         icon={<Icon name="menu" />}
         onClick={sidebar.onOpen}
-        size="md"
+        m={2}
+        size="sm"
+        position="fixed"
+        top={0}
+        left={0}
       />
       <Drawer
         isFullHeight
@@ -47,44 +51,52 @@ export const Sidebar = () => {
         <DrawerContent style={{ width: 'auto' }}>
           <Stack
             bg={useColorModeValue('gray.100', 'gray.900')}
-            borderColor={useColorModeValue('gray.200', 'gray.700')}
             borderRight="1px solid gray"
+            borderColor={useColorModeValue('gray.200', 'gray.700')}
             height="100vh"
             justify="space-between"
-            py={5}
+            p={2}
             minWidth="250px"
           >
-            <Stack as="nav" w="auto" spacing={6}>
-              <DrawerCloseButton left="0px" ml={3} />
+            <Stack as="nav" w="auto" spacing={3} mx={2} mt={6}>
+              <DrawerCloseButton left={0} ml={2} />
               <SidebarUser />
               <SidebarAuth />
               <SidebarLinks />
             </Stack>
-            <Text as="pre" fontSize="xs" px={5} color="gray.500">
-              <code>v{packageData.version}</code>
-            </Text>
+            <HStack px={5}>
+              <Text as="code" fontSize="xs" color="gray.500">
+                v{packageData.version}
+              </Text>
+              <ToggleColorModeButton size="xs" />
+            </HStack>
           </Stack>
         </DrawerContent>
       </Drawer>
+
       <Stack
+        id="sidebar-stack"
+        h="100vh"
         bg={useColorModeValue('gray.100', 'gray.900')}
-        borderColor={useColorModeValue('gray.200', 'gray.700')}
         borderRight="1px solid gray"
+        borderColor={useColorModeValue('gray.200', 'gray.700')}
         display={{ base: 'none', md: 'flex' }}
         height="100vh"
         justify="space-between"
         py={5}
         minWidth="250px"
-        h="auto"
       >
-        <Stack as="nav" w="auto" spacing={5}>
+        <Stack as="nav" w="auto" spacing={5} mx={4}>
           <SidebarUser />
           <SidebarAuth />
           <SidebarLinks />
         </Stack>
-        <Text as="pre" fontSize="xs" px={5} color="gray.500">
-          <code>v{packageData.version}</code>
-        </Text>
+        <HStack px={5}>
+          <Text as="code" fontSize="xs" color="gray.500">
+            v{packageData.version}
+          </Text>
+          <ToggleColorModeButton size="xs" />
+        </HStack>
       </Stack>
     </>
   )
@@ -92,7 +104,7 @@ export const Sidebar = () => {
 
 export const SidebarUser = () => {
   return (
-    <HStack spacing={10} px={5} justifyContent="center">
+    <HStack spacing={10} justifyContent="space-between">
       <Link to="/">
         <Image
           src={useColorModeValue(
@@ -134,7 +146,7 @@ export const SidebarAuth = () => {
   }
 
   return (
-    <ButtonGroup px={5} justifyContent="center" display="flex">
+    <ButtonGroup id="sidebar-auth-buttons">
       <Button colorScheme="orange" size="xs">
         Pengaturan
       </Button>
@@ -146,10 +158,8 @@ export const SidebarAuth = () => {
 }
 
 export const SidebarLinks = () => {
-  const suppliers = useDisclosure()
-  const merchants = useDisclosure()
   return (
-    <Stack fontSize="sm" fontWeight="500" spacing={0} px={3}>
+    <Stack id="sidebar-links" fontSize="sm" fontWeight="500" spacing={0}>
       <SidebarLink name="home" to="/">
         Beranda
       </SidebarLink>
