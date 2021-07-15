@@ -29,8 +29,7 @@ export const truncateString = (str: string, num: number) => {
 export const SuppliersProductsPage = () => {
   const history = useHistory()
   const { data, error } = useSWR('/api/suppliers/products')
-
-  const { supplierProducts = [], message } = data
+  const { supplierProducts } = data || []
 
   return (
     <DefaultLayout>
@@ -50,7 +49,7 @@ export const SuppliersProductsPage = () => {
             Gagal memuat produk supplier
           </Box>
         )}
-        {!supplierProducts && (
+        {!supplierProducts && !error && (
           <Box px={5} py={3}>
             <Spinner color="orange.500" />
           </Box>
