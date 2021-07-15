@@ -19,6 +19,7 @@ import {
   useColorModeValue,
   useToast,
 } from '@chakra-ui/react'
+import { useForm, SubmitHandler } from 'react-hook-form'
 import { useSupabase, useUser } from 'use-supabase'
 
 import { NextLinkButton } from '../next-link-button/next-link-button'
@@ -39,13 +40,6 @@ export const Header = (props: HeaderProps) => {
   // Should be passed down from props of respective app
   // Because useSWR
   const { cart = {} } = props
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleSubmitSearch = (event: any) => {
-    event.preventDefault()
-    const keyword = 'telur'
-    router.push(`/search?q=${keyword}`)
-  }
 
   // Handle sign out via Header, user action button
   const handleSignOut = async () => {
@@ -91,17 +85,7 @@ export const Header = (props: HeaderProps) => {
         </Heading>
       </HStack>
 
-      <Box as="form" w="100%" onSubmit={handleSubmitSearch}>
-        <InputGroup>
-          <Input
-            placeholder="Cari produk..."
-            bg={useColorModeValue('white', 'black')}
-          />
-          <InputRightElement color={useColorModeValue('black', 'white')}>
-            <Icon name="search" />
-          </InputRightElement>
-        </InputGroup>
-      </Box>
+      <SearchBar />
 
       <HStack spacing={3}>
         {user && (
@@ -148,6 +132,45 @@ export const Header = (props: HeaderProps) => {
         )}
       </HStack>
     </HStack>
+  )
+}
+
+export type SearchData = {
+  keyword: string
+}
+
+export const SearchBar = () => {
+  const router = useRouter()
+  // React Hook Form for search
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SearchData>()
+
+  // Sign in process and toast
+  const handleSubmitSearch: SubmitHandler<SearchData> = async ({ keyword }) => {
+    try {
+      router.push(`/search?q=${keyword}`)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  return (
+    <Box as="form" w="100%" onSubmit={handleSubmit(handleSubmitSearch)}>
+      <InputGroup>
+        <Input
+          type="text"
+          placeholder="Cari produk..."
+          bg={useColorModeValue('white', 'black')}
+          {...register('keyword', { required: true })}
+        />
+        <InputRightElement color={useColorModeValue('black', 'white')}>
+          <Icon name="search" />
+        </InputRightElement>
+      </InputGroup>
+    </Box>
   )
 }
 
