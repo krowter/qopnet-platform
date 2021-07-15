@@ -17,7 +17,7 @@ export const swrConfig = {
 export const fetcher = async (
   apiUrl: string,
   endpoint: string,
-  accessToken: string
+  accessToken?: string
 ) => {
   // apiUrl need to be configured in the frontend app
   // Because process.env is not allowed here

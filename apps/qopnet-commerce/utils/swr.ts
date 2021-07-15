@@ -33,7 +33,16 @@ console.info({ apiUrl })
  * Dynamic fetcher which use apiUrl automatically
  */
 export const fetcher = async (endpoint: string) => {
-  return await utilFetcher(apiUrl, endpoint)
+  const supabaseAuthToken =
+    window.localStorage.getItem('supabase.auth.token') || '{}'
+
+  const parsedObject = JSON.parse(supabaseAuthToken) || {
+    currentSession: { access_token: '' },
+  }
+
+  const accessToken = parsedObject.currentSession.access_token
+
+  return await utilFetcher(apiUrl, endpoint, accessToken)
 }
 
 /**
