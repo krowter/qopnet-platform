@@ -4,11 +4,24 @@ import { DefaultSeo } from 'next-seo'
 import { ChakraProvider } from '@chakra-ui/react'
 import { SWRConfig } from 'swr'
 
+// Supabase
+import { createClient } from '@supabase/supabase-js'
+import { SupabaseContextProvider } from 'use-supabase'
+
+// Local lib components and configs
 import { Header, Footer } from '@qopnet/qopnet-ui'
 import { swrConfig } from '@qopnet/util-swr'
 
+// Local styles and configs
 import './styles.css'
 import SEO from '../next-seo.config'
+
+// Create Supabase client so it can be used via hook
+// Use NEXT_PUBLIC because this is Next.js app
+const supabase = createClient(
+  `${process.env.NEXT_PUBLIC_SUPABASE_URL}`,
+  `${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`
+)
 
 function QopnetCommerceApp({ Component, pageProps }: AppProps) {
   return (
@@ -29,11 +42,13 @@ function QopnetCommerceApp({ Component, pageProps }: AppProps) {
 
       <DefaultSeo {...SEO} />
 
-      <SWRConfig value={swrConfig}>
-        <Header />
-        <Component {...pageProps} />
-        <Footer />
-      </SWRConfig>
+      <SupabaseContextProvider client={supabase}>
+        <SWRConfig value={swrConfig}>
+          <Header />
+          <Component {...pageProps} />
+          <Footer />
+        </SWRConfig>
+      </SupabaseContextProvider>
     </ChakraProvider>
   )
 }

@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import {
   Button,
@@ -15,7 +16,6 @@ import {
   useToast,
 } from '@chakra-ui/react'
 import { useForm, SubmitHandler } from 'react-hook-form'
-import { useHistory } from 'react-router-dom'
 import { useUser, useSupabase } from 'use-supabase'
 
 import { Icon } from '@qopnet/qopnet-ui'
@@ -40,15 +40,15 @@ export const SignUpForm = () => {
  * /signin
  */
 export const SignInForm = () => {
-  const history = useHistory()
+  const router = useRouter()
   const toast = useToast()
   const user = useUser()
   const supabase = useSupabase()
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    if (user) history.replace('/')
-  }, [user, history])
+    if (user) router.replace('/')
+  }, [user, router])
 
   // Password input show and hide
   const [show, setShow] = useState(false)
@@ -71,7 +71,7 @@ export const SignInForm = () => {
     setLoading(false)
     if (user) {
       toast({ title: 'Berhasil masuk', status: 'success' })
-      history.push('/')
+      router.push('/')
     } else if (error) {
       toast({ title: 'Gagal masuk', status: 'error' })
     } else {

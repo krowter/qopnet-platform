@@ -15,6 +15,7 @@ import {
 } from './pages'
 import { useEffect } from 'react'
 import { SWRConfig } from 'swr'
+
 import { swrConfig } from '@qopnet/util-swr'
 
 export const App = () => {
