@@ -22,23 +22,23 @@ export const HomePage = () => {
           <Heading as="h1" size="xl">
             Qopnet Admin
           </Heading>
-          <p>Manage business operation and database</p>
+          <p>Mengelola operasi bisnis dan database</p>
         </Stack>
 
         <Stack id="home-business" spacing={5}>
           <Heading as="h2" size="lg">
-            Business
+            Bisnis
           </Heading>
           <SimpleGrid columns={2} spacing={5} minChildWidth="350px">
             <DashboardCard
               withHelpText
-              name="Commerce Volume"
+              name="Volume Penjualan"
               amount={360}
               to="/volume"
             />
             <DashboardCard
               withHelpText
-              name="Balance"
+              name="Saldo"
               amountPrefix="Rp "
               amount={320500000}
               to="/balance"
@@ -51,9 +51,9 @@ export const HomePage = () => {
             Database
           </Heading>
           <SimpleGrid columns={2} spacing={5} minChildWidth="300px">
-            <DashboardCard name="Name" amount={123} to="/" />
-            <DashboardCard name="Name" amount={123} to="/" />
-            <DashboardCard name="Name" amount={123} to="/" />
+            <DashboardCard name="Nama" amount={123} to="/" />
+            <DashboardCard name="Nama" amount={123} to="/" />
+            <DashboardCard name="Nama" amount={123} to="/" />
           </SimpleGrid>
         </Stack>
       </HomeLayout>
@@ -108,7 +108,7 @@ export const DashboardCard = ({
         {withHelpText && <StatHelpText>1 Jan 2021 - 1 July 2021</StatHelpText>}
       </Stat>
       <Button as={Link} to={to} size="sm" colorScheme="orange">
-        Manage
+        Kelola
       </Button>
     </Box>
   )
