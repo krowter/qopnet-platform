@@ -17,6 +17,8 @@ import {
   ButtonGroup,
   NumberInput,
   NumberInputField,
+  ListItem,
+  UnorderedList,
 } from '@chakra-ui/react'
 
 import { formatDateTime } from '@qopnet/util-format'
@@ -219,7 +221,7 @@ export const SupplierProductContainer = ({
   const productImageFirst = productImages[0] as string
 
   return (
-    <Box pt={10}>
+    <Stack pt={10} spacing={20}>
       <Stack direction="row" spacing={10}>
         <Stack id="product-images" spacing={5}>
           <Box display="inherit">
@@ -256,7 +258,7 @@ export const SupplierProductContainer = ({
               <Box color="green.500">
                 <SupplierProductPrice product={product} fontSize="2xl" />
               </Box>
-              <Text>Harga per 1 set. 22 kg per set</Text>
+              <Text>Detail tidak diketahui</Text>
             </Stack>
 
             <ButtonGroup
@@ -280,21 +282,64 @@ export const SupplierProductContainer = ({
           <Divider />
 
           <Stack id="product-detail">
-            <Text>Kode SKU: {product.sku}</Text>
-            <Text>Berat: 22 Kg</Text>
+            <Text>
+              Kode SKU: <b>{product.sku}</b>
+            </Text>
+            <Text>
+              Berat: <b>Tidak diketahui</b>
+            </Text>
             <Text>{product.description}</Text>
           </Stack>
 
           <Divider />
 
           <Stack id="supplier-info">
-            <Text>Toko Supplier: {product.supplierId}</Text>
-            <Text>Pemilik: {product.ownerId}</Text>
-            <Text>Dijual mulai {formatDateTime(product.createdAt)}</Text>
-            <Text>Terakhir diubah {formatDateTime(product.updatedAt)}</Text>
+            <Text>
+              Toko Supplier: <b>{product.supplierId}</b>
+            </Text>
+            <Text>
+              Pemilik: <b>{product.ownerId}</b>
+            </Text>
+            <Text>
+              Dikirim dari <b>Kota tidak diketahui</b>
+            </Text>
+            <Text>
+              Dijual mulai <b>{formatDateTime(product.createdAt)}</b>
+            </Text>
+            <Text>
+              Terakhir diubah <b>{formatDateTime(product.updatedAt)}</b>
+            </Text>
           </Stack>
         </Stack>
       </Stack>
-    </Box>
+
+      <Divider />
+
+      <Stack id="product-more-details">
+        <Stack spacing={5}>
+          <Heading as="h4" size="lg">
+            Rincian Produk
+          </Heading>
+          <Stack>
+            <Heading as="h5" size="md">
+              Fitur utama
+            </Heading>
+            <Text>Produk ini sangat bagus.</Text>
+          </Stack>
+          <Stack>
+            <Heading as="h5" size="md">
+              Ukuran produk
+            </Heading>
+          </Stack>
+          <Box>
+            <UnorderedList>
+              <ListItem>Panjang: 200 cm</ListItem>
+              <ListItem>Tinggi: 78 cm</ListItem>
+              <ListItem>Lebar: 120 cm</ListItem>
+            </UnorderedList>
+          </Box>
+        </Stack>
+      </Stack>
+    </Stack>
   )
 }
