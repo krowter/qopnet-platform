@@ -37,9 +37,7 @@ export const fetcher = async (endpoint: string) => {
     currentSession: { access_token: '' },
   }
   // Get only the accessToken
-  const accessToken = supabaseAuthToken ? parsedObject : ''
-
-  console.log()
+  const accessToken = parsedObject.currentSession.access_token
 
   return await utilFetcher(apiUrl, endpoint, accessToken)
 }
