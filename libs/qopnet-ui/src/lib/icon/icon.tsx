@@ -13,6 +13,8 @@ import {
   FaBuilding as Supplier,
   FaRegBuilding as Suppliers,
   FaCarrot as SuppliersProducts,
+  FaEye as Show,
+  FaEyeSlash as Hide,
 
   // Category
   FaBoxes as All,
@@ -64,6 +66,10 @@ export const Icon = (props: IconProps) => {
       return <SuppliersProducts />
     case 'menu':
       return <Menu />
+    case 'show':
+      return <Show />
+    case 'hide':
+      return <Hide />
 
     /**
      * Category

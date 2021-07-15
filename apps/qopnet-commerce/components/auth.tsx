@@ -9,6 +9,7 @@ import {
   InputGroup,
   InputRightElement,
   Stack,
+  IconButton,
   VisuallyHidden,
   VStack,
   useToast,
@@ -16,6 +17,8 @@ import {
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { useHistory } from 'react-router-dom'
 import { useUser, useSupabase } from 'use-supabase'
+
+import { Icon } from '@qopnet/qopnet-ui'
 
 export type AuthData = {
   email: string
@@ -49,7 +52,7 @@ export const SignInForm = () => {
 
   // Password input show and hide
   const [show, setShow] = useState(false)
-  const handleClick = () => setShow(!show)
+  const handleShow = () => setShow(!show)
 
   // Sign in form hook
   const {
@@ -109,10 +112,14 @@ export const SignInForm = () => {
                 placeholder="Kata sandi"
                 {...register('password', { required: true })}
               />
-              <InputRightElement width="6.5rem">
-                <Button h="1.75rem" size="sm" onClick={handleClick}>
-                  {show ? 'Sembunyi' : 'Muncul'}
-                </Button>
+              <InputRightElement>
+                <IconButton
+                  onClick={handleShow}
+                  size="sm"
+                  h="1.75rem"
+                  aria-label={show ? 'Sembunyi' : 'Muncul'}
+                  icon={<Icon name={show ? 'hide' : 'show'} />}
+                />
               </InputRightElement>
             </InputGroup>
             <FormHelperText color="red.500">
