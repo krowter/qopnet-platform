@@ -28,8 +28,8 @@ const apiUrl =
     : apiProduction
 
 console.info({
-  env: process.env,
-  vercelEnv: process.env.NEXT_PUBLIC_VERCEL_ENV,
+  // env: process.env,
+  // vercelEnv: process.env.NEXT_PUBLIC_VERCEL_ENV,
   apiUrl,
 })
 
@@ -37,16 +37,16 @@ console.info({
  * Dynamic fetcher which use apiUrl automatically
  */
 export const fetcher = async (endpoint: string) => {
-  const supabaseAuthToken =
-    window.localStorage.getItem('supabase.auth.token') || '{}'
+  // const supabaseAuthToken =
+  //   window.localStorage.getItem('supabase.auth.token') || '{}'
 
-  const parsedObject = JSON.parse(supabaseAuthToken) || {
-    currentSession: { access_token: '' },
-  }
+  // const parsedObject = JSON.parse(supabaseAuthToken) || {
+  //   currentSession: { access_token: '' },
+  // }
 
-  const accessToken = parsedObject.currentSession.access_token
+  // const accessToken = parsedObject.currentSession.access_token
 
-  return await utilFetcher(apiUrl, endpoint, accessToken)
+  return await utilFetcher(apiUrl, endpoint)
 }
 
 /**
