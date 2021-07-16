@@ -13,6 +13,7 @@ import {
   IconButton,
   Image as ChakraImage,
   ListItem,
+  Input,
   NumberInput,
   NumberInputField,
   SimpleGrid,
@@ -20,11 +21,13 @@ import {
   Text,
   UnorderedList,
   useMediaQuery,
+  useNumberInput,
   VStack,
 } from '@chakra-ui/react'
 
 import { formatDateTime } from '@qopnet/util-format'
 import { Icon } from '../icon/icon'
+import { useState } from 'react'
 
 const supplierProductCategories = [
   { name: 'all', text: 'Semua Produk', color: 'orange.500' },
@@ -283,28 +286,7 @@ export const SupplierProductContainer = ({
 
           <Divider />
 
-          <Stack>
-            <Heading as="h4" size="sm">
-              Atur jumlah pesanan
-            </Heading>
-            <ButtonGroup
-              id="product-cart-modifier"
-              spacing={3}
-              alignItems="center"
-              variant="outline"
-            >
-              <IconButton aria-label="Kurangi produk">
-                <Icon name="decrement" />
-              </IconButton>
-              <NumberInput defaultValue={0} max={10}>
-                <NumberInputField w={100} />
-              </NumberInput>
-              <IconButton aria-label="Tambah produk">
-                <Icon name="increment" />
-              </IconButton>
-            </ButtonGroup>
-            <Text fontSize="xs">Max. pembelian 10 pcs</Text>
-          </Stack>
+          <SupplierProductCartModifier product={product} />
 
           <Divider />
 
@@ -367,6 +349,46 @@ export const SupplierProductContainer = ({
           </Stack>
         </Stack>
       </Stack>
+    </Stack>
+  )
+}
+
+export const SupplierProductCartModifier = ({
+  product,
+}: {
+  product: SupplierProduct
+}) => {
+  const maxValue = 10
+
+  // https://chakra-ui.com/docs/form/number-input#create-a-mobile-spinner
+  const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
+    useNumberInput({
+      step: 1,
+      defaultValue: 0,
+      min: 0,
+      max: maxValue,
+    })
+
+  const inc = getIncrementButtonProps()
+  const dec = getDecrementButtonProps()
+  const input = getInputProps()
+
+  return (
+    <Stack id="product-cart-modifier">
+      <Heading as="h4" size="sm">
+        Atur jumlah pembelian
+      </Heading>
+
+      <ButtonGroup spacing={3} alignItems="center" variant="outline">
+        <IconButton {...dec} aria-label="Kurangi produk">
+          <Icon name="decrement" />
+        </IconButton>
+        <Input maxW="100px" {...input} />
+        <IconButton {...inc} aria-label="Tambah produk">
+          <Icon name="increment" />
+        </IconButton>
+      </ButtonGroup>
+      <Text fontSize="xs">Max. pembelian {maxValue} pcs</Text>
     </Stack>
   )
 }
