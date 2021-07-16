@@ -29,15 +29,17 @@ export type ProfileData = {
   phone: string
 
   // Address
-  street: string // Jl. Street Name
-  streetDetails?: string // Optional details such as floor number
-  city: string
-  state: string // Province
-  zip: string // Postal code
-  countryCode: string // Save as ID, not Indonesia
+  address: {
+    street: string // Jl. Street Name
+    streetDetails?: string // Optional details such as floor number
+    city: string
+    state: string // Province
+    zip: string // Postal code
+    countryCode: string // Save as ID, not Indonesia
+  }
 }
 
-export const CreateProfileForm = () => {
+export const CreateProfileForm = ({ profile }) => {
   const router = useRouter()
   const toast = useToast()
   const user = useUser()
@@ -52,20 +54,27 @@ export const CreateProfileForm = () => {
   } = useForm<ProfileData>()
 
   // Create profile process and toast
-  const handleSubmitCreateProfile: SubmitHandler<ProfileData> = async ({
-    name,
-    handle,
-  }) => {
+  const handleSubmitCreateProfile: SubmitHandler<ProfileData> = async (
+    profileFormData
+  ) => {
     try {
       setLoading(true)
 
       // Mutate to create profile via POST /api/profiles
+      console.log({ profileFormData })
+
       const profile = true
       const error = false
 
       if (profile) {
         toast({ title: 'Berhasil membuat profil', status: 'success' })
-        // router.push('/')
+        // router.push('/dashboard')
+        /**
+         * Dashboard to choose to:
+         * 1. continue shopping
+         * 2. create supplier
+         * 3. create supplier product
+         */
       } else if (error) {
         throw new Error('Gagal membuat profil')
       }
@@ -92,7 +101,7 @@ export const CreateProfileForm = () => {
         as="form"
         w="100%"
         maxW="720px"
-        columns={[1, 2]}
+        columns={[1, 2, 2]}
         spacing={5}
       >
         <Stack>
@@ -137,69 +146,71 @@ export const CreateProfileForm = () => {
           <FormControl>
             <FormLabel>Alamat</FormLabel>
             <Input
-              {...register('street', { required: true })}
+              {...register('address.street', { required: true })}
               placeholder="Jl. Masukkan nama jalan No. 10"
             />
             <FormHelperText color="red.500">
-              {errors.street && <span>Alamat diperlukan</span>}
+              {errors.address.street && <span>Alamat diperlukan</span>}
             </FormHelperText>
           </FormControl>
 
           <FormControl>
             <FormLabel>Detail alamat</FormLabel>
             <Textarea
-              {...register('streetDetails')}
+              {...register('address.streetDetails')}
               placeholder="RT/RW 01/02, Kelurahan, Kecamatan"
             />
             <FormHelperText color="red.500">
-              {errors.streetDetails && <span>Detail alamat tidak jelas</span>}
+              {errors.address.streetDetails && (
+                <span>Detail alamat tidak jelas</span>
+              )}
             </FormHelperText>
           </FormControl>
 
           <FormControl>
             <FormLabel>Kode pos</FormLabel>
             <Input
-              {...register('zip', { required: true })}
+              {...register('address.zip', { required: true })}
               placeholder="12345"
             />
             <FormHelperText color="red.500">
-              {errors.zip && <span>Kode pos diperlukan</span>}
+              {errors.address.zip && <span>Kode pos diperlukan</span>}
             </FormHelperText>
           </FormControl>
 
           <FormControl>
             <FormLabel>Kota</FormLabel>
             <Input
-              {...register('city', { required: true })}
+              {...register('address.city', { required: true })}
               placeholder="Nama kota"
             />
             <FormHelperText color="red.500">
-              {errors.city && <span>Kota diperlukan</span>}
+              {errors.address.city && <span>Kota diperlukan</span>}
             </FormHelperText>
           </FormControl>
 
           <FormControl>
             <FormLabel>Provinsi</FormLabel>
             <Input
-              {...register('state', { required: true })}
+              {...register('address.state', { required: true })}
               placeholder="Nama provinsi"
             />
             <FormHelperText color="red.500">
-              {errors.state && <span>Provinsi diperlukan</span>}
+              {errors.address.state && <span>Provinsi diperlukan</span>}
             </FormHelperText>
           </FormControl>
 
           <FormControl>
             <FormLabel>Negara</FormLabel>
             <Select
-              {...register('countryCode', { required: true })}
+              {...register('address.countryCode', { required: true })}
               placeholder="Pilih negara"
             >
               <option value="ID">Indonesia</option>
             </Select>
 
             <FormHelperText color="red.500">
-              {errors.countryCode && <span>Negara diperlukan</span>}
+              {errors.address.countryCode && <span>Negara diperlukan</span>}
             </FormHelperText>
           </FormControl>
 
