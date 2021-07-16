@@ -39,7 +39,7 @@ export type ProfileData = {
   }
 }
 
-export const CreateProfileForm = ({ profile }) => {
+export const CreateProfileForm = ({ currentProfile }) => {
   const router = useRouter()
   const toast = useToast()
   const user = useUser()
