@@ -1,9 +1,11 @@
 import { Layout } from '@qopnet/qopnet-ui'
 
+import { SignUpForm } from '../../components'
+
 const signUpPage = () => {
   return (
     <Layout>
-      <h1>Daftar baru pengguna</h1>
+      <SignUpForm />
     </Layout>
   )
 }

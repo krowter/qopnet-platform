@@ -1,9 +1,11 @@
 import { Layout } from '@qopnet/qopnet-ui'
 
-const shopPage = () => {
+import { ShopProducts } from '../../components/products'
+
+export const shopPage = () => {
   return (
     <Layout>
-      <h1>Belanja semua produk supplier</h1>
+      <ShopProducts />
     </Layout>
   )
 }

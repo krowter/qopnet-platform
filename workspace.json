@@ -274,6 +274,27 @@
         }
       }
     },
+    "util-format": {
+      "root": "libs/util-format",
+      "sourceRoot": "libs/util-format/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/util-format/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/util-format"],
+          "options": {
+            "jestConfig": "libs/util-format/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "util-supabase": {
       "root": "libs/util-supabase",
       "sourceRoot": "libs/util-supabase/src",
