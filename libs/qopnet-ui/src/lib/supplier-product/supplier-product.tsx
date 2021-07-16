@@ -47,10 +47,10 @@ const supplierProductCategories = [
   { name: 'snack', text: 'Makanan Ringan', color: 'blue.500' },
 ]
 
-const defaultProductImages = [
-  'https://ik.imagekit.io/qopnetlabs/images/telur.jpg',
-  'https://ik.imagekit.io/qopnetlabs/images/kasur.jpg',
-  'https://ik.imagekit.io/qopnetlabs/images/rangka-kasur.jpg',
+const defaultSupplierProductImages = [
+  'https://rryitovbrajppywbpmit.supabase.co/storage/v1/object/public/images/telur.jpg',
+  'https://rryitovbrajppywbpmit.supabase.co/storage/v1/object/public/images/kasur.jpg',
+  'https://rryitovbrajppywbpmit.supabase.co/storage/v1/object/public/images/rangka-telur.jpg',
 ]
 
 export interface HomeProductCategoryProps {
@@ -144,7 +144,7 @@ export const SupplierProductCard = ({ product }: SupplierProductCardProps) => {
   const productImages = product.images as string[]
   const productImageThumbnail = productImages?.length
     ? productImages[0]
-    : defaultProductImages[0]
+    : defaultSupplierProductImages[0]
 
   return (
     <NextLink href={`/products/${product.slug}`} passHref>
