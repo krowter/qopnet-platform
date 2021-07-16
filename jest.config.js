@@ -7,5 +7,6 @@ module.exports = {
     '<rootDir>/libs/qopnet-ui',
     '<rootDir>/libs/shared-types',
     '<rootDir>/libs/util-swr',
+    '<rootDir>/libs/util-format',
   ],
 }

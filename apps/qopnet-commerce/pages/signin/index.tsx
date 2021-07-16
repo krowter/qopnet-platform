@@ -1,9 +1,11 @@
 import { Layout } from '@qopnet/qopnet-ui'
 
+import { SignInForm } from '../../components'
+
 const signInPage = () => {
   return (
     <Layout>
-      <h1>Masuk sebagai pengguna</h1>
+      <SignInForm />
     </Layout>
   )
 }

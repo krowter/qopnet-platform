@@ -5,24 +5,29 @@ import NextImage from 'next/image'
 import { SupplierProduct } from '@prisma/client'
 import { Decimal } from '@prisma/client/runtime'
 import {
-  Text,
-  Heading,
-  SimpleGrid,
-  VStack,
-  Stack,
   Box,
-  Image as ChakraImage,
-  Flex,
-  Divider,
-  Button,
-  IconButton,
-  HStack,
   ButtonGroup,
+  Divider,
+  Flex,
+  Heading,
+  IconButton,
+  Image as ChakraImage,
+  ListItem,
+  Input,
   NumberInput,
   NumberInputField,
+  SimpleGrid,
+  Stack,
+  Text,
+  UnorderedList,
+  useMediaQuery,
+  useNumberInput,
+  VStack,
 } from '@chakra-ui/react'
 
-import { Icon } from '@qopnet/qopnet-ui'
+import { formatDateTime } from '@qopnet/util-format'
+import { Icon } from '../icon/icon'
+import { useState } from 'react'
 
 const supplierProductCategories = [
   { name: 'all', text: 'Semua Produk', color: 'orange.500' },
@@ -54,10 +59,13 @@ export interface HomeProductCategoryProps {
 
 export interface HomeProductSpecialProps {
   id?: string
-  supplierProducts: SupplierProduct[]
   error: any
+  supplierProducts: SupplierProduct[]
 }
 
+export interface SupplierProductsGridProps {
+  supplierProducts: SupplierProduct[]
+}
 export interface SupplierProductCardProps {
   product: SupplierProduct
 }
@@ -78,7 +86,7 @@ export const HomeProductCategory = (props: HomeProductCategoryProps) => {
       <Heading as="h2" size="lg">
         Kategori Produk
       </Heading>
-      <SimpleGrid spacing={5} columns={8}>
+      <SimpleGrid spacing={5} columns={[4, 6, 8]}>
         {supplierProductCategories.map((category) => {
           return (
             <NextLink
@@ -112,18 +120,23 @@ export const HomeProductSpecial = (props: HomeProductSpecialProps) => {
       {error && <Text>Gagal mengambil produk pilihan</Text>}
       {!error && !supplierProducts && <Text>Memuat produk pilihan...</Text>}
       {!error && supplierProducts && (
-        <SimpleGrid spacing={5} columns={4}>
-          {supplierProducts?.map((product, index) => {
-            return (
-              <SupplierProductCard
-                key={product.slug || index}
-                product={product}
-              />
-            )
-          })}
-        </SimpleGrid>
+        <SupplierProductsGrid supplierProducts={supplierProducts} />
       )}
     </VStack>
+  )
+}
+
+export const SupplierProductsGrid = ({
+  supplierProducts,
+}: SupplierProductsGridProps) => {
+  return (
+    <SimpleGrid spacing={5} columns={[2, 2, 4]}>
+      {supplierProducts?.map((product, index) => {
+        return (
+          <SupplierProductCard key={product.slug || index} product={product} />
+        )
+      })}
+    </SimpleGrid>
   )
 }
 
@@ -145,7 +158,7 @@ export const SupplierProductCard = ({ product }: SupplierProductCardProps) => {
             height={300}
           />
         )}
-        <Heading as="h3" size="md" fontWeight="black">
+        <Heading as="h3" size={'md'} fontWeight="black">
           {product.name}
         </Heading>
         <SupplierProductPrice product={product} />
@@ -220,10 +233,12 @@ export const SupplierProductContainer = ({
   // @ts-ignore
   const productImageFirst = productImages[0] as string
 
+  const [isDesktop] = useMediaQuery('(min-width: 60em)')
+
   return (
-    <Box pt={10}>
-      <Stack direction="row" spacing={10}>
-        <Stack id="product-images" spacing={5}>
+    <Stack pt={10} spacing={20}>
+      <Stack direction={isDesktop ? 'row' : 'column'} spacing={10}>
+        <Stack id="product-images">
           <Box display="inherit">
             <NextImage
               key={product.slug + '-first'}
@@ -237,66 +252,143 @@ export const SupplierProductContainer = ({
           <Stack direction="row">
             {productImages.map((imageUrl: string, index) => {
               return (
-                <ChakraImage
-                  key={`${product.slug}-${index}-${product.id}`}
-                  src={imageUrl}
-                  alt={product.name || 'Small product image'}
-                  layout="fixed"
-                  width={100}
-                  height={100}
-                />
+                <Box display="inherit">
+                  <NextImage
+                    key={`${product.slug}-${index}-${product.id}`}
+                    src={imageUrl}
+                    alt={product.name || 'Small product image'}
+                    layout="fixed"
+                    width={100}
+                    height={100}
+                  />
+                </Box>
               )
             })}
           </Stack>
         </Stack>
 
-        <Stack id="product-info-sections" spacing={5}>
+        <Stack id="product-info-sections" spacing={5} w="100%">
           <Stack id="product-info-name-price">
-            <Heading as="h2">{product.name}</Heading>
+            <Heading as="h2" size="lg">
+              {product.name}
+            </Heading>
 
-            <Stack id="product-price-unit" spacing={0}>
-              <Box color="green.500">
-                <SupplierProductPrice product={product} fontSize="2xl" />
-              </Box>
-              <Text>Harga per 1 set. 22 kg per set</Text>
+            <Stack id="product-price-unit" spacing={3}>
+              <Text>Detail tidak diketahui</Text>
+              <Flex alignItems="center">
+                <Box color="green.500">
+                  <SupplierProductPrice product={product} fontSize="3xl" />
+                </Box>
+                <Text ml={3}> / 1 crate / 15 kg</Text>
+              </Flex>
             </Stack>
-
-            <ButtonGroup
-              id="product-cart-modifier"
-              spacing={5}
-              alignItems="center"
-              variant="ghost"
-            >
-              <IconButton aria-label="Kurangi produk">
-                <Icon name="decrement" />
-              </IconButton>
-              <NumberInput defaultValue={0} max={10} clampValueOnBlur={false}>
-                <NumberInputField w={100} />
-              </NumberInput>
-              <IconButton aria-label="Tambah produk">
-                <Icon name="increment" />
-              </IconButton>
-            </ButtonGroup>
           </Stack>
 
           <Divider />
 
+          <SupplierProductCartModifier product={product} />
+
+          <Divider />
+
           <Stack id="product-detail">
-            <Text>Kode SKU: {product.sku}</Text>
-            <Text>Berat: 22 Kg</Text>
+            <Text>
+              Kode SKU: <b>{product.sku}</b>
+            </Text>
+            <Text>
+              Berat: <b>Tidak diketahui</b>
+            </Text>
             <Text>{product.description}</Text>
           </Stack>
 
           <Divider />
 
           <Stack id="supplier-info">
-            <Text>Toko Supplier: {product.supplierId}</Text>
-            <Text>Pemilik: {product.ownerId}</Text>
-            <Text>Dijual mulai {product.createdAt}</Text>
-            <Text>Terakhir diubah {product.updatedAt}</Text>
+            <Text>
+              Toko Supplier: <b>{product.supplierId}</b>
+            </Text>
+            <Text>
+              Pemilik: <b>{product.ownerId}</b>
+            </Text>
+            <Text>
+              Dikirim dari <b>Kota tidak diketahui</b>
+            </Text>
+            <Text>
+              Dijual mulai <b>{formatDateTime(product.createdAt)}</b>
+            </Text>
+            <Text>
+              Terakhir diubah <b>{formatDateTime(product.updatedAt)}</b>
+            </Text>
           </Stack>
         </Stack>
       </Stack>
-    </Box>
+
+      <Divider />
+
+      <Stack id="product-more-details">
+        <Stack spacing={5}>
+          <Heading as="h4" size="lg">
+            Rincian Produk
+          </Heading>
+          <Stack>
+            <Heading as="h5" size="md">
+              Deskripsi
+            </Heading>
+            <Text>Produk ini sangat bagus.</Text>
+          </Stack>
+          <Stack>
+            <Heading as="h5" size="md">
+              Ukuran
+            </Heading>
+            <Box>
+              <UnorderedList>
+                <ListItem>Panjang: 200 cm</ListItem>
+                <ListItem>Tinggi: 78 cm</ListItem>
+                <ListItem>Lebar: 120 cm</ListItem>
+              </UnorderedList>
+            </Box>
+          </Stack>
+        </Stack>
+      </Stack>
+    </Stack>
+  )
+}
+
+export const SupplierProductCartModifier = ({
+  product,
+}: {
+  product: SupplierProduct
+}) => {
+  const maxValue = 10
+
+  // https://chakra-ui.com/docs/form/number-input#create-a-mobile-spinner
+  const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
+    useNumberInput({
+      step: 1,
+      defaultValue: 0,
+      min: 0,
+      max: maxValue,
+    })
+
+  const inc = getIncrementButtonProps()
+  const dec = getDecrementButtonProps()
+  const input = getInputProps()
+
+  return (
+    <Stack id="product-cart-modifier">
+      <Heading as="h4" size="sm">
+        Atur jumlah pembelian
+      </Heading>
+
+      <ButtonGroup spacing={3} alignItems="center" variant="outline">
+        <IconButton {...dec} aria-label="Kurangi produk">
+          <Icon name="decrement" />
+        </IconButton>
+        <Input maxW="100px" {...input} />
+        <IconButton {...inc} aria-label="Tambah produk">
+          <Icon name="increment" />
+        </IconButton>
+      </ButtonGroup>
+      <Text fontSize="xs">Max. pembelian {maxValue} pcs</Text>
+    </Stack>
   )
 }

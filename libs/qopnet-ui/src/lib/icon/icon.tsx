@@ -13,6 +13,13 @@ import {
   FaBuilding as Supplier,
   FaRegBuilding as Suppliers,
   FaCarrot as SuppliersProducts,
+  FaEye as Show,
+  FaEyeSlash as Hide,
+
+  // Form
+  FaSmile as Name,
+  FaIdBadge as Handle,
+  FaPhone as Phone,
 
   // Category
   FaBoxes as All,
@@ -64,6 +71,20 @@ export const Icon = (props: IconProps) => {
       return <SuppliersProducts />
     case 'menu':
       return <Menu />
+    case 'show':
+      return <Show />
+    case 'hide':
+      return <Hide />
+
+    /**
+     * Form
+     */
+    case 'name':
+      return <Name />
+    case 'handle':
+      return <Handle />
+    case 'phone':
+      return <Phone />
 
     /**
      * Category

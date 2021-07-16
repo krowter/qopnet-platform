@@ -9,18 +9,19 @@
     "lib": ["es2017", "dom"],
     "module": "esnext",
     "moduleResolution": "node",
-    "paths": {
-      "@qopnet/qopnet-ui": ["libs/qopnet-ui/src/index.ts"],
-      "@qopnet/shared-types": ["libs/shared-types/src/index.ts"],
-      "@qopnet/util-supabase": ["libs/util-supabase/src/index.ts"],
-      "@qopnet/util-swr": ["libs/util-swr/src/index.ts"]
-    },
     "resolveJsonModule": true,
     "rootDir": ".",
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
     "sourceMap": true,
-    "target": "es2015"
+    "target": "es2015",
+    "paths": {
+      "@qopnet/qopnet-ui": ["libs/qopnet-ui/src/index.ts"],
+      "@qopnet/shared-types": ["libs/shared-types/src/index.ts"],
+      "@qopnet/util-format": ["libs/util-format/src/index.ts"],
+      "@qopnet/util-supabase": ["libs/util-supabase/src/index.ts"],
+      "@qopnet/util-swr": ["libs/util-swr/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

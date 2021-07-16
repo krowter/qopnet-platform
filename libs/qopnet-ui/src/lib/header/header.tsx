@@ -14,9 +14,14 @@ import {
   InputGroup,
   InputRightElement,
   Link,
+  ButtonGroup,
   useColorMode,
   useColorModeValue,
+  useToast,
+  useMediaQuery,
 } from '@chakra-ui/react'
+import { useForm, SubmitHandler } from 'react-hook-form'
+import { useSupabase, useUser } from 'use-supabase'
 
 import { NextLinkButton } from '../next-link-button/next-link-button'
 import { Icon } from '../icon/icon'
@@ -27,16 +32,30 @@ export interface HeaderProps {
 }
 
 export const Header = (props: HeaderProps) => {
-  const user = false
-  const { cart = {} } = props
   const { colorMode, toggleColorMode } = useColorMode()
-  const router = useRouter()
+  const supabase = useSupabase()
+  const user = useUser()
+  const toast = useToast()
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleSubmitSearch = (event: any) => {
-    event.preventDefault()
-    const keyword = 'telur'
-    router.push(`/search?q=${keyword}`)
+  const [isDesktop] = useMediaQuery('(min-width: 60em)')
+  const qopnetLogoDesktop = useColorModeValue(
+    '/images/qopnet-logo.png',
+    '/images/qopnet-logo-dark.png'
+  )
+  const qopnetLogoMobile = useColorModeValue(
+    '/images/qopnet-icon.png',
+    '/images/qopnet-icon.png'
+  )
+
+  // Should be passed down from props of respective app
+  // Because useSWR
+  const { cart = {} } = props
+
+  // Handle sign out via Header, user action button
+  const handleSignOut = async () => {
+    const { error } = await supabase.auth.signOut()
+    if (!error) toast({ title: 'Berhasil keluar' })
+    else toast({ title: 'Gagal keluar', status: 'error' })
   }
 
   return (
@@ -52,13 +71,12 @@ export const Header = (props: HeaderProps) => {
         <NextLink href="/" passHref>
           <chakra.a display="block" className="next-image-container">
             <NextImage
+              key="qopnet-logo"
               alt="Qopnet logo"
-              src={useColorModeValue(
-                '/images/qopnet-logo.png',
-                '/images/qopnet-logo-dark.png'
-              )}
+              src={qopnetLogoDesktop}
               width={161}
               height={50}
+              layout="fixed"
             />
           </chakra.a>
         </NextLink>
@@ -76,53 +94,96 @@ export const Header = (props: HeaderProps) => {
         </Heading>
       </HStack>
 
-      <Box as="form" w="100%" onSubmit={handleSubmitSearch}>
-        <InputGroup>
-          <Input
-            placeholder="Cari produk..."
-            bg={useColorModeValue('white', 'black')}
-          />
-          <InputRightElement color={useColorModeValue('black', 'white')}>
-            <Icon name="search" />
-          </InputRightElement>
-        </InputGroup>
-      </Box>
+      <SearchBar />
 
       <HStack spacing={3}>
         {user && (
-          <HStack id="user-buttons">
-            <Avatar
-              id="user-avatar-button"
-              name="User Name"
-              size="sm"
-              rounded="base"
-            >
-              <AvatarBadge boxSize="1.25em" bg="green.500" />
-            </Avatar>
-            <IconButton
-              id="shopping-cart-button"
-              aria-label="Keranjang belanja"
-            >
-              <Icon name="cart" />
-            </IconButton>
-            <IconButton id="signout-button" aria-label="Keluar">
-              <Icon name="signout" />
-            </IconButton>
+          <HStack id="user-buttons" spacing={3}>
+            <NextLink href="/create-profile" passHref>
+              <chakra.a display="block">
+                <Avatar
+                  id="user-avatar-button"
+                  name={user.email || 'Unknown'}
+                  size="sm"
+                  rounded="base"
+                  height="40px"
+                  width="40px"
+                >
+                  <AvatarBadge boxSize="1.25em" bg="green.500" />
+                </Avatar>
+              </chakra.a>
+            </NextLink>
+            <ButtonGroup id="user-action-buttons" spacing={3} size="md">
+              <IconButton
+                id="shopping-cart-button"
+                colorScheme="green"
+                aria-label="Keranjang belanja"
+              >
+                <Icon name="cart" />
+              </IconButton>
+              <IconButton
+                id="signout-button"
+                colorScheme="red"
+                aria-label="Keluar"
+                onClick={handleSignOut}
+              >
+                <Icon name="signout" />
+              </IconButton>
+            </ButtonGroup>
           </HStack>
         )}
 
         {!user && (
-          <HStack id="non-user-buttons">
+          <ButtonGroup id="non-user-buttons" spacing={3}>
             <NextLinkButton href="/signin" colorScheme="yellow">
               Masuk
             </NextLinkButton>
             <NextLinkButton href="/signup" colorScheme="orange">
               Daftar
             </NextLinkButton>
-          </HStack>
+          </ButtonGroup>
         )}
       </HStack>
     </HStack>
+  )
+}
+
+export type SearchData = {
+  keyword: string
+}
+
+export const SearchBar = () => {
+  const router = useRouter()
+  // React Hook Form for search
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SearchData>()
+
+  // Sign in process and toast
+  const handleSubmitSearch: SubmitHandler<SearchData> = async ({ keyword }) => {
+    try {
+      router.push(`/search?q=${keyword}`)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  return (
+    <Box as="form" w="100%" onSubmit={handleSubmit(handleSubmitSearch)}>
+      <InputGroup>
+        <Input
+          type="text"
+          placeholder="Cari produk..."
+          bg={useColorModeValue('white', 'black')}
+          {...register('keyword', { required: true })}
+        />
+        <InputRightElement color={useColorModeValue('black', 'white')}>
+          <Icon name="search" />
+        </InputRightElement>
+      </InputGroup>
+    </Box>
   )
 }
 

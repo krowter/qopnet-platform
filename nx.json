@@ -45,6 +45,9 @@
     "shared-types": {
       "tags": []
     },
+    "util-format": {
+      "tags": []
+    },
     "util-supabase": {
       "tags": []
     },
