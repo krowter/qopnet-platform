@@ -229,7 +229,8 @@ export const SupplierProductContainer = ({
   supplierProduct,
 }: SupplierProductContainer) => {
   const product = supplierProduct
-  const productImages = (product?.images as string[]) || defaultProductImages
+  const productImages =
+    (product?.images as string[]) || defaultSupplierProductImages
   // @ts-ignore
   const productImageFirst = productImages[0] as string
 
