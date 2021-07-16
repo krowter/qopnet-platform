@@ -99,16 +99,20 @@ export const Header = (props: HeaderProps) => {
       <HStack spacing={3}>
         {user && (
           <HStack id="user-buttons" spacing={3}>
-            <Avatar
-              id="user-avatar-button"
-              name={user.email || 'Unknown'}
-              size="sm"
-              rounded="base"
-              height="40px"
-              width="40px"
-            >
-              <AvatarBadge boxSize="1.25em" bg="green.500" />
-            </Avatar>
+            <NextLink href="/create-profile" passHref>
+              <chakra.a display="block">
+                <Avatar
+                  id="user-avatar-button"
+                  name={user.email || 'Unknown'}
+                  size="sm"
+                  rounded="base"
+                  height="40px"
+                  width="40px"
+                >
+                  <AvatarBadge boxSize="1.25em" bg="green.500" />
+                </Avatar>
+              </chakra.a>
+            </NextLink>
             <ButtonGroup id="user-action-buttons" spacing={3} size="md">
               <IconButton
                 id="shopping-cart-button"

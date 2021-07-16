@@ -95,7 +95,7 @@ export const SignUpForm = () => {
         <Text>Silakan daftarkan diri Anda untuk membuat profil dan toko.</Text>
         <Text>
           Sudah punya akun?{' '}
-          <NextLink href="/signup">
+          <NextLink href="/signin">
             <Link color="orange.500">Masuk ke akun</Link>
           </NextLink>
         </Text>
@@ -187,7 +187,7 @@ export const SignInForm = () => {
       const { user, error } = await supabase.auth.signIn({ email, password })
       if (user) {
         toast({ title: 'Berhasil masuk akun', status: 'success' })
-        router.push('/')
+        router.replace('/create-profile')
       } else if (error) throw new Error('Gagal masuk akun')
     } catch (error) {
       toast({ title: 'Gagal masuk akun', status: 'error' })

@@ -1,9 +1,10 @@
-import { Layout } from '@qopnet/qopnet-ui'
+import { Layout, Icon } from '@qopnet/qopnet-ui'
+import { CreateProfileForm } from '../../components'
 
-const createProfilePage = () => {
+export const createProfilePage = () => {
   return (
     <Layout>
-      <h1>Buat profil</h1>
+      <CreateProfileForm />
     </Layout>
   )
 }
