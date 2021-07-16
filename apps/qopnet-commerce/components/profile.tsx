@@ -9,6 +9,8 @@ import {
   FormLabel,
   Heading,
   Spinner,
+  InputGroup,
+  InputLeftElement,
   Input,
   Stack,
   VStack,
@@ -24,22 +26,22 @@ import { Icon } from '@qopnet/qopnet-ui'
 
 export type ProfileData = {
   // Profile
-  name: string
-  handle: string
-  phone: string
+  name?: string
+  handle?: string
+  phone?: string
 
   // Address
-  address: {
-    street: string // Jl. Street Name
+  address?: {
+    street?: string // Jl. Street Name
     streetDetails?: string // Optional details such as floor number
-    city: string
-    state: string // Province
-    zip: string // Postal code
-    countryCode: string // Save as ID, not Indonesia
+    city?: string
+    state?: string // Province
+    zip?: string // Postal code
+    countryCode?: string // Save as ID, not Indonesia
   }
 }
 
-export const CreateProfileForm = ({ currentProfile }) => {
+export const CreateProfileForm = () => {
   const router = useRouter()
   const toast = useToast()
   const user = useUser()
@@ -107,11 +109,16 @@ export const CreateProfileForm = ({ currentProfile }) => {
         <Stack>
           <FormControl>
             <FormLabel>Nama Lengkap</FormLabel>
-            <Input
-              type="text"
-              placeholder="Nama Lengkap"
-              {...register('name', { required: true })}
-            />
+            <InputGroup>
+              <InputLeftElement pointerEvents="none">
+                <Icon name="name" />
+              </InputLeftElement>
+              <Input
+                type="text"
+                placeholder="Nama Lengkap"
+                {...register('name', { required: true })}
+              />
+            </InputGroup>
             <FormHelperText color="red.500">
               {errors.name && <span>Nama lengkap diperlukan</span>}
             </FormHelperText>
@@ -119,11 +126,16 @@ export const CreateProfileForm = ({ currentProfile }) => {
 
           <FormControl>
             <FormLabel>Username</FormLabel>
-            <Input
-              type="text"
-              placeholder="username"
-              {...register('handle', { required: true })}
-            />
+            <InputGroup>
+              <InputLeftElement pointerEvents="none">
+                <Icon name="handle" />
+              </InputLeftElement>
+              <Input
+                type="text"
+                placeholder="username"
+                {...register('handle', { required: true })}
+              />
+            </InputGroup>
             <FormHelperText color="red.500">
               {errors.handle && <span>Username diperlukan</span>}
             </FormHelperText>
@@ -131,11 +143,16 @@ export const CreateProfileForm = ({ currentProfile }) => {
 
           <FormControl>
             <FormLabel>Nomor telepon/HP/WhatsApp</FormLabel>
-            <Input
-              type="tel"
-              placeholder="+62 1234 5678"
-              {...register('phone', { required: true })}
-            />
+            <InputGroup>
+              <InputLeftElement pointerEvents="none">
+                <Icon name="phone" />
+              </InputLeftElement>
+              <Input
+                type="tel"
+                placeholder="+62 1234 5678"
+                {...register('phone', { required: true })}
+              />
+            </InputGroup>
             <FormHelperText color="red.500">
               {errors.phone && <span>Nomor telepon diperlukan</span>}
             </FormHelperText>
@@ -150,7 +167,7 @@ export const CreateProfileForm = ({ currentProfile }) => {
               placeholder="Jl. Masukkan nama jalan No. 10"
             />
             <FormHelperText color="red.500">
-              {errors.address.street && <span>Alamat diperlukan</span>}
+              {errors.address?.street && <span>Alamat diperlukan</span>}
             </FormHelperText>
           </FormControl>
 
@@ -161,7 +178,7 @@ export const CreateProfileForm = ({ currentProfile }) => {
               placeholder="RT/RW 01/02, Kelurahan, Kecamatan"
             />
             <FormHelperText color="red.500">
-              {errors.address.streetDetails && (
+              {errors.address?.streetDetails && (
                 <span>Detail alamat tidak jelas</span>
               )}
             </FormHelperText>
@@ -174,7 +191,7 @@ export const CreateProfileForm = ({ currentProfile }) => {
               placeholder="12345"
             />
             <FormHelperText color="red.500">
-              {errors.address.zip && <span>Kode pos diperlukan</span>}
+              {errors.address?.zip && <span>Kode pos diperlukan</span>}
             </FormHelperText>
           </FormControl>
 
@@ -185,7 +202,7 @@ export const CreateProfileForm = ({ currentProfile }) => {
               placeholder="Nama kota"
             />
             <FormHelperText color="red.500">
-              {errors.address.city && <span>Kota diperlukan</span>}
+              {errors.address?.city && <span>Kota diperlukan</span>}
             </FormHelperText>
           </FormControl>
 
@@ -196,7 +213,7 @@ export const CreateProfileForm = ({ currentProfile }) => {
               placeholder="Nama provinsi"
             />
             <FormHelperText color="red.500">
-              {errors.address.state && <span>Provinsi diperlukan</span>}
+              {errors.address?.state && <span>Provinsi diperlukan</span>}
             </FormHelperText>
           </FormControl>
 
@@ -210,7 +227,7 @@ export const CreateProfileForm = ({ currentProfile }) => {
             </Select>
 
             <FormHelperText color="red.500">
-              {errors.address.countryCode && <span>Negara diperlukan</span>}
+              {errors.address?.countryCode && <span>Negara diperlukan</span>}
             </FormHelperText>
           </FormControl>
 

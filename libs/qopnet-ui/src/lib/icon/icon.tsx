@@ -16,6 +16,11 @@ import {
   FaEye as Show,
   FaEyeSlash as Hide,
 
+  // Form
+  FaSmile as Name,
+  FaIdBadge as Handle,
+  FaPhone as Phone,
+
   // Category
   FaBoxes as All,
   FaCertificate as New,
@@ -70,6 +75,16 @@ export const Icon = (props: IconProps) => {
       return <Show />
     case 'hide':
       return <Hide />
+
+    /**
+     * Form
+     */
+    case 'name':
+      return <Name />
+    case 'handle':
+      return <Handle />
+    case 'phone':
+      return <Phone />
 
     /**
      * Category
