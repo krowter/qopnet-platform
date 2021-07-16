@@ -23,6 +23,8 @@ const linkToPages = [
   { href: '/qopnet/kasur', text: 'Halaman produk kasur' },
   { href: '/products', text: 'Semua produk supplier' },
   { href: '/search', text: 'Cari produk' },
+  { href: '/terms', text: 'Syarat dan Ketentuan' },
+  { href: '/faq', text: 'FAQ' },
 ]
 
 /* eslint-disable-next-line */
