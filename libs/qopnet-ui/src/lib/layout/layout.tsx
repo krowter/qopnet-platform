@@ -14,7 +14,7 @@ export function Layout(props: LayoutProps) {
 
   return (
     <Container spacing={10} maxW={1200}>
-      <NextSeo title={`${meta?.title} - Qopnet`} />
+      {meta && <NextSeo title={`${meta?.title} - Qopnet`} />}
       <Box minH="80vh">{children}</Box>
     </Container>
   )

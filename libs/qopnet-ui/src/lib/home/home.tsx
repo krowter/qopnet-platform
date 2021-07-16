@@ -24,7 +24,7 @@ export function HomeBanner(props: HomeBannerProps) {
       <NextLink href="/shop" passHref>
         <chakra.a display="block" className="next-image-container">
           <NextImage
-            alt="Banner image"
+            alt="Gambar banner promosi"
             src={bannerImages[bannerIndex]}
             layout="responsive"
             width={1280}
