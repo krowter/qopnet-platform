@@ -1,6 +1,7 @@
 import {
   Avatar,
   Box,
+  Button,
   Flex,
   SimpleGrid,
   Spinner,
@@ -41,7 +42,16 @@ export const SuppliersPage = () => {
           <Text ml={5} fontWeight={500}>
             {suppliers?.length ?? 0} supplier
           </Text>
-          <Box ml="auto" h={5} w={5} borderRadius={20} bg="#4C2602" />
+          <Button
+            as={Link}
+            ml="auto"
+            variant="outline"
+            size="xs"
+            colorScheme="orange.900"
+            to="/suppliers/add"
+          >
+            Tambah Supplier
+          </Button>
         </Flex>
 
         {error && (
@@ -84,7 +94,7 @@ export const SupplierRows = ({ suppliers }: { suppliers: any[] }) => {
             bg={bg}
             borderBottom="1px solid gray"
             borderColor={border}
-            gridTemplateColumns="repeat(7, 1fr)"
+            gridTemplateColumns="50px 50px repeat(5, 1fr)"
           >
             <Text>#{index}</Text>
             <Avatar size="xs" name={supplier.name} />

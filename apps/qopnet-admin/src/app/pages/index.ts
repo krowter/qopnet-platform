@@ -1,6 +1,7 @@
 export * from './home'
 export * from './users'
 export * from './suppliers'
+export * from './suppliers/addSupplier'
 export * from './suppliers/supplierSlug'
 export * from './suppliers/products'
 export * from './suppliers/addProduct'
