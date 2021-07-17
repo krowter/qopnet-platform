@@ -140,18 +140,37 @@ export const CreateSupplierProductForm = ({ supplierParam }) => {
               </InputLeftElement>
               <Input
                 type="text"
-                placeholder="Telur Bebek Asin (Jenis/Kategori Produk) + Premium (Keterangan) + Lingkar Kuning (Merek)"
+                placeholder="Telur Bebek Asin"
                 {...register('name', { required: true })}
               />
             </InputGroup>
             <FormHelperText>
-              <span>
-                Nama min. 5 kata, terdiri dari jenis produk, merek, dan
-                keterangan seperti warna, bahan, atau tipe.
-              </span>
+              <span>Nama min. 1 kata</span>
             </FormHelperText>
             <FormHelperText color="red.500">
               {errors.name && <span>Nama produk diperlukan</span>}
+            </FormHelperText>
+          </FormControl>
+          <FormControl>
+            <FormLabel>Sub Nama Produk</FormLabel>
+            <InputGroup>
+              <InputLeftElement pointerEvents="none">
+                <Icon name="subname" />
+              </InputLeftElement>
+              <Input
+                type="text"
+                placeholder="Gurih Premium Lingkar Kuning dari Bogor"
+                {...register('subname')}
+              />
+            </InputGroup>
+            <FormHelperText>
+              <span>
+                Sub nama menjelaskan jenis produk, merek, dan keterangan seperti
+                warna, bahan, atau tipe.
+              </span>
+            </FormHelperText>
+            <FormHelperText color="red.500">
+              {errors.name && <span>Sub nama produk tidak jelas</span>}
             </FormHelperText>
           </FormControl>
           <FormControl>
@@ -194,13 +213,14 @@ export const CreateSupplierProductForm = ({ supplierParam }) => {
             <FormLabel>Deskripsi Produk</FormLabel>
             <Textarea
               {...register('description')}
-              placeholder="Telur Asin merupakan salah satu makanan yang banyak dicari karena cukup enak untuk dimakan dengan aneka makanan kering maupun berkuah. Telur Bebek Asin Matang ini sudah bisa langsung dinikmati.\n\nTelur Asin termasuk makanan tinggi kalori, mengandung vitamin A, C, Kalsium, Fosfor dan zat besi yang baik untuk perkembangan tubuh.\n\nTelur Bebek Asin Matang dapat langsung dikonsumsi dengan makanan pilihan kamu."
+              rows={7}
+              placeholder="Telur Asin merupakan salah satu makanan yang banyak dicari karena cukup enak untuk dimakan dengan aneka makanan kering maupun berkuah. Telur Bebek Asin Matang ini sudah bisa langsung dinikmati. Telur Asin termasuk makanan tinggi kalori, mengandung vitamin A, C, Kalsium, Fosfor dan zat besi yang baik untuk perkembangan tubuh. Telur Bebek Asin Matang dapat langsung dikonsumsi dengan makanan pilihan kamu."
             />
             <FormHelperText>
               <span>
-                Pastikan deskripsi produk memuat spesifikasi, ukuran, bahan,
-                masa berlaku, dan lainnya. Semakin detail, semakin berguna bagi
-                pembeli terutama merchant.
+                Detail yang lengkap terkait produk. Pastikan deskripsi produk
+                memuat spesifikasi, ukuran, bahan, masa berlaku, dan lainnya.
+                Semakin detail, semakin berguna bagi pembeli terutama merchant.
               </span>
             </FormHelperText>
             <FormHelperText color="red.500">
