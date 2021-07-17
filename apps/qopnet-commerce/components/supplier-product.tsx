@@ -27,12 +27,13 @@ import { useUser, useSupabase } from 'use-supabase'
 import { Icon } from '@qopnet/qopnet-ui'
 import { postToAPI } from '../utils/fetch'
 
+// SupplierProduct
 export type SupplierProductData = {
-  // SupplierProduct
   images?: string[]
   slug?: string
 
   name?: string
+  subname?: string
   category?: string
   sku?: string
   description?: string
@@ -40,6 +41,19 @@ export type SupplierProductData = {
   price?: number
   priceMax?: number
   priceMin?: number
+  minOrder?: number
+
+  weight?: number
+  weightUnit?: 'GR' | 'KG' | 'TON'
+  weightDetails?: string
+  dimension?: {
+    length?: number
+    width?: number
+    height?: number
+  }
+
+  status?: 'ACTIVE' | 'INACTIVE'
+  stock?: number
 }
 
 export const CreateSupplierProductForm = ({ supplierParam }) => {
@@ -178,7 +192,10 @@ export const CreateSupplierProductForm = ({ supplierParam }) => {
           </FormControl>
           <FormControl>
             <FormLabel>Deskripsi Produk</FormLabel>
-            <Textarea {...register('description')} placeholder="" />
+            <Textarea
+              {...register('description')}
+              placeholder="Telur Asin merupakan salah satu makanan yang banyak dicari karena cukup enak untuk dimakan dengan aneka makanan kering maupun berkuah. Telur Bebek Asin Matang ini sudah bisa langsung dinikmati.\n\nTelur Asin termasuk makanan tinggi kalori, mengandung vitamin A, C, Kalsium, Fosfor dan zat besi yang baik untuk perkembangan tubuh.\n\nTelur Bebek Asin Matang dapat langsung dikonsumsi dengan makanan pilihan kamu."
+            />
             <FormHelperText>
               <span>
                 Pastikan deskripsi produk memuat spesifikasi, ukuran, bahan,
