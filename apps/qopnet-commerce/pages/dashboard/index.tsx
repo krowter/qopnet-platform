@@ -78,7 +78,7 @@ export const DashboardContent = ({ profile }) => {
         {/* Only show owned suppliers list when exist */}
         <Stack id="dashboard-suppliers">
           <Heading as="h3" size="md">
-            Daftar Supplier
+            Daftar Supplier Saya
           </Heading>
           {!profile?.suppliers?.length && (
             <Stack align="flex-start">
