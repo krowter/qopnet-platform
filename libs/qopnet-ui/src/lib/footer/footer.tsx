@@ -15,6 +15,7 @@ const linkToPages = [
   { href: '/', text: 'Beranda' },
   { href: '/signup', text: 'Daftar' },
   { href: '/signin', text: 'Masuk' },
+  { href: '/dashboard', text: 'Dasbor' },
   { href: '/create-profile', text: 'Buat Profil' },
   { href: '/create-supplier', text: 'Buat Toko Supplier' },
   { href: '/create-product', text: 'Buat Produk Supplier' },

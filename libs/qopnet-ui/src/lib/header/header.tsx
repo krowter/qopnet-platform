@@ -99,7 +99,7 @@ export const Header = (props: HeaderProps) => {
       <HStack spacing={3}>
         {user && (
           <HStack id="user-buttons" spacing={3}>
-            <NextLink href="/create-profile" passHref>
+            <NextLink href="/dashboard" passHref>
               <chakra.a display="block">
                 <Avatar
                   id="user-avatar-button"

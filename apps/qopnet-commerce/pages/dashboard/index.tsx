@@ -131,7 +131,10 @@ export const DashboardActionLink = ({ href, children }) => {
 export const DashboardSupplierCardLink = ({
   supplier,
 }: {
-  supplier: Supplier
+  supplier: {
+    name: string
+    handle: string
+  }
 }) => {
   return (
     <Box

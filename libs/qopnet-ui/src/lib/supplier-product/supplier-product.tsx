@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
+
+import { useState } from 'react'
 import NextLink from 'next/link'
 import NextImage from 'next/image'
 import { SupplierProduct } from '@prisma/client'
@@ -27,7 +29,6 @@ import {
 
 import { formatDateTime } from '@qopnet/util-format'
 import { Icon } from '../icon/icon'
-import { useState } from 'react'
 
 const supplierProductCategories = [
   { name: 'all', text: 'Semua Produk', color: 'orange.500' },
@@ -49,8 +50,6 @@ const supplierProductCategories = [
 
 const defaultSupplierProductImages = [
   'https://rryitovbrajppywbpmit.supabase.co/storage/v1/object/public/images/telur.jpg',
-  'https://rryitovbrajppywbpmit.supabase.co/storage/v1/object/public/images/kasur.jpg',
-  'https://rryitovbrajppywbpmit.supabase.co/storage/v1/object/public/images/rangka-telur.jpg',
 ]
 
 export interface HomeProductCategoryProps {
