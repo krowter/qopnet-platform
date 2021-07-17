@@ -6,6 +6,7 @@ import {
   HStack,
   Heading,
   Text,
+  Spinner,
   VStack,
   Stack,
   SimpleGrid,
@@ -34,10 +35,17 @@ export const SupplierContainer = ({ supplierParam }) => {
   return (
     <VStack mt={10} spacing={10}>
       {error && <Text>Gagal memuat data supplier</Text>}
-      {!error && !supplier && <Text>Memuat data supplier...</Text>}
+      {!error && !supplier && (
+        <Stack>
+          <Spinner />
+          <Text>Memuat data supplier...</Text>
+        </Stack>
+      )}
       {!error && supplier && (
         <>
-          <NextSeo title={`${supplier.name} - Qopnet`} />
+          <NextSeo
+            title={`${supplier.name} - ${supplier.addresses[0].city}, ${supplier.addresses[0].state} - Qopnet`}
+          />
           <Stack spacing={10} w="100%">
             <Stack>
               <Heading as="h1" size="xl">
@@ -60,9 +68,9 @@ export const SupplierContainer = ({ supplierParam }) => {
                       <span>{address.street}, </span>
                       <span>{address.streetDetails ?? ''}</span>
                       <span>{address.city}, </span>
-                      <span>{address.state}, </span>
+                      <span>{address.state} </span>
                       <span>{address.zip}, </span>
-                      <span>{address.countryCode}</span>
+                      <span>Indonesia</span>
                     </Text>
                   )
                 })}

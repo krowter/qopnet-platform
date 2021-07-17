@@ -3,7 +3,7 @@
 
 import NextLink from 'next/link'
 import NextImage from 'next/image'
-import { SupplierProduct } from '@prisma/client'
+import { SupplierProduct, Supplier, Profile, Address } from '@prisma/client'
 import { Decimal } from '@prisma/client/runtime'
 import {
   Box,
@@ -12,7 +12,7 @@ import {
   Flex,
   Heading,
   IconButton,
-  Image as ChakraImage,
+  Button,
   ListItem,
   Input,
   SimpleGrid,
@@ -22,6 +22,7 @@ import {
   useMediaQuery,
   useNumberInput,
   VStack,
+  useColorModeValue,
 } from '@chakra-ui/react'
 
 import { formatDateTime } from '@qopnet/util-format'
@@ -72,7 +73,12 @@ export interface SupplierProductPriceProps {
 }
 
 export interface SupplierProductDetailProps {
-  product: SupplierProduct
+  product: SupplierProduct & {
+    supplier: Supplier & {
+      owner: Profile
+      addresses: Address[]
+    }
+  }
 }
 
 export const HomeProductCategory = (props: HomeProductCategoryProps) => {
@@ -297,23 +303,12 @@ export const SupplierProductDetail = ({
 
           <Divider variant="dashed" />
 
-          <Stack id="supplier-info">
-            <Text>
-              Toko Supplier: <b>{product.supplierId}</b>
-            </Text>
-            <Text>
-              Pemilik: <b>{product.ownerId}</b>
-            </Text>
-            <Text>
-              Dikirim dari <b>Kota tidak diketahui</b>
-            </Text>
-            <Text>
-              Dijual mulai <b>{formatDateTime(product.createdAt)}</b>
-            </Text>
-            <Text>
-              Terakhir diubah <b>{formatDateTime(product.updatedAt)}</b>
-            </Text>
-          </Stack>
+          <SupplierCardForProductLink supplier={product.supplier} />
+
+          <Text fontSize="xs">
+            Dijual sejak <b>{formatDateTime(product.createdAt)}</b>. Diubah
+            sejak <b>{formatDateTime(product.updatedAt)}</b>
+          </Text>
         </Stack>
       </Stack>
 
@@ -346,6 +341,43 @@ export const SupplierProductDetail = ({
   )
 }
 
+export const SupplierCardForProductLink = ({
+  supplier,
+}: {
+  supplier: Supplier & {
+    owner: Profile
+    addresses: Address[]
+  }
+}) => {
+  return (
+    <NextLink href={`/${supplier.handle}`} passHref>
+      <Stack
+        id="supplier-info"
+        as="a"
+        p={5}
+        boxShadow="xs"
+        rounded="base"
+        bg={useColorModeValue('gray.50', 'gray.900')}
+      >
+        <Heading as="h4" size="md">
+          {supplier.name}
+        </Heading>
+        <Text>
+          Dimiliki oleh <b>{supplier.owner.name}</b>
+        </Text>
+        {supplier?.addresses && (
+          <Text>
+            Dikirim dari{' '}
+            <b>
+              {supplier.addresses[0].city}, {supplier.addresses[0].state}
+            </b>
+          </Text>
+        )}
+      </Stack>
+    </NextLink>
+  )
+}
+
 export const SupplierProductCartModifier = ({
   product,
 }: {
@@ -358,16 +390,21 @@ export const SupplierProductCartModifier = ({
     useNumberInput({
       step: 1,
       defaultValue: 0,
-      min: 0,
+      min: 1,
       max: maxValue,
     })
 
   const inc = getIncrementButtonProps()
   const dec = getDecrementButtonProps()
   const input = getInputProps()
+  // @ts-ignore
+  const productSubTotal = input.value
+  const formattedProductSubTotal = formatPrice(
+    Number(product?.price) * Number(productSubTotal)
+  )
 
   return (
-    <Stack id="product-cart-modifier">
+    <Stack id="product-cart-modifier" alignItems="flex-start">
       <Heading as="h4" size="sm">
         Atur jumlah pembelian
       </Heading>
@@ -381,7 +418,17 @@ export const SupplierProductCartModifier = ({
           <Icon name="plus" />
         </IconButton>
       </ButtonGroup>
+
       <Text fontSize="xs">Max. pembelian {maxValue} pcs</Text>
+
+      <Text>
+        <span>Subtotal: </span>
+        <b>{formattedProductSubTotal}</b>
+      </Text>
+
+      <Button colorScheme="green" size="sm" leftIcon={<Icon name="plus" />}>
+        Tambah Keranjang
+      </Button>
     </Stack>
   )
 }

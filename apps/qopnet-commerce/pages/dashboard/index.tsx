@@ -3,17 +3,17 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useUser } from 'use-supabase'
 import {
-  Heading,
-  Divider,
-  Stack,
   Box,
-  Text,
-  SimpleGrid,
-  Stat,
-  StatLabel,
-  StatNumber,
-  StatHelpText,
   Button,
+  Divider,
+  Heading,
+  SimpleGrid,
+  Spinner,
+  Stack,
+  Stat,
+  StatHelpText,
+  StatLabel,
+  Text,
   useColorModeValue,
 } from '@chakra-ui/react'
 
@@ -21,11 +21,7 @@ import { Layout, Icon } from '@qopnet/qopnet-ui'
 import { useSWR } from '../../utils/swr'
 
 /**
- * Dashboard to choose to:
- * 1. Continue shopping
- * 2. Create supplier
- * 3. Create supplier product
- * 4. Go to owned suppliers
+ * Dashboard for links and manading suppliers.
  */
 const DashboardPage = () => {
   const { data, error } = useSWR('/api/profiles/my')
@@ -42,7 +38,12 @@ const DashboardPage = () => {
   return (
     <Layout>
       {error && <Text>Gagal memuat profil Anda</Text>}
-      {!error && !profile && <Text>Memuat profil...</Text>}
+      {!error && !profile && (
+        <Stack>
+          <Spinner />
+          <Text>Memuat profil...</Text>
+        </Stack>
+      )}
       {!error && profile && <DashboardContent profile={profile} />}
     </Layout>
   )
