@@ -42,12 +42,15 @@ const DashboardPage = () => {
   return (
     <Layout>
       {error && <Text>Gagal memuat profil Anda</Text>}
-      {!error && !profile && <Text>Memuat profil Anda...</Text>}
+      {!error && !profile && <Text>Memuat profil...</Text>}
       {!error && profile && <DashboardContent profile={profile} />}
     </Layout>
   )
 }
 
+/**
+ * Jika belum ada profil, maka hanya ada button buat profil
+ */
 export const DashboardContent = ({ profile }) => {
   return (
     <Stack mt={10} spacing={10}>

@@ -8,9 +8,11 @@ import {
   Text,
   VStack,
   Stack,
+  SimpleGrid,
 } from '@chakra-ui/react'
+import { useUser } from 'use-supabase'
 
-import { Layout } from '@qopnet/qopnet-ui'
+import { Layout, SupplierProductCard } from '@qopnet/qopnet-ui'
 import { useSWR } from '../../utils/swr'
 
 const SupplierParamPage = () => {
@@ -25,6 +27,7 @@ const SupplierParamPage = () => {
 }
 
 export const SupplierContainer = ({ supplierParam }) => {
+  const user = useUser()
   const { data, error } = useSWR(`/api/suppliers/${supplierParam}`)
   const { supplier } = data || {}
 
@@ -55,9 +58,20 @@ export const SupplierContainer = ({ supplierParam }) => {
             <Divider />
 
             {!supplier?.supplierProducts?.length && (
-              <Text>Toko supplier belum memiliki produk.</Text>
+              <Stack>
+                <Heading as="h3" size="lg">
+                  Toko supplier belum memiliki produk
+                </Heading>
+                {user && supplier.owner.user.id === user.id ? (
+                  <Stack>
+                    <Text>Ayo tambahkan produk untuk supplier Anda</Text>
+                  </Stack>
+                ) : (
+                  <Text>Maaf, toko supplier ini baru mulai ternyata.</Text>
+                )}
+              </Stack>
             )}
-            {supplier?.supplierProducts?.length && (
+            {supplier?.supplierProducts && (
               <SupplierProducts products={supplier.supplierProducts} />
             )}
           </Stack>
@@ -69,11 +83,11 @@ export const SupplierContainer = ({ supplierParam }) => {
 
 export const SupplierProducts = ({ products }) => {
   return (
-    <Stack>
+    <SimpleGrid spacing={5} columns={[2, 2, 4]}>
       {products.map((product, index) => {
-        return <Stack>{product.name}</Stack>
+        return <SupplierProductCard product={product} />
       })}
-    </Stack>
+    </SimpleGrid>
   )
 }
 

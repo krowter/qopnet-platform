@@ -38,7 +38,11 @@ router.get('/:supplierParam', async (req, res) => {
         handle: supplierParam,
       },
       include: {
-        owner: true,
+        owner: {
+          include: {
+            user: true,
+          },
+        },
         addresses: true,
         supplierProducts: true,
       },
