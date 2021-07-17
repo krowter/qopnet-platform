@@ -8,6 +8,8 @@ import {
   HStack,
   Heading,
   Text,
+  Flex,
+  Avatar,
   Spinner,
   VStack,
   Stack,
@@ -15,8 +17,9 @@ import {
 } from '@chakra-ui/react'
 import { useUser } from 'use-supabase'
 
-import { Layout, SupplierProductCard } from '@qopnet/qopnet-ui'
-import { useSWR } from '../../utils/swr'
+import { Layout, Icon, SupplierProductCard } from '@qopnet/qopnet-ui'
+import { NextLinkButton } from '../../components'
+import { useSWR } from '../../utils'
 
 const SupplierParamPage = () => {
   const router = useRouter()
@@ -50,33 +53,36 @@ export const SupplierContainer = ({ supplierParam }) => {
           />
           <Stack spacing={10} w="100%">
             <Stack>
-              <Heading as="h1" size="xl">
-                {supplier?.name}
-              </Heading>
-
-              <HStack>
-                <Tag colorScheme="green">
-                  {supplier?.category === 'PRODUCER'
-                    ? 'Produsen'
-                    : 'Distributor'}
-                </Tag>
-                {supplier?.phone && <span>{supplier?.phone}</span>}
-              </HStack>
-
-              <HStack>
-                {supplier?.addresses?.map((address, index) => {
-                  return (
-                    <Text key={cuid()}>
-                      <span>{address?.street}, </span>
-                      <span>{address?.streetDetails}, </span>
-                      <span>{address?.city}, </span>
-                      <span>{address?.state} </span>
-                      <span>{address?.zip}, </span>
-                      <span>Indonesia</span>
-                    </Text>
-                  )
-                })}
-              </HStack>
+              <Flex id="supplier-brand">
+                <Avatar size="xl" name={supplier?.name} />
+                <Stack ml={5}>
+                  <Heading as="h1" size="xl">
+                    {supplier?.name}
+                  </Heading>
+                  <HStack>
+                    <Tag colorScheme="green">
+                      {supplier?.category === 'PRODUCER'
+                        ? 'Produsen'
+                        : 'Distributor'}
+                    </Tag>
+                    {supplier?.phone && <span>{supplier?.phone}</span>}
+                  </HStack>
+                  <HStack>
+                    {supplier?.addresses?.map((address, index) => {
+                      return (
+                        <Text key={cuid()}>
+                          <span>{address?.street}, </span>
+                          <span>{address?.streetDetails}, </span>
+                          <span>{address?.city}, </span>
+                          <span>{address?.state} </span>
+                          <span>{address?.zip}, </span>
+                          <span>Indonesia</span>
+                        </Text>
+                      )
+                    })}
+                  </HStack>
+                </Stack>
+              </Flex>
             </Stack>
 
             <Divider />
@@ -87,11 +93,19 @@ export const SupplierContainer = ({ supplierParam }) => {
                   Toko supplier belum memiliki produk
                 </Heading>
                 {user && supplier.owner.user.id === user.id ? (
-                  <Stack>
+                  <Stack align="flex-start" spacing={5}>
                     <Text>Ayo tambahkan produk untuk supplier Anda</Text>
+                    <NextLinkButton
+                      colorScheme="green"
+                      size="sm"
+                      leftIcon={<Icon name="plus" />}
+                      href={`/${supplier.handle}/create-supplier-product`}
+                    >
+                      Tambahkan produk
+                    </NextLinkButton>
                   </Stack>
                 ) : (
-                  <Text>Maaf, toko supplier ini baru mulai ternyata.</Text>
+                  <Text>Maaf, toko supplier ini baru mulai</Text>
                 )}
               </Stack>
             )}
