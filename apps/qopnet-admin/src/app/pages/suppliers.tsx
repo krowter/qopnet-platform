@@ -1,7 +1,9 @@
 import {
   Avatar,
   Box,
+  Button,
   Flex,
+  SimpleGrid,
   Spinner,
   Table,
   TableCaption,
@@ -12,10 +14,12 @@ import {
   Th,
   Thead,
   Tr,
+  useColorModeValue,
   VStack,
 } from '@chakra-ui/react'
 
 import { Supplier } from '@qopnet/shared-types'
+import { Link } from 'react-router-dom'
 import { DefaultLayout } from '../layouts'
 import { useSWR } from '../utils/swr'
 
@@ -34,7 +38,16 @@ export const SuppliersPage = () => {
           <Text ml={5} fontWeight={500}>
             {suppliers?.length ?? 0} supplier
           </Text>
-          <Box ml="auto" h={5} w={5} borderRadius={20} bg="#4C2602" />
+          <Button
+            as={Link}
+            ml="auto"
+            variant="outline"
+            size="xs"
+            colorScheme="orange.900"
+            to="/suppliers/add"
+          >
+            Tambah Supplier
+          </Button>
         </Flex>
 
         {error && (
@@ -47,30 +60,48 @@ export const SuppliersPage = () => {
             <Spinner color="orange.500" />
           </Box>
         )}
-
-        {suppliers?.length && (
-          <VStack id="suppliers-all" mt={5} spacing={10}>
-            <Table variant="simple" size="sm">
-              <Tbody>
-                {suppliers.map((supplier: Supplier, index: number) => {
-                  return (
-                    <Tr key={`${supplier?.name ?? ''}-${index}`}>
-                      <Td>#{index}</Td>
-                      <Td>
-                        <Avatar size="xs" name={supplier.name} />
-                      </Td>
-                      <Td>{supplier?.handle}</Td>
-                      <Td>{supplier?.name}</Td>
-                      <Td>{supplier?.nationalTax}</Td>
-                      <Td>{supplier?.certificationFile}</Td>
-                    </Tr>
-                  )
-                })}
-              </Tbody>
-            </Table>
-          </VStack>
-        )}
+        <SupplierRows suppliers={suppliers} />
       </Box>
     </DefaultLayout>
+  )
+}
+
+export const SupplierRows = ({ suppliers }: { suppliers: any[] }) => {
+  const bg = useColorModeValue('gray.50', 'gray.900')
+  const border = useColorModeValue('gray.200', 'gray.700')
+
+  if (!suppliers) {
+    return <div>No products</div>
+  }
+  return (
+    <Box mt={2}>
+      {suppliers.map((supplier: any, index: number) => {
+        const supplierHandle = { handle: 'placeholder' }
+        return (
+          <SimpleGrid
+            spacingX={3}
+            columns={{ base: 1, md: 3 }}
+            as={Link}
+            key={`${supplier.id}`}
+            to={`/suppliers/${supplier.handle}`}
+            w="100%"
+            px={5}
+            py={3}
+            bg={bg}
+            borderBottom="1px solid gray"
+            borderColor={border}
+            gridTemplateColumns="50px 50px repeat(5, 1fr)"
+          >
+            <Text>#{index}</Text>
+            <Avatar size="xs" name={supplier.name} />
+            <Text>{supplier.name}</Text>
+            <Text>{supplier.handle}</Text>
+            <Text>{supplier.sku}</Text>
+            <Text>{supplier.nationalTax}</Text>
+            <Text>{supplier.certificationFile}</Text>
+          </SimpleGrid>
+        )
+      })}
+    </Box>
   )
 }

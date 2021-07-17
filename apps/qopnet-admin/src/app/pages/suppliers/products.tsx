@@ -1,33 +1,19 @@
 import { Prisma } from '@prisma/client'
 import {
-  Avatar,
   Box,
+  Button,
   Flex,
+  SimpleGrid,
   Spinner,
-  Table,
-  Tbody,
-  Td,
   Text,
-  Tr,
-  VStack,
+  useColorModeValue,
 } from '@chakra-ui/react'
 import { Link, useHistory } from 'react-router-dom'
 
 import { DefaultLayout } from '../../layouts'
 import { useSWR } from '../../utils/swr'
 
-const truncateString = (str: string, num: number) => {
-  // If the length of str is less than or equal to num
-  // just return str--don't truncate it.
-  if (str.length <= num) {
-    return str
-  }
-  // Return str truncated with '...' concatenated to the end of str.
-  return str.slice(0, num) + '...'
-}
-
 export const SuppliersProductsPage = () => {
-  const history = useHistory()
   const { data, error } = useSWR('/api/suppliers/products')
   const { supplierProducts } = data || {}
 
@@ -42,7 +28,16 @@ export const SuppliersProductsPage = () => {
           <Text ml={5} fontWeight={500}>
             {supplierProducts?.length ?? 0} produk
           </Text>
-          <Box ml="auto" h={5} w={5} borderRadius={20} bg="#4C2602" />
+          <Button
+            as={Link}
+            ml="auto"
+            variant="outline"
+            size="xs"
+            colorScheme="orange.900"
+            to="/suppliers/products/add"
+          >
+            Tambah Produk
+          </Button>
         </Flex>
         {error && (
           <Box px={5} py={3}>
@@ -54,71 +49,51 @@ export const SuppliersProductsPage = () => {
             <Spinner color="orange.500" />
           </Box>
         )}
-        {supplierProducts?.length && (
-          <VStack id="suppliers-all" mt={5} spacing={10}>
-            <Table variant="simple" size="sm">
-              <Tbody>
-                {supplierProducts.map(
-                  (
-                    supplierProduct: Prisma.SupplierProductCreateInput,
-                    index: number
-                  ) => {
-                    /**
-                     * Temporary until :supplierParam can be
-                     * retrieved from supplierProduct.supplier.handle
-                     */
-                    const supplier = { handle: 'placeholder' }
-
-                    return (
-                      <Tr
-                        as={Link}
-                        key={`${supplierProduct.id}`}
-                        to={`/suppliers/${supplier.handle}/products/${supplierProduct.slug}`}
-                        display="table-row"
-                      >
-                        <Td>#{index}</Td>
-                        <Td>
-                          <Avatar
-                            size="xs"
-                            name={supplierProduct.name ?? 'product'}
-                          />
-                        </Td>
-                        <Td>{supplierProduct.name}</Td>
-                        <Td>{supplierProduct.slug}</Td>
-                        <Td>{supplierProduct.sku}</Td>
-                        <Td>{supplierProduct.images}</Td>
-                        <Td>{supplierProduct.price ?? '0'}</Td>
-                        <Td>{supplierProduct.priceMin ?? '0'}</Td>
-                        <Td>{supplierProduct.priceMax ?? '0'}</Td>
-                        <Td>
-                          {supplierProduct.description
-                            ? truncateString(supplierProduct.description, 20)
-                            : '-'}
-                          {/* <div
-                            dangerouslySetInnerHTML={{
-                              __html:
-                                supplierProduct.description?.replace(
-                                  /\n/gi,
-                                  '<br>'
-                                ) ?? '',
-                            }}
-                          /> */}
-                          {/* <div>
-                            {supplierProduct.description?.replace(
-                              /\n/i,
-                              '<br>'
-                            )}
-                          </div> */}
-                        </Td>
-                      </Tr>
-                    )
-                  }
-                )}
-              </Tbody>
-            </Table>
-          </VStack>
-        )}
+        <SupplierProductRows supplierProducts={supplierProducts} />
       </Box>
     </DefaultLayout>
+  )
+}
+
+export const SupplierProductRows = ({
+  supplierProducts,
+}: {
+  supplierProducts: any[]
+}) => {
+  const bg = useColorModeValue('gray.50', 'gray.900')
+  const border = useColorModeValue('gray.200', 'gray.700')
+
+  if (!supplierProducts) {
+    return <div>No products</div>
+  }
+  return (
+    <Box mt={2}>
+      {supplierProducts.map((supplierProduct: any, index: number) => {
+        const supplier = { handle: 'placeholder' }
+        return (
+          <SimpleGrid
+            spacingX={3}
+            columns={{ base: 1, md: 3 }}
+            as={Link}
+            key={`${supplierProduct.id}`}
+            to={`/suppliers/${supplier.handle}/products/${supplierProduct.slug}`}
+            w="100%"
+            px={5}
+            py={3}
+            bg={bg}
+            borderBottom="1px solid gray"
+            borderColor={border}
+            gridTemplateColumns="repeat(6, 1fr)"
+          >
+            <Text>{supplierProduct.name}</Text>
+            <Text>{supplierProduct.slug}</Text>
+            <Text>{supplierProduct.sku}</Text>
+            <Text>{supplierProduct.price ?? '0'}</Text>
+            <Text>{supplierProduct.priceMin ?? '0'}</Text>
+            <Text>{supplierProduct.priceMax ?? '0'}</Text>
+          </SimpleGrid>
+        )
+      })}
+    </Box>
   )
 }
