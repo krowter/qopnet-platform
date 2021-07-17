@@ -1,11 +1,74 @@
-import { Layout } from '@qopnet/qopnet-ui'
+import NextLink from 'next/link'
+import { Supplier, Profile, Address } from '@prisma/client'
+import {
+  Heading,
+  Stack,
+  Text,
+  SimpleGrid,
+  HStack,
+  Spinner,
+  useColorModeValue,
+} from '@chakra-ui/react'
 
-const suppliersPage = () => {
+import { Layout } from '@qopnet/qopnet-ui'
+import { useSWR } from '../../utils/swr'
+
+const SuppliersPage = () => {
+  const { data, error } = useSWR('/api/suppliers')
+  const { suppliers } = data || {}
+
   return (
-    <Layout>
-      <h1>Semua toko supplier</h1>
+    <Layout pt={10}>
+      {error && <Text>Gagal memuat semua supplier</Text>}
+      {!error && !suppliers && (
+        <HStack>
+          <Spinner />
+          <Text>Memuat semua supplier...</Text>
+        </HStack>
+      )}
+      {!error && suppliers && (
+        <SimpleGrid columns={2} spacing={5} minChildWidth="500px">
+          {suppliers.map((supplier, index) => {
+            return <SupplierCardLink supplier={supplier} />
+          })}
+        </SimpleGrid>
+      )}
     </Layout>
   )
 }
 
-export default suppliersPage
+export const SupplierCardLink = ({
+  supplier,
+}: {
+  supplier: Supplier & {
+    owner: Profile
+    addresses: Address[]
+  }
+}) => {
+  return (
+    <NextLink href={`/${supplier.handle}`} passHref>
+      <Stack
+        id="supplier-info"
+        as="a"
+        p={5}
+        boxShadow="xs"
+        rounded="base"
+        bg={useColorModeValue('gray.50', 'gray.900')}
+      >
+        <Heading as="h4" size="md">
+          {supplier.name}
+        </Heading>
+        <Text>
+          Dimiliki oleh <b>{supplier.owner.name}</b>
+        </Text>
+        {supplier?.addresses[0]?.city && (
+          <Text>
+            {supplier.addresses[0].city}, {supplier.addresses[0].state}
+          </Text>
+        )}
+      </Stack>
+    </NextLink>
+  )
+}
+
+export default SuppliersPage

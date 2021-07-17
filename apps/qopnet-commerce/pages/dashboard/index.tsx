@@ -1,31 +1,28 @@
-import NextLink from 'next/link'
 import { useEffect } from 'react'
+import NextLink from 'next/link'
 import { useRouter } from 'next/router'
-import { useUser } from 'use-supabase'
+import { NextSeo } from 'next-seo'
 import {
-  Heading,
-  Divider,
-  Stack,
   Box,
-  Text,
-  SimpleGrid,
-  Stat,
-  StatLabel,
-  StatNumber,
-  StatHelpText,
   Button,
+  HStack,
+  Heading,
+  SimpleGrid,
+  Spinner,
+  Stack,
+  Stat,
+  StatHelpText,
+  StatLabel,
+  Text,
   useColorModeValue,
 } from '@chakra-ui/react'
+import { useUser } from 'use-supabase'
 
 import { Layout, Icon } from '@qopnet/qopnet-ui'
 import { useSWR } from '../../utils/swr'
 
 /**
- * Dashboard to choose to:
- * 1. Continue shopping
- * 2. Create supplier
- * 3. Create supplier product
- * 4. Go to owned suppliers
+ * Dashboard for links and manading suppliers.
  */
 const DashboardPage = () => {
   const { data, error } = useSWR('/api/profiles/my')
@@ -40,10 +37,15 @@ const DashboardPage = () => {
   }, [user, router])
 
   return (
-    <Layout>
+    <Layout pt={10}>
       {error && <Text>Gagal memuat profil Anda</Text>}
-      {!error && !profile && <Text>Memuat profil...</Text>}
-      {!error && profile && <DashboardContent profile={profile} />}
+      {!error && !data && (
+        <HStack>
+          <Spinner />
+          <Text>Memuat profil...</Text>
+        </HStack>
+      )}
+      {!error && data && <DashboardContent profile={profile} />}
     </Layout>
   )
 }
@@ -53,14 +55,18 @@ const DashboardPage = () => {
  */
 export const DashboardContent = ({ profile }) => {
   return (
-    <Stack mt={10} spacing={10}>
+    <Stack spacing={10}>
+      <NextSeo title="Dasbor saya - Qopnet" />
+
       <Stack id="dashboard-title">
-        <Heading as="h1">Dasbor</Heading>
-        <Text>
-          <span>{profile.user.email} / </span>
-          <span>@{profile.handle} / </span>
-          <span>{profile.phone}</span>
-        </Text>
+        <Heading as="h1">Dasbor Saya</Heading>
+        {profile && (
+          <Text>
+            <span>{profile.user.email} / </span>
+            <span>@{profile.handle} / </span>
+            <span>{profile.phone}</span>
+          </Text>
+        )}
       </Stack>
 
       <Stack
@@ -72,35 +78,47 @@ export const DashboardContent = ({ profile }) => {
           <Heading as="h3" size="md">
             Mau apa?
           </Heading>
-          <Stack>
-            <DashboardActionLink name="shop" href="/shop">
-              Lanjut belanja
-            </DashboardActionLink>
-            <DashboardActionLink name="profile" href="/create-profile">
-              Ubah profil saya
-            </DashboardActionLink>
-            <DashboardActionLink name="supplier" href="/create-supplier">
-              Membuat toko supplier baru
-            </DashboardActionLink>
-            <DashboardActionLink
-              name="supplier-product"
-              href="/create-supplier-product"
-            >
-              Membuat produk supplier baru
-            </DashboardActionLink>
-          </Stack>
+          {!profile && (
+            <Stack w="300px">
+              <DashboardActionLink name="shop" href="/shop">
+                Lanjut belanja
+              </DashboardActionLink>
+              <DashboardActionLink name="profile" href="/create-profile">
+                Buat profil saya
+              </DashboardActionLink>
+            </Stack>
+          )}
+          {profile && (
+            <Stack w="300px">
+              <DashboardActionLink name="shop" href="/shop">
+                Lanjut belanja
+              </DashboardActionLink>
+              <DashboardActionLink name="profile" href="/create-profile">
+                Ubah profil saya
+              </DashboardActionLink>
+              <DashboardActionLink name="supplier" href="/create-supplier">
+                Membuat toko supplier
+              </DashboardActionLink>
+            </Stack>
+          )}
         </Stack>
 
         {/* Only show owned suppliers list when exist */}
-        <Stack id="dashboard-suppliers" spacing={5}>
+        <Stack id="dashboard-suppliers" spacing={5} maxW="500px">
           <Heading as="h3" size="md">
             List toko supplier milik saya
           </Heading>
 
           <Stack align="flex-start" spacing={5}>
-            {!profile?.suppliers?.length && (
+            {!profile && (
+              <Text>Buat profil dahulu jika mau membuat toko supplier</Text>
+            )}
+            {profile?.name && !profile?.suppliers?.length && (
               <>
-                <Text>Saya bukan supplier atau belum memiliki supplier</Text>
+                <Text>
+                  Saya bukan supplier atau belum memiliki supplier. Silakan buat
+                  supplier dahulu jika ingin menambahkan produk.
+                </Text>
                 <DashboardActionLink
                   name="plus"
                   href="/create-supplier"
@@ -111,7 +129,7 @@ export const DashboardContent = ({ profile }) => {
                 </DashboardActionLink>
               </>
             )}
-            {profile?.suppliers?.length && (
+            {profile?.name && profile?.suppliers?.length && (
               <>
                 <SimpleGrid
                   columns={2}

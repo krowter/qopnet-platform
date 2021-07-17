@@ -16,7 +16,7 @@ const SearchPage = () => {
   const { q: keyword } = router.query
 
   return (
-    <Layout>
+    <Layout pt={10}>
       {!keyword && <SearchBegin />}
       {keyword && <SearchResults keyword={keyword} />}
     </Layout>
@@ -25,7 +25,7 @@ const SearchPage = () => {
 
 export const SearchBegin = () => {
   return (
-    <Stack pt={10} spacing={5}>
+    <Stack spacing={5}>
       <Heading as="h1" size="xl">
         Cari produk dan toko supplier
       </Heading>

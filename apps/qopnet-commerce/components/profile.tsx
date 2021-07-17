@@ -1,6 +1,7 @@
+import { useState } from 'react'
 import NextLink from 'next/link'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { NextSeo } from 'next-seo'
 import {
   Button,
   Text,
@@ -23,6 +24,7 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 import { useUser, useSupabase } from 'use-supabase'
 
 import { Icon } from '@qopnet/qopnet-ui'
+import { postToAPI } from '../utils/fetch'
 
 export type ProfileData = {
   // Profile
@@ -41,7 +43,7 @@ export type ProfileData = {
   }
 }
 
-export const CreateProfileForm = () => {
+export const CreateProfileForm = ({ profile }) => {
   const router = useRouter()
   const toast = useToast()
   const user = useUser()
@@ -53,7 +55,12 @@ export const CreateProfileForm = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ProfileData>()
+  } = useForm<ProfileData>({
+    defaultValues: {
+      ...profile,
+      address: profile?.addresses[0],
+    },
+  })
 
   // Create profile process and toast
   const handleSubmitCreateProfile: SubmitHandler<ProfileData> = async (
@@ -61,28 +68,27 @@ export const CreateProfileForm = () => {
   ) => {
     try {
       setLoading(true)
+      // This will use PUT instead of POST
+      // Adaptive create or update
+      const data = await postToAPI('/api/profiles', {
+        ...profileFormData,
+      })
+      if (!data) throw new Error('Update profile response error')
+      console.log({ data })
 
-      // Mutate to create profile via POST /api/profiles
-      console.log({ profileFormData })
-
-      const profile = true
-      const error = false
-
-      if (profile) {
-        toast({ title: 'Berhasil membuat profil', status: 'success' })
-        router.push('/dashboard')
-      } else if (error) {
-        throw new Error('Gagal membuat profil')
-      }
+      toast({ title: 'Berhasil menyimpan profil', status: 'success' })
+      router.push(`/dashboard`)
     } catch (error) {
-      toast({ title: 'Gagal membuat profil', status: 'error' })
+      toast({ title: 'Gagal menyimpan profil', status: 'error' })
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <VStack mt={20} spacing={10}>
+    <VStack spacing={10}>
+      <NextSeo title="Profil dan alamat - Qopnet" />
+
       <VStack>
         <Stack align="center">
           <Heading as="h1" size="xl">
@@ -229,11 +235,11 @@ export const CreateProfileForm = () => {
 
           <Button
             isLoading={loading}
-            loadingText="Membuat profil..."
+            loadingText="Menyimpan profil dan alamat..."
             colorScheme="orange"
             type="submit"
           >
-            Buat Profil dan Alamat
+            Simpan Profil dan Alamat
           </Button>
         </Stack>
       </SimpleGrid>

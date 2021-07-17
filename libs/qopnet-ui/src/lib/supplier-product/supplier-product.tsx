@@ -3,7 +3,7 @@
 
 import NextLink from 'next/link'
 import NextImage from 'next/image'
-import { SupplierProduct } from '@prisma/client'
+import { SupplierProduct, Supplier, Profile, Address } from '@prisma/client'
 import { Decimal } from '@prisma/client/runtime'
 import {
   Box,
@@ -12,7 +12,7 @@ import {
   Flex,
   Heading,
   IconButton,
-  Image as ChakraImage,
+  Button,
   ListItem,
   Input,
   SimpleGrid,
@@ -22,6 +22,8 @@ import {
   useMediaQuery,
   useNumberInput,
   VStack,
+  useColorModeValue,
+  useToast,
 } from '@chakra-ui/react'
 
 import { formatDateTime } from '@qopnet/util-format'
@@ -72,7 +74,17 @@ export interface SupplierProductPriceProps {
 }
 
 export interface SupplierProductDetailProps {
-  product: SupplierProduct
+  product: SupplierProduct & {
+    supplier: Supplier & {
+      owner: Profile
+      addresses: Address[]
+    }
+    dimension?: {
+      width: number
+      height: number
+      length: number
+    }
+  }
 }
 
 export const HomeProductCategory = (props: HomeProductCategoryProps) => {
@@ -128,7 +140,7 @@ export const SupplierProductsGrid = ({
     <SimpleGrid spacing={5} columns={[2, 2, 4]}>
       {supplierProducts?.map((product, index) => {
         return (
-          <SupplierProductCard key={product.slug || index} product={product} />
+          <SupplierProductCard key={product?.slug || index} product={product} />
         )
       })}
     </SimpleGrid>
@@ -136,25 +148,25 @@ export const SupplierProductsGrid = ({
 }
 
 export const SupplierProductCard = ({ product }: SupplierProductCardProps) => {
-  const productImages = product.images as string[]
+  const productImages = product?.images as string[]
   const productImageThumbnail = productImages?.length
     ? productImages[0]
     : defaultSupplierProductImages[0]
 
   return (
-    <NextLink href={`/products/${product.slug}`} passHref>
+    <NextLink href={`/products/${product?.slug}`} passHref>
       <Stack as="a" spacing={3} py={5}>
         {productImageThumbnail && (
           <NextImage
             src={productImageThumbnail}
-            alt={product.name || 'Product image'}
+            alt={product?.name || 'Product image'}
             layout="responsive"
             width={300}
             height={300}
           />
         )}
         <Heading as="h3" size={'md'} fontWeight="black">
-          {product.name}
+          {product?.name}
         </Heading>
         <SupplierProductPrice product={product} />
       </Stack>
@@ -172,28 +184,28 @@ export const SupplierProductPrice = ({
    * 3. Min
    * 4. Max
    */
-  if (product.price) {
+  if (product?.price) {
     return (
       <Text fontWeight="bold" fontSize={fontSize}>
-        {formatPrice(product.price)}
+        {formatPrice(product?.price)}
       </Text>
     )
-  } else if (product.priceMin && product.priceMax) {
+  } else if (product?.priceMin && product?.priceMax) {
     return (
       <Text fontWeight="bold" fontSize={fontSize}>
-        {formatPrice(product.priceMin)} – {formatPrice(product.priceMax)}
+        {formatPrice(product?.priceMin)} – {formatPrice(product?.priceMax)}
       </Text>
     )
-  } else if (product.priceMin) {
+  } else if (product?.priceMin) {
     return (
       <Text fontWeight="bold" fontSize={fontSize}>
-        {formatPrice(product.priceMin)}
+        {formatPrice(product?.priceMin)}
       </Text>
     )
-  } else if (product.priceMax) {
+  } else if (product?.priceMax) {
     return (
       <Text fontWeight="bold" fontSize={fontSize}>
-        {formatPrice(product.priceMax)}
+        {formatPrice(product?.priceMax)}
       </Text>
     )
   } else {
@@ -228,15 +240,21 @@ export const SupplierProductDetail = ({
 
   const [isDesktop] = useMediaQuery('(min-width: 60em)')
 
+  const { width, height, length } = product?.dimension || {
+    width: 0,
+    heigth: 0,
+    length: 0,
+  }
+
   return (
-    <Stack pt={10} spacing={20}>
+    <Stack spacing={20}>
       <Stack direction={isDesktop ? 'row' : 'column'} spacing={10}>
         <Stack id="product-images">
           <Box display="inherit">
             <NextImage
-              key={product.slug + '-first'}
+              key={product?.slug + '-first'}
               src={productImageFirst}
-              alt={product.name || 'First product image'}
+              alt={product?.name || 'First product image'}
               layout="fixed"
               width={420}
               height={420}
@@ -246,12 +264,12 @@ export const SupplierProductDetail = ({
             {productImages.map((imageUrl: string, index) => {
               return (
                 <Box
-                  key={`${product.slug}-${index}-${product.id}`}
+                  key={`${product?.slug}-${index}-${product?.id}`}
                   display="inherit"
                 >
                   <NextImage
                     src={imageUrl}
-                    alt={product.name || 'Small product image'}
+                    alt={product?.name || 'Small product image'}
                     layout="fixed"
                     width={100}
                     height={100}
@@ -265,16 +283,18 @@ export const SupplierProductDetail = ({
         <Stack id="product-info-sections" spacing={5} w="100%" maxW="500px">
           <Stack id="product-info-name-price">
             <Heading as="h2" size="lg">
-              {product.name}
+              {product?.name}
             </Heading>
 
             <Stack id="product-price-unit" spacing={3}>
-              <Text>Detail tidak diketahui</Text>
+              {product?.subname && <Text>{product?.subname}</Text>}
               <Flex alignItems="center">
                 <Box color="green.500">
                   <SupplierProductPrice product={product} fontSize="3xl" />
                 </Box>
-                <Text ml={3}> / 1 crate / 15 kg</Text>
+                {product?.weightDetails && (
+                  <Text ml={3}> untuk {product?.weightDetails}</Text>
+                )}
               </Flex>
             </Stack>
           </Stack>
@@ -287,31 +307,27 @@ export const SupplierProductDetail = ({
 
           <Stack id="product-detail">
             <Text>
-              Kode SKU: <b>{product.sku}</b>
+              Kode SKU: <b>{product?.sku}</b>
             </Text>
-            <Text>
-              Berat: <b>Tidak diketahui</b>
-            </Text>
-            <Text>{product.description}</Text>
+            {product?.weight && product?.weightUnit && (
+              <Text>
+                Berat:{' '}
+                <b>
+                  {product?.weightUnit} {product?.weight}
+                </b>
+              </Text>
+            )}
           </Stack>
 
           <Divider variant="dashed" />
 
-          <Stack id="supplier-info">
-            <Text>
-              Toko Supplier: <b>{product.supplierId}</b>
-            </Text>
-            <Text>
-              Pemilik: <b>{product.ownerId}</b>
-            </Text>
-            <Text>
-              Dikirim dari <b>Kota tidak diketahui</b>
-            </Text>
-            <Text>
-              Dijual mulai <b>{formatDateTime(product.createdAt)}</b>
-            </Text>
-            <Text>
-              Terakhir diubah <b>{formatDateTime(product.updatedAt)}</b>
+          <Stack>
+            {product?.supplier?.handle && (
+              <SupplierCardForProductLink supplier={product?.supplier} />
+            )}
+            <Text fontSize="xs">
+              Dijual sejak <b>{formatDateTime(product?.createdAt)}</b>. Diubah
+              sejak <b>{formatDateTime(product?.updatedAt)}</b>
             </Text>
           </Stack>
         </Stack>
@@ -327,7 +343,11 @@ export const SupplierProductDetail = ({
           <Heading as="h5" size="md">
             Deskripsi
           </Heading>
-          <Text>Produk ini sangat bagus.</Text>
+          {product?.description ? (
+            <Text>{product?.description}</Text>
+          ) : (
+            <Text>Tidak ada deskripsi.</Text>
+          )}
         </Stack>
         <Stack>
           <Heading as="h5" size="md">
@@ -335,9 +355,9 @@ export const SupplierProductDetail = ({
           </Heading>
           <Box>
             <UnorderedList>
-              <ListItem>Panjang: 200 cm</ListItem>
-              <ListItem>Tinggi: 78 cm</ListItem>
-              <ListItem>Lebar: 120 cm</ListItem>
+              {width && <ListItem>Lebar: {width} cm</ListItem>}
+              {height && <ListItem>Tingi: {height} cm</ListItem>}
+              {length && <ListItem>Panjang: {length} cm</ListItem>}
             </UnorderedList>
           </Box>
         </Stack>
@@ -346,28 +366,81 @@ export const SupplierProductDetail = ({
   )
 }
 
+export const SupplierCardForProductLink = ({
+  supplier,
+}: {
+  supplier: Supplier & {
+    owner: Profile
+    addresses: Address[]
+  }
+}) => {
+  return (
+    <NextLink href={`/${supplier.handle}`} passHref>
+      <Stack
+        id="supplier-info"
+        as="a"
+        p={5}
+        boxShadow="xs"
+        rounded="base"
+        bg={useColorModeValue('gray.50', 'gray.900')}
+      >
+        <Heading as="h4" size="md">
+          {supplier.name}
+        </Heading>
+        <Text>
+          Dimiliki oleh <b>{supplier.owner.name}</b>
+        </Text>
+        {supplier?.addresses && (
+          <Text>
+            Dikirim dari{' '}
+            <b>
+              {supplier.addresses[0].city}, {supplier.addresses[0].state}
+            </b>
+          </Text>
+        )}
+      </Stack>
+    </NextLink>
+  )
+}
+
 export const SupplierProductCartModifier = ({
   product,
 }: {
   product: SupplierProduct
 }) => {
-  const maxValue = 10
+  const toast = useToast()
+  const productMinOrder = product?.minOrder || 1
+  const productStock = product?.stock || 100
 
   // https://chakra-ui.com/docs/form/number-input#create-a-mobile-spinner
   const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
     useNumberInput({
       step: 1,
-      defaultValue: 0,
-      min: 0,
-      max: maxValue,
+      defaultValue: productMinOrder,
+      min: productMinOrder,
+      max: productStock,
     })
 
   const inc = getIncrementButtonProps()
   const dec = getDecrementButtonProps()
   const input = getInputProps()
 
+  // @ts-ignore
+  const productSubTotal = input.value
+  const formattedProductSubTotal = formatPrice(
+    Number(product?.price) * Number(productSubTotal)
+  )
+
+  const handleAddToCart = () => {
+    console.info({ productSubTotal })
+    toast({
+      title: `Berhasil menambah produk`,
+      description: `Subtotal: ${formattedProductSubTotal}`,
+    })
+  }
+
   return (
-    <Stack id="product-cart-modifier">
+    <Stack id="product-cart-modifier" alignItems="flex-start">
       <Heading as="h4" size="sm">
         Atur jumlah pembelian
       </Heading>
@@ -381,7 +454,25 @@ export const SupplierProductCartModifier = ({
           <Icon name="plus" />
         </IconButton>
       </ButtonGroup>
-      <Text fontSize="xs">Max. pembelian {maxValue} pcs</Text>
+
+      <Text fontSize="xs">
+        Pembelian min. {productMinOrder} pcs, max. {productStock} pcs
+      </Text>
+
+      <Text>
+        <span>Subtotal: </span>
+        <b>{formattedProductSubTotal}</b>
+      </Text>
+
+      <Button
+        disabled={!productSubTotal}
+        colorScheme="green"
+        size="sm"
+        leftIcon={<Icon name="plus" />}
+        onClick={handleAddToCart}
+      >
+        Tambah Keranjang
+      </Button>
     </Stack>
   )
 }

@@ -44,3 +44,4 @@ Thumbs.db
 
 # Exports from Figma
 _exports
+_*.json
