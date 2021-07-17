@@ -74,7 +74,7 @@ export const CreateSupplierForm = () => {
       }
 
       // Mutate to create supplier via POST /api/suppliers
-      console.log({ newSupplierData })
+      console.log(JSON.stringify(newSupplierData))
 
       const supplier = true
       const error = false

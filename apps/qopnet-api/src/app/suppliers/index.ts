@@ -1,9 +1,11 @@
 import { PrismaClient, SupplierProduct, Supplier } from '@prisma/client'
-const prisma = new PrismaClient()
-import * as express from 'express'
-const router = express.Router()
 import slugify from 'slugify'
+import * as express from 'express'
+
 import { checkUser } from '../auth/middleware'
+
+const prisma = new PrismaClient()
+const router = express.Router()
 
 router.get('/', async (req, res) => {
   try {
@@ -149,8 +151,12 @@ router.get(
  */
 router.post('/', checkUser, async (req, res) => {
   const userId = req.user.sub
-  const supplier: Supplier = req.body
-  const supplierHandle = slugify(supplier.name.toLowerCase())
+  const newSupplier = req.body
+  /**
+   * Currently omit Supplier type check because
+   * the request is still using address f, not addresses
+   */
+  const newSupplierHandle = slugify(newSupplier.name.toLowerCase())
 
   // Check if user exist by userId
   // This user findUnique can be a middleware later like in checkUser
@@ -159,25 +165,41 @@ router.post('/', checkUser, async (req, res) => {
       where: { id: userId },
       include: { profile: true },
     })
-
     if (!user) throw new Error('Failed to findUnique user')
-
     // Assign profileId once get the user
     const profileId = user.profile.id
 
+    // After got the profile or respective owner of the supplier
     try {
-      const newSupplier = await prisma.supplier.create({
+      const supplier = await prisma.supplier.create({
+        /**
+         * Manually arrange the supplier data,
+         * Don't use ...spread because it contains address object, not array
+         */
         data: {
-          ...supplier,
-          handle: supplierHandle,
+          name: newSupplier.name,
+          phone: newSupplier.phone,
+          category: newSupplier.category,
+          nationalTax: newSupplier.nationalTax,
+          certificationFile: newSupplier.certificationFile,
+          handle: newSupplierHandle,
           ownerId: profileId,
+          addresses: {
+            create: [newSupplier.address],
+            // Pass the address object as the first array item
+          },
+        },
+        include: {
+          owner: true,
+          addresses: true,
+          supplierProducts: true,
         },
       })
 
       // 200 OK
       res.json({
         message: 'Create new supplier',
-        supplier: newSupplier,
+        supplier: supplier,
       })
     } catch (error) {
       // 400 Client Error
@@ -185,8 +207,8 @@ router.post('/', checkUser, async (req, res) => {
         res.status(400).json({
           message:
             'Create new supplier failed because name/handle need to be unique',
-          name: supplier.name,
-          handle: supplierHandle,
+          name: newSupplier.name,
+          handle: newSupplierHandle,
           error,
         })
       } else if (error.code === 'P2003') {
@@ -205,7 +227,7 @@ router.post('/', checkUser, async (req, res) => {
       } else {
         // 500 Server Error
         res.status(500).json({
-          message: 'Create new supplier failed',
+          message: 'Create new supplier failed because unknown reason',
           error,
         })
       }
