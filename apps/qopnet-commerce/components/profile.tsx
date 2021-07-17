@@ -42,7 +42,7 @@ export type ProfileData = {
   }
 }
 
-export const CreateProfileForm = () => {
+export const CreateProfileForm = ({ profile }) => {
   const router = useRouter()
   const toast = useToast()
   const user = useUser()
@@ -54,7 +54,12 @@ export const CreateProfileForm = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ProfileData>()
+  } = useForm<ProfileData>({
+    defaultValues: {
+      ...profile,
+      address: profile?.addresses[0],
+    },
+  })
 
   // Create profile process and toast
   const handleSubmitCreateProfile: SubmitHandler<ProfileData> = async (
@@ -227,11 +232,11 @@ export const CreateProfileForm = () => {
 
           <Button
             isLoading={loading}
-            loadingText="Membuat profil..."
+            loadingText="Menyimpan profil dan alamat..."
             colorScheme="orange"
             type="submit"
           >
-            Buat Profil dan Alamat
+            Simpan Profil dan Alamat
           </Button>
         </Stack>
       </SimpleGrid>
