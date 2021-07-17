@@ -150,17 +150,18 @@ router.get(
  * POST /api/suppliers
  */
 router.post('/', checkUser, async (req, res) => {
-  const userId = req.user.sub
-  const newSupplier = req.body
   /**
    * Currently omit Supplier type check because
    * the request is still using address f, not addresses
    */
-  const newSupplierHandle = slugify(newSupplier.name.toLowerCase())
+  const userId = req.user.sub
+  const newSupplier = req.body
 
-  // Check if user exist by userId
-  // This user findUnique can be a middleware later like in checkUser
   try {
+    /**
+     * Check if user exist by userId
+     * This user findUnique can be a middleware later like in checkUser
+     */
     const user = await prisma.user.findFirst({
       where: { id: userId },
       include: { profile: true },
@@ -171,24 +172,27 @@ router.post('/', checkUser, async (req, res) => {
 
     // After got the profile or respective owner of the supplier
     try {
-      const supplier = await prisma.supplier.create({
-        /**
-         * Manually arrange the supplier data,
-         * Don't use ...spread because it contains address object, not array
-         */
-        data: {
-          name: newSupplier.name,
-          phone: newSupplier.phone,
-          category: newSupplier.category,
-          nationalTax: newSupplier.nationalTax,
-          certificationFile: newSupplier.certificationFile,
-          handle: newSupplierHandle,
-          ownerId: profileId,
-          addresses: {
-            create: [newSupplier.address],
-            // Pass the address object as the first array item
-          },
+      /**
+       * Manually arrange the supplier data,
+       * Don't use ...spread because it contains address object, not array
+       */
+      const payloadData = {
+        name: newSupplier.name,
+        handle: newSupplier.handle,
+        phone: newSupplier.phone,
+        category: newSupplier.category,
+        nationalTax: newSupplier.nationalTax,
+        certificationFile: newSupplier.certificationFile,
+        ownerId: profileId,
+        addresses: {
+          create: [newSupplier.address],
+          // Pass the address object as the first array item
         },
+      }
+
+      // Finally can create new supplier data via Prisma
+      const createdSupplier = await prisma.supplier.create({
+        data: payloadData,
         include: {
           owner: true,
           addresses: true,
@@ -198,8 +202,8 @@ router.post('/', checkUser, async (req, res) => {
 
       // 200 OK
       res.json({
-        message: 'Create new supplier',
-        supplier: supplier,
+        message: 'Create new supplier success',
+        supplier: createdSupplier,
       })
     } catch (error) {
       // 400 Client Error

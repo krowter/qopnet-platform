@@ -24,6 +24,7 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 import { useUser, useSupabase } from 'use-supabase'
 
 import { Icon } from '@qopnet/qopnet-ui'
+import { postToAPI } from '../utils/fetch'
 
 export type SupplierData = {
   // Supplier
@@ -66,25 +67,14 @@ export const CreateSupplierForm = () => {
     try {
       setLoading(true)
 
-      // Prepare new supplier data object first
-      // Before passing it as request body
-      const newSupplierData = {
+      const data = await postToAPI('/api/suppliers', {
         ...supplierFormData,
         handle: slugify(supplierFormData.handle.toLowerCase()),
-      }
+      })
+      if (!data) throw new Error('Create supplier response error')
 
-      // Mutate to create supplier via POST /api/suppliers
-      console.log(JSON.stringify(newSupplierData))
-
-      const supplier = true
-      const error = false
-
-      if (supplier) {
-        toast({ title: 'Berhasil membuat supplier', status: 'success' })
-        // router.push(`/${supplier.handle}`)
-      } else if (error) {
-        throw new Error('Gagal membuat supplier')
-      }
+      toast({ title: 'Berhasil membuat supplier', status: 'success' })
+      router.push(`/${data.supplier.handle}`)
     } catch (error) {
       toast({ title: 'Gagal membuat supplier', status: 'error' })
     } finally {
@@ -189,7 +179,7 @@ export const CreateSupplierForm = () => {
               placeholder="Pilih kategori"
             >
               <option value="PRODUCER">Produsen</option>
-              <option value="DISTIBUTOR">Distributor</option>
+              <option value="DISTRIBUTOR">Distributor</option>
             </Select>
             <FormHelperText color="red.500">
               {errors.category && <span>Kategori diperlukan</span>}

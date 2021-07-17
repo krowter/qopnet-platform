@@ -168,7 +168,7 @@ export const SearchBar = () => {
     try {
       router.push(`/search?q=${keyword}`)
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   }
 

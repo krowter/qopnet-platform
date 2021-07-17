@@ -50,7 +50,6 @@ export const SupplierProductSlugPage = () => {
   let filteredSupplierProducts
 
   if (supplierProducts) {
-    console.log('supplierProducts data: ', supplierProducts)
     filteredSupplierProducts = supplierProducts.filter(
       (supplier: any) => supplier.slug === productParam
     )[0]
