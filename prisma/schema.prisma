@@ -151,8 +151,8 @@ model Supplier {
 model SupplierProduct {
   id          String   @id @default(cuid())
   slug        String?  @unique
-  sku         String?
   name        String?
+  sku         String?
   description String?
   price       Decimal? @db.Money
   priceMax    Decimal? @db.Money

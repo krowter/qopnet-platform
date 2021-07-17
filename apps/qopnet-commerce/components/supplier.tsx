@@ -70,6 +70,7 @@ export const CreateSupplierForm = () => {
       const data = await postToAPI('/api/suppliers', {
         ...supplierFormData,
         handle: slugify(supplierFormData.handle.toLowerCase()),
+        // To make sure the handle is really a slug
       })
       if (!data) throw new Error('Create supplier response error')
 

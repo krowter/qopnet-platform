@@ -1,9 +1,9 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useUser } from 'use-supabase'
-import { VStack, Heading, Text } from '@chakra-ui/react'
 
 import { Layout } from '@qopnet/qopnet-ui'
+import { CreateSupplierProductForm } from '../../../components'
 
 export const CreateSupplierProductPage = () => {
   const user = useUser()
@@ -14,15 +14,14 @@ export const CreateSupplierProductPage = () => {
     }
   }, [user, router])
 
-  return <Layout pt={10}>{user && <CreateSupplierProductForm />}</Layout>
-}
+  const { supplierParam } = router.query
 
-export const CreateSupplierProductForm = () => {
   return (
-    <VStack>
-      <Heading>Tambah Produk Supplier</Heading>
-      <Text>Silakan lengkapi info produk baru untuk supplier ini</Text>
-    </VStack>
+    <Layout pt={10}>
+      {user && supplierParam && (
+        <CreateSupplierProductForm supplierParam={supplierParam} />
+      )}
+    </Layout>
   )
 }
 

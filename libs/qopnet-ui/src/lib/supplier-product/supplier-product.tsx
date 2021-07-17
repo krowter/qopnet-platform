@@ -388,7 +388,7 @@ export const SupplierProductCartModifier = ({
   product: SupplierProduct
 }) => {
   const toast = useToast()
-  const maxValue = 10
+  const productStock = 10
 
   // https://chakra-ui.com/docs/form/number-input#create-a-mobile-spinner
   const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
@@ -396,7 +396,7 @@ export const SupplierProductCartModifier = ({
       step: 1,
       defaultValue: 1,
       min: 1,
-      max: maxValue,
+      max: productStock,
     })
 
   const inc = getIncrementButtonProps()
@@ -432,7 +432,7 @@ export const SupplierProductCartModifier = ({
         </IconButton>
       </ButtonGroup>
 
-      <Text fontSize="xs">Max. pembelian {maxValue} pcs</Text>
+      <Text fontSize="xs">Max. pembelian {productStock} pcs</Text>
 
       <Text>
         <span>Subtotal: </span>

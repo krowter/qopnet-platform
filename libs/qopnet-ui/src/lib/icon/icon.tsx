@@ -15,6 +15,8 @@ import {
   FaEye as Show,
   FaEyeSlash as Hide,
   FaWalking as Shop,
+  FaCubes as Category,
+  FaSortNumericDown as SKU,
 
   // Form
   FaSmile as Name,
@@ -81,6 +83,10 @@ export const Icon = (props: IconProps) => {
       return <Hide />
     case 'shop':
       return <Shop />
+    case 'category':
+      return <Category />
+    case 'sku':
+      return <SKU />
 
     /**
      * Form
