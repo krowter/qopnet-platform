@@ -15,7 +15,7 @@ import {
 } from '@chakra-ui/react'
 import { Supplier } from '@prisma/client'
 
-import { Layout } from '@qopnet/qopnet-ui'
+import { Layout, Icon } from '@qopnet/qopnet-ui'
 
 /**
  * Dashboard to choose to:
@@ -77,13 +77,19 @@ const DashboardPage = () => {
             <Heading as="h3" size="md">
               Mau apa?
             </Heading>
-            <DashboardActionLink href="/shop">
+            <DashboardActionLink name="shop" href="/shop">
               Lanjut belanja
             </DashboardActionLink>
-            <DashboardActionLink href="/create-supplier">
+            <DashboardActionLink name="profile" href="/create-profile">
+              Ubah profil
+            </DashboardActionLink>
+            <DashboardActionLink name="supplier" href="/create-supplier">
               Membuat supplier
             </DashboardActionLink>
-            <DashboardActionLink href="/create-supplier-product">
+            <DashboardActionLink
+              name="supplier-product"
+              href="/create-supplier-product"
+            >
               Membuat produk supplier
             </DashboardActionLink>
           </Stack>
@@ -112,16 +118,10 @@ const DashboardPage = () => {
   )
 }
 
-export const DashboardActionLink = ({ href, children }) => {
+export const DashboardActionLink = ({ name, href, children }) => {
   return (
     <NextLink href={href} passHref>
-      <Button
-        as="a"
-        p={3}
-        colorScheme="yellow"
-        // boxShadow="xs"
-        // bg={useColorModeValue('gray.50', 'gray.900')}
-      >
+      <Button as="a" p={3} colorScheme="yellow" leftIcon={<Icon name={name} />}>
         {children}
       </Button>
     </NextLink>

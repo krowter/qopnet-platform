@@ -9,12 +9,13 @@ import {
   FaMinus as Decrement,
   FaHome as Home,
   FaUser as Users,
-  FaIdBadge as Profiles,
-  FaBuilding as Supplier,
+  FaIdBadge as Profile,
   FaRegBuilding as Suppliers,
-  FaCarrot as SuppliersProducts,
+  FaBuilding as Supplier,
+  FaCarrot as SupplierProduct,
   FaEye as Show,
   FaEyeSlash as Hide,
+  FaWalking as Shop,
 
   // Form
   FaSmile as Name,
@@ -62,19 +63,25 @@ export const Icon = (props: IconProps) => {
     case 'users':
       return <Users />
     case 'profiles':
-      return <Profiles />
+      return <Profile />
+    case 'profile':
+      return <Profile />
+    case 'suppliers':
+      return <Supplier />
     case 'supplier':
       return <Supplier />
-    case 'suppliers':
-      return <Suppliers />
     case 'suppliers-products':
-      return <SuppliersProducts />
+      return <SupplierProduct />
+    case 'supplier-product':
+      return <SupplierProduct />
     case 'menu':
       return <Menu />
     case 'show':
       return <Show />
     case 'hide':
       return <Hide />
+    case 'shop':
+      return <Shop />
 
     /**
      * Form
