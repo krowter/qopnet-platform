@@ -105,7 +105,7 @@ export const SupplierContainer = ({ supplierParam }) => {
                     </NextLinkButton>
                   </Stack>
                 ) : (
-                  <Text>Maaf, toko supplier ini baru mulai</Text>
+                  <Text>Maaf, toko supplier ini baru mulai dibuat</Text>
                 )}
               </Stack>
             )}

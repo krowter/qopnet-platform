@@ -1,6 +1,7 @@
+import { useState } from 'react'
 import NextLink from 'next/link'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { NextSeo } from 'next-seo'
 import {
   Button,
   Text,
@@ -65,20 +66,20 @@ export const CreateProfileForm = ({ profile }) => {
   const handleSubmitCreateProfile: SubmitHandler<ProfileData> = async (
     profileFormData
   ) => {
-    console.log({ profileFormData })
-
     try {
       setLoading(true)
+      // This will use PUT instead of POST
+      // Adaptive create or update
       const data = await postToAPI('/api/profiles', {
         ...profileFormData,
       })
-      if (!data) throw new Error('Create profile response error')
+      if (!data) throw new Error('Update profile response error')
       console.log({ data })
 
-      toast({ title: 'Berhasil membuat profil', status: 'success' })
+      toast({ title: 'Berhasil menyimpan profil', status: 'success' })
       router.push(`/dashboard`)
     } catch (error) {
-      toast({ title: 'Gagal membuat profil', status: 'error' })
+      toast({ title: 'Gagal menyimpan profil', status: 'error' })
     } finally {
       setLoading(false)
     }
@@ -86,6 +87,8 @@ export const CreateProfileForm = ({ profile }) => {
 
   return (
     <VStack spacing={10}>
+      <NextSeo title="Profil dan alamat - Qopnet" />
+
       <VStack>
         <Stack align="center">
           <Heading as="h1" size="xl">

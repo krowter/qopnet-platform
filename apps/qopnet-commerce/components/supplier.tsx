@@ -1,7 +1,10 @@
 import NextLink from 'next/link'
-import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
+import { NextSeo } from 'next-seo'
 import slugify from 'slugify'
+import { useForm, SubmitHandler } from 'react-hook-form'
+import { useUser, useSupabase } from 'use-supabase'
 import {
   Button,
   Text,
@@ -20,8 +23,6 @@ import {
   SimpleGrid,
   useToast,
 } from '@chakra-ui/react'
-import { useForm, SubmitHandler } from 'react-hook-form'
-import { useUser, useSupabase } from 'use-supabase'
 
 import { Icon } from '@qopnet/qopnet-ui'
 import { postToAPI } from '../utils/fetch'
@@ -85,6 +86,8 @@ export const CreateSupplierForm = () => {
 
   return (
     <VStack spacing={10}>
+      <NextSeo title="Membuat toko supplier baru - Qopnet" />
+
       <VStack>
         <Stack align="center">
           <Heading as="h1" size="xl">
@@ -139,7 +142,7 @@ export const CreateSupplierForm = () => {
             </InputGroup>
             <FormHelperText>
               <span>
-                Cth:{' '}
+                Contoh:{' '}
                 <b>
                   <code>anekabaju</code>
                 </b>
@@ -165,7 +168,7 @@ export const CreateSupplierForm = () => {
             </InputGroup>
             <FormHelperText>
               <span>
-                Cth: <b>+62 1234 5678</b>. Sebaiknya bukan nomor pribadi.
+                Contoh: <b>+62 1234 5678</b>. Sebaiknya bukan nomor pribadi.
               </span>
             </FormHelperText>
             <FormHelperText color="red.500">

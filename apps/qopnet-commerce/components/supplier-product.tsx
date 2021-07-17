@@ -97,7 +97,7 @@ export const CreateSupplierProductForm = ({ supplierParam }) => {
 
   return (
     <VStack spacing={10}>
-      <NextSeo title={`Tambah Produk - Qopnet`} />
+      <NextSeo title={`Tambah produk supplier ${supplierParam} - Qopnet`} />
 
       <VStack>
         <Stack align="center">

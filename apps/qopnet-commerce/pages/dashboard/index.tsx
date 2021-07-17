@@ -1,7 +1,7 @@
-import NextLink from 'next/link'
 import { useEffect } from 'react'
+import NextLink from 'next/link'
 import { useRouter } from 'next/router'
-import { useUser } from 'use-supabase'
+import { NextSeo } from 'next-seo'
 import {
   Box,
   Button,
@@ -16,6 +16,7 @@ import {
   Text,
   useColorModeValue,
 } from '@chakra-ui/react'
+import { useUser } from 'use-supabase'
 
 import { Layout, Icon } from '@qopnet/qopnet-ui'
 import { useSWR } from '../../utils/swr'
@@ -55,6 +56,8 @@ const DashboardPage = () => {
 export const DashboardContent = ({ profile }) => {
   return (
     <Stack spacing={10}>
+      <NextSeo title="Dasbor saya - Qopnet" />
+
       <Stack id="dashboard-title">
         <Heading as="h1">Dasbor Saya</Heading>
         {profile && (
@@ -101,7 +104,7 @@ export const DashboardContent = ({ profile }) => {
         </Stack>
 
         {/* Only show owned suppliers list when exist */}
-        <Stack id="dashboard-suppliers" spacing={5}>
+        <Stack id="dashboard-suppliers" spacing={5} maxW="500px">
           <Heading as="h3" size="md">
             List toko supplier milik saya
           </Heading>
@@ -112,7 +115,10 @@ export const DashboardContent = ({ profile }) => {
             )}
             {profile?.name && !profile?.suppliers?.length && (
               <>
-                <Text>Saya bukan supplier atau belum memiliki supplier</Text>
+                <Text>
+                  Saya bukan supplier atau belum memiliki supplier. Silakan buat
+                  supplier dahulu jika ingin menambahkan produk.
+                </Text>
                 <DashboardActionLink
                   name="plus"
                   href="/create-supplier"

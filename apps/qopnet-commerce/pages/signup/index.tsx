@@ -14,11 +14,7 @@ const SignUpPage = () => {
     }
   }, [user, router])
 
-  return (
-    <Layout pt={10}>
-      <SignUpForm />
-    </Layout>
-  )
+  return <Layout pt={10}>{!user && <SignUpForm />}</Layout>
 }
 
 export default SignUpPage
