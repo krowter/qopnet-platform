@@ -64,7 +64,9 @@ app.use((err, req, res, next) => {
 
 const port = process.env.PORT || 4000
 const server = app.listen(port, () => {
-  console.info(`qopnet-api listening at :${port}/api`)
+  console.info({
+    message: `Qopnet API listening at :${port}`,
+  })
 })
 
 server.on('error', console.error)

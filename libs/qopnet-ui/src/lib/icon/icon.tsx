@@ -5,16 +5,16 @@ import {
   FaSearch as Search,
   FaShoppingCart as Cart,
   FaSignOutAlt as SignOut,
-  FaPlus as Increment,
-  FaMinus as Decrement,
+  FaPlus as Plus,
+  FaMinus as Minus,
   FaHome as Home,
   FaUser as Users,
-  FaIdBadge as Profiles,
+  FaIdBadge as Profile,
   FaBuilding as Supplier,
-  FaRegBuilding as Suppliers,
-  FaCarrot as SuppliersProducts,
+  FaCarrot as SupplierProduct,
   FaEye as Show,
   FaEyeSlash as Hide,
+  FaWalking as Shop,
 
   // Form
   FaSmile as Name,
@@ -53,28 +53,34 @@ export const Icon = (props: IconProps) => {
       return <Cart />
     case 'signout':
       return <SignOut />
-    case 'increment':
-      return <Increment />
-    case 'decrement':
-      return <Decrement />
+    case 'plus':
+      return <Plus />
+    case 'minus':
+      return <Minus />
     case 'home':
       return <Home />
     case 'users':
       return <Users />
     case 'profiles':
-      return <Profiles />
+      return <Profile />
+    case 'profile':
+      return <Profile />
+    case 'suppliers':
+      return <Supplier />
     case 'supplier':
       return <Supplier />
-    case 'suppliers':
-      return <Suppliers />
     case 'suppliers-products':
-      return <SuppliersProducts />
+      return <SupplierProduct />
+    case 'supplier-product':
+      return <SupplierProduct />
     case 'menu':
       return <Menu />
     case 'show':
       return <Show />
     case 'hide':
       return <Hide />
+    case 'shop':
+      return <Shop />
 
     /**
      * Form

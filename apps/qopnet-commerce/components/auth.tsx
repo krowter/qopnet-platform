@@ -65,7 +65,6 @@ export const SignUpForm = () => {
       const { user, error } = await supabase.auth.signUp({ email, password })
       if (user) {
         toast({ title: 'Berhasil daftar akun', status: 'success' })
-        router.push('/')
       } else if (error) throw new Error('Gagal daftar akun')
     } catch (error) {
       toast({ title: 'Gagal daftar akun', status: 'error' })
@@ -156,15 +155,9 @@ export const SignUpForm = () => {
  * /signin
  */
 export const SignInForm = () => {
-  const router = useRouter()
   const toast = useToast()
-  const user = useUser()
   const supabase = useSupabase()
   const [loading, setLoading] = useState(false)
-
-  useEffect(() => {
-    if (user) router.replace('/')
-  }, [user, router])
 
   // Password input show and hide
   const [show, setShow] = useState(false)
@@ -187,7 +180,6 @@ export const SignInForm = () => {
       const { user, error } = await supabase.auth.signIn({ email, password })
       if (user) {
         toast({ title: 'Berhasil masuk akun', status: 'success' })
-        router.replace('/create-profile')
       } else if (error) throw new Error('Gagal masuk akun')
     } catch (error) {
       toast({ title: 'Gagal masuk akun', status: 'error' })

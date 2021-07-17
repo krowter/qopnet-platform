@@ -129,6 +129,7 @@ model Supplier {
   id                String            @id @default(cuid())
   handle            String?           @unique
   name              String?
+  phone             String?
   avatarUrl         String?
   nationalTax       String?
   certificationFile String?

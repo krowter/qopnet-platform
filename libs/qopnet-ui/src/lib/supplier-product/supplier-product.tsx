@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
+
 import NextLink from 'next/link'
 import NextImage from 'next/image'
 import { SupplierProduct } from '@prisma/client'
@@ -14,8 +15,6 @@ import {
   Image as ChakraImage,
   ListItem,
   Input,
-  NumberInput,
-  NumberInputField,
   SimpleGrid,
   Stack,
   Text,
@@ -27,7 +26,6 @@ import {
 
 import { formatDateTime } from '@qopnet/util-format'
 import { Icon } from '../icon/icon'
-import { useState } from 'react'
 
 const supplierProductCategories = [
   { name: 'all', text: 'Semua Produk', color: 'orange.500' },
@@ -49,8 +47,6 @@ const supplierProductCategories = [
 
 const defaultSupplierProductImages = [
   'https://rryitovbrajppywbpmit.supabase.co/storage/v1/object/public/images/telur.jpg',
-  'https://rryitovbrajppywbpmit.supabase.co/storage/v1/object/public/images/kasur.jpg',
-  'https://rryitovbrajppywbpmit.supabase.co/storage/v1/object/public/images/rangka-telur.jpg',
 ]
 
 export interface HomeProductCategoryProps {
@@ -75,9 +71,8 @@ export interface SupplierProductPriceProps {
   fontSize?: string // sm, md, lg
 }
 
-export interface SupplierProductContainer {
-  supplierProductParam: string
-  supplierProduct: SupplierProduct
+export interface SupplierProductDetailProps {
+  product: SupplierProduct
 }
 
 export const HomeProductCategory = (props: HomeProductCategoryProps) => {
@@ -224,14 +219,11 @@ export const formatPrice = (price: number | Decimal) => {
 /**
  * Don't request here because this is a shared lib
  */
-export const SupplierProductContainer = ({
-  supplierProductParam,
-  supplierProduct,
-}: SupplierProductContainer) => {
-  const product = supplierProduct
+export const SupplierProductDetail = ({
+  product,
+}: SupplierProductDetailProps) => {
   const productImages =
     (product?.images as string[]) || defaultSupplierProductImages
-  // @ts-ignore
   const productImageFirst = productImages[0] as string
 
   const [isDesktop] = useMediaQuery('(min-width: 60em)')
@@ -253,9 +245,11 @@ export const SupplierProductContainer = ({
           <Stack direction="row">
             {productImages.map((imageUrl: string, index) => {
               return (
-                <Box display="inherit">
+                <Box
+                  key={`${product.slug}-${index}-${product.id}`}
+                  display="inherit"
+                >
                   <NextImage
-                    key={`${product.slug}-${index}-${product.id}`}
                     src={imageUrl}
                     alt={product.name || 'Small product image'}
                     layout="fixed"
@@ -268,7 +262,7 @@ export const SupplierProductContainer = ({
           </Stack>
         </Stack>
 
-        <Stack id="product-info-sections" spacing={5} w="100%">
+        <Stack id="product-info-sections" spacing={5} w="100%" maxW="500px">
           <Stack id="product-info-name-price">
             <Heading as="h2" size="lg">
               {product.name}
@@ -285,11 +279,11 @@ export const SupplierProductContainer = ({
             </Stack>
           </Stack>
 
-          <Divider />
+          <Divider variant="dashed" />
 
           <SupplierProductCartModifier product={product} />
 
-          <Divider />
+          <Divider variant="dashed" />
 
           <Stack id="product-detail">
             <Text>
@@ -301,7 +295,7 @@ export const SupplierProductContainer = ({
             <Text>{product.description}</Text>
           </Stack>
 
-          <Divider />
+          <Divider variant="dashed" />
 
           <Stack id="supplier-info">
             <Text>
@@ -325,29 +319,27 @@ export const SupplierProductContainer = ({
 
       <Divider />
 
-      <Stack id="product-more-details">
-        <Stack spacing={5}>
-          <Heading as="h4" size="lg">
-            Rincian Produk
+      <Stack id="product-more-details" spacing={5}>
+        <Heading as="h4" size="lg">
+          Rincian Produk
+        </Heading>
+        <Stack>
+          <Heading as="h5" size="md">
+            Deskripsi
           </Heading>
-          <Stack>
-            <Heading as="h5" size="md">
-              Deskripsi
-            </Heading>
-            <Text>Produk ini sangat bagus.</Text>
-          </Stack>
-          <Stack>
-            <Heading as="h5" size="md">
-              Ukuran
-            </Heading>
-            <Box>
-              <UnorderedList>
-                <ListItem>Panjang: 200 cm</ListItem>
-                <ListItem>Tinggi: 78 cm</ListItem>
-                <ListItem>Lebar: 120 cm</ListItem>
-              </UnorderedList>
-            </Box>
-          </Stack>
+          <Text>Produk ini sangat bagus.</Text>
+        </Stack>
+        <Stack>
+          <Heading as="h5" size="md">
+            Ukuran
+          </Heading>
+          <Box>
+            <UnorderedList>
+              <ListItem>Panjang: 200 cm</ListItem>
+              <ListItem>Tinggi: 78 cm</ListItem>
+              <ListItem>Lebar: 120 cm</ListItem>
+            </UnorderedList>
+          </Box>
         </Stack>
       </Stack>
     </Stack>
@@ -382,11 +374,11 @@ export const SupplierProductCartModifier = ({
 
       <ButtonGroup spacing={3} alignItems="center" variant="outline">
         <IconButton {...dec} aria-label="Kurangi produk">
-          <Icon name="decrement" />
+          <Icon name="minus" />
         </IconButton>
         <Input maxW="100px" {...input} />
         <IconButton {...inc} aria-label="Tambah produk">
-          <Icon name="increment" />
+          <Icon name="plus" />
         </IconButton>
       </ButtonGroup>
       <Text fontSize="xs">Max. pembelian {maxValue} pcs</Text>
