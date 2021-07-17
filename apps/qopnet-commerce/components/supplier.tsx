@@ -1,6 +1,7 @@
 import NextLink from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+import slugify from 'slugify'
 import {
   Button,
   Text,
@@ -24,11 +25,14 @@ import { useUser, useSupabase } from 'use-supabase'
 
 import { Icon } from '@qopnet/qopnet-ui'
 
-export type ProfileData = {
-  // Profile
+export type SupplierData = {
+  // Supplier
   name?: string
   handle?: string
   phone?: string
+  nationalTax?: string
+  certificationFile?: string
+  category?: string | 'PRODUCER'
 
   // Address
   address?: {
@@ -41,7 +45,7 @@ export type ProfileData = {
   }
 }
 
-export const CreateProfileForm = () => {
+export const CreateSupplierForm = () => {
   const router = useRouter()
   const toast = useToast()
   const user = useUser()
@@ -53,29 +57,36 @@ export const CreateProfileForm = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ProfileData>()
+  } = useForm<SupplierData>()
 
-  // Create profile process and toast
-  const handleSubmitCreateProfile: SubmitHandler<ProfileData> = async (
-    profileFormData
+  // Create supplier process and toast
+  const handleSubmitCreateSupplier: SubmitHandler<SupplierData> = async (
+    supplierFormData
   ) => {
     try {
       setLoading(true)
 
-      // Mutate to create profile via POST /api/profiles
-      console.log({ profileFormData })
+      // Prepare new supplier data object first
+      // Before passing it as request body
+      const newSupplierData = {
+        ...supplierFormData,
+        handle: slugify(supplierFormData.handle.toLowerCase()),
+      }
 
-      const profile = true
+      // Mutate to create supplier via POST /api/suppliers
+      console.log({ newSupplierData })
+
+      const supplier = true
       const error = false
 
-      if (profile) {
-        toast({ title: 'Berhasil membuat profil', status: 'success' })
-        router.push('/dashboard')
+      if (supplier) {
+        toast({ title: 'Berhasil membuat supplier', status: 'success' })
+        // router.push(`/${supplier.handle}`)
       } else if (error) {
-        throw new Error('Gagal membuat profil')
+        throw new Error('Gagal membuat supplier')
       }
     } catch (error) {
-      toast({ title: 'Gagal membuat profil', status: 'error' })
+      toast({ title: 'Gagal membuat supplier', status: 'error' })
     } finally {
       setLoading(false)
     }
@@ -86,16 +97,14 @@ export const CreateProfileForm = () => {
       <VStack>
         <Stack align="center">
           <Heading as="h1" size="xl">
-            Profil dan Alamat
+            Membuat Supplier Baru
           </Heading>
-          <Text>
-            Silakan lengkapi profil dan informasi alamat pribadi Anda.
-          </Text>
+          <Text>Silakan lengkapi data supplier baru Anda.</Text>
         </Stack>
       </VStack>
 
       <SimpleGrid
-        onSubmit={handleSubmit(handleSubmitCreateProfile)}
+        onSubmit={handleSubmit(handleSubmitCreateSupplier)}
         as="form"
         w="100%"
         maxW="720px"
@@ -104,41 +113,55 @@ export const CreateProfileForm = () => {
       >
         <Stack>
           <FormControl>
-            <FormLabel>Nama Lengkap</FormLabel>
+            <FormLabel>Nama Supplier</FormLabel>
             <InputGroup>
               <InputLeftElement pointerEvents="none">
                 <Icon name="name" />
               </InputLeftElement>
               <Input
                 type="text"
-                placeholder="Nama Lengkap"
+                placeholder="Nama Supplier"
                 {...register('name', { required: true })}
               />
             </InputGroup>
+            <FormHelperText>
+              <span>
+                Contoh: <b>Aneka Baju (PT Aneka Baju Indonesia)</b>
+              </span>
+            </FormHelperText>
             <FormHelperText color="red.500">
-              {errors.name && <span>Nama lengkap diperlukan</span>}
+              {errors.name && <span>Nama lengkap supplier diperlukan</span>}
             </FormHelperText>
           </FormControl>
 
           <FormControl>
-            <FormLabel>Username</FormLabel>
+            <FormLabel>Handle</FormLabel>
             <InputGroup>
               <InputLeftElement pointerEvents="none">
                 <Icon name="handle" />
               </InputLeftElement>
               <Input
                 type="text"
-                placeholder="namasaya"
+                placeholder="namasupplier"
                 {...register('handle', { required: true })}
               />
             </InputGroup>
+            <FormHelperText>
+              <span>
+                Contoh:{' '}
+                <b>
+                  <code>anekabaju</code>
+                </b>
+                . Harus huruf kecil semua.
+              </span>
+            </FormHelperText>
             <FormHelperText color="red.500">
-              {errors.handle && <span>Username diperlukan</span>}
+              {errors.handle && <span>Handle/domain supplier diperlukan</span>}
             </FormHelperText>
           </FormControl>
 
           <FormControl>
-            <FormLabel>Nomor telepon/HP/WhatsApp</FormLabel>
+            <FormLabel>Nomor telepon/HP/WhatsApp supplier</FormLabel>
             <InputGroup>
               <InputLeftElement pointerEvents="none">
                 <Icon name="phone" />
@@ -149,6 +172,12 @@ export const CreateProfileForm = () => {
                 {...register('phone', { required: true })}
               />
             </InputGroup>
+            <FormHelperText>
+              <span>
+                Contoh: <b>+62 1234 5678</b>. Jika bisa bukan nomor telepon
+                pribadi.
+              </span>
+            </FormHelperText>
             <FormHelperText color="red.500">
               {errors.phone && <span>Nomor telepon diperlukan</span>}
             </FormHelperText>
@@ -229,11 +258,11 @@ export const CreateProfileForm = () => {
 
           <Button
             isLoading={loading}
-            loadingText="Membuat profil..."
+            loadingText="Membuat supplier..."
             colorScheme="orange"
             type="submit"
           >
-            Buat Profil dan Alamat
+            Buat Supplier Baru
           </Button>
         </Stack>
       </SimpleGrid>

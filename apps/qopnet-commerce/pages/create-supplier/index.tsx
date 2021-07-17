@@ -1,11 +1,12 @@
 import { Layout } from '@qopnet/qopnet-ui'
+import { CreateSupplierForm } from '../../components'
 
-const createSupplierPage = () => {
+export const CreateSupplierPage = () => {
   return (
     <Layout>
-      <h1>Buat toko supplier</h1>
+      <CreateSupplierForm />
     </Layout>
   )
 }
 
-export default createSupplierPage
+export default CreateSupplierPage
