@@ -298,17 +298,17 @@ router.post('/:supplierParam/products', checkUser, async (req, res) => {
       if (!supplier) throw new Error('Supplier not found')
 
       try {
-        const data = {
+        const payloadData = {
           ...supplierProduct,
           slug: supplierProductSlug,
           supplierId: supplier.id,
           ownerId: user.profile.id,
         }
 
-        // console.log({ data })
-
         const newSupplierProduct: SupplierProduct =
-          await prisma.supplierProduct.create({ data })
+          await prisma.supplierProduct.create({
+            data: payloadData,
+          })
 
         res.json({
           message: 'Create new supplier product success',
@@ -316,6 +316,7 @@ router.post('/:supplierParam/products', checkUser, async (req, res) => {
           supplierProduct: newSupplierProduct,
         })
       } catch (error) {
+        console.error({ error })
         if (error.code === 'P2002') {
           res.status(400).json({
             message:

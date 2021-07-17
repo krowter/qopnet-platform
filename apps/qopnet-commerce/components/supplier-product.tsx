@@ -82,7 +82,8 @@ export const CreateSupplierProductForm = ({ supplierParam }) => {
        */
       const data = await postToAPI(`/api/suppliers/${supplierParam}/products`, {
         ...supplierProductFormData,
-        handle: slugify(supplierProductFormData.name.toLowerCase()),
+        slug: slugify(supplierProductFormData.name.toLowerCase()),
+        // Be careful, supplier product uses slug, not handle
       })
       if (!data) throw new Error('Create supplier product response error')
 
