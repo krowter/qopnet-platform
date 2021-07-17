@@ -30,9 +30,9 @@ export type SupplierData = {
   name?: string
   handle?: string
   phone?: string
+  category?: string | 'PRODUCER'
   nationalTax?: string
   certificationFile?: string
-  category?: string | 'PRODUCER'
 
   // Address
   address?: {
@@ -93,7 +93,7 @@ export const CreateSupplierForm = () => {
   }
 
   return (
-    <VStack mt={20} spacing={10}>
+    <VStack mt={10} spacing={10}>
       <VStack>
         <Stack align="center">
           <Heading as="h1" size="xl">
@@ -107,13 +107,13 @@ export const CreateSupplierForm = () => {
         onSubmit={handleSubmit(handleSubmitCreateSupplier)}
         as="form"
         w="100%"
-        maxW="720px"
-        columns={[1, 2, 2]}
+        maxW="800px"
+        columns={[1, 1, 2]}
         spacing={5}
       >
         <Stack>
           <FormControl>
-            <FormLabel>Nama Supplier</FormLabel>
+            <FormLabel>Nama supplier</FormLabel>
             <InputGroup>
               <InputLeftElement pointerEvents="none">
                 <Icon name="name" />
@@ -148,7 +148,7 @@ export const CreateSupplierForm = () => {
             </InputGroup>
             <FormHelperText>
               <span>
-                Contoh:{' '}
+                Cth:{' '}
                 <b>
                   <code>anekabaju</code>
                 </b>
@@ -174,12 +174,61 @@ export const CreateSupplierForm = () => {
             </InputGroup>
             <FormHelperText>
               <span>
-                Contoh: <b>+62 1234 5678</b>. Jika bisa bukan nomor telepon
-                pribadi.
+                Cth: <b>+62 1234 5678</b>. Sebaiknya bukan nomor pribadi.
               </span>
             </FormHelperText>
             <FormHelperText color="red.500">
               {errors.phone && <span>Nomor telepon diperlukan</span>}
+            </FormHelperText>
+          </FormControl>
+
+          <FormControl>
+            <FormLabel>Kategori</FormLabel>
+            <Select
+              {...register('category', { required: true })}
+              placeholder="Pilih kategori"
+            >
+              <option value="PRODUCER">Produsen</option>
+              <option value="DISTIBUTOR">Distributor</option>
+            </Select>
+            <FormHelperText color="red.500">
+              {errors.category && <span>Kategori diperlukan</span>}
+            </FormHelperText>
+          </FormControl>
+
+          <FormControl>
+            <FormLabel>NPWP (Nomor Pokok Wajib Pajak) supplier</FormLabel>
+            <InputGroup>
+              <InputLeftElement pointerEvents="none">
+                <Icon name="number" />
+              </InputLeftElement>
+              <Input
+                type="text"
+                placeholder="1234 5678 1234 5678"
+                {...register('nationalTax', { required: true })}
+              />
+            </InputGroup>
+            <FormHelperText color="red.500">
+              {errors.nationalTax && <span>NPWP supplier diperlukan</span>}
+            </FormHelperText>
+          </FormControl>
+
+          <FormControl>
+            <FormLabel>Berkas/file sertifikat</FormLabel>
+            <InputGroup>
+              <InputLeftElement pointerEvents="none">
+                <Icon name="certificate" />
+              </InputLeftElement>
+              <Input
+                type="text"
+                placeholder="https://drive.google.com/path/to/file.pdf"
+                {...register('certificationFile')}
+              />
+            </InputGroup>
+            <FormHelperText color="red.500">
+              {errors.certificationFile && (
+                <span>Berkas sertifikat tidak jelas</span>
+              )}
             </FormHelperText>
           </FormControl>
         </Stack>
@@ -200,7 +249,7 @@ export const CreateSupplierForm = () => {
             <FormLabel>Detail alamat</FormLabel>
             <Textarea
               {...register('address.streetDetails')}
-              placeholder="RT/RW 01/02, Kelurahan, Kecamatan"
+              placeholder="RT/RW 01/02, Kelurahan, Kecamatan. Nomor gedung/lantai"
             />
             <FormHelperText color="red.500">
               {errors.address?.streetDetails && (
@@ -250,7 +299,6 @@ export const CreateSupplierForm = () => {
             >
               <option value="ID">Indonesia</option>
             </Select>
-
             <FormHelperText color="red.500">
               {errors.address?.countryCode && <span>Negara diperlukan</span>}
             </FormHelperText>
