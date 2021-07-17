@@ -1,5 +1,7 @@
 import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
+import cuid from 'cuid'
+
 import {
   Tag,
   Divider,
@@ -44,32 +46,32 @@ export const SupplierContainer = ({ supplierParam }) => {
       {!error && supplier && (
         <>
           <NextSeo
-            title={`${supplier.name} - ${supplier.addresses[0].city}, ${supplier.addresses[0].state} - Qopnet`}
+            title={`${supplier?.name} - ${supplier?.addresses[0]?.city}, ${supplier?.addresses[0]?.state} - Qopnet`}
           />
           <Stack spacing={10} w="100%">
             <Stack>
               <Heading as="h1" size="xl">
-                {supplier.name}
+                {supplier?.name}
               </Heading>
 
               <HStack>
                 <Tag colorScheme="green">
-                  {supplier.category === 'PRODUCER'
+                  {supplier?.category === 'PRODUCER'
                     ? 'Produsen'
                     : 'Distributor'}
                 </Tag>
-                {supplier.phone && <span>{supplier.phone}</span>}
+                {supplier?.phone && <span>{supplier?.phone}</span>}
               </HStack>
 
               <HStack>
-                {supplier.addresses.map((address, index) => {
+                {supplier?.addresses?.map((address, index) => {
                   return (
-                    <Text>
-                      <span>{address.street}, </span>
-                      <span>{address.streetDetails ?? ''}</span>
-                      <span>{address.city}, </span>
-                      <span>{address.state} </span>
-                      <span>{address.zip}, </span>
+                    <Text key={cuid()}>
+                      <span>{address?.street}, </span>
+                      <span>{address?.streetDetails ?? ''}</span>
+                      <span>{address?.city}, </span>
+                      <span>{address?.state} </span>
+                      <span>{address?.zip}, </span>
                       <span>Indonesia</span>
                     </Text>
                   )
@@ -107,7 +109,7 @@ export const SupplierProducts = ({ products }) => {
   return (
     <SimpleGrid spacing={5} columns={[2, 2, 4]}>
       {products.map((product, index) => {
-        return <SupplierProductCard product={product} />
+        return <SupplierProductCard key={cuid()} product={product} />
       })}
     </SimpleGrid>
   )

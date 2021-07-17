@@ -23,6 +23,7 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 import { useUser, useSupabase } from 'use-supabase'
 
 import { Icon } from '@qopnet/qopnet-ui'
+import { postToAPI } from '../utils/fetch'
 
 export type ProfileData = {
   // Profile
@@ -59,21 +60,18 @@ export const CreateProfileForm = () => {
   const handleSubmitCreateProfile: SubmitHandler<ProfileData> = async (
     profileFormData
   ) => {
+    console.log({ profileFormData })
+
     try {
       setLoading(true)
+      const data = await postToAPI('/api/profiles', {
+        ...profileFormData,
+      })
+      if (!data) throw new Error('Create profile response error')
+      console.log({ data })
 
-      // Mutate to create profile via POST /api/profiles
-      console.log({ profileFormData })
-
-      const profile = true
-      const error = false
-
-      if (profile) {
-        toast({ title: 'Berhasil membuat profil', status: 'success' })
-        router.push('/dashboard')
-      } else if (error) {
-        throw new Error('Gagal membuat profil')
-      }
+      toast({ title: 'Berhasil membuat profil', status: 'success' })
+      router.push(`/dashboard`)
     } catch (error) {
       toast({ title: 'Gagal membuat profil', status: 'error' })
     } finally {

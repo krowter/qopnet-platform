@@ -5,7 +5,7 @@ import { useUser } from 'use-supabase'
 import {
   Box,
   Button,
-  Divider,
+  HStack,
   Heading,
   SimpleGrid,
   Spinner,
@@ -38,13 +38,13 @@ const DashboardPage = () => {
   return (
     <Layout>
       {error && <Text>Gagal memuat profil Anda</Text>}
-      {!error && !profile && (
-        <Stack>
+      {!error && !data && (
+        <HStack mt={10}>
           <Spinner />
           <Text>Memuat profil...</Text>
-        </Stack>
+        </HStack>
       )}
-      {!error && profile && <DashboardContent profile={profile} />}
+      {!error && data && <DashboardContent profile={profile} />}
     </Layout>
   )
 }
@@ -56,12 +56,14 @@ export const DashboardContent = ({ profile }) => {
   return (
     <Stack mt={10} spacing={10}>
       <Stack id="dashboard-title">
-        <Heading as="h1">Dasbor</Heading>
-        <Text>
-          <span>{profile.user.email} / </span>
-          <span>@{profile.handle} / </span>
-          <span>{profile.phone}</span>
-        </Text>
+        <Heading as="h1">Dasbor Saya</Heading>
+        {profile && (
+          <Text>
+            <span>{profile.user.email} / </span>
+            <span>@{profile.handle} / </span>
+            <span>{profile.phone}</span>
+          </Text>
+        )}
       </Stack>
 
       <Stack
@@ -73,17 +75,29 @@ export const DashboardContent = ({ profile }) => {
           <Heading as="h3" size="md">
             Mau apa?
           </Heading>
-          <Stack>
-            <DashboardActionLink name="shop" href="/shop">
-              Lanjut belanja
-            </DashboardActionLink>
-            <DashboardActionLink name="profile" href="/create-profile">
-              Ubah profil saya
-            </DashboardActionLink>
-            <DashboardActionLink name="supplier" href="/create-supplier">
-              Membuat toko supplier
-            </DashboardActionLink>
-          </Stack>
+          {!profile && (
+            <Stack w="300px">
+              <DashboardActionLink name="shop" href="/shop">
+                Lanjut belanja
+              </DashboardActionLink>
+              <DashboardActionLink name="profile" href="/create-profile">
+                Buat profil saya
+              </DashboardActionLink>
+            </Stack>
+          )}
+          {profile && (
+            <Stack w="300px">
+              <DashboardActionLink name="shop" href="/shop">
+                Lanjut belanja
+              </DashboardActionLink>
+              <DashboardActionLink name="profile" href="/create-profile">
+                Ubah profil saya
+              </DashboardActionLink>
+              <DashboardActionLink name="supplier" href="/create-supplier">
+                Membuat toko supplier
+              </DashboardActionLink>
+            </Stack>
+          )}
         </Stack>
 
         {/* Only show owned suppliers list when exist */}
@@ -93,7 +107,10 @@ export const DashboardContent = ({ profile }) => {
           </Heading>
 
           <Stack align="flex-start" spacing={5}>
-            {!profile?.suppliers?.length && (
+            {!profile && (
+              <Text>Buat profil dahulu jika mau membuat toko supplier</Text>
+            )}
+            {profile?.name && !profile?.suppliers?.length && (
               <>
                 <Text>Saya bukan supplier atau belum memiliki supplier</Text>
                 <DashboardActionLink
@@ -106,7 +123,7 @@ export const DashboardContent = ({ profile }) => {
                 </DashboardActionLink>
               </>
             )}
-            {profile?.suppliers?.length && (
+            {profile?.name && profile?.suppliers?.length && (
               <>
                 <SimpleGrid
                   columns={2}
