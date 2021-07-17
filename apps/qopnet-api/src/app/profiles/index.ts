@@ -33,12 +33,16 @@ router.post('/', checkUser, async (req, res) => {
   const userId = req.user.sub
   const profile = req.body
 
+  console.log({ profile })
+
   try {
     const user = await prisma.user.findUnique({
       where: { id: userId },
       include: { profile: true },
       // Just to check whether the user already had a profile too
     })
+    console.log({ user })
+
     if (!user) throw new Error('User not found')
 
     // Check if profile for a user already exist
@@ -47,11 +51,29 @@ router.post('/', checkUser, async (req, res) => {
       const existingProfile = await prisma.profile.findFirst({
         where: { userId },
       })
+      console.log({ existingProfile })
       if (existingProfile) throw new Error('Profile already exist')
 
-      // Continue to create if there is no existing profile
+      /**
+       * Manually arrange the profile data,
+       * Don't use ...spread because it contains address object, not array
+       */
+      const payloadData = {
+        name: profile.name,
+        handle: profile.handle,
+        phone: profile.phone,
+        userId,
+        addresses: { create: [profile.address] },
+      }
+      console.log({ payloadData })
+
+      /**
+       * Continue to create profile if there is no existing profile
+       * Also with address
+       */
       const newProfile = await prisma.profile.create({
-        data: { ...profile, userId },
+        data: payloadData,
+        include: { addresses: true },
       })
 
       res.json({
@@ -62,6 +84,7 @@ router.post('/', checkUser, async (req, res) => {
     } catch (error) {
       res.json({
         message: 'Create new user profile failed because profile already exist',
+        user: req.user,
         error,
       })
     }
@@ -80,7 +103,14 @@ router.post('/', checkUser, async (req, res) => {
 router.get('/my', checkUser, async (req, res) => {
   const profile = await prisma.profile.findFirst({
     where: { userId: req.user.sub },
-    include: { user: true },
+    include: {
+      user: true,
+      addresses: true,
+      suppliers: true,
+      supplierProducts: true,
+      wholesalers: true,
+      merchants: true,
+    },
   })
 
   res.json({

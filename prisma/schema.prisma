@@ -126,9 +126,13 @@ enum SupplierCategory {
 }
 
 model Supplier {
-  id                String            @id @default(cuid())
-  handle            String?           @unique
-  name              String?
+  id String @id @default(cuid())
+
+  handle String? @unique
+  name   String?
+  phone  String?
+  email  String?
+
   avatarUrl         String?
   nationalTax       String?
   certificationFile String?
@@ -147,16 +151,48 @@ model Supplier {
   @@map(name: "suppliers")
 }
 
+// -----------------------------------------------------------------------------
+// Supplier Product
+
+enum SupplierProductWeightUnit {
+  GR
+  KG
+  TON
+}
+
+enum SupplierProductStatus {
+  ACTIVE
+  INACTIVE
+}
+
 model SupplierProduct {
-  id          String   @id @default(cuid())
-  slug        String?  @unique
-  sku         String?
+  id String @id @default(cuid())
+
+  images Json? // string[]
+  slug   String? @unique
+
+  // Info
   name        String?
+  subname     String?
+  category    String?
+  sku         String?
   description String?
-  price       Decimal? @db.Money
-  priceMax    Decimal? @db.Money
-  priceMin    Decimal? @db.Money
-  images      Json?
+
+  // Price
+  price    Decimal? @db.Money
+  priceMax Decimal? @db.Money
+  priceMin Decimal? @db.Money
+  minOrder Int?
+
+  // Weight and Size
+  weight        Int?
+  weightUnit    SupplierProductWeightUnit?
+  weightDetails String?
+  dimension     Json?
+
+  // Manage
+  status SupplierProductStatus?
+  stock  Int?
 
   // Relations
   supplierId String?

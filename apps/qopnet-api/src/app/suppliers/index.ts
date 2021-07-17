@@ -1,16 +1,29 @@
 import { PrismaClient, SupplierProduct, Supplier } from '@prisma/client'
-const prisma = new PrismaClient()
-import * as express from 'express'
-const router = express.Router()
 import slugify from 'slugify'
+import * as express from 'express'
+
 import { checkUser } from '../auth/middleware'
 
+const prisma = new PrismaClient()
+const router = express.Router()
+
+/**
+ * GET /api/suppliers
+ * Get all suppliers
+ */
 router.get('/', async (req, res) => {
   try {
-    const supplier: Supplier[] = await prisma.supplier.findMany({})
+    const suppliers: Supplier[] = await prisma.supplier.findMany({
+      include: {
+        owner: true,
+        addresses: true,
+        supplierProducts: true,
+      },
+    })
+
     res.json({
       message: 'Get all suppliers',
-      supplier,
+      suppliers,
     })
   } catch (error) {
     res.json({
@@ -20,6 +33,10 @@ router.get('/', async (req, res) => {
   }
 })
 
+/**
+ * GET /api/suppliers/:supplierParam
+ * Get one supplier by supplierParam
+ */
 router.get('/:supplierParam', async (req, res) => {
   const { supplierParam } = req.params
   try {
@@ -27,7 +44,17 @@ router.get('/:supplierParam', async (req, res) => {
       where: {
         handle: supplierParam,
       },
+      include: {
+        owner: {
+          include: {
+            user: true,
+          },
+        },
+        addresses: true,
+        supplierProducts: true,
+      },
     })
+
     if (!supplier) {
       res.status(404).json({
         message: 'Get one supplier by supplierParam not found',
@@ -148,36 +175,60 @@ router.get(
  * POST /api/suppliers
  */
 router.post('/', checkUser, async (req, res) => {
+  /**
+   * Currently omit Supplier type check because
+   * the request is still using address f, not addresses
+   */
   const userId = req.user.sub
-  const supplier: Supplier = req.body
-  const supplierHandle = slugify(supplier.name.toLowerCase())
+  const newSupplier = req.body
 
-  // Check if user exist by userId
-  // This user findUnique can be a middleware later like in checkUser
   try {
+    /**
+     * Check if user exist by userId
+     * This user findUnique can be a middleware later like in checkUser
+     */
     const user = await prisma.user.findFirst({
       where: { id: userId },
       include: { profile: true },
     })
-
     if (!user) throw new Error('Failed to findUnique user')
-
     // Assign profileId once get the user
     const profileId = user.profile.id
 
+    // After got the profile or respective owner of the supplier
     try {
-      const newSupplier = await prisma.supplier.create({
-        data: {
-          ...supplier,
-          handle: supplierHandle,
-          ownerId: profileId,
+      /**
+       * Manually arrange the supplier data,
+       * Don't use ...spread because it contains address object, not array
+       */
+      const payloadData = {
+        name: newSupplier.name,
+        handle: newSupplier.handle,
+        phone: newSupplier.phone,
+        category: newSupplier.category,
+        nationalTax: newSupplier.nationalTax,
+        certificationFile: newSupplier.certificationFile,
+        ownerId: profileId,
+        addresses: {
+          create: [newSupplier.address],
+          // Pass the address object as the first array item
+        },
+      }
+
+      // Finally can create new supplier data via Prisma
+      const createdSupplier = await prisma.supplier.create({
+        data: payloadData,
+        include: {
+          owner: true,
+          addresses: true,
+          supplierProducts: true,
         },
       })
 
       // 200 OK
       res.json({
-        message: 'Create new supplier',
-        supplier: newSupplier,
+        message: 'Create new supplier success',
+        supplier: createdSupplier,
       })
     } catch (error) {
       // 400 Client Error
@@ -185,8 +236,7 @@ router.post('/', checkUser, async (req, res) => {
         res.status(400).json({
           message:
             'Create new supplier failed because name/handle need to be unique',
-          name: supplier.name,
-          handle: supplierHandle,
+          handle: newSupplier.handle,
           error,
         })
       } else if (error.code === 'P2003') {
@@ -205,7 +255,7 @@ router.post('/', checkUser, async (req, res) => {
       } else {
         // 500 Server Error
         res.status(500).json({
-          message: 'Create new supplier failed',
+          message: 'Create new supplier failed because unknown reason',
           error,
         })
       }
@@ -221,7 +271,7 @@ router.post('/', checkUser, async (req, res) => {
 
 /**
  * POST /api/suppliers/:supplierParam/products
- * Create new supplier product
+ * Create new supplier product for one supplier
  */
 router.post('/:supplierParam/products', checkUser, async (req, res) => {
   const userId = req.user.sub
@@ -237,16 +287,18 @@ router.post('/:supplierParam/products', checkUser, async (req, res) => {
       where: { id: userId },
       include: { profile: true },
     })
+    if (!user) throw new Error('User not found')
 
-    // Get supplier id by supplierParam
-    // So later we can create the products for that supplier
+    // Get supplier handle by supplierParam
+    // So we can create the products for that supplier
     try {
       const supplier = await prisma.supplier.findFirst({
         where: { handle: { contains: supplierParam, mode: 'insensitive' } },
       })
+      if (!supplier) throw new Error('Supplier not found')
 
       try {
-        const data = {
+        const payloadData = {
           ...supplierProduct,
           slug: supplierProductSlug,
           supplierId: supplier.id,
@@ -254,7 +306,9 @@ router.post('/:supplierParam/products', checkUser, async (req, res) => {
         }
 
         const newSupplierProduct: SupplierProduct =
-          await prisma.supplierProduct.create({ data })
+          await prisma.supplierProduct.create({
+            data: payloadData,
+          })
 
         res.json({
           message: 'Create new supplier product success',
@@ -262,6 +316,7 @@ router.post('/:supplierParam/products', checkUser, async (req, res) => {
           supplierProduct: newSupplierProduct,
         })
       } catch (error) {
+        console.error({ error })
         if (error.code === 'P2002') {
           res.status(400).json({
             message:
@@ -285,7 +340,7 @@ router.post('/:supplierParam/products', checkUser, async (req, res) => {
             error,
           })
         } else {
-          res.status(500).json({
+          res.status(400).json({
             message:
               'Create new supplier product failed because unknown reason',
             error,

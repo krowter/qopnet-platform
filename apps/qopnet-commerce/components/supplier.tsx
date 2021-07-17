@@ -1,7 +1,10 @@
-import { useState } from 'react'
 import NextLink from 'next/link'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
+import slugify from 'slugify'
+import { useForm, SubmitHandler } from 'react-hook-form'
+import { useUser, useSupabase } from 'use-supabase'
 import {
   Button,
   Text,
@@ -20,17 +23,18 @@ import {
   SimpleGrid,
   useToast,
 } from '@chakra-ui/react'
-import { useForm, SubmitHandler } from 'react-hook-form'
-import { useUser, useSupabase } from 'use-supabase'
 
 import { Icon } from '@qopnet/qopnet-ui'
 import { postToAPI } from '../utils/fetch'
 
-export type ProfileData = {
-  // Profile
+export type SupplierData = {
+  // Supplier
   name?: string
   handle?: string
   phone?: string
+  category?: string | 'PRODUCER'
+  nationalTax?: string
+  certificationFile?: string
 
   // Address
   address?: {
@@ -43,7 +47,7 @@ export type ProfileData = {
   }
 }
 
-export const CreateProfileForm = ({ profile }) => {
+export const CreateSupplierForm = () => {
   const router = useRouter()
   const toast = useToast()
   const user = useUser()
@@ -55,31 +59,26 @@ export const CreateProfileForm = ({ profile }) => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ProfileData>({
-    defaultValues: {
-      ...profile,
-      address: profile?.addresses[0],
-    },
-  })
+  } = useForm<SupplierData>()
 
-  // Create profile process and toast
-  const handleSubmitCreateProfile: SubmitHandler<ProfileData> = async (
-    profileFormData
+  // Create supplier process and toast
+  const handleSubmitCreateSupplier: SubmitHandler<SupplierData> = async (
+    supplierFormData
   ) => {
     try {
       setLoading(true)
-      // This will use PUT instead of POST
-      // Adaptive create or update
-      const data = await postToAPI('/api/profiles', {
-        ...profileFormData,
-      })
-      if (!data) throw new Error('Update profile response error')
-      console.log({ data })
 
-      toast({ title: 'Berhasil menyimpan profil', status: 'success' })
-      router.push(`/dashboard`)
+      const data = await postToAPI('/api/suppliers', {
+        ...supplierFormData,
+        handle: slugify(supplierFormData.handle.toLowerCase()),
+        // To make sure the handle is really a slug
+      })
+      if (!data) throw new Error('Create supplier response error')
+
+      toast({ title: 'Berhasil membuat supplier', status: 'success' })
+      router.push(`/${data.supplier.handle}`)
     } catch (error) {
-      toast({ title: 'Gagal menyimpan profil', status: 'error' })
+      toast({ title: 'Gagal membuat supplier', status: 'error' })
     } finally {
       setLoading(false)
     }
@@ -87,64 +86,76 @@ export const CreateProfileForm = ({ profile }) => {
 
   return (
     <VStack spacing={10}>
-      <NextSeo title="Profil dan alamat - Qopnet" />
+      <NextSeo title="Membuat toko supplier baru - Qopnet" />
 
       <VStack>
         <Stack align="center">
           <Heading as="h1" size="xl">
-            Profil dan Alamat
+            Membuat Toko Supplier Baru
           </Heading>
-          <Text>
-            Silakan lengkapi profil dan informasi alamat pribadi Anda.
-          </Text>
+          <Text>Silakan lengkapi data supplier baru Anda.</Text>
         </Stack>
       </VStack>
 
       <SimpleGrid
-        onSubmit={handleSubmit(handleSubmitCreateProfile)}
+        onSubmit={handleSubmit(handleSubmitCreateSupplier)}
         as="form"
         w="100%"
-        maxW="720px"
-        columns={[1, 2, 2]}
+        maxW="800px"
+        columns={[1, 1, 2]}
         spacing={5}
       >
         <Stack>
           <FormControl>
-            <FormLabel>Nama Lengkap</FormLabel>
+            <FormLabel>Nama supplier</FormLabel>
             <InputGroup>
               <InputLeftElement pointerEvents="none">
                 <Icon name="name" />
               </InputLeftElement>
               <Input
                 type="text"
-                placeholder="Nama Lengkap"
+                placeholder="Nama Supplier"
                 {...register('name', { required: true })}
               />
             </InputGroup>
+            <FormHelperText>
+              <span>
+                Contoh: <b>Aneka Baju (PT Aneka Baju Indonesia)</b>
+              </span>
+            </FormHelperText>
             <FormHelperText color="red.500">
-              {errors.name && <span>Nama lengkap diperlukan</span>}
+              {errors.name && <span>Nama lengkap supplier diperlukan</span>}
             </FormHelperText>
           </FormControl>
 
           <FormControl>
-            <FormLabel>Username</FormLabel>
+            <FormLabel>Handle</FormLabel>
             <InputGroup>
               <InputLeftElement pointerEvents="none">
                 <Icon name="handle" />
               </InputLeftElement>
               <Input
                 type="text"
-                placeholder="namasaya"
+                placeholder="namasupplier"
                 {...register('handle', { required: true })}
               />
             </InputGroup>
+            <FormHelperText>
+              <span>
+                Contoh:{' '}
+                <b>
+                  <code>anekabaju</code>
+                </b>
+                . Harus huruf kecil semua.
+              </span>
+            </FormHelperText>
             <FormHelperText color="red.500">
-              {errors.handle && <span>Username diperlukan</span>}
+              {errors.handle && <span>Handle/domain supplier diperlukan</span>}
             </FormHelperText>
           </FormControl>
 
           <FormControl>
-            <FormLabel>Nomor telepon/HP/WhatsApp</FormLabel>
+            <FormLabel>Nomor telepon/HP/WhatsApp supplier</FormLabel>
             <InputGroup>
               <InputLeftElement pointerEvents="none">
                 <Icon name="phone" />
@@ -155,8 +166,63 @@ export const CreateProfileForm = ({ profile }) => {
                 {...register('phone', { required: true })}
               />
             </InputGroup>
+            <FormHelperText>
+              <span>
+                Contoh: <b>+62 1234 5678</b>. Sebaiknya bukan nomor pribadi.
+              </span>
+            </FormHelperText>
             <FormHelperText color="red.500">
               {errors.phone && <span>Nomor telepon diperlukan</span>}
+            </FormHelperText>
+          </FormControl>
+
+          <FormControl>
+            <FormLabel>Kategori</FormLabel>
+            <Select
+              {...register('category', { required: true })}
+              placeholder="Pilih kategori"
+            >
+              <option value="PRODUCER">Produsen</option>
+              <option value="DISTRIBUTOR">Distributor</option>
+            </Select>
+            <FormHelperText color="red.500">
+              {errors.category && <span>Kategori diperlukan</span>}
+            </FormHelperText>
+          </FormControl>
+
+          <FormControl>
+            <FormLabel>NPWP (Nomor Pokok Wajib Pajak) supplier</FormLabel>
+            <InputGroup>
+              <InputLeftElement pointerEvents="none">
+                <Icon name="number" />
+              </InputLeftElement>
+              <Input
+                type="text"
+                placeholder="1234 5678 1234 5678"
+                {...register('nationalTax', { required: true })}
+              />
+            </InputGroup>
+            <FormHelperText color="red.500">
+              {errors.nationalTax && <span>NPWP supplier diperlukan</span>}
+            </FormHelperText>
+          </FormControl>
+
+          <FormControl>
+            <FormLabel>Berkas/file sertifikat PT/CV</FormLabel>
+            <InputGroup>
+              <InputLeftElement pointerEvents="none">
+                <Icon name="certificate" />
+              </InputLeftElement>
+              <Input
+                type="text"
+                placeholder="https://drive.google.com/path/to/file.pdf"
+                {...register('certificationFile')}
+              />
+            </InputGroup>
+            <FormHelperText color="red.500">
+              {errors.certificationFile && (
+                <span>Berkas sertifikat tidak jelas</span>
+              )}
             </FormHelperText>
           </FormControl>
         </Stack>
@@ -177,7 +243,7 @@ export const CreateProfileForm = ({ profile }) => {
             <FormLabel>Detail alamat</FormLabel>
             <Textarea
               {...register('address.streetDetails')}
-              placeholder="RT/RW 01/02, Kelurahan, Kecamatan"
+              placeholder="RT/RW 01/02, Kelurahan, Kecamatan. Nomor gedung/lantai"
             />
             <FormHelperText color="red.500">
               {errors.address?.streetDetails && (
@@ -227,7 +293,6 @@ export const CreateProfileForm = ({ profile }) => {
             >
               <option value="ID">Indonesia</option>
             </Select>
-
             <FormHelperText color="red.500">
               {errors.address?.countryCode && <span>Negara diperlukan</span>}
             </FormHelperText>
@@ -235,11 +300,11 @@ export const CreateProfileForm = ({ profile }) => {
 
           <Button
             isLoading={loading}
-            loadingText="Menyimpan profil dan alamat..."
+            loadingText="Membuat supplier..."
             colorScheme="orange"
             type="submit"
           >
-            Simpan Profil dan Alamat
+            Buat Supplier Baru
           </Button>
         </Stack>
       </SimpleGrid>

@@ -10,10 +10,7 @@ http://localhost:4000
 
 # staging
 https://api-staging.qopnet.id
-https://qopnet-api-staging.up.railway.app
 
 # production
 https://api.qopnet.id
-https://qopnet-api.catamyst.com
-https://qopnet-api.up.railway.app
 ```
