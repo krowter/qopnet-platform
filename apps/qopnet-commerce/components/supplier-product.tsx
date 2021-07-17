@@ -71,7 +71,7 @@ export const CreateSupplierProductForm = ({ supplierParam }) => {
   const handleSubmitCreateSupplier: SubmitHandler<SupplierProductData> = async (
     supplierProductFormData
   ) => {
-    console.log({ supplierProductFormData })
+    // console.log({ supplierProductFormData })
 
     try {
       setLoading(true)
@@ -88,7 +88,10 @@ export const CreateSupplierProductForm = ({ supplierParam }) => {
       if (!data) throw new Error('Create supplier product response error')
 
       toast({ title: 'Berhasil menambah produk supplier', status: 'success' })
-      // router.push(`/${supplierParam}/${data.supplier.handle}`)
+
+      const redirectPath = `/${supplierParam}/${data.supplierProduct.slug}`
+      console.log({ redirectPath })
+      router.push(redirectPath)
     } catch (error) {
       toast({ title: 'Gagal membuat supplier', status: 'error' })
     } finally {

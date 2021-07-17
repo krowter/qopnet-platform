@@ -25,7 +25,7 @@ export const SupplierProductContainer = ({ supplierProductParam }) => {
 
   return (
     <>
-      {error && <Text>Gagal memuat produk</Text>}
+      {error && <Text>Gagal memuat produk supplier</Text>}
       {!error && !data && (
         <HStack>
           <Spinner />

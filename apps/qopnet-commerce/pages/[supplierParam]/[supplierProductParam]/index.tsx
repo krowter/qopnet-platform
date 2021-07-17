@@ -1,18 +1,42 @@
 import { useRouter } from 'next/router'
-import { Box, Heading } from '@chakra-ui/react'
+import { HStack, Spinner, Text } from '@chakra-ui/react'
 
-import { Layout } from '@qopnet/qopnet-ui'
+import { Layout, SupplierProductDetail } from '@qopnet/qopnet-ui'
+import { useSWR } from '../../../utils/swr'
 
-const SupplierProductParamPage = () => {
+const SupplierParamSlashSupplierProductParamPage = () => {
   const router = useRouter()
-  const { supplierProductParam } = router.query
+  const { supplierParam, supplierProductParam } = router.query
 
   return (
     <Layout pt={10}>
-      <Heading>One product page</Heading>
-      {supplierProductParam && <Box>{supplierProductParam}</Box>}
+      {supplierParam && supplierProductParam && (
+        <SupplierProductContainer supplierProductParam={supplierProductParam} />
+      )}
     </Layout>
   )
 }
 
-export default SupplierProductParamPage
+export const SupplierProductContainer = ({ supplierProductParam }) => {
+  // Although this is GET /api/suppliers/:supplierParam/:supplierProductParam
+  // We can still GET /api/suppliers/products/:supplierProductParam
+  const { data, error } = useSWR(
+    `/api/suppliers/products/${supplierProductParam}`
+  )
+  const { supplierProduct } = data || {}
+
+  return (
+    <>
+      {error && <Text>Gagal memuat produk supplier</Text>}
+      {!error && !data && (
+        <HStack>
+          <Spinner />
+          <Text>Memuat produk supplier...</Text>
+        </HStack>
+      )}
+      {!error && data && <SupplierProductDetail product={supplierProduct} />}
+    </>
+  )
+}
+
+export default SupplierParamSlashSupplierProductParamPage
