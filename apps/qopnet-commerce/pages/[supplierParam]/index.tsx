@@ -23,7 +23,7 @@ const SupplierParamPage = () => {
   const { supplierParam } = router.query
 
   return (
-    <Layout>
+    <Layout pt={10}>
       {supplierParam && <SupplierContainer supplierParam={supplierParam} />}
     </Layout>
   )
@@ -35,13 +35,13 @@ export const SupplierContainer = ({ supplierParam }) => {
   const { supplier } = data || {}
 
   return (
-    <VStack mt={10} spacing={10}>
+    <VStack spacing={10}>
       {error && <Text>Gagal memuat data supplier</Text>}
       {!error && !supplier && (
-        <Stack>
+        <HStack>
           <Spinner />
           <Text>Memuat data supplier...</Text>
-        </Stack>
+        </HStack>
       )}
       {!error && supplier && (
         <>
@@ -68,7 +68,7 @@ export const SupplierContainer = ({ supplierParam }) => {
                   return (
                     <Text key={cuid()}>
                       <span>{address?.street}, </span>
-                      <span>{address?.streetDetails ?? ''}</span>
+                      <span>{address?.streetDetails}, </span>
                       <span>{address?.city}, </span>
                       <span>{address?.state} </span>
                       <span>{address?.zip}, </span>
@@ -109,7 +109,7 @@ export const SupplierProducts = ({ products }) => {
   return (
     <SimpleGrid spacing={5} columns={[2, 2, 4]}>
       {products.map((product, index) => {
-        return <SupplierProductCard key={cuid()} product={product} />
+        return <SupplierProductCard key={product.id} product={product} />
       })}
     </SimpleGrid>
   )

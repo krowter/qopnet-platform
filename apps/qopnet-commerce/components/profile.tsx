@@ -80,7 +80,7 @@ export const CreateProfileForm = () => {
   }
 
   return (
-    <VStack mt={20} spacing={10}>
+    <VStack spacing={10}>
       <VStack>
         <Stack align="center">
           <Heading as="h1" size="xl">

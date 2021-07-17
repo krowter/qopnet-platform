@@ -83,7 +83,7 @@ export const CreateSupplierForm = () => {
   }
 
   return (
-    <VStack mt={10} spacing={10}>
+    <VStack spacing={10}>
       <VStack>
         <Stack align="center">
           <Heading as="h1" size="xl">

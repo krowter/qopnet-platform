@@ -236,7 +236,7 @@ export const SupplierProductDetail = ({
   const [isDesktop] = useMediaQuery('(min-width: 60em)')
 
   return (
-    <Stack pt={10} spacing={20}>
+    <Stack spacing={20}>
       <Stack direction={isDesktop ? 'row' : 'column'} spacing={10}>
         <Stack id="product-images">
           <Box display="inherit">

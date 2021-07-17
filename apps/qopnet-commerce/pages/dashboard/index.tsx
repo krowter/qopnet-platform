@@ -36,10 +36,10 @@ const DashboardPage = () => {
   }, [user, router])
 
   return (
-    <Layout>
+    <Layout pt={10}>
       {error && <Text>Gagal memuat profil Anda</Text>}
       {!error && !data && (
-        <HStack mt={10}>
+        <HStack>
           <Spinner />
           <Text>Memuat profil...</Text>
         </HStack>
@@ -54,7 +54,7 @@ const DashboardPage = () => {
  */
 export const DashboardContent = ({ profile }) => {
   return (
-    <Stack mt={10} spacing={10}>
+    <Stack spacing={10}>
       <Stack id="dashboard-title">
         <Heading as="h1">Dasbor Saya</Heading>
         {profile && (

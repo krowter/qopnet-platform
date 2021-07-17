@@ -21,11 +21,7 @@ import { useSWR } from '../utils/swr'
 
 export const SuppliersPage = () => {
   const { data, error } = useSWR('/api/suppliers')
-  /**
-   * Quick fix because currently /api/suppliers returns
-   * { supplier: [] } not { suppliers: [] }
-   */
-  const { supplier: suppliers } = data || {}
+  const { suppliers } = data || {}
 
   return (
     <DefaultLayout>

@@ -13,10 +13,17 @@ const router = express.Router()
  */
 router.get('/', async (req, res) => {
   try {
-    const supplier: Supplier[] = await prisma.supplier.findMany({})
+    const suppliers: Supplier[] = await prisma.supplier.findMany({
+      include: {
+        owner: true,
+        addresses: true,
+        supplierProducts: true,
+      },
+    })
+
     res.json({
       message: 'Get all suppliers',
-      supplier,
+      suppliers,
     })
   } catch (error) {
     res.json({
