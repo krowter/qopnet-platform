@@ -70,13 +70,7 @@ export const CreateProfileForm = () => {
 
       if (profile) {
         toast({ title: 'Berhasil membuat profil', status: 'success' })
-        // router.push('/dashboard')
-        /**
-         * Dashboard to choose to:
-         * 1. continue shopping
-         * 2. create supplier
-         * 3. create supplier product
-         */
+        router.push('/dashboard')
       } else if (error) {
         throw new Error('Gagal membuat profil')
       }
@@ -92,9 +86,11 @@ export const CreateProfileForm = () => {
       <VStack>
         <Stack align="center">
           <Heading as="h1" size="xl">
-            Buat profil dan atur alamat
+            Profil dan Alamat
           </Heading>
-          <Text>Silakan lengkapi profil dan informasi alamat.</Text>
+          <Text>
+            Silakan lengkapi profil dan informasi alamat pribadi Anda.
+          </Text>
         </Stack>
       </VStack>
 

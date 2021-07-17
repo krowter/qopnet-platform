@@ -26,6 +26,7 @@ const apiUrl =
     : apiDevelopment // development
 
 console.info({
+  message: 'Qopnet Commerce is ready',
   env: process.env.NEXT_PUBLIC_ENV,
   apiUrl,
 })
