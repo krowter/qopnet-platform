@@ -105,15 +105,17 @@ export const Header = (props: HeaderProps) => {
                   id="user-avatar-button"
                   name={user.email || 'Unknown'}
                   size="sm"
-                  rounded="base"
-                  height="40px"
-                  width="40px"
                 >
                   <AvatarBadge boxSize="1.25em" bg="green.500" />
                 </Avatar>
               </chakra.a>
             </NextLink>
-            <ButtonGroup id="user-action-buttons" spacing={3} size="md">
+            <ButtonGroup
+              id="user-action-buttons"
+              spacing={3}
+              size="md"
+              variant="ghost"
+            >
               <IconButton
                 id="shopping-cart-button"
                 colorScheme="green"

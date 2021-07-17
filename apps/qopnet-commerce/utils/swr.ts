@@ -33,6 +33,7 @@ console.info({
 
 /**
  * Dynamic fetcher which use apiUrl automatically
+ * Use accessToken from headers if authenticated
  */
 export const fetcher = async (endpoint: string) => {
   // Be careful when dealing with localStorage
