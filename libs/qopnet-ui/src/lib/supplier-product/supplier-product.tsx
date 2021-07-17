@@ -23,6 +23,7 @@ import {
   useNumberInput,
   VStack,
   useColorModeValue,
+  useToast,
 } from '@chakra-ui/react'
 
 import { formatDateTime } from '@qopnet/util-format'
@@ -303,12 +304,15 @@ export const SupplierProductDetail = ({
 
           <Divider variant="dashed" />
 
-          <SupplierCardForProductLink supplier={product.supplier} />
-
-          <Text fontSize="xs">
-            Dijual sejak <b>{formatDateTime(product.createdAt)}</b>. Diubah
-            sejak <b>{formatDateTime(product.updatedAt)}</b>
-          </Text>
+          <Stack>
+            {product?.supplier?.handle && (
+              <SupplierCardForProductLink supplier={product.supplier} />
+            )}
+            <Text fontSize="xs">
+              Dijual sejak <b>{formatDateTime(product.createdAt)}</b>. Diubah
+              sejak <b>{formatDateTime(product.updatedAt)}</b>
+            </Text>
+          </Stack>
         </Stack>
       </Stack>
 
@@ -383,13 +387,14 @@ export const SupplierProductCartModifier = ({
 }: {
   product: SupplierProduct
 }) => {
+  const toast = useToast()
   const maxValue = 10
 
   // https://chakra-ui.com/docs/form/number-input#create-a-mobile-spinner
   const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
     useNumberInput({
       step: 1,
-      defaultValue: 0,
+      defaultValue: 1,
       min: 1,
       max: maxValue,
     })
@@ -402,6 +407,14 @@ export const SupplierProductCartModifier = ({
   const formattedProductSubTotal = formatPrice(
     Number(product?.price) * Number(productSubTotal)
   )
+
+  const handleAddToCart = () => {
+    console.info({ productSubTotal })
+    toast({
+      title: `Berhasil menambah produk`,
+      description: `Subtotal: ${formattedProductSubTotal}`,
+    })
+  }
 
   return (
     <Stack id="product-cart-modifier" alignItems="flex-start">
@@ -426,7 +439,13 @@ export const SupplierProductCartModifier = ({
         <b>{formattedProductSubTotal}</b>
       </Text>
 
-      <Button colorScheme="green" size="sm" leftIcon={<Icon name="plus" />}>
+      <Button
+        disabled={!productSubTotal}
+        colorScheme="green"
+        size="sm"
+        leftIcon={<Icon name="plus" />}
+        onClick={handleAddToCart}
+      >
         Tambah Keranjang
       </Button>
     </Stack>
