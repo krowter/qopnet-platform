@@ -1,5 +1,9 @@
 -- CreateEnum
 CREATE TYPE "SupplierCategory" AS ENUM ('PRODUCER', 'DISTRIBUTOR');
+-- CreateEnum
+CREATE TYPE "SupplierProductWeightUnit" AS ENUM ('GR', 'KG', 'TON');
+-- CreateEnum
+CREATE TYPE "SupplierProductStatus" AS ENUM ('ACTIVE', 'INACTIVE');
 -- CreateTable
 CREATE TABLE "users" (
     "id" TEXT NOT NULL,
@@ -58,6 +62,7 @@ CREATE TABLE "suppliers" (
     "id" TEXT NOT NULL,
     "handle" TEXT,
     "name" TEXT,
+    "phone" TEXT,
     "avatarUrl" TEXT,
     "nationalTax" TEXT,
     "certificationFile" TEXT,
@@ -70,14 +75,23 @@ CREATE TABLE "suppliers" (
 -- CreateTable
 CREATE TABLE "supplier_products" (
     "id" TEXT NOT NULL,
+    "images" JSONB,
     "slug" TEXT,
-    "sku" TEXT,
     "name" TEXT,
+    "subname" TEXT,
+    "category" TEXT,
+    "sku" TEXT,
     "description" TEXT,
     "price" MONEY,
     "priceMax" MONEY,
     "priceMin" MONEY,
-    "images" JSONB,
+    "minOrder" INTEGER,
+    "weight" INTEGER,
+    "weightUnit" "SupplierProductWeightUnit",
+    "weightDetails" TEXT,
+    "dimension" JSONB,
+    "status" "SupplierProductStatus",
+    "stock" INTEGER,
     "supplierId" TEXT,
     "ownerId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -151,14 +165,3 @@ ADD FOREIGN KEY ("ownerId") REFERENCES "profiles"("id") ON DELETE CASCADE ON UPD
 ALTER TABLE "merchants"
 ADD FOREIGN KEY ("ownerId") REFERENCES "profiles"("id") ON DELETE
 SET NULL ON UPDATE CASCADE;
--- This trigger can be pasted into the first init migration
--- Copy from auth.users to public.users
-CREATE OR REPLACE FUNCTION public.signup_copy_to_users_table() RETURNS TRIGGER AS $$ BEGIN
-INSERT INTO public.users (id, email)
-VALUES(new.id, new.email);
-RETURN NEW;
-INSERT INTO public.profiles (userId)
-VALUES(new.userId);
-RETURN NEW;
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
