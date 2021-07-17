@@ -271,7 +271,7 @@ router.post('/', checkUser, async (req, res) => {
 
 /**
  * POST /api/suppliers/:supplierParam/products
- * Create new supplier product
+ * Create new supplier product for one supplier
  */
 router.post('/:supplierParam/products', checkUser, async (req, res) => {
   const userId = req.user.sub
@@ -287,13 +287,15 @@ router.post('/:supplierParam/products', checkUser, async (req, res) => {
       where: { id: userId },
       include: { profile: true },
     })
+    if (!user) throw new Error('User not found')
 
-    // Get supplier id by supplierParam
-    // So later we can create the products for that supplier
+    // Get supplier handle by supplierParam
+    // So we can create the products for that supplier
     try {
       const supplier = await prisma.supplier.findFirst({
         where: { handle: { contains: supplierParam, mode: 'insensitive' } },
       })
+      if (!supplier) throw new Error('Supplier not found')
 
       try {
         const data = {
@@ -302,6 +304,8 @@ router.post('/:supplierParam/products', checkUser, async (req, res) => {
           supplierId: supplier.id,
           ownerId: user.profile.id,
         }
+
+        // console.log({ data })
 
         const newSupplierProduct: SupplierProduct =
           await prisma.supplierProduct.create({ data })
@@ -335,7 +339,7 @@ router.post('/:supplierParam/products', checkUser, async (req, res) => {
             error,
           })
         } else {
-          res.status(500).json({
+          res.status(400).json({
             message:
               'Create new supplier product failed because unknown reason',
             error,

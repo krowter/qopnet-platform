@@ -22,7 +22,6 @@ import {
   useToast,
 } from '@chakra-ui/react'
 import { useForm, SubmitHandler } from 'react-hook-form'
-import { useUser, useSupabase } from 'use-supabase'
 
 import { Icon } from '@qopnet/qopnet-ui'
 import { postToAPI } from '../utils/fetch'
@@ -72,17 +71,23 @@ export const CreateSupplierProductForm = ({ supplierParam }) => {
   const handleSubmitCreateSupplier: SubmitHandler<SupplierProductData> = async (
     supplierProductFormData
   ) => {
+    console.log({ supplierProductFormData })
+
     try {
       setLoading(true)
 
-      const data = await postToAPI('/api/suppliers', {
+      /**
+       * POST /api/suppliers/:supplierParam/products
+       * Create new supplier product for one supplier
+       */
+      const data = await postToAPI(`/api/suppliers/${supplierParam}/products`, {
         ...supplierProductFormData,
         handle: slugify(supplierProductFormData.name.toLowerCase()),
       })
       if (!data) throw new Error('Create supplier product response error')
 
       toast({ title: 'Berhasil menambah produk supplier', status: 'success' })
-      router.push(`/${supplierParam}/${data.supplier.handle}`)
+      // router.push(`/${supplierParam}/${data.supplier.handle}`)
     } catch (error) {
       toast({ title: 'Gagal membuat supplier', status: 'error' })
     } finally {
