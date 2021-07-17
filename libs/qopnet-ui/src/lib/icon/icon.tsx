@@ -5,12 +5,11 @@ import {
   FaSearch as Search,
   FaShoppingCart as Cart,
   FaSignOutAlt as SignOut,
-  FaPlus as Increment,
-  FaMinus as Decrement,
+  FaPlus as Plus,
+  FaMinus as Minus,
   FaHome as Home,
   FaUser as Users,
   FaIdBadge as Profile,
-  FaRegBuilding as Suppliers,
   FaBuilding as Supplier,
   FaCarrot as SupplierProduct,
   FaEye as Show,
@@ -54,10 +53,10 @@ export const Icon = (props: IconProps) => {
       return <Cart />
     case 'signout':
       return <SignOut />
-    case 'increment':
-      return <Increment />
-    case 'decrement':
-      return <Decrement />
+    case 'plus':
+      return <Plus />
+    case 'minus':
+      return <Minus />
     case 'home':
       return <Home />
     case 'users':

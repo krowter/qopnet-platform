@@ -7,6 +7,10 @@ import { checkUser } from '../auth/middleware'
 const prisma = new PrismaClient()
 const router = express.Router()
 
+/**
+ * GET /api/suppliers
+ * Get all suppliers
+ */
 router.get('/', async (req, res) => {
   try {
     const supplier: Supplier[] = await prisma.supplier.findMany({})
@@ -22,6 +26,10 @@ router.get('/', async (req, res) => {
   }
 })
 
+/**
+ * GET /api/suppliers/:supplierParam
+ * Get one supplier by supplierParam
+ */
 router.get('/:supplierParam', async (req, res) => {
   const { supplierParam } = req.params
   try {
@@ -29,7 +37,13 @@ router.get('/:supplierParam', async (req, res) => {
       where: {
         handle: supplierParam,
       },
+      include: {
+        owner: true,
+        addresses: true,
+        supplierProducts: true,
+      },
     })
+
     if (!supplier) {
       res.status(404).json({
         message: 'Get one supplier by supplierParam not found',
@@ -211,8 +225,7 @@ router.post('/', checkUser, async (req, res) => {
         res.status(400).json({
           message:
             'Create new supplier failed because name/handle need to be unique',
-          name: newSupplier.name,
-          handle: newSupplierHandle,
+          handle: newSupplier.handle,
           error,
         })
       } else if (error.code === 'P2003') {

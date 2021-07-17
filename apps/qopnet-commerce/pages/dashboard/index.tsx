@@ -1,4 +1,7 @@
 import NextLink from 'next/link'
+import { useEffect } from 'react'
+import { useRouter } from 'next/router'
+import { useUser } from 'use-supabase'
 import {
   Heading,
   Divider,
@@ -28,6 +31,14 @@ const DashboardPage = () => {
   const { data, error } = useSWR('/api/profiles/my')
   const { profile } = data || {}
 
+  const user = useUser()
+  const router = useRouter()
+  useEffect(() => {
+    if (!user) {
+      router.replace('/signin')
+    }
+  }, [user, router])
+
   return (
     <Layout>
       {error && <Text>Gagal memuat profil Anda</Text>}
@@ -54,57 +65,77 @@ export const DashboardContent = ({ profile }) => {
         direction={['column', 'column', 'row']}
         spacing={10}
       >
-        <Stack>
+        <Stack spacing={5}>
           <Heading as="h3" size="md">
             Mau apa?
           </Heading>
-          <DashboardActionLink name="shop" href="/shop">
-            Lanjut belanja
-          </DashboardActionLink>
-          <DashboardActionLink name="profile" href="/create-profile">
-            Ubah profil saya
-          </DashboardActionLink>
-          <DashboardActionLink name="supplier" href="/create-supplier">
-            Membuat supplier baru
-          </DashboardActionLink>
-          <DashboardActionLink
-            name="supplier-product"
-            href="/create-supplier-product"
-          >
-            Membuat produk supplier baru
-          </DashboardActionLink>
+          <Stack>
+            <DashboardActionLink name="shop" href="/shop">
+              Lanjut belanja
+            </DashboardActionLink>
+            <DashboardActionLink name="profile" href="/create-profile">
+              Ubah profil saya
+            </DashboardActionLink>
+            <DashboardActionLink name="supplier" href="/create-supplier">
+              Membuat toko supplier baru
+            </DashboardActionLink>
+            <DashboardActionLink
+              name="supplier-product"
+              href="/create-supplier-product"
+            >
+              Membuat produk supplier baru
+            </DashboardActionLink>
+          </Stack>
         </Stack>
 
         {/* Only show owned suppliers list when exist */}
-        <Stack id="dashboard-suppliers">
+        <Stack id="dashboard-suppliers" spacing={5}>
           <Heading as="h3" size="md">
-            Daftar Supplier Saya
+            List toko supplier milik saya
           </Heading>
-          {!profile?.suppliers?.length && (
-            <Stack align="flex-start">
-              <Text>Saya bukan supplier atau belum memiliki supplier</Text>
-              <DashboardActionLink
-                name="supplier"
-                href="/create-supplier"
-                size="xs"
-                variant="outline"
-              >
-                Buat supplier pertama saya
-              </DashboardActionLink>
-            </Stack>
-          )}
-          {profile?.suppliers?.length && (
-            <SimpleGrid columns={2} spacing={5} minChildWidth="350px">
-              {profile.suppliers.map((supplier, index) => {
-                return (
-                  <DashboardSupplierCardLink
-                    key={supplier.handle}
-                    supplier={supplier}
-                  />
-                )
-              })}
-            </SimpleGrid>
-          )}
+
+          <Stack align="flex-start" spacing={5}>
+            {!profile?.suppliers?.length && (
+              <>
+                <Text>Saya bukan supplier atau belum memiliki supplier</Text>
+                <DashboardActionLink
+                  name="plus"
+                  href="/create-supplier"
+                  size="xs"
+                  variant="outline"
+                >
+                  Buat supplier pertama saya
+                </DashboardActionLink>
+              </>
+            )}
+            {profile?.suppliers?.length && (
+              <>
+                <SimpleGrid
+                  columns={2}
+                  spacing={5}
+                  minChildWidth="350px"
+                  w="100%"
+                >
+                  {profile.suppliers.map((supplier, index) => {
+                    return (
+                      <DashboardSupplierCardLink
+                        key={supplier.handle}
+                        supplier={supplier}
+                      />
+                    )
+                  })}
+                </SimpleGrid>{' '}
+                <DashboardActionLink
+                  name="plus"
+                  href="/create-supplier"
+                  size="xs"
+                  variant="outline"
+                >
+                  Tambah toko supplier lagi
+                </DashboardActionLink>
+              </>
+            )}
+          </Stack>
         </Stack>
       </Stack>
     </Stack>

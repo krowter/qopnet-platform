@@ -87,7 +87,7 @@ export const CreateSupplierForm = () => {
       <VStack>
         <Stack align="center">
           <Heading as="h1" size="xl">
-            Membuat Supplier Baru
+            Membuat Toko Supplier Baru
           </Heading>
           <Text>Silakan lengkapi data supplier baru Anda.</Text>
         </Stack>
@@ -204,7 +204,7 @@ export const CreateSupplierForm = () => {
           </FormControl>
 
           <FormControl>
-            <FormLabel>Berkas/file sertifikat</FormLabel>
+            <FormLabel>Berkas/file sertifikat PT/CV</FormLabel>
             <InputGroup>
               <InputLeftElement pointerEvents="none">
                 <Icon name="certificate" />
