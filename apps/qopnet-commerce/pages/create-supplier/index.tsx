@@ -14,7 +14,7 @@ export const CreateSupplierPage = () => {
     }
   }, [user, router])
 
-  return <Layout>{user && <CreateSupplierForm />}</Layout>
+  return <Layout pt={10}>{user && <CreateSupplierForm />}</Layout>
 }
 
 export default CreateSupplierPage

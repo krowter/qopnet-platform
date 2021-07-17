@@ -14,7 +14,7 @@ export const CreateProfilePage = () => {
     }
   }, [user, router])
 
-  return <Layout>{user && <CreateProfileForm />}</Layout>
+  return <Layout pt={10}>{user && <CreateProfileForm />}</Layout>
 }
 
 export default CreateProfilePage

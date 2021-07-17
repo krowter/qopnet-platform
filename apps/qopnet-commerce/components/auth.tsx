@@ -79,7 +79,7 @@ export const SignUpForm = () => {
   )
 
   return (
-    <VStack mt={20} spacing={10}>
+    <VStack spacing={10}>
       <Stack align="center">
         <NextImage
           alt="Qopnet icon"
@@ -189,7 +189,7 @@ export const SignInForm = () => {
   }
 
   return (
-    <VStack mt={20} spacing={10}>
+    <VStack spacing={10}>
       <VStack>
         <Heading as="h1" size="xl">
           Masuk ke akun Qopnet

@@ -8,7 +8,7 @@ const SupplierProductParamPage = () => {
   const { supplierProductParam } = router.query
 
   return (
-    <Layout>
+    <Layout pt={10}>
       <Heading>One product page</Heading>
       {supplierProductParam && <Box>{supplierProductParam}</Box>}
     </Layout>

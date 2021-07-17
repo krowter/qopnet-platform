@@ -15,7 +15,7 @@ const SignUpPage = () => {
   }, [user, router])
 
   return (
-    <Layout>
+    <Layout pt={10}>
       <SignUpForm />
     </Layout>
   )
