@@ -33,15 +33,12 @@ router.post('/', checkUser, async (req, res) => {
   const userId = req.user.sub
   const profile = req.body
 
-  console.log({ profile })
-
   try {
     const user = await prisma.user.findUnique({
       where: { id: userId },
       include: { profile: true },
       // Just to check whether the user already had a profile too
     })
-    console.log({ user })
 
     if (!user) throw new Error('User not found')
 
@@ -51,7 +48,6 @@ router.post('/', checkUser, async (req, res) => {
       const existingProfile = await prisma.profile.findFirst({
         where: { userId },
       })
-      console.log({ existingProfile })
       if (existingProfile) throw new Error('Profile already exist')
 
       /**
@@ -65,7 +61,6 @@ router.post('/', checkUser, async (req, res) => {
         userId,
         addresses: { create: [profile.address] },
       }
-      console.log({ payloadData })
 
       /**
        * Continue to create profile if there is no existing profile

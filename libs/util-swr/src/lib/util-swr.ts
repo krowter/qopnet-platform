@@ -22,10 +22,17 @@ export const fetcher = async (
   // apiUrl need to be configured in the frontend app
   // Because process.env is not allowed here
   const fullUrl = apiUrl + endpoint
+  console.info({ fullUrl, accessToken })
 
   const fetchConfig = accessToken
-    ? { headers: new Headers({ Authorization: 'Bearer ' + accessToken }) }
+    ? {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + accessToken,
+        },
+      }
     : {}
+  console.info({ fetchConfig })
 
   const res = await fetch(fullUrl, fetchConfig)
 

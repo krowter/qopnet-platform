@@ -74,7 +74,7 @@ export const SignUpForm = () => {
         })
       }
     } catch (error) {
-      console.log(error)
+      console.error(error)
     } finally {
       setLoading(false)
     }
@@ -197,7 +197,7 @@ export const SignInForm = () => {
         })
       }
     } catch (error) {
-      console.log(error)
+      console.error(error)
     } finally {
       setLoading(false)
     }

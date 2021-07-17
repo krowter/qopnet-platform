@@ -66,6 +66,8 @@ const port = process.env.PORT || 4000
 const server = app.listen(port, () => {
   console.info({
     message: `Qopnet API listening at :${port}`,
+    env: process.env.NODE_ENV,
+    databaseUrl: process.env.DATABASE_URL,
   })
 })
 

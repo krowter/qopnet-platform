@@ -25,9 +25,6 @@ import { useSWR } from '../../utils/swr'
  * Dashboard for links and manading suppliers.
  */
 const DashboardPage = () => {
-  const { data, error } = useSWR('/api/profiles/my')
-  const { profile } = data || {}
-
   const user = useUser()
   const router = useRouter()
   useEffect(() => {
@@ -36,9 +33,16 @@ const DashboardPage = () => {
     }
   }, [user, router])
 
+  return <Layout pt={10}>{user && <DashboardContainer user={user} />}</Layout>
+}
+
+export const DashboardContainer = ({ user }) => {
+  const { data, error } = useSWR('/api/profiles/my')
+  const { profile } = data || {}
+
   return (
-    <Layout pt={10}>
-      {error && <Text>Gagal memuat profil Anda</Text>}
+    <Stack>
+      {error && !data && <Text>Gagal memuat profil Anda</Text>}
       {!error && !data && (
         <HStack>
           <Spinner />
@@ -46,7 +50,7 @@ const DashboardPage = () => {
         </HStack>
       )}
       {!error && data && <DashboardContent profile={profile} />}
-    </Layout>
+    </Stack>
   )
 }
 

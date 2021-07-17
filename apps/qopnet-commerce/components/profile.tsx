@@ -74,7 +74,7 @@ export const CreateProfileForm = ({ profile }) => {
         ...profileFormData,
       })
       if (!data) throw new Error('Update profile response error')
-      console.log({ data })
+      console.error({ data })
 
       toast({ title: 'Berhasil menyimpan profil', status: 'success' })
       router.push(`/dashboard`)
