@@ -80,13 +80,7 @@ export const DashboardContent = ({ profile }) => {
               Ubah profil saya
             </DashboardActionLink>
             <DashboardActionLink name="supplier" href="/create-supplier">
-              Membuat toko supplier baru
-            </DashboardActionLink>
-            <DashboardActionLink
-              name="supplier-product"
-              href="/create-supplier-product"
-            >
-              Membuat produk supplier baru
+              Membuat toko supplier
             </DashboardActionLink>
           </Stack>
         </Stack>

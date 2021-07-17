@@ -50,8 +50,22 @@ export const SupplierContainer = ({ supplierParam }) => {
                     ? 'Produsen'
                     : 'Distributor'}
                 </Tag>
-                <span> / </span>
                 {supplier.phone && <span>{supplier.phone}</span>}
+              </HStack>
+
+              <HStack>
+                {supplier.addresses.map((address, index) => {
+                  return (
+                    <Text>
+                      <span>{address.street}, </span>
+                      <span>{address.streetDetails ?? ''}</span>
+                      <span>{address.city}, </span>
+                      <span>{address.state}, </span>
+                      <span>{address.zip}, </span>
+                      <span>{address.countryCode}</span>
+                    </Text>
+                  )
+                })}
               </HStack>
             </Stack>
 
