@@ -1,13 +1,7 @@
 // import * as dayjs from 'dayjs'
 import dayjs from 'dayjs'
-
 import 'dayjs/locale/id'
-
 dayjs.locale('id')
-
-export function utilFormat(): string {
-  return 'util-format'
-}
 
 /**
  * Format from string or date
