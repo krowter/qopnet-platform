@@ -80,7 +80,14 @@ router.post('/', checkUser, async (req, res) => {
 router.get('/my', checkUser, async (req, res) => {
   const profile = await prisma.profile.findFirst({
     where: { userId: req.user.sub },
-    include: { user: true },
+    include: {
+      user: true,
+      addresses: true,
+      suppliers: true,
+      supplierProducts: true,
+      wholesalers: true,
+      merchants: true,
+    },
   })
 
   res.json({
