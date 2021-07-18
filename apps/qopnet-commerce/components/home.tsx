@@ -8,8 +8,8 @@ import {
 } from '@qopnet/qopnet-ui'
 import { useSWR } from '../utils/swr'
 
-export const Home = () => {
-  const { data, error } = useSWR(`/api/suppliers/products`)
+export const HomeContainer = () => {
+  const { data, error } = useSWR(`/api/suppliers/products/special`)
   const { supplierProducts } = data || {}
 
   return (

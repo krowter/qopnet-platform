@@ -1,12 +1,6 @@
 import { useRouter } from 'next/router'
-import {
-  Stack,
-  Heading,
-  Text,
-  Flex,
-  Spinner,
-  SimpleGrid,
-} from '@chakra-ui/react'
+import { NextSeo } from 'next-seo'
+import { Stack, Heading, Text, Flex, Spinner } from '@chakra-ui/react'
 
 import { Layout, SupplierProductsGrid } from '@qopnet/qopnet-ui'
 import { useSWR } from '../../utils/swr'
@@ -16,7 +10,7 @@ const SearchPage = () => {
   const { q: keyword } = router.query
 
   return (
-    <Layout pt={10}>
+    <Layout pt={5}>
       {!keyword && <SearchBegin />}
       {keyword && <SearchResults keyword={keyword} />}
     </Layout>
@@ -42,6 +36,8 @@ export const SearchResults = ({ keyword }) => {
 
   return (
     <Stack pt={10} spacing={3}>
+      <NextSeo title={`Pencarian: ${keyword} - Qopnet`} />
+
       <Heading as="h1" size="xl">
         Cari produk dan toko supplier
       </Heading>

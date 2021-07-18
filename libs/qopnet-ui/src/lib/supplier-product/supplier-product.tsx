@@ -44,13 +44,13 @@ const supplierProductCategories = [
   { name: 'new', text: 'Terbaru', color: 'pink.300' },
   { name: 'organic', text: 'Organik', color: 'green.500' },
   { name: 'breakfast', text: 'Sarapan', color: 'orange.500' },
-  { name: 'spices', text: 'Minyak, Bumbu, Saus', color: 'red.500' },
-  { name: 'fruits', text: 'Buah Segar', color: 'yellow.500' },
+  { name: 'spice', text: 'Minyak, Bumbu, Saus', color: 'red.500' },
+  { name: 'fruit', text: 'Buah Segar', color: 'yellow.500' },
   { name: 'vegetable', text: 'Sayuran', color: 'orange.500' },
   { name: 'carb', text: 'Beras, Mie, Roti', color: 'gray.500' },
   { name: 'protein', text: 'Protein', color: 'orange.900' },
-  { name: 'dairy', text: 'Susu, Telur, Keju', color: 'yellow.200' },
-  { name: 'baby', text: 'Makanan Bayi', color: 'orange.500' },
+  { name: 'dairy', text: 'Susu, Telur, Keju', color: 'orange.400' },
+  { name: 'baby', text: 'Makanan Bayi', color: 'yellow.200' },
   { name: 'snack', text: 'Makanan Ringan', color: 'blue.500' },
 ]
 
@@ -97,11 +97,11 @@ export interface SupplierProductDetailProps {
 
 export const HomeProductCategory = (props: HomeProductCategoryProps) => {
   return (
-    <VStack id={props.id} py={20} spacing={10}>
+    <VStack id={props.id} py={10} spacing={10}>
       <Heading as="h2" size="lg">
-        Kategori Produk
+        Pilihan Kategori Produk
       </Heading>
-      <SimpleGrid spacing={5} columns={[4, 6, 8]}>
+      <SimpleGrid spacing={5} columns={[3, 4, 8]}>
         {supplierProductCategories.map((category) => {
           return (
             <NextLink
@@ -110,7 +110,7 @@ export const HomeProductCategory = (props: HomeProductCategoryProps) => {
               passHref
             >
               <VStack as="a">
-                <Text fontSize="5xl" color={category.color}>
+                <Text fontSize="4xl" color={category.color}>
                   <Icon name={category.name} />
                 </Text>
                 <Text textAlign="center">{category.text}</Text>
@@ -127,7 +127,7 @@ export const HomeProductSpecial = (props: HomeProductSpecialProps) => {
   const { id, supplierProducts, error } = props
 
   return (
-    <VStack id={id} py={20} spacing={10}>
+    <VStack id={id} py={10} spacing={10}>
       <Heading as="h2" size="lg">
         Produk Pilihan
       </Heading>
@@ -150,6 +150,9 @@ export const SupplierProductsGrid = ({
         return (
           <SupplierProductCardLink
             key={product?.slug || index}
+            // Can fix by combining SupplierProduct and Supplier
+            // @ts-ignore
+            href={`/${product?.supplier?.handle}/${product.slug}`}
             product={product}
           />
         )
