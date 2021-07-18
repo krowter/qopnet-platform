@@ -233,7 +233,19 @@ export const SupplierProductSlugPage = () => {
                     {' '}
                     Harga Maximum: Rp. {supplierProduct.priceMax ?? '-'}
                   </Text>
-                  <Text>{supplierProduct.description}</Text>
+                  <Text> Minimum Order: {supplierProduct.minOrder ?? '-'}</Text>
+                  <Text> Berat: {supplierProduct.weight ?? '-'} Kg</Text>
+                  <Text>
+                    {' '}
+                    Satuan Berat: {supplierProduct.weightUnit ?? 'Kg'}
+                  </Text>
+                  <Text>
+                    {' '}
+                    Detail Berat: {supplierProduct.weightDetails ?? ''}
+                  </Text>
+                  <Text> Dimensi: {supplierProduct.dimension.width ?? ''}</Text>
+                  <Text> Stok: {supplierProduct.stock ?? ''} pcs</Text>
+                  <Text>Deskripsi: {supplierProduct.description}</Text>
                 </Stack>
               </VStack>
             )}

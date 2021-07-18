@@ -10,6 +10,7 @@ import {
   SupplierAddPage,
   SupplierSlugPage,
   SuppliersProductsPage,
+  SupplierProductsPage,
   SupplierProductSlugPage,
   SupplierProductAddPage,
   SupplierProductEditPage,
@@ -58,7 +59,17 @@ export const App = () => {
         />
         <Route
           exact
+          path="/suppliers/:supplierParam/products"
+          component={SupplierProductsPage}
+        />
+        <Route
+          exact
           path="/suppliers/products/add"
+          component={SupplierProductAddPage}
+        />
+        <Route
+          exact
+          path="/suppliers/:supplierParam/products/add"
           component={SupplierProductAddPage}
         />
         <Route
