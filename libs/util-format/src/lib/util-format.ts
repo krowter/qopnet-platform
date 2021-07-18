@@ -1,4 +1,3 @@
-// import * as dayjs from 'dayjs'
 import dayjs from 'dayjs'
 import 'dayjs/locale/id'
 dayjs.locale('id')

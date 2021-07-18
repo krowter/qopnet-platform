@@ -12,7 +12,7 @@ import {
   Image as ChakraImage,
   Input,
   InputGroup,
-  InputRightElement,
+  InputLeftElement,
   Link,
   ButtonGroup,
   useColorMode,
@@ -175,15 +175,15 @@ export const SearchBar = () => {
   return (
     <Box as="form" w="100%" onSubmit={handleSubmit(handleSubmitSearch)}>
       <InputGroup>
+        <InputLeftElement color={useColorModeValue('black', 'white')}>
+          <Icon name="search" />
+        </InputLeftElement>
         <Input
           type="text"
           placeholder="Cari produk..."
           bg={useColorModeValue('white', 'black')}
           {...register('keyword', { required: true })}
         />
-        <InputRightElement color={useColorModeValue('black', 'white')}>
-          <Icon name="search" />
-        </InputRightElement>
       </InputGroup>
     </Box>
   )

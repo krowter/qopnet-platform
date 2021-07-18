@@ -4,12 +4,16 @@ import { DefaultSeo } from 'next-seo'
 import { ChakraProvider } from '@chakra-ui/react'
 import { SWRConfig } from 'swr'
 
+// MDX and Chakra UI
+import { MDXProvider } from '@mdx-js/react'
+import { Text, UnorderedList, ListItem } from '@chakra-ui/react'
+
 // Supabase
 import { createClient } from '@supabase/supabase-js'
 import { SupabaseContextProvider } from 'use-supabase'
 
 // Local lib components and configs
-import { Header, Footer } from '@qopnet/qopnet-ui'
+import { Layout, Header, Footer } from '@qopnet/qopnet-ui'
 import { swrConfig } from '@qopnet/util-swr'
 
 // Local styles and configs
@@ -23,32 +27,61 @@ const supabase = createClient(
   `${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`
 )
 
+// Chakra UI component mapping for MDX
+const components = {
+  h1: (props) => (
+    <Text as="h1" fontSize="2xl" mb={3}>
+      {props.children}
+    </Text>
+  ),
+  h2: (props) => (
+    <Text as="h2" fontSize="xl" my={3}>
+      {props.children}
+    </Text>
+  ),
+  h3: (props) => (
+    <Text as="h3" fontSize="md" my={3}>
+      {props.children}
+    </Text>
+  ),
+  ul: (props) => <UnorderedList my={2}>{props.children}</UnorderedList>,
+  li: (props) => <ListItem>{props.children}</ListItem>,
+  p: (props) => <Text my={2}>{props.children}</Text>,
+  Header,
+  Layout,
+}
+
 function QopnetCommerceApp({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider>
-      <NextHead>
-        <meta
-          name="viewport"
-          content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover"
-        />
-        <meta name="application-name" content={SEO.title} />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content={SEO.title} />
-        <meta name="description" content={SEO.shortDescription} />
-        <meta name="format-detection" content="telephone=no" />
-        <meta name="mobile-web-app-capable" content="yes" />
-      </NextHead>
+      <MDXProvider components={components}>
+        <NextHead>
+          <meta
+            name="viewport"
+            content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover"
+          />
+          <meta name="application-name" content={SEO.title} />
+          <meta name="apple-mobile-web-app-capable" content="yes" />
+          <meta
+            name="apple-mobile-web-app-status-bar-style"
+            content="default"
+          />
+          <meta name="apple-mobile-web-app-title" content={SEO.title} />
+          <meta name="description" content={SEO.shortDescription} />
+          <meta name="format-detection" content="telephone=no" />
+          <meta name="mobile-web-app-capable" content="yes" />
+        </NextHead>
 
-      <DefaultSeo {...SEO} />
+        <DefaultSeo {...SEO} />
 
-      <SupabaseContextProvider client={supabase}>
-        <SWRConfig value={swrConfig}>
-          <Header />
-          <Component {...pageProps} />
-          <Footer />
-        </SWRConfig>
-      </SupabaseContextProvider>
+        <SupabaseContextProvider client={supabase}>
+          <SWRConfig value={swrConfig}>
+            <Header />
+            <Component {...pageProps} />
+            <Footer />
+          </SWRConfig>
+        </SupabaseContextProvider>
+      </MDXProvider>
     </ChakraProvider>
   )
 }

@@ -1,10 +1,23 @@
+import { NextSeo } from 'next-seo'
 import { Container, Box, BoxProps } from '@chakra-ui/react'
 
-export function Layout(props: BoxProps) {
+export interface LayoutProps {
+  meta?: {
+    title?: string
+    updatedAt?: string
+  }
+  children: JSX.Element | JSX.Element[]
+}
+
+export function Layout(props: LayoutProps & BoxProps) {
+  const { meta, children } = props
+
   return (
     <Container spacing={10} maxW={1200}>
+      {meta?.title && <NextSeo title={`${meta?.title} - Qopnet`} />}
+
       <Box minH="80vh" {...props}>
-        {props.children}
+        {children}
       </Box>
     </Container>
   )
