@@ -129,7 +129,7 @@ export const HomeProductSpecial = (props: HomeProductSpecialProps) => {
   return (
     <VStack id={id} py={10} spacing={10}>
       <Heading as="h2" size="lg">
-        Produk Pilihan
+        Produk dan Supplier Pilihan
       </Heading>
 
       {error && <Text>Gagal mengambil produk pilihan</Text>}
