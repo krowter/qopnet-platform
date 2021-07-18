@@ -14,7 +14,7 @@ async function main() {
   const newSupplier = await prisma.supplier.create({
     data: {
       name: 'PT. Aneka Busa Internasional',
-      handle: 'pt-aneka-busa-internasional'
+      handle: 'anekabusa'
     },
   })
 
