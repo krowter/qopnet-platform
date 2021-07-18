@@ -245,6 +245,7 @@ export const SupplierProductDetail = ({
     heigth: 0,
     length: 0,
   }
+  const hasDimension = width || height || length
 
   return (
     <Stack spacing={20}>
@@ -349,18 +350,20 @@ export const SupplierProductDetail = ({
             <Text>Tidak ada deskripsi.</Text>
           )}
         </Stack>
-        <Stack>
-          <Heading as="h5" size="md">
-            Ukuran
-          </Heading>
-          <Box>
-            <UnorderedList>
-              {width && <ListItem>Lebar: {width} cm</ListItem>}
-              {height && <ListItem>Tingi: {height} cm</ListItem>}
-              {length && <ListItem>Panjang: {length} cm</ListItem>}
-            </UnorderedList>
-          </Box>
-        </Stack>
+        {hasDimension && (
+          <Stack>
+            <Heading as="h5" size="md">
+              Ukuran
+            </Heading>
+            <Box>
+              <UnorderedList>
+                {width && <ListItem>Lebar: {width} cm</ListItem>}
+                {height && <ListItem>Tingi: {height} cm</ListItem>}
+                {length && <ListItem>Panjang: {length} cm</ListItem>}
+              </UnorderedList>
+            </Box>
+          </Stack>
+        )}
       </Stack>
     </Stack>
   )
