@@ -36,7 +36,7 @@ const env =
     ? 'staging'
     : 'development'
 
-const supplierProductCategories = [
+export const supplierProductCategories = [
   { name: 'all', text: 'Semua Produk', color: 'orange.500' },
   { name: 'cheap', text: 'Jaminan Murah', color: 'teal.500' },
   { name: 'saving', text: 'Hemat Waktu!', color: 'purple.500' },
@@ -106,7 +106,7 @@ export const HomeProductCategory = (props: HomeProductCategoryProps) => {
           return (
             <NextLink
               key={category.name}
-              href={`/products/${category.name}`}
+              href={`/products/category/${category.name}`}
               passHref
             >
               <VStack as="a">
