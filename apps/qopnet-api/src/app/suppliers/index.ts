@@ -1,10 +1,10 @@
-import { PrismaClient, SupplierProduct, Supplier } from '@prisma/client'
+import { SupplierProduct, Supplier } from '@prisma/client'
+import { prisma } from '@qopnet/util-prisma'
 import slugify from 'slugify'
 import * as express from 'express'
 
 import { checkUser } from '../auth/middleware'
 
-const prisma = new PrismaClient()
 const router = express.Router()
 
 /**

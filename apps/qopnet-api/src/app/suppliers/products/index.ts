@@ -1,5 +1,5 @@
-import { PrismaClient, SupplierProduct } from '@prisma/client'
-const prisma = new PrismaClient()
+import { SupplierProduct } from '@prisma/client'
+import { prisma } from '@qopnet/util-prisma'
 
 import * as express from 'express'
 const router = express.Router()

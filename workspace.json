@@ -295,6 +295,27 @@
         }
       }
     },
+    "util-prisma": {
+      "root": "libs/util-prisma",
+      "sourceRoot": "libs/util-prisma/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/util-prisma/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/util-prisma"],
+          "options": {
+            "jestConfig": "libs/util-prisma/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "util-supabase": {
       "root": "libs/util-supabase",
       "sourceRoot": "libs/util-supabase/src",
