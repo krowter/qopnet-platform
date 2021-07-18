@@ -205,12 +205,10 @@ export const DashboardSupplierCardLink = ({
       rounded="base"
       bg={useColorModeValue('gray.50', 'gray.900')}
     >
-      <Stat as={Stack} mb={5}>
-        <StatLabel as={Heading} size="lg">
-          {supplier.name}
-        </StatLabel>
-        <StatHelpText>/{supplier.handle}</StatHelpText>
-      </Stat>
+      <Stack mb={5}>
+        <Heading size="lg">{supplier.name}</Heading>
+        <Text>/{supplier.handle}</Text>
+      </Stack>
       <NextLink href={supplier.handle} passHref>
         <Button as="a" size="sm" colorScheme="orange">
           Kelola
