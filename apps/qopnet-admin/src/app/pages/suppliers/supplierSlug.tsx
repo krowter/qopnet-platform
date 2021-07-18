@@ -207,7 +207,7 @@ export const SupplierSlugPage = () => {
                   <Divider />
                   {supplier.addresses.length > 0
                     ? supplier.addresses.map((address: any, index: any) => (
-                        <>
+                        <Box key={index}>
                           <Text as="h2" fontWeight="700">
                             Alamat {index + 1}:
                           </Text>
@@ -215,7 +215,7 @@ export const SupplierSlugPage = () => {
                           <Text>Provinsi: {address.state ?? ''}</Text>
                           <Text>Jalan: {address.street ?? ''}</Text>
                           <Text>Kode Pos: {address.zip ?? ''}</Text>
-                        </>
+                        </Box>
                       ))
                     : null}
                 </Stack>
@@ -262,6 +262,18 @@ export const SupplierSlugPage = () => {
             <Flex pt={5} justifyContent="space-between" alignItems="center">
               <Box>Terakhir diubah</Box>
               <Box>{supplier.updatedAt}</Box>
+            </Flex>
+            <Flex pt={5} justifyContent="space-between" alignItems="center">
+              <Button
+                ml="auto"
+                as={Link}
+                to={`/suppliers/${supplier.id}/products`}
+                variant="outline"
+                size="xs"
+                colorScheme="orange.900"
+              >
+                Lihat Produk
+              </Button>
             </Flex>
           </Box>
         </Grid>
