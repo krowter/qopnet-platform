@@ -69,32 +69,27 @@ export const Header = (props: HeaderProps) => {
       justify="space-between"
       spacing={5}
     >
-      <HStack w={isDesktop ? '500px' : '300px'} spacing={3}>
+      <HStack w={'500px'} spacing={3}>
         {isDesktop && (
           <NextLink href="/" passHref>
             <chakra.a display="block" className="next-image-container">
-              <ChakraImage
-                key="qopnet-logo-desktop"
-                alt="Qopnet logo"
-                src={qopnetLogoDesktop}
-                width={161}
-                height={50}
-                layout="fixed"
-              />
-            </chakra.a>
-          </NextLink>
-        )}
-        {!isDesktop && (
-          <NextLink href="/" passHref>
-            <chakra.a display="block" className="next-image-container">
-              <ChakraImage
-                key="qopnet-logo-mobile"
-                alt="Qopnet logo"
-                src={qopnetLogoMobile}
-                width={50}
-                height={50}
-                layout="fixed"
-              />
+              {isDesktop ? (
+                <ChakraImage
+                  key="qopnet-logo-desktop"
+                  alt="Qopnet logo"
+                  src={qopnetLogoDesktop}
+                  width={161}
+                  height={50}
+                />
+              ) : (
+                <ChakraImage
+                  key="qopnet-logo-mobile"
+                  alt="Qopnet logo"
+                  src={qopnetLogoMobile}
+                  width={50}
+                  height={50}
+                />
+              )}
             </chakra.a>
           </NextLink>
         )}
@@ -161,9 +156,11 @@ export const Header = (props: HeaderProps) => {
             <NextLinkButton href="/signin" colorScheme="yellow">
               Masuk
             </NextLinkButton>
-            <NextLinkButton href="/signup" colorScheme="orange">
-              Daftar
-            </NextLinkButton>
+            {isDesktop && (
+              <NextLinkButton href="/signup" colorScheme="orange">
+                Daftar
+              </NextLinkButton>
+            )}
           </ButtonGroup>
         )}
       </HStack>
