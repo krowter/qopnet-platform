@@ -8,8 +8,8 @@ const OfflinePage = () => {
     <>
       <NextSeo title="Are you offline? - Qopnet" />
 
-      <Layout>
-        <VStack pt={10}>
+      <Layout pt={10}>
+        <VStack>
           <Heading as="h1">Looks like you're offline</Heading>
           <Text>Try to refresh or check your connection</Text>
         </VStack>

@@ -1,5 +1,5 @@
 import { NextSeo } from 'next-seo'
-import { Container, Box } from '@chakra-ui/react'
+import { Container, Box, BoxProps } from '@chakra-ui/react'
 
 export interface LayoutProps {
   meta?: {
@@ -9,13 +9,16 @@ export interface LayoutProps {
   children: JSX.Element | JSX.Element[]
 }
 
-export function Layout(props: LayoutProps) {
+export function Layout(props: LayoutProps & BoxProps) {
   const { meta, children } = props
 
   return (
     <Container spacing={10} maxW={1200}>
-      {meta && <NextSeo title={`${meta?.title} - Qopnet`} />}
-      <Box minH="80vh">{children}</Box>
+      {meta?.title && <NextSeo title={`${meta?.title} - Qopnet`} />}
+
+      <Box minH="80vh" {...props}>
+        {children}
+      </Box>
     </Container>
   )
 }

@@ -8,5 +8,6 @@ module.exports = {
     '<rootDir>/libs/shared-types',
     '<rootDir>/libs/util-swr',
     '<rootDir>/libs/util-format',
+    '<rootDir>/libs/util-prisma',
   ],
 }

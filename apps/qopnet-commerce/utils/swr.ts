@@ -11,14 +11,14 @@ import {
  * Set apiUrl based on variable availability
  * Because there is still an issue on Vercel deployment
  */
-const apiProduction = 'https://qopnet-api.catamyst.com'
-const apiStaging = 'https://qopnet-api-staging.up.railway.app'
-const apiDevelopment =
+export const apiProduction = 'https://api.qopnet.id'
+export const apiStaging = 'https://api-staging.qopnet.id'
+export const apiDevelopment =
   process.env.NEXT_PUBLIC_NX_API_URL ||
   process.env.NEXT_PUBLIC_API_URL ||
   'http://localhost:4000'
 
-const apiUrl =
+export const apiUrl =
   process.env.NEXT_PUBLIC_ENV === 'production'
     ? apiProduction
     : process.env.NEXT_PUBLIC_ENV === 'staging'
@@ -26,12 +26,14 @@ const apiUrl =
     : apiDevelopment // development
 
 console.info({
+  message: 'Qopnet Commerce is ready',
   env: process.env.NEXT_PUBLIC_ENV,
   apiUrl,
 })
 
 /**
  * Dynamic fetcher which use apiUrl automatically
+ * Use accessToken from headers if authenticated
  */
 export const fetcher = async (endpoint: string) => {
   // Be careful when dealing with localStorage

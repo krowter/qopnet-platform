@@ -1,5 +1,5 @@
-import { PrismaClient, SupplierProduct } from '@prisma/client'
-const prisma = new PrismaClient()
+import { SupplierProduct } from '@prisma/client'
+import { prisma } from '@qopnet/util-prisma'
 
 import * as express from 'express'
 const router = express.Router()
@@ -66,7 +66,17 @@ router.get('/:supplierProductParam', async (req, res) => {
 
   try {
     const supplierProduct = await prisma.supplierProduct.findUnique({
-      where: { slug: supplierProductParam },
+      where: {
+        slug: supplierProductParam,
+      },
+      include: {
+        supplier: {
+          include: {
+            owner: true,
+          },
+        },
+        owner: true,
+      },
     })
     if (!supplierProduct) {
       throw new Error(`Failed to find supplier product with specific param`)

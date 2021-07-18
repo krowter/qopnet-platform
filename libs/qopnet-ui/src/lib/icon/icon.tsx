@@ -1,34 +1,33 @@
 import {
+  FaBold as SubName,
+  FaBoxes as All,
+  FaBuilding as Supplier,
+  FaCarrot as SupplierProduct,
+  FaCarrot as Vegetable,
+  FaCertificate as New,
   FaCircle as Circle,
+  FaCubes as Category,
+  FaDoorOpen as Saving,
+  FaEye as Show,
+  FaEyeSlash as Hide,
+  FaFont as Name,
+  FaHome as Home,
+  FaIdBadge as Handle,
+  FaIdBadge as Profile,
+  FaLemon as Fruit,
+  FaMinus as Minus,
+  FaMoneyBillAlt as Cheap,
   FaMoon as Moon, // Light Icon
-  FaSun as Sun, // Dark Icon
+  FaPercentage as Promo,
+  FaPhone as Phone,
+  FaPlus as Plus,
   FaSearch as Search,
   FaShoppingCart as Cart,
   FaSignOutAlt as SignOut,
-  FaPlus as Increment,
-  FaMinus as Decrement,
-  FaHome as Home,
+  FaSortNumericDown as SKU,
+  FaSun as Sun, // Dark Icon
   FaUser as Users,
-  FaIdBadge as Profiles,
-  FaBuilding as Supplier,
-  FaRegBuilding as Suppliers,
-  FaCarrot as SuppliersProducts,
-  FaEye as Show,
-  FaEyeSlash as Hide,
-
-  // Form
-  FaSmile as Name,
-  FaIdBadge as Handle,
-  FaPhone as Phone,
-
-  // Category
-  FaBoxes as All,
-  FaCertificate as New,
-  FaMoneyBillAlt as Cheap,
-  FaDoorOpen as Saving,
-  FaLemon as Fruit,
-  FaCarrot as Vegetable,
-  FaPercentage as Promo,
+  FaWalking as Shop,
 } from 'react-icons/fa'
 import { FiMenu as Menu } from 'react-icons/fi'
 
@@ -41,68 +40,72 @@ export const Icon = (props: IconProps) => {
     /**
      * General icons
      */
-    case 'circle':
-      return <Circle />
-    case 'sun':
-      return <Sun />
-    case 'moon':
-      return <Moon />
-    case 'search':
-      return <Search />
-    case 'cart':
-      return <Cart />
-    case 'signout':
-      return <SignOut />
-    case 'increment':
-      return <Increment />
-    case 'decrement':
-      return <Decrement />
-    case 'home':
-      return <Home />
-    case 'users':
-      return <Users />
-    case 'profiles':
-      return <Profiles />
-    case 'supplier':
-      return <Supplier />
-    case 'suppliers':
-      return <Suppliers />
-    case 'suppliers-products':
-      return <SuppliersProducts />
-    case 'menu':
-      return <Menu />
-    case 'show':
-      return <Show />
-    case 'hide':
-      return <Hide />
-
-    /**
-     * Form
-     */
-    case 'name':
-      return <Name />
-    case 'handle':
-      return <Handle />
-    case 'phone':
-      return <Phone />
-
-    /**
-     * Category
-     */
     case 'all':
       return <All />
-    case 'new':
-      return <New />
-    case 'fruit':
-      return <Fruit />
-    case 'vegetable':
-      return <Vegetable />
+    case 'cart':
+      return <Cart />
+    case 'category':
+      return <Category />
     case 'cheap':
       return <Cheap />
-    case 'saving':
-      return <Saving />
+    case 'circle':
+      return <Circle />
+    case 'fruit':
+      return <Fruit />
+    case 'handle':
+      return <Handle />
+    case 'hide':
+      return <Hide />
+    case 'home':
+      return <Home />
+    case 'menu':
+      return <Menu />
+    case 'minus':
+      return <Minus />
+    case 'moon':
+      return <Moon />
+    case 'name':
+      return <Name />
+    case 'new':
+      return <New />
+    case 'phone':
+      return <Phone />
+    case 'plus':
+      return <Plus />
+    case 'profile':
+      return <Profile />
+    case 'profiles':
+      return <Profile />
     case 'promo':
       return <Promo />
+    case 'saving':
+      return <Saving />
+    case 'search':
+      return <Search />
+    case 'shop':
+      return <Shop />
+    case 'show':
+      return <Show />
+    case 'signout':
+      return <SignOut />
+    case 'sku':
+      return <SKU />
+    case 'subname':
+      return <SubName />
+    case 'sun':
+      return <Sun />
+    case 'supplier-product':
+      return <SupplierProduct />
+    case 'supplier':
+      return <Supplier />
+    case 'suppliers-products':
+      return <SupplierProduct />
+    case 'suppliers':
+      return <Supplier />
+    case 'users':
+      return <Users />
+    case 'vegetable':
+      return <Vegetable />
 
     /**
      * When nothing found

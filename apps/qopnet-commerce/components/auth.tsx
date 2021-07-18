@@ -1,7 +1,8 @@
+import { useEffect, useState } from 'react'
 import NextImage from 'next/image'
 import NextLink from 'next/link'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { NextSeo } from 'next-seo'
 import {
   Box,
   Button,
@@ -65,10 +66,15 @@ export const SignUpForm = () => {
       const { user, error } = await supabase.auth.signUp({ email, password })
       if (user) {
         toast({ title: 'Berhasil daftar akun', status: 'success' })
-        router.push('/')
-      } else if (error) throw new Error('Gagal daftar akun')
+      } else if (error) {
+        toast({
+          title: 'Gagal daftar akun',
+          description: 'Kesalahan pada email atau password',
+          status: 'error',
+        })
+      }
     } catch (error) {
-      toast({ title: 'Gagal daftar akun', status: 'error' })
+      console.error(error)
     } finally {
       setLoading(false)
     }
@@ -80,7 +86,9 @@ export const SignUpForm = () => {
   )
 
   return (
-    <VStack mt={20} spacing={10}>
+    <VStack spacing={10}>
+      <NextSeo title="Daftar akun - Qopnet" />
+
       <Stack align="center">
         <NextImage
           alt="Qopnet icon"
@@ -156,15 +164,9 @@ export const SignUpForm = () => {
  * /signin
  */
 export const SignInForm = () => {
-  const router = useRouter()
   const toast = useToast()
-  const user = useUser()
   const supabase = useSupabase()
   const [loading, setLoading] = useState(false)
-
-  useEffect(() => {
-    if (user) router.replace('/')
-  }, [user, router])
 
   // Password input show and hide
   const [show, setShow] = useState(false)
@@ -187,17 +189,22 @@ export const SignInForm = () => {
       const { user, error } = await supabase.auth.signIn({ email, password })
       if (user) {
         toast({ title: 'Berhasil masuk akun', status: 'success' })
-        router.replace('/create-profile')
-      } else if (error) throw new Error('Gagal masuk akun')
+      } else if (error) {
+        toast({
+          title: 'Gagal masuk akun',
+          description: 'Salah email atau password',
+          status: 'error',
+        })
+      }
     } catch (error) {
-      toast({ title: 'Gagal masuk akun', status: 'error' })
+      console.error(error)
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <VStack mt={20} spacing={10}>
+    <VStack spacing={10}>
       <VStack>
         <Heading as="h1" size="xl">
           Masuk ke akun Qopnet

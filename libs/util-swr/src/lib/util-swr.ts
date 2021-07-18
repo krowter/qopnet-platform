@@ -24,7 +24,12 @@ export const fetcher = async (
   const fullUrl = apiUrl + endpoint
 
   const fetchConfig = accessToken
-    ? { headers: new Headers({ Authorization: 'Bearer ' + accessToken }) }
+    ? {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + accessToken,
+        },
+      }
     : {}
 
   const res = await fetch(fullUrl, fetchConfig)

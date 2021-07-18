@@ -7,8 +7,13 @@ import {
   AboutPage,
   UsersPage,
   SuppliersPage,
+  SupplierAddPage,
+  SupplierSlugPage,
   SuppliersProductsPage,
+  SupplierProductsPage,
   SupplierProductSlugPage,
+  SupplierProductAddPage,
+  SupplierProductEditPage,
   MerchantsPage,
   SignInPage,
   NotFoundPage,
@@ -37,34 +42,52 @@ export const App = () => {
   return (
     <SWRConfig value={swrConfig}>
       <Switch>
-        {user && (
-          <>
-            <Route exact path="/" component={HomePage} />
-            <Route exact path="/signin" component={SignInPage} />
-            <Route exact path="/users" component={UsersPage} />
-            <Route exact path="/suppliers" component={SuppliersPage} />
-            <Route
-              exact
-              path="/suppliers/products"
-              component={SuppliersProductsPage}
-            />
-            <Route
-              exact
-              path="/suppliers/:supplierParam/products/:productParam"
-              component={SupplierProductSlugPage}
-            />
-            <Route exact path="/merchants" component={MerchantsPage} />
-            <Route exact path="/about" component={AboutPage} />
-            <Route exact path="/profiles" component={Profiles} />
-          </>
-        )}
-        {!user && (
-          <>
-            <Route component={NotFoundPage} />
-            <Route exact path="/signin" component={SignInPage} />
-            <Route exact path="/about" component={AboutPage} />
-          </>
-        )}
+        <Route exact path="/" component={HomePage} />
+        <Route exact path="/signin" component={SignInPage} />
+        <Route exact path="/users" component={UsersPage} />
+        <Route exact path="/suppliers" component={SuppliersPage} />
+        <Route exact path="/suppliers/add" component={SupplierAddPage} />
+        <Route
+          exact
+          path="/suppliers/products"
+          component={SuppliersProductsPage}
+        />
+        <Route
+          exact
+          path="/suppliers/:supplierParam"
+          component={SupplierSlugPage}
+        />
+        <Route
+          exact
+          path="/suppliers/:supplierParam/products"
+          component={SupplierProductsPage}
+        />
+        <Route
+          exact
+          path="/suppliers/products/add"
+          component={SupplierProductAddPage}
+        />
+        <Route
+          exact
+          path="/suppliers/:supplierParam/products/add"
+          component={SupplierProductAddPage}
+        />
+        <Route
+          exact
+          path="/suppliers/:supplierParam/products/:productParam"
+          component={SupplierProductSlugPage}
+        />
+        <Route
+          exact
+          path="/suppliers/:supplierParam/products/:productParam/edit"
+          component={SupplierProductEditPage}
+        />
+        <Route exact path="/merchants" component={MerchantsPage} />
+        <Route exact path="/about" component={AboutPage} />
+        <Route exact path="/profiles" component={Profiles} />
+
+        <Route exact path="/signin" component={SignInPage} />
+        <Route path="*" component={NotFoundPage} />
       </Switch>
     </SWRConfig>
   )

@@ -5,6 +5,7 @@ import * as Sentry from '@sentry/node'
 import * as Tracing from '@sentry/tracing'
 
 import root from './app/root'
+import images from './app/images'
 import auth from './app/auth'
 import users from './app/users'
 import profiles from './app/profiles'
@@ -41,6 +42,7 @@ app.use(Sentry.Handlers.tracingHandler())
 // Our API endpoints
 // The order is very important
 app.use('/', root)
+app.use('/images', images)
 app.use('/auth', auth)
 app.use('/api/users', users)
 app.use('/api/profiles', profiles)
@@ -62,7 +64,11 @@ app.use((err, req, res, next) => {
 
 const port = process.env.PORT || 4000
 const server = app.listen(port, () => {
-  console.info(`qopnet-api listening at :${port}/api`)
+  console.info({
+    message: `Qopnet API listening at :${port}`,
+    env: process.env.NODE_ENV,
+    databaseUrl: process.env.DATABASE_URL,
+  })
 })
 
 server.on('error', console.error)
