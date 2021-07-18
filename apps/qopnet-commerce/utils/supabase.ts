@@ -1,3 +1,10 @@
+const SUPABASE_ENV_ID =
+  process.env.NEXT_PUBLIC_ENV === 'production'
+    ? 'xbsxanmbihphdwfviqmh'
+    : process.env.NEXT_PUBLIC_ENV === 'staging'
+    ? 'jarlxxhkxbdpqngysmes'
+    : 'rryitovbrajppywbpmit'
+
 /**
  * To handle different case of image URL format
  * 1. https://domain.com/path/to/image.jpg
@@ -10,17 +17,14 @@ export const formatImageUrl = (text: string) => {
   if (text.includes('http')) {
     return text
   } else {
-    const IMAGE_NAME = text
-    const SUPABASE_ENV_ID =
-      process.env.NEXT_PUBLIC_ENV === 'production'
-        ? ''
-        : process.env.NEXT_PUBLIC_ENV === 'staging'
-        ? ''
-        : 'rryitovbrajppywbpmit'
-
-    const url = `https://${SUPABASE_ENV_ID}.supabase.co/storage/v1/object/public/images/${IMAGE_NAME}`
-    console.log({ url })
-
-    return url
+    return `https://${SUPABASE_ENV_ID}.supabase.co/storage/v1/object/public/images/${text}`
   }
+}
+
+/**
+ * Format after being uploaded
+ */
+
+export const convertImageNameToURL = (name: string) => {
+  return `https://${SUPABASE_ENV_ID}.supabase.co/storage/v1/object/public/${name}`
 }

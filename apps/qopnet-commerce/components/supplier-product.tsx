@@ -24,6 +24,7 @@ import {
 import { useForm, SubmitHandler } from 'react-hook-form'
 
 import { Icon } from '@qopnet/qopnet-ui'
+import { UploadImageForm } from '../components'
 import { postToAPI } from '../utils/fetch'
 
 // SupplierProduct
@@ -124,6 +125,7 @@ export const CreateSupplierProductForm = ({ supplierParam }) => {
           </Heading>
           <FormControl>
             <FormLabel>Foto produk</FormLabel>
+            <UploadImageForm />
             <FormHelperText>
               <span>
                 Format gambar .jpg .jpeg .png dan ukuran minimum 300 x 300px
