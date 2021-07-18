@@ -138,7 +138,7 @@ export const DashboardContent = ({ profile }) => {
                 <SimpleGrid
                   columns={2}
                   spacing={5}
-                  minChildWidth="350px"
+                  minChildWidth="280px"
                   w="100%"
                 >
                   {profile.suppliers.map((supplier, index) => {
