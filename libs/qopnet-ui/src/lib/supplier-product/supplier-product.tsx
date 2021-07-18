@@ -26,8 +26,15 @@ import {
   useToast,
 } from '@chakra-ui/react'
 
-import { formatDateTime } from '@qopnet/util-format'
+import { formatDateTime, formatImageUrl } from '@qopnet/util-format'
 import { Icon } from '../icon/icon'
+
+const env =
+  process.env.NEXT_PUBLIC_ENV === 'production'
+    ? 'production'
+    : process.env.NEXT_PUBLIC_ENV === 'staging'
+    ? 'staging'
+    : 'development'
 
 const supplierProductCategories = [
   { name: 'all', text: 'Semua Produk', color: 'orange.500' },
@@ -65,6 +72,7 @@ export interface SupplierProductsGridProps {
   supplierProducts: SupplierProduct[]
 }
 export interface SupplierProductCardProps {
+  href?: string
   product: SupplierProduct
 }
 
@@ -137,35 +145,41 @@ export const SupplierProductsGrid = ({
   supplierProducts,
 }: SupplierProductsGridProps) => {
   return (
-    <SimpleGrid spacing={5} columns={[2, 2, 4]}>
+    <SimpleGrid spacing={5} columns={[2, 3, 4, 5]} w="100%">
       {supplierProducts?.map((product, index) => {
         return (
-          <SupplierProductCard key={product?.slug || index} product={product} />
+          <SupplierProductCardLink
+            key={product?.slug || index}
+            product={product}
+          />
         )
       })}
     </SimpleGrid>
   )
 }
 
-export const SupplierProductCard = ({ product }: SupplierProductCardProps) => {
+export const SupplierProductCardLink = ({
+  href,
+  product,
+}: SupplierProductCardProps) => {
   const productImages = product?.images as string[]
   const productImageThumbnail = productImages?.length
     ? productImages[0]
     : defaultSupplierProductImages[0]
 
   return (
-    <NextLink href={`/products/${product?.slug}`} passHref>
+    <NextLink href={href || `/products/${product?.slug}`} passHref>
       <Stack as="a" spacing={3} py={5}>
         {productImageThumbnail && (
           <NextImage
-            src={productImageThumbnail}
+            src={formatImageUrl(env, productImageThumbnail)}
             alt={product?.name || 'Product image'}
             layout="responsive"
             width={300}
             height={300}
           />
         )}
-        <Heading as="h3" size={'md'} fontWeight="black">
+        <Heading as="h3" size={'sm'}>
           {product?.name}
         </Heading>
         <SupplierProductPrice product={product} />
@@ -253,8 +267,8 @@ export const SupplierProductDetail = ({
         <Stack id="product-images">
           <Box display="inherit">
             <NextImage
+              src={formatImageUrl(env, productImageFirst)}
               key={product?.slug + '-first'}
-              src={productImageFirst}
               alt={product?.name || 'First product image'}
               layout="fixed"
               width={420}
@@ -269,7 +283,7 @@ export const SupplierProductDetail = ({
                   display="inherit"
                 >
                   <NextImage
-                    src={imageUrl}
+                    src={formatImageUrl(env, imageUrl)}
                     alt={product?.name || 'Small product image'}
                     layout="fixed"
                     width={100}
@@ -390,9 +404,11 @@ export const SupplierCardForProductLink = ({
         <Heading as="h4" size="md">
           {supplier.name}
         </Heading>
-        <Text>
-          Dimiliki oleh <b>{supplier.owner.name}</b>
-        </Text>
+        {supplier?.owner && (
+          <Text>
+            Dimiliki oleh <b>{supplier?.owner?.name}</b>
+          </Text>
+        )}
         {supplier?.addresses && (
           <Text>
             Dikirim dari{' '}

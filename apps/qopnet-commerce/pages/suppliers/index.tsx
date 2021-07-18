@@ -58,9 +58,11 @@ export const SupplierCardLink = ({
         <Heading as="h4" size="md">
           {supplier.name}
         </Heading>
-        <Text>
-          Dimiliki oleh <b>{supplier.owner.name}</b>
-        </Text>
+        {supplier?.owner && (
+          <Text>
+            Dimiliki oleh <b>{supplier?.owner?.name}</b>
+          </Text>
+        )}
         {supplier?.addresses[0]?.city && (
           <Text>
             {supplier.addresses[0].city}, {supplier.addresses[0].state}

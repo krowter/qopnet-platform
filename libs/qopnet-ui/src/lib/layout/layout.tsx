@@ -4,6 +4,7 @@ import { Container, Box, BoxProps } from '@chakra-ui/react'
 export interface LayoutProps {
   meta?: {
     title?: string
+    description?: string
     updatedAt?: string
   }
   children: JSX.Element | JSX.Element[]
@@ -14,7 +15,12 @@ export function Layout(props: LayoutProps & BoxProps) {
 
   return (
     <Container spacing={10} maxW={1200}>
-      {meta?.title && <NextSeo title={`${meta?.title} - Qopnet`} />}
+      {meta?.title && (
+        <NextSeo
+          title={`${meta?.title} - Qopnet`}
+          description={meta?.description}
+        />
+      )}
 
       <Box minH="80vh" {...props}>
         {children}

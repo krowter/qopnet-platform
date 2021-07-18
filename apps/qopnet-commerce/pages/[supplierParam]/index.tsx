@@ -1,7 +1,7 @@
+import cuid from 'cuid'
 import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
-import cuid from 'cuid'
-
+import { useUser } from 'use-supabase'
 import {
   Tag,
   Divider,
@@ -15,9 +15,8 @@ import {
   Stack,
   SimpleGrid,
 } from '@chakra-ui/react'
-import { useUser } from 'use-supabase'
 
-import { Layout, Icon, SupplierProductCard } from '@qopnet/qopnet-ui'
+import { Layout, Icon, SupplierProductCardLink } from '@qopnet/qopnet-ui'
 import { NextLinkButton } from '../../components'
 import { useSWR } from '../../utils'
 
@@ -110,7 +109,7 @@ export const SupplierContainer = ({ supplierParam }) => {
               </Stack>
             )}
             {supplier?.supplierProducts && (
-              <SupplierProducts products={supplier.supplierProducts} />
+              <SupplierProducts supplier={supplier} />
             )}
           </Stack>
         </>
@@ -119,11 +118,17 @@ export const SupplierContainer = ({ supplierParam }) => {
   )
 }
 
-export const SupplierProducts = ({ products }) => {
+export const SupplierProducts = ({ supplier }) => {
   return (
     <SimpleGrid spacing={5} columns={[2, 2, 4]}>
-      {products.map((product, index) => {
-        return <SupplierProductCard key={product.id} product={product} />
+      {supplier?.supplierProducts.map((product, index) => {
+        return (
+          <SupplierProductCardLink
+            key={product.id}
+            href={`/${supplier.handle}/${product.slug}`}
+            product={product}
+          />
+        )
       })}
     </SimpleGrid>
   )

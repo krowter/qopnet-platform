@@ -1,7 +1,7 @@
 const withNx = require('@nrwl/next/plugins/with-nx')
 const withPWA = require('next-pwa')
 const withMDX = require('@next/mdx')({
-  extension: /\.mdx$/
+  extension: /\.mdx$/,
 })
 
 /**
@@ -18,9 +18,9 @@ const defaultNextConfig = {
       'supabase.com',
       'supabase.io',
       'supabase.co',
-      'rryitovbrajppywbpmit.supabase.co',
-      'jarlxxhkxbdpqngysmes.supabase.co',
-      'xbsxanmbihphdwfviqmh.supabase.co',
+      'rryitovbrajppywbpmit.supabase.co', // dev
+      'jarlxxhkxbdpqngysmes.supabase.co', // stg
+      'xbsxanmbihphdwfviqmh.supabase.co', // prd
       'ik.imagekit.io',
       'placekitten.com',
     ],
