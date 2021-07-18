@@ -38,6 +38,8 @@ export const Header = (props: HeaderProps) => {
   const toast = useToast()
 
   const [isDesktop] = useMediaQuery('(min-width: 60em)')
+  const [showSearch] = useMediaQuery('(min-width: 425px)')
+
   const qopnetLogoDesktop = useColorModeValue(
     '/images/qopnet-logo.png',
     '/images/qopnet-logo-dark.png'
@@ -67,7 +69,7 @@ export const Header = (props: HeaderProps) => {
       justify="space-between"
       spacing={5}
     >
-      <HStack w={500} spacing={3}>
+      <HStack w={isDesktop ? '500px' : '300px'} spacing={3}>
         {isDesktop && (
           <NextLink href="/" passHref>
             <chakra.a display="block" className="next-image-container">
@@ -113,7 +115,7 @@ export const Header = (props: HeaderProps) => {
         )}
       </HStack>
 
-      {isDesktop && <SearchBar />}
+      {showSearch && <SearchBar />}
 
       <HStack spacing={3}>
         {user && (

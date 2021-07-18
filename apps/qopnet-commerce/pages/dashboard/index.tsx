@@ -78,12 +78,12 @@ export const DashboardContent = ({ profile }) => {
         direction={['column', 'column', 'row']}
         spacing={10}
       >
-        <Stack spacing={5}>
+        <Stack spacing={5} maxW="300px">
           <Heading as="h3" size="md">
             Mau apa?
           </Heading>
           {!profile && (
-            <Stack w="300px">
+            <Stack>
               <DashboardActionLink name="shop" href="/shop">
                 Lanjut belanja
               </DashboardActionLink>
@@ -93,7 +93,7 @@ export const DashboardContent = ({ profile }) => {
             </Stack>
           )}
           {profile && (
-            <Stack w="300px">
+            <Stack>
               <DashboardActionLink name="shop" href="/shop">
                 Lanjut belanja
               </DashboardActionLink>
