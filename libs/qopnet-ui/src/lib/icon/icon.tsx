@@ -28,8 +28,18 @@ import {
   FaSun as Sun, // Dark Icon
   FaUser as Users,
   FaWalking as Shop,
+  FaLeaf as Organic,
+  FaEgg as Dairy,
+  FaBaby as Baby,
 } from 'react-icons/fa'
 import { FiMenu as Menu } from 'react-icons/fi'
+import { MdFreeBreakfast as Breakfast } from 'react-icons/md'
+import {
+  GiSlicedBread as Carb,
+  GiChickenLeg as Protein,
+  GiChipsBag as Snack,
+  GiSquareBottle as Spice,
+} from 'react-icons/gi'
 
 export interface IconProps {
   name: string | ''
@@ -106,6 +116,22 @@ export const Icon = (props: IconProps) => {
       return <Users />
     case 'vegetable':
       return <Vegetable />
+    case 'organic':
+      return <Organic />
+    case 'breakfast':
+      return <Breakfast />
+    case 'carb':
+      return <Carb />
+    case 'protein':
+      return <Protein />
+    case 'dairy':
+      return <Dairy />
+    case 'baby':
+      return <Baby />
+    case 'snack':
+      return <Snack />
+    case 'spice':
+      return <Spice />
 
     /**
      * When nothing found

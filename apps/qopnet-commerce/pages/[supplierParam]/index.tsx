@@ -1,7 +1,7 @@
+import cuid from 'cuid'
 import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
-import cuid from 'cuid'
-
+import { useUser } from 'use-supabase'
 import {
   Tag,
   Divider,
@@ -15,9 +15,8 @@ import {
   Stack,
   SimpleGrid,
 } from '@chakra-ui/react'
-import { useUser } from 'use-supabase'
 
-import { Layout, Icon, SupplierProductCard } from '@qopnet/qopnet-ui'
+import { Layout, Icon, SupplierProductCardLink } from '@qopnet/qopnet-ui'
 import { NextLinkButton } from '../../components'
 import { useSWR } from '../../utils'
 
@@ -52,7 +51,7 @@ export const SupplierContainer = ({ supplierParam }) => {
             title={`${supplier?.name} - ${supplier?.addresses[0]?.city}, ${supplier?.addresses[0]?.state} - Qopnet`}
           />
           <Stack spacing={10} w="100%">
-            <Stack>
+            <Stack spacing={5}>
               <Flex id="supplier-brand">
                 <Avatar size="xl" name={supplier?.name} />
                 <Stack ml={5}>
@@ -83,6 +82,18 @@ export const SupplierContainer = ({ supplierParam }) => {
                   </HStack>
                 </Stack>
               </Flex>
+              {user && user?.id === supplier?.owner?.user?.id && (
+                <Stack align="flex-start" spacing={5}>
+                  <NextLinkButton
+                    colorScheme="green"
+                    size="sm"
+                    leftIcon={<Icon name="plus" />}
+                    href={`/${supplier.handle}/create-supplier-product`}
+                  >
+                    Tambah produk lagi
+                  </NextLinkButton>
+                </Stack>
+              )}
             </Stack>
 
             <Divider />
@@ -92,7 +103,7 @@ export const SupplierContainer = ({ supplierParam }) => {
                 <Heading as="h3" size="lg">
                   Toko supplier belum memiliki produk
                 </Heading>
-                {user && supplier.owner.user.id === user.id ? (
+                {user && user?.id === supplier?.owner?.user?.id ? (
                   <Stack align="flex-start" spacing={5}>
                     <Text>Ayo tambahkan produk untuk supplier Anda</Text>
                     <NextLinkButton
@@ -110,7 +121,7 @@ export const SupplierContainer = ({ supplierParam }) => {
               </Stack>
             )}
             {supplier?.supplierProducts && (
-              <SupplierProducts products={supplier.supplierProducts} />
+              <SupplierProducts supplier={supplier} />
             )}
           </Stack>
         </>
@@ -119,11 +130,17 @@ export const SupplierContainer = ({ supplierParam }) => {
   )
 }
 
-export const SupplierProducts = ({ products }) => {
+export const SupplierProducts = ({ supplier }) => {
   return (
     <SimpleGrid spacing={5} columns={[2, 2, 4]}>
-      {products.map((product, index) => {
-        return <SupplierProductCard key={product.id} product={product} />
+      {supplier?.supplierProducts.map((product, index) => {
+        return (
+          <SupplierProductCardLink
+            key={product.id}
+            href={`/${supplier.handle}/${product.slug}`}
+            product={product}
+          />
+        )
       })}
     </SimpleGrid>
   )

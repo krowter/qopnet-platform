@@ -38,6 +38,8 @@ export const Header = (props: HeaderProps) => {
   const toast = useToast()
 
   const [isDesktop] = useMediaQuery('(min-width: 60em)')
+  const [showSearch] = useMediaQuery('(min-width: 425px)')
+
   const qopnetLogoDesktop = useColorModeValue(
     '/images/qopnet-logo.png',
     '/images/qopnet-logo-dark.png'
@@ -61,25 +63,42 @@ export const Header = (props: HeaderProps) => {
   return (
     <HStack
       as="header"
-      p={5}
+      p={isDesktop ? 5 : 2}
       color={useColorModeValue('orange.900', 'orange.100')}
       bg={useColorModeValue('orange.100', 'orange.900')}
       justify="space-between"
       spacing={5}
     >
-      <HStack w={500} spacing={3}>
-        <NextLink href="/" passHref>
-          <chakra.a display="block" className="next-image-container">
-            <NextImage
-              key="qopnet-logo"
-              alt="Qopnet logo"
-              src={qopnetLogoDesktop}
-              width={161}
-              height={50}
-              layout="fixed"
-            />
-          </chakra.a>
-        </NextLink>
+      <HStack w={isDesktop ? '500px' : '300px'} spacing={3}>
+        {isDesktop && (
+          <NextLink href="/" passHref>
+            <chakra.a display="block" className="next-image-container">
+              <ChakraImage
+                key="qopnet-logo-desktop"
+                alt="Qopnet logo"
+                src={qopnetLogoDesktop}
+                width={161}
+                height={50}
+                layout="fixed"
+              />
+            </chakra.a>
+          </NextLink>
+        )}
+        {!isDesktop && (
+          <NextLink href="/" passHref>
+            <chakra.a display="block" className="next-image-container">
+              <ChakraImage
+                key="qopnet-logo-mobile"
+                alt="Qopnet logo"
+                src={qopnetLogoMobile}
+                width={50}
+                height={50}
+                layout="fixed"
+              />
+            </chakra.a>
+          </NextLink>
+        )}
+
         <IconButton
           aria-label="Change color mode"
           variant="ghost"
@@ -87,14 +106,16 @@ export const Header = (props: HeaderProps) => {
         >
           {colorMode === 'light' ? <Icon name="moon" /> : <Icon name="sun" />}
         </IconButton>
-        <Heading as="h1" size="md">
-          <NextLink href="/shop">
-            <Link>Belanja</Link>
-          </NextLink>
-        </Heading>
+        {isDesktop && (
+          <Heading as="h1" size="md">
+            <NextLink href="/shop">
+              <Link>Belanja</Link>
+            </NextLink>
+          </Heading>
+        )}
       </HStack>
 
-      <SearchBar />
+      {showSearch && <SearchBar />}
 
       <HStack spacing={3}>
         {user && (
