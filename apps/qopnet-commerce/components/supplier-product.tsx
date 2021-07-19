@@ -14,6 +14,7 @@ import {
   InputLeftElement,
   Select,
   Spinner,
+  VisuallyHidden,
   Stack,
   Text,
   Divider,
@@ -77,8 +78,10 @@ export const CreateSupplierProductForm = ({ supplierParam }) => {
     mode: 'onChange',
   })
 
-  // Get image URL from Image Form
+  // Append image URL from Image Form into React Hook Form field.images
   const appendImageUrl = (newUrl) => {
+    console.log({ newUrl })
+
     // https://react-hook-form.com/api/useform/setvalue
     const existingImages = getValues('images')
     console.log({ existingImages })
@@ -130,6 +133,26 @@ export const CreateSupplierProductForm = ({ supplierParam }) => {
           </Stack>
         </VStack>
 
+        <Stack spacing={5} w="100%" maxW="800px">
+          <Heading as="h2" size="lg">
+            Upload Gambar Produk
+          </Heading>
+          <FormControl>
+            <FormLabel>Gambar produk</FormLabel>
+            <VisuallyHidden>
+              <Input {...register('images')} />
+            </VisuallyHidden>
+            <UploadImageForm appendImageUrl={appendImageUrl} />
+            <FormHelperText>
+              <span>
+                Format gambar <code>.jpg</code> <code>.jpeg</code>{' '}
+                <code>.png</code>, ukuran minimum 300 x 300px, tidak lebih dari
+                5 MB
+              </span>
+            </FormHelperText>
+          </FormControl>
+        </Stack>
+
         <Stack
           onSubmit={handleSubmit(handleSubmitCreateSupplier)}
           as="form"
@@ -137,23 +160,7 @@ export const CreateSupplierProductForm = ({ supplierParam }) => {
           maxW="800px"
           spacing={10}
         >
-          <Stack spacing={5}>
-            <Heading as="h2" size="lg">
-              Upload Foto Produk
-            </Heading>
-            <FormControl>
-              <FormLabel>Foto produk</FormLabel>
-              <UploadImageForm appendImageUrl={appendImageUrl} />
-              <FormHelperText>
-                <span>
-                  Format gambar .jpg .jpeg .png dan ukuran minimum 300 x 300px
-                </span>
-              </FormHelperText>
-            </FormControl>
-          </Stack>
-
           <Divider />
-
           <Stack spacing={5}>
             <Heading as="h2" size="lg">
               Informasi dan Detail Produk
@@ -338,7 +345,9 @@ export const CreateSupplierProductForm = ({ supplierParam }) => {
         </Stack>
       </VStack>
       {/* Setup React Hook Form devtool */}
-      <DevTool control={control} placement="bottom-left" />{' '}
+      {process.env.NODE_ENV === 'development' && (
+        <DevTool control={control} placement="bottom-left" />
+      )}
     </>
   )
 }

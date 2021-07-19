@@ -10,8 +10,8 @@ import { convertImageNameToURL } from '../utils/supabase'
  * Upload form using Supabase Storage
  */
 export const UploadImageForm = ({
-  appendImageUrl = (url) => {
-    console.log(url)
+  appendImageUrl = (newUrl) => {
+    console.log({ newUrl })
   },
 }) => {
   const [loading, setLoading] = useState(false)
