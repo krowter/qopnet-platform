@@ -23,7 +23,7 @@ async function main() {
     data: products,
   }: AxiosResponse<any[]> =
     await axios.get(
-      'https://gist.githubusercontent.com/hwindo/c5d6dbeadb97048bc696d2bbba659a2b/raw/806e7196f42c520d2121b0dbd19549535e332b39/anekabusa_produst.json'
+      'https://gist.githubusercontent.com/hwindo/c5d6dbeadb97048bc696d2bbba659a2b/raw/f0d5787f21c6bf87850fdaca88a3fe4222323b48/anekabusa_produst.json'
       
     )
 
