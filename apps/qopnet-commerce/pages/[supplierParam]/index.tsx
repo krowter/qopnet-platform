@@ -82,18 +82,20 @@ export const SupplierContainer = ({ supplierParam }) => {
                   </HStack>
                 </Stack>
               </Flex>
-              {user && user?.id === supplier?.owner?.user?.id && (
-                <Stack align="flex-start" spacing={5}>
-                  <NextLinkButton
-                    colorScheme="green"
-                    size="sm"
-                    leftIcon={<Icon name="plus" />}
-                    href={`/${supplier.handle}/create-supplier-product`}
-                  >
-                    Tambah produk lagi
-                  </NextLinkButton>
-                </Stack>
-              )}
+              {supplier?.supplierProducts?.length &&
+                user &&
+                user?.id === supplier?.owner?.user?.id && (
+                  <Stack align="flex-start" spacing={5}>
+                    <NextLinkButton
+                      colorScheme="green"
+                      size="sm"
+                      leftIcon={<Icon name="plus" />}
+                      href={`/${supplier.handle}/create-supplier-product`}
+                    >
+                      Tambah produk lagi
+                    </NextLinkButton>
+                  </Stack>
+                )}
             </Stack>
 
             <Divider />
