@@ -63,7 +63,7 @@ export const Header = (props: HeaderProps) => {
   return (
     <HStack
       as="header"
-      p={isDesktop ? 5 : 2}
+      p={2}
       color={useColorModeValue('orange.900', 'orange.100')}
       bg={useColorModeValue('orange.100', 'orange.900')}
       justify="space-between"
