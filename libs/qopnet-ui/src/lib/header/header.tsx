@@ -73,7 +73,7 @@ export const Header = (props: HeaderProps) => {
         {isDesktop ? (
           <NextLink href="/" passHref>
             <chakra.a display="block" className="next-image-container">
-              <ChakraImage
+              <NextImage
                 key="qopnet-logo-desktop"
                 alt="Qopnet logo"
                 src={qopnetLogoDesktop}
@@ -85,7 +85,7 @@ export const Header = (props: HeaderProps) => {
         ) : (
           <NextLink href="/" passHref>
             <chakra.a display="block" className="next-image-container">
-              <ChakraImage
+              <NextImage
                 key="qopnet-logo-mobile"
                 alt="Qopnet logo"
                 src={qopnetLogoMobile}
