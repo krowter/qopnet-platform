@@ -1,14 +1,18 @@
 import NextLink from 'next/link'
 import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useState, useEffect } from 'react'
 import slugify from 'slugify'
+import cuid from 'cuid'
 import {
   Button,
+  Flex,
   FormControl,
   FormHelperText,
   FormLabel,
   Heading,
+  Box,
+  Image as ChakraImage,
   Input,
   InputGroup,
   InputLeftElement,
@@ -17,6 +21,7 @@ import {
   VisuallyHidden,
   Stack,
   Text,
+  Link as ChakraLink,
   Divider,
   Textarea,
   VStack,
@@ -73,20 +78,26 @@ export const CreateSupplierProductForm = ({ supplierParam }) => {
     handleSubmit,
     setValue,
     getValues,
+    watch,
     formState: { errors },
   } = useForm<SupplierProductData>({
     mode: 'onChange',
   })
+  const uploadedImagesUrl = watch('images')
+  console.log({ uploadedImagesUrl })
 
   // Append image URL from Image Form into React Hook Form field.images
   const appendImageUrl = (newUrl) => {
     console.log({ newUrl })
 
-    // https://react-hook-form.com/api/useform/setvalue
     const existingImages = getValues('images')
     console.log({ existingImages })
 
-    setValue('images', [...existingImages, newUrl]) // ✅ performant
+    if (existingImages) {
+      setValue('images', [...existingImages, newUrl]) // ✅ performant
+    } else {
+      setValue('images', [newUrl]) // ✅ performant
+    }
   }
 
   // Create supplier process and toast
@@ -139,9 +150,6 @@ export const CreateSupplierProductForm = ({ supplierParam }) => {
           </Heading>
           <FormControl>
             <FormLabel>Gambar produk</FormLabel>
-            <VisuallyHidden>
-              <Input {...register('images')} />
-            </VisuallyHidden>
             <UploadImageForm appendImageUrl={appendImageUrl} />
             <FormHelperText>
               <span>
@@ -151,6 +159,31 @@ export const CreateSupplierProductForm = ({ supplierParam }) => {
               </span>
             </FormHelperText>
           </FormControl>
+
+          {/* Preview uploaded images as boxes */}
+          {uploadedImagesUrl?.length && (
+            <Flex>
+              {uploadedImagesUrl.map((uploadedImageUrl, index) => {
+                return (
+                  <Box key={cuid()} border="1px solid black" rounded="base">
+                    <ChakraLink
+                      isExternal
+                      href={uploadedImageUrl}
+                      passHref
+                      display="block"
+                    >
+                      <ChakraImage
+                        src={uploadedImageUrl}
+                        alt={`Uploaded image ${index + 1}`}
+                        width={150}
+                        height={150}
+                      />
+                    </ChakraLink>
+                  </Box>
+                )
+              })}
+            </Flex>
+          )}
         </Stack>
 
         <Stack

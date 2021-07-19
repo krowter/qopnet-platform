@@ -53,10 +53,14 @@ export const UploadImageForm = ({
       as="form"
       align="flex-start"
       onSubmit={handleSubmit(handleSubmitUploadImage)}
-      spacing={5}
     >
       <input {...register('images')} type="file" name="images" />
-      <Button type="submit" size="sm" disabled={!isImageSelected || loading}>
+      <Button
+        colorScheme="orange"
+        type="submit"
+        size="sm"
+        disabled={!isImageSelected || loading}
+      >
         {loading ? 'Mengunggah...' : 'Unggah Gambar'}
       </Button>
     </Stack>
