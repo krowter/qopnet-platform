@@ -8,11 +8,13 @@ import { CreateSupplierProductForm } from '../../../components'
 export const CreateSupplierProductPage = () => {
   const user = useUser()
   const router = useRouter()
-  useEffect(() => {
-    if (!user) {
-      router.replace('/signin')
-    }
-  }, [user, router])
+
+  // Don't redirect for now
+  // useEffect(() => {
+  //   if (!user) {
+  //     router.replace('/signin')
+  //   }
+  // }, [user, router])
 
   const { supplierParam } = router.query
 

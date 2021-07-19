@@ -6,6 +6,9 @@ import { Box, Stack, Text, Button } from '@chakra-ui/react'
 
 import { convertImageNameToURL } from '../utils/supabase'
 
+/**
+ * Upload form using Supabase Storage
+ */
 export const UploadImageForm = ({
   appendImageUrl = (url) => {
     console.log(url)
@@ -54,7 +57,7 @@ export const UploadImageForm = ({
     >
       <input {...register('images')} type="file" name="images" />
       <Button type="submit" size="sm" disabled={!isImageSelected || loading}>
-        {loading ? 'Unggah...' : 'Unggah Gambar'}
+        {loading ? 'Mengunggah...' : 'Unggah Gambar'}
       </Button>
     </Stack>
   )
