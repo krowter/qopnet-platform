@@ -63,37 +63,22 @@ export const Header = (props: HeaderProps) => {
   return (
     <HStack
       as="header"
-      p={isDesktop ? 5 : 2}
+      p={2}
       color={useColorModeValue('orange.900', 'orange.100')}
       bg={useColorModeValue('orange.100', 'orange.900')}
       justify="space-between"
       spacing={5}
     >
-      <HStack w={isDesktop ? '500px' : '300px'} spacing={3}>
+      <HStack w={'500px'} spacing={3}>
         {isDesktop && (
           <NextLink href="/" passHref>
             <chakra.a display="block" className="next-image-container">
-              <ChakraImage
+              <NextImage
                 key="qopnet-logo-desktop"
                 alt="Qopnet logo"
                 src={qopnetLogoDesktop}
                 width={161}
                 height={50}
-                layout="fixed"
-              />
-            </chakra.a>
-          </NextLink>
-        )}
-        {!isDesktop && (
-          <NextLink href="/" passHref>
-            <chakra.a display="block" className="next-image-container">
-              <ChakraImage
-                key="qopnet-logo-mobile"
-                alt="Qopnet logo"
-                src={qopnetLogoMobile}
-                width={50}
-                height={50}
-                layout="fixed"
               />
             </chakra.a>
           </NextLink>
@@ -161,9 +146,11 @@ export const Header = (props: HeaderProps) => {
             <NextLinkButton href="/signin" colorScheme="yellow">
               Masuk
             </NextLinkButton>
-            <NextLinkButton href="/signup" colorScheme="orange">
-              Daftar
-            </NextLinkButton>
+            {isDesktop && (
+              <NextLinkButton href="/signup" colorScheme="orange">
+                Daftar
+              </NextLinkButton>
+            )}
           </ButtonGroup>
         )}
       </HStack>
