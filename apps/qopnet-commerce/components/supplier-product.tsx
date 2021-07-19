@@ -165,7 +165,12 @@ export const CreateSupplierProductForm = ({ supplierParam }) => {
             <Flex>
               {uploadedImagesUrl.map((uploadedImageUrl, index) => {
                 return (
-                  <Box key={cuid()} border="1px solid black" rounded="base">
+                  <Box
+                    key={cuid()}
+                    border="1px solid gray"
+                    rounded="base"
+                    mr={5}
+                  >
                     <ChakraLink
                       isExternal
                       href={uploadedImageUrl}

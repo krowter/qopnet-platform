@@ -18,6 +18,7 @@ import {
   SimpleGrid,
   Stack,
   Text,
+  Link as ChakraLink,
   UnorderedList,
   useMediaQuery,
   useNumberInput,
@@ -253,7 +254,7 @@ export const SupplierProductDetail = ({
 }: SupplierProductDetailProps) => {
   const productImages =
     (product?.images as string[]) || defaultSupplierProductImages
-  const productImageFirst = productImages[0] as string
+  const firstProductImageUrl = productImages[0] as string
 
   const [isDesktop] = useMediaQuery('(min-width: 60em)')
 
@@ -268,16 +269,25 @@ export const SupplierProductDetail = ({
     <Stack spacing={20}>
       <Stack direction={isDesktop ? 'row' : 'column'} spacing={10}>
         <Stack id="product-images">
+          {/* The first product image */}
           <Box display="inherit">
-            <NextImage
-              src={formatImageUrl(env, productImageFirst)}
-              key={product?.slug + '-first'}
-              alt={product?.name || 'First product image'}
-              layout="fixed"
-              width={420}
-              height={420}
-            />
+            <ChakraLink
+              isExternal
+              href={formatImageUrl(env, firstProductImageUrl)}
+              display="block"
+              className="next-image-container"
+            >
+              <NextImage
+                src={formatImageUrl(env, firstProductImageUrl)}
+                key={product?.slug + '-first'}
+                alt={product?.name || 'First product image'}
+                layout="fixed"
+                width={420}
+                height={420}
+              />
+            </ChakraLink>
           </Box>
+          {/* The other product image */}
           <Stack direction="row">
             {productImages.map((imageUrl: string, index) => {
               return (
@@ -285,13 +295,20 @@ export const SupplierProductDetail = ({
                   key={`${product?.slug}-${index}-${product?.id}`}
                   display="inherit"
                 >
-                  <NextImage
-                    src={formatImageUrl(env, imageUrl)}
-                    alt={product?.name || 'Small product image'}
-                    layout="fixed"
-                    width={100}
-                    height={100}
-                  />
+                  <ChakraLink
+                    isExternal
+                    href={formatImageUrl(env, imageUrl)}
+                    display="block"
+                    className="next-image-container"
+                  >
+                    <NextImage
+                      src={formatImageUrl(env, imageUrl)}
+                      alt={product?.name || 'Small product image'}
+                      layout="fixed"
+                      width={100}
+                      height={100}
+                    />
+                  </ChakraLink>
                 </Box>
               )
             })}
