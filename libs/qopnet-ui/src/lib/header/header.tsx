@@ -12,7 +12,7 @@ import {
   Image as ChakraImage,
   Input,
   InputGroup,
-  InputRightElement,
+  InputLeftElement,
   Link,
   ButtonGroup,
   useColorMode,
@@ -38,6 +38,8 @@ export const Header = (props: HeaderProps) => {
   const toast = useToast()
 
   const [isDesktop] = useMediaQuery('(min-width: 60em)')
+  const [showSearch] = useMediaQuery('(min-width: 425px)')
+
   const qopnetLogoDesktop = useColorModeValue(
     '/images/qopnet-logo.png',
     '/images/qopnet-logo-dark.png'
@@ -61,25 +63,27 @@ export const Header = (props: HeaderProps) => {
   return (
     <HStack
       as="header"
-      p={5}
+      p={2}
       color={useColorModeValue('orange.900', 'orange.100')}
       bg={useColorModeValue('orange.100', 'orange.900')}
       justify="space-between"
       spacing={5}
     >
-      <HStack w={500} spacing={3}>
-        <NextLink href="/" passHref>
-          <chakra.a display="block" className="next-image-container">
-            <NextImage
-              key="qopnet-logo"
-              alt="Qopnet logo"
-              src={qopnetLogoDesktop}
-              width={161}
-              height={50}
-              layout="fixed"
-            />
-          </chakra.a>
-        </NextLink>
+      <HStack w={'500px'} spacing={3}>
+        {isDesktop && (
+          <NextLink href="/" passHref>
+            <chakra.a display="block" className="next-image-container">
+              <NextImage
+                key="qopnet-logo-desktop"
+                alt="Qopnet logo"
+                src={qopnetLogoDesktop}
+                width={161}
+                height={50}
+              />
+            </chakra.a>
+          </NextLink>
+        )}
+
         <IconButton
           aria-label="Change color mode"
           variant="ghost"
@@ -87,14 +91,16 @@ export const Header = (props: HeaderProps) => {
         >
           {colorMode === 'light' ? <Icon name="moon" /> : <Icon name="sun" />}
         </IconButton>
-        <Heading as="h1" size="md">
-          <NextLink href="/shop">
-            <Link>Belanja</Link>
-          </NextLink>
-        </Heading>
+        {isDesktop && (
+          <Heading as="h1" size="md">
+            <NextLink href="/shop">
+              <Link>Belanja</Link>
+            </NextLink>
+          </Heading>
+        )}
       </HStack>
 
-      <SearchBar />
+      {showSearch && <SearchBar />}
 
       <HStack spacing={3}>
         {user && (
@@ -140,9 +146,11 @@ export const Header = (props: HeaderProps) => {
             <NextLinkButton href="/signin" colorScheme="yellow">
               Masuk
             </NextLinkButton>
-            <NextLinkButton href="/signup" colorScheme="orange">
-              Daftar
-            </NextLinkButton>
+            {isDesktop && (
+              <NextLinkButton href="/signup" colorScheme="orange">
+                Daftar
+              </NextLinkButton>
+            )}
           </ButtonGroup>
         )}
       </HStack>
@@ -175,15 +183,15 @@ export const SearchBar = () => {
   return (
     <Box as="form" w="100%" onSubmit={handleSubmit(handleSubmitSearch)}>
       <InputGroup>
+        <InputLeftElement color={useColorModeValue('black', 'white')}>
+          <Icon name="search" />
+        </InputLeftElement>
         <Input
           type="text"
           placeholder="Cari produk..."
           bg={useColorModeValue('white', 'black')}
           {...register('keyword', { required: true })}
         />
-        <InputRightElement color={useColorModeValue('black', 'white')}>
-          <Icon name="search" />
-        </InputRightElement>
       </InputGroup>
     </Box>
   )

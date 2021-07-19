@@ -1,11 +1,15 @@
 const withNx = require('@nrwl/next/plugins/with-nx')
 const withPWA = require('next-pwa')
+const withMDX = require('@next/mdx')({
+  extension: /\.mdx$/,
+})
 
 /**
  * @type {import('@nrwl/next/plugins/with-nx').WithNxOptions}
  **/
 const defaultNextConfig = {
   nx: { svgr: true },
+  pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
   images: {
     domains: [
       'qopnet.id',
@@ -14,9 +18,9 @@ const defaultNextConfig = {
       'supabase.com',
       'supabase.io',
       'supabase.co',
-      'rryitovbrajppywbpmit.supabase.co',
-      'jarlxxhkxbdpqngysmes.supabase.co',
-      'xbsxanmbihphdwfviqmh.supabase.co',
+      'rryitovbrajppywbpmit.supabase.co', // dev
+      'jarlxxhkxbdpqngysmes.supabase.co', // stg
+      'xbsxanmbihphdwfviqmh.supabase.co', // prd
       'ik.imagekit.io',
       'placekitten.com',
     ],
@@ -32,4 +36,4 @@ const pwaNextConfig = withPWA({ ...defaultNextConfig, pwa: { dest: 'public' } })
 const nextConfig =
   process.env.NODE_ENV === 'development' ? defaultNextConfig : pwaNextConfig
 
-module.exports = withNx(nextConfig)
+module.exports = withNx(withMDX(nextConfig))

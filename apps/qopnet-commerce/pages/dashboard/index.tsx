@@ -78,12 +78,12 @@ export const DashboardContent = ({ profile }) => {
         direction={['column', 'column', 'row']}
         spacing={10}
       >
-        <Stack spacing={5}>
+        <Stack spacing={5} maxW="300px">
           <Heading as="h3" size="md">
             Mau apa?
           </Heading>
           {!profile && (
-            <Stack w="300px">
+            <Stack>
               <DashboardActionLink name="shop" href="/shop">
                 Lanjut belanja
               </DashboardActionLink>
@@ -93,7 +93,7 @@ export const DashboardContent = ({ profile }) => {
             </Stack>
           )}
           {profile && (
-            <Stack w="300px">
+            <Stack>
               <DashboardActionLink name="shop" href="/shop">
                 Lanjut belanja
               </DashboardActionLink>
@@ -138,7 +138,7 @@ export const DashboardContent = ({ profile }) => {
                 <SimpleGrid
                   columns={2}
                   spacing={5}
-                  minChildWidth="350px"
+                  minChildWidth="280px"
                   w="100%"
                 >
                   {profile.suppliers.map((supplier, index) => {
@@ -205,12 +205,10 @@ export const DashboardSupplierCardLink = ({
       rounded="base"
       bg={useColorModeValue('gray.50', 'gray.900')}
     >
-      <Stat as={Stack} mb={5}>
-        <StatLabel as={Heading} size="lg">
-          {supplier.name}
-        </StatLabel>
-        <StatHelpText>/{supplier.handle}</StatHelpText>
-      </Stat>
+      <Stack mb={5}>
+        <Heading size="lg">{supplier.name}</Heading>
+        <Text>/{supplier.handle}</Text>
+      </Stack>
       <NextLink href={supplier.handle} passHref>
         <Button as="a" size="sm" colorScheme="orange">
           Kelola

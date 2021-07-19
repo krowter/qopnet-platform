@@ -14,11 +14,19 @@ import { Layout } from '@qopnet/qopnet-ui'
 import { useSWR } from '../../utils/swr'
 
 const SuppliersPage = () => {
+  return (
+    <Layout pt={10}>
+      <SuppliersContainer />
+    </Layout>
+  )
+}
+
+export const SuppliersContainer = () => {
   const { data, error } = useSWR('/api/suppliers')
   const { suppliers } = data || {}
 
   return (
-    <Layout pt={10}>
+    <Stack>
       {error && <Text>Gagal memuat semua supplier</Text>}
       {!error && !suppliers && (
         <HStack>
@@ -33,7 +41,7 @@ const SuppliersPage = () => {
           })}
         </SimpleGrid>
       )}
-    </Layout>
+    </Stack>
   )
 }
 
@@ -58,9 +66,11 @@ export const SupplierCardLink = ({
         <Heading as="h4" size="md">
           {supplier.name}
         </Heading>
-        <Text>
-          Dimiliki oleh <b>{supplier.owner.name}</b>
-        </Text>
+        {supplier?.owner && (
+          <Text>
+            Dimiliki oleh <b>{supplier?.owner?.name}</b>
+          </Text>
+        )}
         {supplier?.addresses[0]?.city && (
           <Text>
             {supplier.addresses[0].city}, {supplier.addresses[0].state}

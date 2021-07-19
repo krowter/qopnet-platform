@@ -1,13 +1,11 @@
-import { Text } from '@chakra-ui/react'
-
 import { Layout } from '@qopnet/qopnet-ui'
 
-import { Home } from '../components'
+import { HomeContainer } from '../components'
 
 export function HomePage() {
   return (
     <Layout>
-      <Home />
+      <HomeContainer />
     </Layout>
   )
 }

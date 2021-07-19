@@ -20,7 +20,7 @@ export const ModifierButtons = ({
       >
         Simpan
       </Button>
-      <Button variant="outline" size="xs" colorScheme="orange.900">
+      {/* <Button variant="outline" size="xs" colorScheme="orange.900">
         Batal
       </Button>
       <Button
@@ -34,7 +34,7 @@ export const ModifierButtons = ({
       </Button>
       <Button variant="outline" size="xs" colorScheme="orange.900">
         Hapus
-      </Button>
+      </Button> */}
     </HStack>
   )
 }

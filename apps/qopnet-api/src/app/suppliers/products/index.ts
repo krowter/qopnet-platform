@@ -1,16 +1,57 @@
-import { PrismaClient, SupplierProduct } from '@prisma/client'
-const prisma = new PrismaClient()
+import { SupplierProduct } from '@prisma/client'
+import { prisma } from '@qopnet/util-prisma'
 
 import * as express from 'express'
 const router = express.Router()
+
+const allSupplierProductsFields = {
+  select: {
+    id: true,
+    images: true,
+    slug: true,
+    name: true,
+    price: true,
+    priceMax: true,
+    priceMin: true,
+    supplier: {
+      select: {
+        handle: true, // Only use the handle for href
+      },
+    },
+  },
+}
+
+/**
+ * GET /api/suppliers/products/special
+ * Take latest 10 products
+ */
+router.get('/special', async (req, res) => {
+  try {
+    const supplierProducts: Partial<SupplierProduct>[] =
+      await prisma.supplierProduct.findMany({
+        ...allSupplierProductsFields,
+        take: 10,
+      })
+
+    res.json({
+      message: 'Get all supplier products',
+      supplierProducts,
+    })
+  } catch (error) {
+    res.status(500).json({
+      message: 'Get all supplier products failed',
+      error,
+    })
+  }
+})
 
 /**
  * GET /api/suppliers/products
  */
 router.get('/', async (req, res) => {
   try {
-    const supplierProducts: SupplierProduct[] =
-      await prisma.supplierProduct.findMany({})
+    const supplierProducts: Partial<SupplierProduct>[] =
+      await prisma.supplierProduct.findMany(allSupplierProductsFields)
 
     res.json({
       message: 'Get all supplier products',

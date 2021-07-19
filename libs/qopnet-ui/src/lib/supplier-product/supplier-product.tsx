@@ -18,6 +18,7 @@ import {
   SimpleGrid,
   Stack,
   Text,
+  Link as ChakraLink,
   UnorderedList,
   useMediaQuery,
   useNumberInput,
@@ -26,10 +27,17 @@ import {
   useToast,
 } from '@chakra-ui/react'
 
-import { formatDateTime } from '@qopnet/util-format'
+import { formatDateTime, formatImageUrl } from '@qopnet/util-format'
 import { Icon } from '../icon/icon'
 
-const supplierProductCategories = [
+const env =
+  process.env.NEXT_PUBLIC_ENV === 'production'
+    ? 'production'
+    : process.env.NEXT_PUBLIC_ENV === 'staging'
+    ? 'staging'
+    : 'development'
+
+export const supplierProductCategories = [
   { name: 'all', text: 'Semua Produk', color: 'orange.500' },
   { name: 'cheap', text: 'Jaminan Murah', color: 'teal.500' },
   { name: 'saving', text: 'Hemat Waktu!', color: 'purple.500' },
@@ -37,13 +45,13 @@ const supplierProductCategories = [
   { name: 'new', text: 'Terbaru', color: 'pink.300' },
   { name: 'organic', text: 'Organik', color: 'green.500' },
   { name: 'breakfast', text: 'Sarapan', color: 'orange.500' },
-  { name: 'spices', text: 'Minyak, Bumbu, Saus', color: 'red.500' },
-  { name: 'fruits', text: 'Buah Segar', color: 'yellow.500' },
+  { name: 'spice', text: 'Minyak, Bumbu, Saus', color: 'red.500' },
+  { name: 'fruit', text: 'Buah Segar', color: 'yellow.500' },
   { name: 'vegetable', text: 'Sayuran', color: 'orange.500' },
   { name: 'carb', text: 'Beras, Mie, Roti', color: 'gray.500' },
   { name: 'protein', text: 'Protein', color: 'orange.900' },
-  { name: 'dairy', text: 'Susu, Telur, Keju', color: 'yellow.200' },
-  { name: 'baby', text: 'Makanan Bayi', color: 'orange.500' },
+  { name: 'dairy', text: 'Susu, Telur, Keju', color: 'orange.400' },
+  { name: 'baby', text: 'Makanan Bayi', color: 'yellow.200' },
   { name: 'snack', text: 'Makanan Ringan', color: 'blue.500' },
 ]
 
@@ -65,6 +73,7 @@ export interface SupplierProductsGridProps {
   supplierProducts: SupplierProduct[]
 }
 export interface SupplierProductCardProps {
+  href?: string
   product: SupplierProduct
 }
 
@@ -89,20 +98,20 @@ export interface SupplierProductDetailProps {
 
 export const HomeProductCategory = (props: HomeProductCategoryProps) => {
   return (
-    <VStack id={props.id} py={20} spacing={10}>
+    <VStack id={props.id} py={10} spacing={10}>
       <Heading as="h2" size="lg">
-        Kategori Produk
+        Pilihan Kategori Produk
       </Heading>
-      <SimpleGrid spacing={5} columns={[4, 6, 8]}>
+      <SimpleGrid spacing={5} columns={[3, 4, 8]}>
         {supplierProductCategories.map((category) => {
           return (
             <NextLink
               key={category.name}
-              href={`/products/${category.name}`}
+              href={`/products/category/${category.name}`}
               passHref
             >
               <VStack as="a">
-                <Text fontSize="5xl" color={category.color}>
+                <Text fontSize="4xl" color={category.color}>
                   <Icon name={category.name} />
                 </Text>
                 <Text textAlign="center">{category.text}</Text>
@@ -119,9 +128,9 @@ export const HomeProductSpecial = (props: HomeProductSpecialProps) => {
   const { id, supplierProducts, error } = props
 
   return (
-    <VStack id={id} py={20} spacing={10}>
+    <VStack id={id} py={10} spacing={10}>
       <Heading as="h2" size="lg">
-        Produk Pilihan
+        Produk dan Supplier Pilihan
       </Heading>
 
       {error && <Text>Gagal mengambil produk pilihan</Text>}
@@ -137,35 +146,44 @@ export const SupplierProductsGrid = ({
   supplierProducts,
 }: SupplierProductsGridProps) => {
   return (
-    <SimpleGrid spacing={5} columns={[2, 2, 4]}>
+    <SimpleGrid spacing={5} columns={[2, 3, 4, 5]} w="100%">
       {supplierProducts?.map((product, index) => {
         return (
-          <SupplierProductCard key={product?.slug || index} product={product} />
+          <SupplierProductCardLink
+            key={product?.slug || index}
+            // Can fix by combining SupplierProduct and Supplier
+            // @ts-ignore
+            href={`/${product?.supplier?.handle}/${product.slug}`}
+            product={product}
+          />
         )
       })}
     </SimpleGrid>
   )
 }
 
-export const SupplierProductCard = ({ product }: SupplierProductCardProps) => {
+export const SupplierProductCardLink = ({
+  href,
+  product,
+}: SupplierProductCardProps) => {
   const productImages = product?.images as string[]
   const productImageThumbnail = productImages?.length
     ? productImages[0]
     : defaultSupplierProductImages[0]
 
   return (
-    <NextLink href={`/products/${product?.slug}`} passHref>
+    <NextLink href={href || `/products/${product?.slug}`} passHref>
       <Stack as="a" spacing={3} py={5}>
         {productImageThumbnail && (
           <NextImage
-            src={productImageThumbnail}
+            src={formatImageUrl(env, productImageThumbnail)}
             alt={product?.name || 'Product image'}
             layout="responsive"
             width={300}
             height={300}
           />
         )}
-        <Heading as="h3" size={'md'} fontWeight="black">
+        <Heading as="h3" size={'sm'}>
           {product?.name}
         </Heading>
         <SupplierProductPrice product={product} />
@@ -236,7 +254,7 @@ export const SupplierProductDetail = ({
 }: SupplierProductDetailProps) => {
   const productImages =
     (product?.images as string[]) || defaultSupplierProductImages
-  const productImageFirst = productImages[0] as string
+  const firstProductImageUrl = productImages[0] as string
 
   const [isDesktop] = useMediaQuery('(min-width: 60em)')
 
@@ -245,21 +263,31 @@ export const SupplierProductDetail = ({
     heigth: 0,
     length: 0,
   }
+  const hasDimension = width || height || length
 
   return (
     <Stack spacing={20}>
       <Stack direction={isDesktop ? 'row' : 'column'} spacing={10}>
         <Stack id="product-images">
+          {/* The first product image */}
           <Box display="inherit">
-            <NextImage
-              key={product?.slug + '-first'}
-              src={productImageFirst}
-              alt={product?.name || 'First product image'}
-              layout="fixed"
-              width={420}
-              height={420}
-            />
+            <ChakraLink
+              isExternal
+              href={formatImageUrl(env, firstProductImageUrl)}
+              display="block"
+              className="next-image-container"
+            >
+              <NextImage
+                src={formatImageUrl(env, firstProductImageUrl)}
+                key={product?.slug + '-first'}
+                alt={product?.name || 'First product image'}
+                layout="fixed"
+                width={420}
+                height={420}
+              />
+            </ChakraLink>
           </Box>
+          {/* The other product image */}
           <Stack direction="row">
             {productImages.map((imageUrl: string, index) => {
               return (
@@ -267,13 +295,20 @@ export const SupplierProductDetail = ({
                   key={`${product?.slug}-${index}-${product?.id}`}
                   display="inherit"
                 >
-                  <NextImage
-                    src={imageUrl}
-                    alt={product?.name || 'Small product image'}
-                    layout="fixed"
-                    width={100}
-                    height={100}
-                  />
+                  <ChakraLink
+                    isExternal
+                    href={formatImageUrl(env, imageUrl)}
+                    display="block"
+                    className="next-image-container"
+                  >
+                    <NextImage
+                      src={formatImageUrl(env, imageUrl)}
+                      alt={product?.name || 'Small product image'}
+                      layout="fixed"
+                      width={100}
+                      height={100}
+                    />
+                  </ChakraLink>
                 </Box>
               )
             })}
@@ -349,18 +384,20 @@ export const SupplierProductDetail = ({
             <Text>Tidak ada deskripsi.</Text>
           )}
         </Stack>
-        <Stack>
-          <Heading as="h5" size="md">
-            Ukuran
-          </Heading>
-          <Box>
-            <UnorderedList>
-              {width && <ListItem>Lebar: {width} cm</ListItem>}
-              {height && <ListItem>Tingi: {height} cm</ListItem>}
-              {length && <ListItem>Panjang: {length} cm</ListItem>}
-            </UnorderedList>
-          </Box>
-        </Stack>
+        {hasDimension && (
+          <Stack>
+            <Heading as="h5" size="md">
+              Ukuran
+            </Heading>
+            <Box>
+              <UnorderedList>
+                {width && <ListItem>Lebar: {width} cm</ListItem>}
+                {height && <ListItem>Tingi: {height} cm</ListItem>}
+                {length && <ListItem>Panjang: {length} cm</ListItem>}
+              </UnorderedList>
+            </Box>
+          </Stack>
+        )}
       </Stack>
     </Stack>
   )
@@ -387,9 +424,11 @@ export const SupplierCardForProductLink = ({
         <Heading as="h4" size="md">
           {supplier.name}
         </Heading>
-        <Text>
-          Dimiliki oleh <b>{supplier.owner.name}</b>
-        </Text>
+        {supplier?.owner && (
+          <Text>
+            Dimiliki oleh <b>{supplier?.owner?.name}</b>
+          </Text>
+        )}
         {supplier?.addresses && (
           <Text>
             Dikirim dari{' '}

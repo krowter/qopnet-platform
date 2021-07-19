@@ -21,7 +21,7 @@ import {
 } from '@chakra-ui/react'
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import { useForm } from 'react-hook-form'
-import { useHistory } from 'react-router'
+import { useParams, useHistory } from 'react-router'
 
 import { DefaultLayout } from '../../layouts'
 import { useSWR } from '../../utils/swr'
@@ -38,13 +38,21 @@ export const SupplierProductAddPage = () => {
   const onSubmit = async (data: any) => {
     console.log('data: ', data)
     console.log('suppliers', suppliers)
-    const filteredSupplier = await suppliers.supplier.filter(
-      (supplier: any) => supplier.id === data.supplierId
-    )
+    const filteredSupplier = await suppliers.filter((supplier: any) => {
+      if (supplierParam) {
+        return supplier.id === supplierParam
+      } else return supplier.id === data.supplierId
+    })
     console.log(filteredSupplier)
     const { ownerId, handle } = filteredSupplier[0]
     console.log({ ownerId })
-    const finalFormData = { ...data, ownerId }
+    const finalFormData = {
+      ...data,
+      minOrder: parseInt(data.minOrder),
+      weight: parseInt(data.weight),
+      stock: parseInt(data.stock),
+      ownerId,
+    }
     try {
       const submitData = await postToAPI(
         `/api/suppliers/${handle}/products`,
@@ -58,14 +66,22 @@ export const SupplierProductAddPage = () => {
       alert('Gagal membuat supplier')
     }
   }
+  const {
+    supplierParam,
+    productParam,
+  }: { supplierParam: string; productParam: string } = useParams()
   const history = useHistory()
-  const { data: suppliers, error } = useSWR('/api/suppliers')
+  const { data: { suppliers = [] } = {}, error } = useSWR('/api/suppliers')
   const leftElementColor = useColorModeValue('black', 'white')
 
+  console.log('suppliers', suppliers)
+  console.log('supplierParam', supplierParam)
   return (
     <DefaultLayout>
       <Box
         m={2}
+        height="82vh"
+        overflow="scroll"
         rounded={10}
         minHeight="98vh"
         border="1px solid gray"
@@ -96,9 +112,11 @@ export const SupplierProductAddPage = () => {
                   <BreadcrumbLink href="#">Supplier</BreadcrumbLink>
                 </BreadcrumbItem>
 
-                <BreadcrumbItem>
-                  <BreadcrumbLink href="#">Semua Produk</BreadcrumbLink>
-                </BreadcrumbItem>
+                {!supplierParam && (
+                  <BreadcrumbItem>
+                    <BreadcrumbLink href="#">Semua Produk</BreadcrumbLink>
+                  </BreadcrumbItem>
+                )}
 
                 <BreadcrumbItem isCurrentPage>
                   <BreadcrumbLink href="#">Tambah Produk</BreadcrumbLink>
@@ -114,23 +132,31 @@ export const SupplierProductAddPage = () => {
                   <Spinner color="orange.500" />
                 </Box>
               ) : (
-                <VStack id="suppliers-products-all" mt={5} pl={14} spacing={5}>
-                  <FormControl id="name">
-                    <FormLabel>Supplier</FormLabel>
-                    <Select
-                      placeholder="Pilih Supplier"
-                      defaultValue=""
-                      {...register('supplierId', { required: true })}
-                    >
-                      {suppliers?.supplier
-                        ? suppliers?.supplier?.map((supplier: any) => (
-                            <option value={supplier.id} key={supplier.id}>
-                              {supplier.name}
-                            </option>
-                          ))
-                        : ''}
-                    </Select>
-                  </FormControl>
+                <VStack
+                  id="suppliers-products-all"
+                  mt={5}
+                  mb={5}
+                  pl={14}
+                  spacing={5}
+                >
+                  {!supplierParam && (
+                    <FormControl id="name">
+                      <FormLabel>Supplier</FormLabel>
+                      <Select
+                        placeholder="Pilih Supplier"
+                        defaultValue=""
+                        {...register('supplierId', { required: true })}
+                      >
+                        {suppliers
+                          ? suppliers.map((supplier: any) => (
+                              <option value={supplier.id} key={supplier.id}>
+                                {supplier.name}
+                              </option>
+                            ))
+                          : ''}
+                      </Select>
+                    </FormControl>
+                  )}
                   <FormControl id="name">
                     <FormLabel>Nama Produk</FormLabel>
                     <Input
@@ -203,6 +229,56 @@ export const SupplierProductAddPage = () => {
                         type="number"
                         defaultValue=""
                         {...register('priceMax')}
+                      />
+                    </InputGroup>
+                  </FormControl>
+                  <FormControl id="minimum-order">
+                    <FormLabel>Minimum Order</FormLabel>
+                    <InputGroup>
+                      <Input
+                        type="number"
+                        defaultValue=""
+                        {...register('minOrder')}
+                      />
+                    </InputGroup>
+                  </FormControl>
+                  <FormControl id="weight">
+                    <FormLabel>Berat</FormLabel>
+                    <InputGroup>
+                      <Input
+                        type="number"
+                        defaultValue=""
+                        {...register('weight')}
+                      />
+                    </InputGroup>
+                  </FormControl>
+                  <FormControl id="weight-details">
+                    <FormLabel>Detail Berat</FormLabel>
+                    <InputGroup>
+                      <Input
+                        type="text"
+                        defaultValue={0}
+                        {...register('weightDetails')}
+                      />
+                    </InputGroup>
+                  </FormControl>
+                  <FormControl id="dimension-width">
+                    <FormLabel>Dimensi Lebar</FormLabel>
+                    <InputGroup>
+                      <Input
+                        type="text"
+                        defaultValue={0}
+                        {...register('dimension.width')}
+                      />
+                    </InputGroup>
+                  </FormControl>
+                  <FormControl id="stock">
+                    <FormLabel>Stok</FormLabel>
+                    <InputGroup>
+                      <Input
+                        type="number"
+                        defaultValue={0}
+                        {...register('stock')}
                       />
                     </InputGroup>
                   </FormControl>

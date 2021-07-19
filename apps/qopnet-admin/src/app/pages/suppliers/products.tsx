@@ -1,4 +1,3 @@
-import { Prisma } from '@prisma/client'
 import {
   Box,
   Button,
@@ -8,8 +7,7 @@ import {
   Text,
   useColorModeValue,
 } from '@chakra-ui/react'
-import { Link, useHistory } from 'react-router-dom'
-
+import { Link } from 'react-router-dom'
 import { DefaultLayout } from '../../layouts'
 import { useSWR } from '../../utils/swr'
 
@@ -69,14 +67,13 @@ export const SupplierProductRows = ({
   return (
     <Box mt={2}>
       {supplierProducts.map((supplierProduct: any, index: number) => {
-        const supplier = { handle: 'placeholder' }
         return (
           <SimpleGrid
             spacingX={3}
             columns={{ base: 1, md: 3 }}
             as={Link}
             key={`${supplierProduct.id}`}
-            to={`/suppliers/${supplier.handle}/products/${supplierProduct.slug}`}
+            to={`/suppliers/${supplierProduct.slug}/products/${supplierProduct.slug}`}
             w="100%"
             px={5}
             py={3}

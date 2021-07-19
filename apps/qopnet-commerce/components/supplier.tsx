@@ -73,12 +73,12 @@ export const CreateSupplierForm = () => {
         handle: slugify(supplierFormData.handle.toLowerCase()),
         // To make sure the handle is really a slug
       })
-      if (!data) throw new Error('Create supplier response error')
+      if (!data) throw new Error('Create new supplier response error')
 
-      toast({ title: 'Berhasil membuat supplier', status: 'success' })
+      toast({ title: 'Berhasil membuat supplier baru', status: 'success' })
       router.push(`/${data.supplier.handle}`)
     } catch (error) {
-      toast({ title: 'Gagal membuat supplier', status: 'error' })
+      toast({ title: 'Gagal membuat supplier baru', status: 'error' })
     } finally {
       setLoading(false)
     }

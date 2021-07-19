@@ -7,9 +7,10 @@ import {
   HomeFaq,
 } from '@qopnet/qopnet-ui'
 import { useSWR } from '../utils/swr'
+import { SuppliersContainer } from '../pages/suppliers'
 
-export const Home = () => {
-  const { data, error } = useSWR(`/api/suppliers/products`)
+export const HomeContainer = () => {
+  const { data, error } = useSWR(`/api/suppliers/products/special`)
   const { supplierProducts } = data || {}
 
   return (
@@ -17,7 +18,7 @@ export const Home = () => {
       <HomeBanner id="slider-promo" />
       <HomeProductCategory id="product-category" />
       <HomeProductSpecial supplierProducts={supplierProducts} error={error} />
-      <HomeFaq />
+      <SuppliersContainer />
     </Stack>
   )
 }
