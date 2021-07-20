@@ -61,3 +61,15 @@ Check the Prisma Schema formatting.
 ```sh
 doppler run -- npm run prisma:format
 ```
+
+
+# Data Model 
+## Duha Syariah
+Duha Syariah is a Financing for the purchase of goods, Umrah travel, halal tourism, education, and invoice financing in accordance with Sharia principles.
+### Data requirements for Pre-regisration checking
+1. name: String
+2. birthPlace: String
+3. birthData: Datetime
+4. email: Email
+5. residenceId: String (KTP)
+6. income: Money
