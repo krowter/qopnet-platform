@@ -1,13 +1,9 @@
 import NextLink from 'next/link'
 import NextImage from 'next/image'
-import { useState } from 'react'
-import { Box, AspectRatio, chakra } from '@chakra-ui/react'
+import { chakra, Box, Heading } from '@chakra-ui/react'
 
-const bannerImages = [
-  'https://ik.imagekit.io/qopnetlabs/banners/qopnet-25-percent-discount.jpg?updatedAt=1626892509930',
-  'https://ik.imagekit.io/qopnetlabs/banners/qopnet-dream-bed.jpg?updatedAt=1626892510466',
-  'https://ik.imagekit.io/qopnetlabs/banners/qopnet-eid-adha.jpg?updatedAt=1626892511418',
-]
+import Carousel from 'react-multi-carousel'
+import 'react-multi-carousel/lib/styles.css'
 
 /* eslint-disable-next-line */
 export interface HomeBannerProps {
@@ -15,26 +11,53 @@ export interface HomeBannerProps {
 }
 
 export function HomeBanner(props: HomeBannerProps) {
-  const randomNumber = Math.floor(Math.random() * 3)
-  const [bannerIndex, setBannerIndex] = useState(randomNumber)
-
   return (
     <Box id={props.id}>
-      <NextLink href="/shop" passHref>
-        <chakra.a display="block" className="next-image-container">
-          <NextImage
-            alt="Gambar banner promosi"
-            src={bannerImages[bannerIndex]}
-            layout="responsive"
-            width={1400}
-            height={670}
-          />
-        </chakra.a>
-      </NextLink>
+      <HomeBannerCarousel />
     </Box>
   )
 }
 
+const carouselResponsive = {
+  superLargeDesktop: { items: 1, breakpoint: { max: 4000, min: 3000 } },
+  desktop: { items: 1, breakpoint: { max: 3000, min: 1024 } },
+  tablet: { items: 1, breakpoint: { max: 1024, min: 464 } },
+  mobile: { items: 1, breakpoint: { max: 464, min: 0 } },
+}
+
+const carouselBannerImages = [
+  'https://ik.imagekit.io/qopnetlabs/banners/qopnet-25-percent-discount.jpg?updatedAt=1626892509930',
+  'https://ik.imagekit.io/qopnetlabs/banners/qopnet-dream-bed.jpg?updatedAt=1626892510466',
+  'https://ik.imagekit.io/qopnetlabs/banners/qopnet-eid-adha.jpg?updatedAt=1626892511418',
+]
+
+export const HomeBannerCarousel = () => {
+  return (
+    <Carousel responsive={carouselResponsive}>
+      {carouselBannerImages.map((banner, index) => {
+        return (
+          <NextLink href="/shop" passHref>
+            <chakra.a>
+              <NextImage
+                key={index}
+                alt="Gambar banner promosi"
+                src={carouselBannerImages[index]}
+                layout="responsive"
+                width={1400}
+                height={670}
+              />
+            </chakra.a>
+          </NextLink>
+        )
+      })}
+    </Carousel>
+  )
+}
+
 export const HomeFaq = () => {
-  return <Box id="faq"></Box>
+  return (
+    <Box id="faq">
+      <Heading>FAQ</Heading>
+    </Box>
+  )
 }
