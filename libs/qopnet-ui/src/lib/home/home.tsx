@@ -1,13 +1,12 @@
 import NextLink from 'next/link'
 import NextImage from 'next/image'
 import { useState } from 'react'
-import { Box, chakra } from '@chakra-ui/react'
+import { Box, AspectRatio, chakra } from '@chakra-ui/react'
 
 const bannerImages = [
-  'https://ik.imagekit.io/qopnetlabs/banners/qopnet-banner-1_cWUHg0qnmC.jpeg',
-  'https://ik.imagekit.io/qopnetlabs/banners/qopnet-banner-2_3gw8N_LGz.jpeg',
-  'https://ik.imagekit.io/qopnetlabs/banners/sayurbox-banner-1_zmuPmEIft.jpeg',
-  'https://ik.imagekit.io/qopnetlabs/banners/sayurbox-banner-2_mIAiacsCXI.jpeg',
+  'https://ik.imagekit.io/qopnetlabs/banners/qopnet-25-percent-discount.jpg?updatedAt=1626892509930',
+  'https://ik.imagekit.io/qopnetlabs/banners/qopnet-dream-bed.jpg?updatedAt=1626892510466',
+  'https://ik.imagekit.io/qopnetlabs/banners/qopnet-eid-adha.jpg?updatedAt=1626892511418',
 ]
 
 /* eslint-disable-next-line */
@@ -27,8 +26,8 @@ export function HomeBanner(props: HomeBannerProps) {
             alt="Gambar banner promosi"
             src={bannerImages[bannerIndex]}
             layout="responsive"
-            width={1280}
-            height={500}
+            width={1400}
+            height={670}
           />
         </chakra.a>
       </NextLink>

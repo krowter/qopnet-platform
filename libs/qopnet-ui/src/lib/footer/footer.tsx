@@ -8,6 +8,8 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react'
 
+import * as packageData from '../../../../../package.json'
+
 /**
  * Can be refactored later
  */
@@ -60,7 +62,12 @@ export const Footer = (props: FooterProps) => {
         </Stack>
       )}
 
-      <Text fontSize="sm">Copyright &copy; 2015-2021 Qopnet</Text>
+      <Stack>
+        <Text fontSize="sm">
+          Copyright <b>&copy;</b> 2015-2021 Qopnet
+        </Text>
+        <Text fontSize="xs">v{packageData.version}</Text>
+      </Stack>
     </Stack>
   )
 }
