@@ -10,6 +10,8 @@ const allSupplierProductsFields = {
     images: true,
     slug: true,
     name: true,
+    subname: true,
+    sku: true,
     price: true,
     priceMax: true,
     priceMin: true,

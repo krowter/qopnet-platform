@@ -19,6 +19,7 @@ import {
   Select,
   Spinner,
   VisuallyHidden,
+  InputLeftAddon,
   Stack,
   Text,
   Link as ChakraLink,
@@ -236,12 +237,12 @@ export const CreateSupplierProductForm = ({ supplierParam }) => {
               </InputGroup>
               <FormHelperText>
                 <span>
-                  Sub nama menjelaskan jenis produk, merek, dan keterangan
-                  seperti warna, bahan, atau tipe.
+                  Sub nama adalah jenis produk, merek, tagline, atau keterangan
+                  lain seperti warna, bahan, tipe.
                 </span>
               </FormHelperText>
               <FormHelperText color="red.500">
-                {errors.name && <span>Sub nama produk tidak jelas</span>}
+                {errors.name && <span>Sub nama produk tidak sesuai</span>}
               </FormHelperText>
             </FormControl>
             <FormControl>
@@ -281,7 +282,7 @@ export const CreateSupplierProductForm = ({ supplierParam }) => {
                 </span>
               </FormHelperText>
               <FormHelperText color="red.500">
-                {errors.sku && <span>SKU tidak jelas</span>}
+                {errors.sku && <span>SKU tidak sesuai</span>}
               </FormHelperText>
             </FormControl>
             <FormControl>
@@ -313,12 +314,48 @@ export const CreateSupplierProductForm = ({ supplierParam }) => {
             </Heading>
             <FormControl>
               <FormLabel>Harga Satuan</FormLabel>
-              <FormHelperText>Tentukan harga per satu produk.</FormHelperText>
+              <InputGroup>
+                <InputLeftAddon children="Rp" />
+                <Input
+                  type="number"
+                  placeholder="100"
+                  defaultValue={100}
+                  {...register('price', {
+                    min: 100,
+                    max: 999999999,
+                  })}
+                />
+              </InputGroup>
+              <FormHelperText>
+                Tentukan harga per satu produk. Mininum Rp 100, maksimum Rp
+                999.999.999
+              </FormHelperText>
+              <FormHelperText color="red.500">
+                {errors.price && <span>Harga tidak sesuai</span>}
+              </FormHelperText>
             </FormControl>
             <FormControl>
-              <FormLabel>Minimum Pemesanan</FormLabel>
+              <FormLabel>Minimum Order</FormLabel>
+              <InputGroup>
+                <InputLeftElement pointerEvents="none">
+                  <Icon name="order" />
+                </InputLeftElement>
+                <Input
+                  type="number"
+                  placeholder="1"
+                  defaultValue={1}
+                  {...register('minOrder', {
+                    min: 1,
+                    max: 9999,
+                  })}
+                />
+              </InputGroup>
               <FormHelperText>
-                Atur jumlah minimum yang harus dibeli oleh merchant.
+                Atur jumlah minimum order yang harus dibeli oleh merchant.
+                Mininum 1, maksimum 9.999
+              </FormHelperText>
+              <FormHelperText color="red.500">
+                {errors.minOrder && <span>Minimum order tidak sesuai</span>}
               </FormHelperText>
             </FormControl>
           </Stack>
