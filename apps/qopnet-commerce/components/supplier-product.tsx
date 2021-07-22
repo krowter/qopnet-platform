@@ -157,12 +157,18 @@ export const SupplierProductForm = ({ supplierParam }) => {
   ) => {
     try {
       setLoading(true)
+      delete formData['discount']
 
       const preparedFormData = {
         ...formData,
         // Be careful, supplier product uses slug, not handle
         slug: slugify(formData.name.toLowerCase()),
         status: formData.status ? 'ACTIVE' : 'INACTIVE',
+        minOrder: Number(formData.minOrder) || 1,
+        price: Number(formData.price) || 100,
+        // discount: Number(formData.discount) || null,
+        weight: Number(formData.weight) || 1,
+        stock: Number(formData.stock) || 1,
       }
       console.log({ preparedFormData })
 
