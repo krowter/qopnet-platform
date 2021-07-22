@@ -4,6 +4,8 @@ import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 import slugify from 'slugify'
 import cuid from 'cuid'
+import { Controller, useForm, SubmitHandler } from 'react-hook-form'
+import { DevTool } from '@hookform/devtools'
 import {
   Box,
   Button,
@@ -15,6 +17,7 @@ import {
   FormHelperText,
   FormLabel,
   Heading,
+  HStack,
   Image as ChakraImage,
   Input,
   InputGroup,
@@ -23,21 +26,25 @@ import {
   InputRightAddon,
   InputRightElement,
   Link as ChakraLink,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  Radio,
+  RadioGroup,
   Select,
   Spinner,
   Stack,
   Switch,
-  HStack,
   Text,
   Textarea,
-  VisuallyHidden,
-  VStack,
   useToast,
+  VisuallyHidden,
+  chakra,
+  VStack,
 } from '@chakra-ui/react'
-import { useForm, SubmitHandler } from 'react-hook-form'
-import { DevTool } from '@hookform/devtools'
 
 import { Icon } from '@qopnet/qopnet-ui'
+import { formatMoney } from '@qopnet/util-format'
 import { UploadImageForm } from '../components'
 import { postToAPI } from '../utils/fetch'
 
@@ -53,6 +60,7 @@ export type SupplierProductData = {
   description?: string
 
   price?: number
+  discount?: number
   priceMax?: number
   priceMin?: number
   minOrder?: number
@@ -100,6 +108,7 @@ export const SupplierProductForm = ({ supplierParam }) => {
       description: '',
 
       price: 100,
+      discount: null,
       priceMax: null,
       priceMin: null,
       minOrder: 1,
@@ -118,10 +127,11 @@ export const SupplierProductForm = ({ supplierParam }) => {
     },
   })
 
+  const price = watch('price')
+  const discount = watch('discount')
   const status = watch('status')
   const weightUnit = watch('weightUnit')
   const uploadedImagesUrl = watch('images')
-  // console.log({ uploadedImagesUrl })
 
   // Append image URL from Image Form into React Hook Form field.images
   const appendImageUrl = (newUrl) => {
@@ -351,52 +361,10 @@ export const SupplierProductForm = ({ supplierParam }) => {
 
           <Stack spacing={5}>
             <Heading as="h2" size="lg">
-              Harga Produk
+              Jumlah dan Harga Produk
             </Heading>
             <FormControl>
-              <FormLabel>Harga Satuan</FormLabel>
-              <InputGroup>
-                <InputLeftAddon children="Rp" />
-                <Input
-                  type="number"
-                  placeholder="100"
-                  defaultValue={100}
-                  {...register('price', {
-                    min: 100,
-                    max: 999999999,
-                  })}
-                />
-              </InputGroup>
-              <FormHelperText>
-                Tentukan harga per satu produk. Mininum Rp 100, maksimum Rp
-                999.999.999
-              </FormHelperText>
-              <FormHelperText color="red.500">
-                {errors.price && <span>Harga tidak sesuai</span>}
-              </FormHelperText>
-            </FormControl>
-            <FormControl>
-              <FormLabel>Diskon Harga dalam Persen</FormLabel>
-              <InputGroup>
-                <Input
-                  type="number"
-                  placeholder="10"
-                  // {...register('discount', {
-                  //   min: 0,
-                  //   max: 99,
-                  // })}
-                />
-                <InputRightAddon children="%" />
-              </InputGroup>
-              <FormHelperText>
-                Tentukan diskon harga dalam persentase dari 0% hingga 99%.
-              </FormHelperText>
-              {/* <FormHelperText color="red.500">
-                {errors.discount && <span>Diskon harga tidak sesuai</span>}
-              </FormHelperText> */}
-            </FormControl>
-            <FormControl>
-              <FormLabel>Minimum Order</FormLabel>
+              <FormLabel>Jumlah Minimum Order</FormLabel>
               <InputGroup>
                 <InputLeftElement pointerEvents="none">
                   <Icon name="order" />
@@ -405,10 +373,7 @@ export const SupplierProductForm = ({ supplierParam }) => {
                   type="number"
                   placeholder="1"
                   defaultValue={1}
-                  {...register('minOrder', {
-                    min: 1,
-                    max: 9999,
-                  })}
+                  {...register('minOrder', { min: 1, max: 9999 })}
                 />
               </InputGroup>
               <FormHelperText>
@@ -419,6 +384,61 @@ export const SupplierProductForm = ({ supplierParam }) => {
                 {errors.minOrder && <span>Minimum order tidak sesuai</span>}
               </FormHelperText>
             </FormControl>
+
+            <Stack id="price-discount" direction={['column', 'column', 'row']}>
+              <FormControl>
+                <FormLabel>Harga Satuan</FormLabel>
+                <InputGroup>
+                  <InputLeftAddon children="Rp" />
+                  <Input
+                    type="number"
+                    defaultValue="100"
+                    {...register('price', { min: 100, max: 999999999 })}
+                  />
+                </InputGroup>
+                <FormHelperText>
+                  Tentukan harga per satu produk. Mininum Rp 100, maksimum Rp
+                  999.999.999
+                </FormHelperText>
+                <FormHelperText color="red.500">
+                  {errors.price && <span>Harga tidak sesuai</span>}
+                </FormHelperText>
+              </FormControl>
+
+              <FormControl>
+                <FormLabel>Diskon Harga dalam Persen</FormLabel>
+                <InputGroup>
+                  <Input
+                    type="number"
+                    {...register('discount', { min: 0, max: 99 })}
+                  />
+                  <InputRightAddon children="%" />
+                </InputGroup>
+                <FormHelperText>
+                  Tentukan diskon harga dalam persentase dari 0% hingga 99%.
+                </FormHelperText>
+                <FormHelperText color="red.500">
+                  {errors.discount && <span>Diskon harga tidak sesuai</span>}
+                </FormHelperText>
+              </FormControl>
+            </Stack>
+
+            {discount && (
+              <Box>
+                <Text>
+                  Harga awal: Rp{' '}
+                  <chakra.span color="red.500">
+                    {formatMoney(price)}
+                  </chakra.span>
+                </Text>
+                <Text>
+                  Harga setelah diskon: Rp{' '}
+                  <chakra.span color="green.500">
+                    {formatMoney(price - Math.ceil((discount / 100) * price))}
+                  </chakra.span>
+                </Text>
+              </Box>
+            )}
           </Stack>
 
           <Divider />
@@ -434,10 +454,7 @@ export const SupplierProductForm = ({ supplierParam }) => {
                   type="number"
                   placeholder="1"
                   defaultValue={1}
-                  {...register('minOrder', {
-                    min: 1,
-                    max: 9999,
-                  })}
+                  {...register('weight', { min: 1, max: 9999 })}
                 />
                 {weightUnit && (
                   <InputRightAddon>{weightUnit.toLowerCase()}</InputRightAddon>
@@ -449,7 +466,7 @@ export const SupplierProductForm = ({ supplierParam }) => {
                 data dengan pihak kurir.
               </FormHelperText>
               <FormHelperText color="red.500">
-                {errors.minOrder && <span>Minimum order tidak sesuai</span>}
+                {errors.weight && <span>Berat produk tidak sesuai</span>}
               </FormHelperText>
             </FormControl>
             <FormControl>
@@ -474,27 +491,30 @@ export const SupplierProductForm = ({ supplierParam }) => {
               <FormLabel>Ukuran/Dimensi Produk</FormLabel>
               <Stack direction={['column', 'row', 'row']}>
                 <InputGroup>
-                  <Input
-                    placeholder="Panjang"
-                    type="number"
-                    {...register('dimension.length')}
-                  />
+                  <NumberInput defaultValue={0} min={0} max={9999}>
+                    <NumberInputField
+                      {...register('dimension.length', { min: 0, max: 9999 })}
+                      borderRightRadius={0}
+                    />
+                  </NumberInput>
                   <InputRightAddon children="cm" />
                 </InputGroup>
                 <InputGroup>
-                  <Input
-                    placeholder="Lebar"
-                    type="number"
-                    {...register('dimension.width')}
-                  />
+                  <NumberInput defaultValue={0} min={0} max={9999}>
+                    <NumberInputField
+                      {...register('dimension.width', { min: 0, max: 9999 })}
+                      borderRightRadius={0}
+                    />
+                  </NumberInput>
                   <InputRightAddon children="cm" />
                 </InputGroup>
                 <InputGroup>
-                  <Input
-                    placeholder="Tinggi"
-                    type="number"
-                    {...register('dimension.height')}
-                  />
+                  <NumberInput defaultValue={0} min={0} max={9999}>
+                    <NumberInputField
+                      {...register('dimension.height', { min: 0, max: 9999 })}
+                      borderRightRadius={0}
+                    />
+                  </NumberInput>
                   <InputRightAddon children="cm" />
                 </InputGroup>
               </Stack>
