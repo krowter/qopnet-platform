@@ -1,6 +1,6 @@
 import NextLink from 'next/link'
 import NextImage from 'next/image'
-import { chakra, Box, Heading } from '@chakra-ui/react'
+import { chakra, Box, Heading, Stack, VStack, Text } from '@chakra-ui/react'
 
 import Carousel from 'react-multi-carousel'
 import 'react-multi-carousel/lib/styles.css'
@@ -9,29 +9,64 @@ import 'react-multi-carousel/lib/styles.css'
 export interface HomeBannerProps {}
 
 export function HomeBanner(props: HomeBannerProps) {
-  return (
-    <Box>
-      <HomeBannerCarousel />
-    </Box>
-  )
+  // Can be changed to other carousel system
+  return <HomeBannerCarousel />
 }
 
-const carouselResponsive = {
+export const carouselResponsive = {
   superLargeDesktop: { items: 1, breakpoint: { max: 4000, min: 3000 } },
   desktop: { items: 1, breakpoint: { max: 3000, min: 1024 } },
   tablet: { items: 1, breakpoint: { max: 1024, min: 464 } },
   mobile: { items: 1, breakpoint: { max: 464, min: 0 } },
 }
 
-const carouselBannerImages = [
+// Hardcode for now
+export const carouselBannerImages = [
   'https://ik.imagekit.io/qopnetlabs/banners/qopnet-25-percent-discount.jpg?updatedAt=1626892509930',
   'https://ik.imagekit.io/qopnetlabs/banners/qopnet-dream-bed.jpg?updatedAt=1626892510466',
   'https://ik.imagekit.io/qopnetlabs/banners/qopnet-eid-adha.jpg?updatedAt=1626892511418',
 ]
 
+// Hardcode for now
+export const testimonials = [
+  {
+    text: 'Qopnet sangat membantu saya dalam perdagangan yang selama ini saya jalankan mengguanakan toko offline. Terima kasih Qopnet!',
+    author: 'Irfan',
+    affiliation: 'Pedagang Pasar Induk Beras Cipinang',
+  },
+  {
+    text: 'Mantap beli bahan pokok di Qopnet, harganya terjangkau plus return guarantee-nya bagus. Recommended banget buat yang usaha catering. Ga bakal nyesel deh.',
+    author: 'Charlie',
+    affiliation: 'ex-Purchasing Manager Berry Kitchen',
+  },
+  {
+    text: 'Harga murah dan terjangkau, kami berterima kasih karena usaha kami terbantu oleh Qopnet',
+    author: 'Fauzan',
+    affiliation: 'Pemilik Dapur Miji Catering, Mitra Kulina',
+  },
+  {
+    text: 'Qopnet helps us provide our basic raw materials not only with good quality but also easiness in payment & helpful in after sales service. Thank you, Qopnet!',
+    author: 'Annisa Riani',
+    affiliation: 'Co-Founder Soul in a Box @soulinabox',
+  },
+  {
+    text: 'Dengan harga terjangkau, kami berterima kasih karenanya usaha koperasi kami sangat terbantu.',
+    author: 'Silfia Trisna',
+    affiliation:
+      'Sekretaris Koperasi Karyawan Trio Putera Utama, Kelompok Usaha Adira Semesta Industry',
+  },
+]
+
 export const HomeBannerCarousel = () => {
   return (
-    <Carousel responsive={carouselResponsive}>
+    <Carousel
+      responsive={carouselResponsive}
+      swipeable={true}
+      draggable={true}
+      showDots={true}
+      infinite={true}
+      ssr={true}
+    >
       {carouselBannerImages.map((banner, index) => {
         return (
           <NextLink key={index} href="/shop" passHref>
@@ -48,6 +83,46 @@ export const HomeBannerCarousel = () => {
         )
       })}
     </Carousel>
+  )
+}
+
+export const HomePartners = () => {
+  return (
+    <VStack id="home-partners">
+      <Heading>Partner Kami</Heading>
+    </VStack>
+  )
+}
+
+export const HomeTestimonials = () => {
+  return (
+    <Stack id="home-testimonials" spacing={10} textAlign="center">
+      <Heading textAlign="center">Testimonial</Heading>
+      <Carousel
+        responsive={carouselResponsive}
+        swipeable={true}
+        draggable={true}
+        showDots={true}
+        infinite={true}
+        ssr={true}
+      >
+        {testimonials.map((testimonial, index) => {
+          return (
+            <Stack
+              key={index}
+              maxW="700px"
+              textAlign="center"
+              pb={10}
+              m="0 auto"
+            >
+              <Text fontSize="lg">"{testimonial.text}"</Text>
+              <Text fontWeight="bold">{testimonial.author}</Text>
+              <Text fontSize="sm">{testimonial.affiliation}</Text>
+            </Stack>
+          )
+        })}
+      </Carousel>
+    </Stack>
   )
 }
 

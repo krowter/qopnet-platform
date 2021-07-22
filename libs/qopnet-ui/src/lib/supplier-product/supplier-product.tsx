@@ -125,10 +125,10 @@ export const HomeProductCategory = (props: HomeProductCategoryProps) => {
 }
 
 export const HomeProductSpecial = (props: HomeProductSpecialProps) => {
-  const { id, supplierProducts, error } = props
+  const { supplierProducts, error } = props
 
   return (
-    <VStack id={id} py={10} spacing={10}>
+    <VStack id="home-product-special" spacing={10}>
       <Heading as="h2" size="lg">
         Produk Pilihan
       </Heading>
