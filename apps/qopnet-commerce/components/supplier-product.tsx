@@ -7,6 +7,8 @@ import cuid from 'cuid'
 import {
   Box,
   Button,
+  Checkbox,
+  CheckboxGroup,
   Divider,
   Flex,
   FormControl,
@@ -24,11 +26,11 @@ import {
   Select,
   Spinner,
   Stack,
+  Switch,
+  HStack,
   Text,
   Textarea,
   VisuallyHidden,
-  Checkbox,
-  CheckboxGroup,
   VStack,
   useToast,
 } from '@chakra-ui/react'
@@ -64,14 +66,14 @@ export type SupplierProductData = {
     height?: number
   }
 
-  status?: 'ACTIVE' | 'INACTIVE'
+  status?: boolean // Into database, convert to 'ACTIVE' | 'INACTIVE'
   stock?: number
 }
 
 /**
  * Create new Supplier form component
  */
-export const CreateSupplierProductForm = ({ supplierParam }) => {
+export const SupplierProductForm = ({ supplierParam }) => {
   const router = useRouter()
   const toast = useToast()
   const [loading, setLoading] = useState(false)
@@ -87,8 +89,36 @@ export const CreateSupplierProductForm = ({ supplierParam }) => {
     formState: { errors },
   } = useForm<SupplierProductData>({
     mode: 'onChange',
+    defaultValues: {
+      images: [],
+      slug: '',
+
+      name: '',
+      subname: '',
+      category: '',
+      sku: '',
+      description: '',
+
+      price: 100,
+      priceMax: null,
+      priceMin: null,
+      minOrder: 1,
+
+      weight: 1,
+      weightUnit: 'KG',
+      weightDetails: '',
+      dimension: {
+        length: 0,
+        width: 0,
+        height: 0,
+      },
+
+      status: true,
+      stock: 1,
+    },
   })
 
+  const status = watch('status')
   const weightUnit = watch('weightUnit')
   const uploadedImagesUrl = watch('images')
   // console.log({ uploadedImagesUrl })
@@ -109,7 +139,7 @@ export const CreateSupplierProductForm = ({ supplierParam }) => {
 
   // Create supplier process and toast
   const handleSubmitCreateSupplier: SubmitHandler<SupplierProductData> = async (
-    supplierProductFormData
+    formData
   ) => {
     try {
       setLoading(true)
@@ -119,10 +149,12 @@ export const CreateSupplierProductForm = ({ supplierParam }) => {
        * Create new supplier product for one supplier
        */
       const data = await postToAPI(`/api/suppliers/${supplierParam}/products`, {
-        ...supplierProductFormData,
-        slug: slugify(supplierProductFormData.name.toLowerCase()),
+        ...formData,
         // Be careful, supplier product uses slug, not handle
+        slug: slugify(formData.name.toLowerCase()),
+        status: formData.status ? 'ACTIVE' : 'INACTIVE',
       })
+
       if (!data) throw new Error('Create supplier product response error')
 
       toast({ title: 'Berhasil menambah produk supplier', status: 'success' })
@@ -223,7 +255,10 @@ export const CreateSupplierProductForm = ({ supplierParam }) => {
                 />
               </InputGroup>
               <FormHelperText>
-                <span>Nama min. 1 kata</span>
+                <span>
+                  Nama minimum 1 kata. Harus sangat unik, tidak boleh sama
+                  dengan produk lain yang sudah ada.
+                </span>
               </FormHelperText>
               <FormHelperText color="red.500">
                 {errors.name && <span>Nama produk diperlukan</span>}
@@ -491,7 +526,15 @@ export const CreateSupplierProductForm = ({ supplierParam }) => {
               Pengelolaan Produk
             </Heading>
             <FormControl>
-              <FormLabel>Status Produk</FormLabel>
+              <FormLabel htmlFor="status">Status Produk</FormLabel>
+              <HStack alignItems="center">
+                <Switch
+                  id="status"
+                  colorScheme="green"
+                  {...register('status')}
+                />
+                <Text>{status ? 'Aktif' : 'Tidak Aktif'}</Text>
+              </HStack>
               <FormHelperText>
                 Jika status aktif, produkmu dapat dicari oleh calon pembeli.
               </FormHelperText>
@@ -516,7 +559,7 @@ export const CreateSupplierProductForm = ({ supplierParam }) => {
       </VStack>
       {/* Setup React Hook Form devtool */}
       {process.env.NODE_ENV === 'development' && (
-        <DevTool control={control} placement="bottom-left" />
+        <DevTool control={control} placement="bottom-right" />
       )}
     </>
   )

@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { useUser } from 'use-supabase'
 
 import { Layout } from '@qopnet/qopnet-ui'
-import { CreateSupplierProductForm } from '../../../components'
+import { SupplierProductForm } from '../../../components'
 
 export const CreateSupplierProductPage = () => {
   const user = useUser()
@@ -21,7 +21,7 @@ export const CreateSupplierProductPage = () => {
   return (
     <Layout pt={10}>
       {user && supplierParam && (
-        <CreateSupplierProductForm supplierParam={supplierParam} />
+        <SupplierProductForm supplierParam={supplierParam} />
       )}
     </Layout>
   )
