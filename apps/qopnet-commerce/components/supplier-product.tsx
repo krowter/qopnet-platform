@@ -207,7 +207,7 @@ export const SupplierProductForm = ({ supplierParam }) => {
               <span>
                 Format gambar <code>.jpg</code> <code>.jpeg</code>{' '}
                 <code>.png</code>, ukuran minimum 300 x 300px, tidak lebih dari
-                5 MB
+                5 MB.
               </span>
             </FormHelperText>
           </FormControl>
@@ -376,7 +376,11 @@ export const SupplierProductForm = ({ supplierParam }) => {
                   type="number"
                   placeholder="1"
                   defaultValue={1}
-                  {...register('minOrder', { min: 1, max: 9999 })}
+                  {...register('minOrder', {
+                    required: true,
+                    min: 1,
+                    max: 9999,
+                  })}
                 />
               </InputGroup>
               <FormHelperText>
@@ -396,7 +400,11 @@ export const SupplierProductForm = ({ supplierParam }) => {
                   <Input
                     type="number"
                     defaultValue="100"
-                    {...register('price', { min: 100, max: 999999999 })}
+                    {...register('price', {
+                      required: true,
+                      min: 100,
+                      max: 999999999,
+                    })}
                   />
                 </InputGroup>
                 <FormHelperText>
@@ -459,7 +467,11 @@ export const SupplierProductForm = ({ supplierParam }) => {
                     type="number"
                     placeholder="1"
                     defaultValue={1}
-                    {...register('weight', { min: 1, max: 9999 })}
+                    {...register('weight', {
+                      required: true,
+                      min: 1,
+                      max: 9999,
+                    })}
                   />
                   {weightUnit && (
                     <InputRightAddon>
@@ -478,7 +490,7 @@ export const SupplierProductForm = ({ supplierParam }) => {
               </FormControl>
               <FormControl>
                 <FormLabel>Unit Berat</FormLabel>
-                <InputGroup>
+                <InputGroup maxW="100px">
                   <Select
                     placeholder="Unit berat"
                     defaultValue="KG"
@@ -529,7 +541,7 @@ export const SupplierProductForm = ({ supplierParam }) => {
               </Stack>
               <FormHelperText>
                 Masukkan ukuran/dimensi produk yaitu panjang, lebar, dan tinggi
-                setelah dikemas untuk menghitung berat volume
+                setelah dikemas untuk menghitung berat volume.
               </FormHelperText>
             </FormControl>
             <FormControl>
@@ -555,14 +567,17 @@ export const SupplierProductForm = ({ supplierParam }) => {
               Pengelolaan Produk
             </Heading>
             <FormControl>
-              <FormLabel htmlFor="status">Status Produk</FormLabel>
+              <FormLabel>Status Produk</FormLabel>
               <HStack alignItems="center">
                 <Switch
+                  size="lg"
                   id="status"
                   colorScheme="green"
                   {...register('status')}
                 />
-                <Text>{status ? 'Aktif' : 'Tidak Aktif'}</Text>
+                <FormLabel htmlFor="status" userSelect="none" cursor="pointer">
+                  {status ? 'Aktif' : 'Nonaktif'}
+                </FormLabel>
               </HStack>
               <FormHelperText>
                 Jika status aktif, produkmu dapat dicari oleh calon pembeli.
@@ -570,8 +585,19 @@ export const SupplierProductForm = ({ supplierParam }) => {
             </FormControl>
             <FormControl>
               <FormLabel>Stok Produk</FormLabel>
+              <InputGroup>
+                <NumberInput defaultValue={1} min={1} max={9999}>
+                  <NumberInputField
+                    {...register('stock', {
+                      required: true,
+                      min: 1,
+                      max: 9999,
+                    })}
+                  />
+                </NumberInput>
+              </InputGroup>
               <FormHelperText>
-                Masukkan jumlah stok yang tersedia
+                Masukkan jumlah stok yang tersedia. Mininum 1, maksimum 9.999
               </FormHelperText>
             </FormControl>
           </Stack>
