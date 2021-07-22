@@ -31,6 +31,8 @@ import {
   FaLeaf as Organic,
   FaEgg as Dairy,
   FaBaby as Baby,
+  FaMoneyBill as Price,
+  FaSort as Order,
 } from 'react-icons/fa'
 import { FiMenu as Menu } from 'react-icons/fi'
 import { MdFreeBreakfast as Breakfast } from 'react-icons/md'
@@ -132,6 +134,10 @@ export const Icon = (props: IconProps) => {
       return <Snack />
     case 'spice':
       return <Spice />
+    case 'price':
+      return <Price />
+    case 'order':
+      return <Order />
 
     /**
      * When nothing found
