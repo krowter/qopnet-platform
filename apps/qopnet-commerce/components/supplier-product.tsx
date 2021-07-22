@@ -27,6 +27,8 @@ import {
   Text,
   Textarea,
   VisuallyHidden,
+  Checkbox,
+  CheckboxGroup,
   VStack,
   useToast,
 } from '@chakra-ui/react'
@@ -467,9 +469,17 @@ export const CreateSupplierProductForm = ({ supplierParam }) => {
               </FormHelperText>
             </FormControl>
             <FormControl>
-              <FormLabel>Layanan Pengiriman Produk</FormLabel>
+              <FormLabel>Layanan Kurir Pengiriman Produk</FormLabel>
+              <CheckboxGroup colorScheme="orange" defaultValue={['DELIVEREE']}>
+                <Stack direction={['column', 'column', 'row']} spacing={3}>
+                  <Checkbox value="DELIVEREE">Deliveree</Checkbox>
+                  <Checkbox value="LALAMOVE">Lalamove</Checkbox>
+                  <Checkbox value="MASKARGO">Mas Kargo</Checkbox>
+                </Stack>
+              </CheckboxGroup>
+
               <FormHelperText>
-                Atur layanan pengiriman sesuai jenis produkmu.
+                Atur layanan kurir pengiriman sesuai jenis dan ukuran produkmu.
               </FormHelperText>
             </FormControl>
           </Stack>
