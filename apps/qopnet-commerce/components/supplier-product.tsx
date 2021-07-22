@@ -154,16 +154,22 @@ export const SupplierProductForm = ({ supplierParam }) => {
     try {
       setLoading(true)
 
-      /**
-       * POST /api/suppliers/:supplierParam/products
-       * Create new supplier product for one supplier
-       */
-      const data = await postToAPI(`/api/suppliers/${supplierParam}/products`, {
+      const preparedFormData = {
         ...formData,
         // Be careful, supplier product uses slug, not handle
         slug: slugify(formData.name.toLowerCase()),
         status: formData.status ? 'ACTIVE' : 'INACTIVE',
-      })
+      }
+      console.log({ preparedFormData })
+
+      /**
+       * POST /api/suppliers/:supplierParam/products
+       * Create new supplier product for one supplier
+       */
+      const data = await postToAPI(
+        `/api/suppliers/${supplierParam}/products`,
+        preparedFormData
+      )
 
       if (!data) throw new Error('Create supplier product response error')
 
@@ -188,9 +194,11 @@ export const SupplierProductForm = ({ supplierParam }) => {
               Tambah Produk Supplier
             </Heading>
             <Text>
-              Silakan lengkapi info produk untuk
+              Silakan lengkapi info produk untuk{' '}
               <NextLink href={`/${supplierParam}`} passHref>
-                <ChakraLink color="orange.500">{supplierParam}</ChakraLink>
+                <ChakraLink fontWeight="bold" color="orange.500">
+                  {supplierParam}
+                </ChakraLink>
               </NextLink>
             </Text>
           </Stack>
@@ -205,9 +213,9 @@ export const SupplierProductForm = ({ supplierParam }) => {
             <UploadImageForm appendImageUrl={appendImageUrl} />
             <FormHelperText>
               <span>
-                Format gambar <code>.jpg</code> <code>.jpeg</code>{' '}
-                <code>.png</code>, ukuran minimum 300 x 300px, tidak lebih dari
-                5 MB.
+                Bisa unggah lebih dari satu. Format gambar <code>.jpg</code>{' '}
+                <code>.jpeg</code> <code>.png</code>, ukuran minimum 300 x
+                300px, tidak lebih dari 5 MB.
               </span>
             </FormHelperText>
           </FormControl>
@@ -514,8 +522,9 @@ export const SupplierProductForm = ({ supplierParam }) => {
                 <InputGroup>
                   <NumberInput defaultValue={0} min={0} max={9999}>
                     <NumberInputField
+                      id="dimension-length"
+                      borderRightRadius={0}
                       {...register('dimension.length', { min: 0, max: 9999 })}
-                      borderRightRadius={0}
                     />
                   </NumberInput>
                   <InputRightAddon children="cm" />
@@ -523,8 +532,9 @@ export const SupplierProductForm = ({ supplierParam }) => {
                 <InputGroup>
                   <NumberInput defaultValue={0} min={0} max={9999}>
                     <NumberInputField
+                      id="dimension-width"
+                      borderRightRadius={0}
                       {...register('dimension.width', { min: 0, max: 9999 })}
-                      borderRightRadius={0}
                     />
                   </NumberInput>
                   <InputRightAddon children="cm" />
@@ -532,8 +542,9 @@ export const SupplierProductForm = ({ supplierParam }) => {
                 <InputGroup>
                   <NumberInput defaultValue={0} min={0} max={9999}>
                     <NumberInputField
-                      {...register('dimension.height', { min: 0, max: 9999 })}
+                      id="dimension-height"
                       borderRightRadius={0}
+                      {...register('dimension.height', { min: 0, max: 9999 })}
                     />
                   </NumberInput>
                   <InputRightAddon children="cm" />
