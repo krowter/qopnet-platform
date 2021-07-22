@@ -39,7 +39,6 @@ export const Header = (props: HeaderProps) => {
   const toast = useToast()
 
   const [isDesktop] = useMediaQuery('(min-width: 768px)')
-  const [showSearch] = useMediaQuery('(min-width: 425px)')
 
   const qopnetLogo = useColorModeValue(
     '/images/qopnet-logo.png',
@@ -100,7 +99,7 @@ export const Header = (props: HeaderProps) => {
         )}
       </HStack>
 
-      {showSearch && <SearchBar />}
+      <SearchBar />
 
       <HStack spacing={3}>
         {user && (
