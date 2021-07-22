@@ -5,26 +5,27 @@ import { useState, useEffect } from 'react'
 import slugify from 'slugify'
 import cuid from 'cuid'
 import {
+  Box,
   Button,
+  Divider,
   Flex,
   FormControl,
   FormHelperText,
   FormLabel,
   Heading,
-  Box,
   Image as ChakraImage,
   Input,
   InputGroup,
+  InputLeftAddon,
   InputLeftElement,
+  InputRightAddon,
+  Link as ChakraLink,
   Select,
   Spinner,
-  VisuallyHidden,
-  InputLeftAddon,
   Stack,
   Text,
-  Link as ChakraLink,
-  Divider,
   Textarea,
+  VisuallyHidden,
   VStack,
   useToast,
 } from '@chakra-ui/react'
@@ -333,6 +334,26 @@ export const CreateSupplierProductForm = ({ supplierParam }) => {
               <FormHelperText color="red.500">
                 {errors.price && <span>Harga tidak sesuai</span>}
               </FormHelperText>
+            </FormControl>
+            <FormControl>
+              <FormLabel>Diskon Harga dalam Persen</FormLabel>
+              <InputGroup>
+                <Input
+                  type="number"
+                  placeholder="10"
+                  // {...register('discount', {
+                  //   min: 0,
+                  //   max: 99,
+                  // })}
+                />
+                <InputRightAddon children="%" />
+              </InputGroup>
+              <FormHelperText>
+                Tentukan diskon harga dalam persentase dari 0% hingga 99%.
+              </FormHelperText>
+              {/* <FormHelperText color="red.500">
+                {errors.discount && <span>Diskon harga tidak sesuai</span>}
+              </FormHelperText> */}
             </FormControl>
             <FormControl>
               <FormLabel>Minimum Order</FormLabel>
