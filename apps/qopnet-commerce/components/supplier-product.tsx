@@ -434,10 +434,36 @@ export const CreateSupplierProductForm = ({ supplierParam }) => {
               </FormHelperText>
             </FormControl>
             <FormControl>
-              <FormLabel>Ukuran Produk</FormLabel>
+              <FormLabel>Ukuran/Dimensi Produk</FormLabel>
+              <Stack direction={['column', 'row', 'row']}>
+                <InputGroup>
+                  <Input
+                    placeholder="Panjang"
+                    type="number"
+                    {...register('dimension.length')}
+                  />
+                  <InputRightAddon children="cm" />
+                </InputGroup>
+                <InputGroup>
+                  <Input
+                    placeholder="Lebar"
+                    type="number"
+                    {...register('dimension.width')}
+                  />
+                  <InputRightAddon children="cm" />
+                </InputGroup>
+                <InputGroup>
+                  <Input
+                    placeholder="Tinggi"
+                    type="number"
+                    {...register('dimension.height')}
+                  />
+                  <InputRightAddon children="cm" />
+                </InputGroup>
+              </Stack>
               <FormHelperText>
-                Masukkan ukuran produk setelah dikemas untuk menghitung berat
-                volume
+                Masukkan ukuran/dimensi produk yaitu panjang, lebar, dan tinggi
+                setelah dikemas untuk menghitung berat volume
               </FormHelperText>
             </FormControl>
             <FormControl>
