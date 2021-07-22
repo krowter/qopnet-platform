@@ -129,6 +129,10 @@ export const SupplierProductForm = ({ supplierParam }) => {
 
   const price = watch('price')
   const discount = watch('discount')
+  const priceDiscounted = price - Math.ceil((discount / 100) * price) || price
+  const minOrder = watch('minOrder')
+  const subTotal = minOrder * price
+  const subTotalDiscounted = minOrder * priceDiscounted
   const status = watch('status')
   const weightUnit = watch('weightUnit')
   const uploadedImagesUrl = watch('images')
@@ -382,8 +386,9 @@ export const SupplierProductForm = ({ supplierParam }) => {
                 </InputLeftElement>
                 <Input
                   type="number"
-                  placeholder="1"
                   defaultValue={1}
+                  min={1}
+                  max={9999}
                   {...register('minOrder', {
                     required: true,
                     min: 1,
@@ -407,7 +412,9 @@ export const SupplierProductForm = ({ supplierParam }) => {
                   <InputLeftAddon children="Rp" />
                   <Input
                     type="number"
-                    defaultValue="100"
+                    min={100}
+                    max={999999999}
+                    defaultValue={100}
                     {...register('price', {
                       required: true,
                       min: 100,
@@ -429,6 +436,8 @@ export const SupplierProductForm = ({ supplierParam }) => {
                 <InputGroup>
                   <Input
                     type="number"
+                    min={0}
+                    max={99}
                     {...register('discount', { min: 0, max: 99 })}
                   />
                   <InputRightAddon children="%" />
@@ -442,22 +451,34 @@ export const SupplierProductForm = ({ supplierParam }) => {
               </FormControl>
             </Stack>
 
-            {discount && (
-              <Box>
+            <Box>
+              <Text>
+                Harga satuan awal: Rp{' '}
+                <chakra.span color="red.500">{formatMoney(price)}</chakra.span>
+              </Text>
+              {discount && (
                 <Text>
-                  Harga awal: Rp{' '}
-                  <chakra.span color="red.500">
-                    {formatMoney(price)}
-                  </chakra.span>
-                </Text>
-                <Text>
-                  Harga setelah diskon: Rp{' '}
+                  Harga satuan setelah diskon: Rp{' '}
                   <chakra.span color="green.500">
-                    {formatMoney(price - Math.ceil((discount / 100) * price))}
+                    {formatMoney(priceDiscounted)}
                   </chakra.span>
                 </Text>
-              </Box>
-            )}
+              )}
+              <Text>
+                Subtotal awal: Rp{' '}
+                <chakra.span color="blue.500">
+                  {formatMoney(subTotal)}
+                </chakra.span>
+              </Text>
+              {discount && (
+                <Text>
+                  Subtotal setelah diskon: Rp{' '}
+                  <chakra.span color="teal.500">
+                    {formatMoney(subTotalDiscounted)}
+                  </chakra.span>
+                </Text>
+              )}
+            </Box>
           </Stack>
 
           <Divider />
@@ -473,8 +494,9 @@ export const SupplierProductForm = ({ supplierParam }) => {
                 <InputGroup>
                   <Input
                     type="number"
-                    placeholder="1"
                     defaultValue={1}
+                    min={1}
+                    max={9999}
                     {...register('weight', {
                       required: true,
                       min: 1,
@@ -520,30 +542,42 @@ export const SupplierProductForm = ({ supplierParam }) => {
               <FormLabel>Ukuran/Dimensi Produk</FormLabel>
               <Stack direction={['column', 'row', 'row']}>
                 <InputGroup>
+                  <InputLeftAddon children="P" />
                   <NumberInput defaultValue={0} min={0} max={9999}>
                     <NumberInputField
                       id="dimension-length"
+                      placeholder="Panjang"
                       borderRightRadius={0}
+                      min={0}
+                      max={9999}
                       {...register('dimension.length', { min: 0, max: 9999 })}
                     />
                   </NumberInput>
                   <InputRightAddon children="cm" />
                 </InputGroup>
                 <InputGroup>
+                  <InputLeftAddon children="L" />
                   <NumberInput defaultValue={0} min={0} max={9999}>
                     <NumberInputField
                       id="dimension-width"
+                      placeholder="Lebar"
                       borderRightRadius={0}
+                      min={0}
+                      max={9999}
                       {...register('dimension.width', { min: 0, max: 9999 })}
                     />
                   </NumberInput>
                   <InputRightAddon children="cm" />
                 </InputGroup>
                 <InputGroup>
+                  <InputLeftAddon children="T" />
                   <NumberInput defaultValue={0} min={0} max={9999}>
                     <NumberInputField
                       id="dimension-height"
+                      placeholder="Tinggi"
                       borderRightRadius={0}
+                      min={0}
+                      max={9999}
                       {...register('dimension.height', { min: 0, max: 9999 })}
                     />
                   </NumberInput>
@@ -597,18 +631,19 @@ export const SupplierProductForm = ({ supplierParam }) => {
             <FormControl>
               <FormLabel>Stok Produk</FormLabel>
               <InputGroup>
-                <NumberInput defaultValue={1} min={1} max={9999}>
+                <NumberInput defaultValue={1} min={1} max={999999999}>
                   <NumberInputField
                     {...register('stock', {
                       required: true,
                       min: 1,
-                      max: 9999,
+                      max: 999999999,
                     })}
                   />
                 </NumberInput>
               </InputGroup>
               <FormHelperText>
-                Masukkan jumlah stok yang tersedia. Mininum 1, maksimum 9.999
+                Masukkan jumlah stok yang tersedia. Mininum 1, maksimum
+                999.999.999
               </FormHelperText>
             </FormControl>
           </Stack>
