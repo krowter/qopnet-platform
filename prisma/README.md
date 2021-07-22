@@ -1,5 +1,12 @@
 # Prisma
 
+## Prisma Workflow
+
+1. Update Prisma schema
+2. Run `migrate`
+3. Run `push`
+4. Run `generate`
+
 ## Preparation
 
 Since we're using Supabase for authentication/authorization, there is a special `auth.users` table for Supabase Auth. The schema is in `auth`, not `public`. Meanwhile, Prisma uses `public` table by default and cannot access or cross reference the `auth` schema.
