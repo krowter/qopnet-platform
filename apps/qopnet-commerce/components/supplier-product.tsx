@@ -19,6 +19,7 @@ import {
   InputLeftAddon,
   InputLeftElement,
   InputRightAddon,
+  InputRightElement,
   Link as ChakraLink,
   Select,
   Spinner,
@@ -85,8 +86,10 @@ export const CreateSupplierProductForm = ({ supplierParam }) => {
   } = useForm<SupplierProductData>({
     mode: 'onChange',
   })
+
+  const weightUnit = watch('weightUnit')
   const uploadedImagesUrl = watch('images')
-  console.log({ uploadedImagesUrl })
+  // console.log({ uploadedImagesUrl })
 
   // Append image URL from Image Form into React Hook Form field.images
   const appendImageUrl = (newUrl) => {
@@ -389,10 +392,45 @@ export const CreateSupplierProductForm = ({ supplierParam }) => {
             </Heading>
             <FormControl>
               <FormLabel>Berat Produk</FormLabel>
+              <InputGroup>
+                <Input
+                  type="number"
+                  placeholder="1"
+                  defaultValue={1}
+                  {...register('minOrder', {
+                    min: 1,
+                    max: 9999,
+                  })}
+                />
+                {weightUnit && (
+                  <InputRightAddon>{weightUnit.toLowerCase()}</InputRightAddon>
+                )}
+              </InputGroup>
               <FormHelperText>
                 Masukkan berat dengan menimbang produk setelah dikemas.
                 Perhatikan dengan baik berat produk agar tidak terjadi selisih
                 data dengan pihak kurir.
+              </FormHelperText>
+              <FormHelperText color="red.500">
+                {errors.minOrder && <span>Minimum order tidak sesuai</span>}
+              </FormHelperText>
+            </FormControl>
+            <FormControl>
+              <FormLabel>Unit Berat</FormLabel>
+              <InputGroup>
+                <Select
+                  placeholder="Unit berat"
+                  defaultValue="KG"
+                  {...register('weightUnit', { required: true })}
+                >
+                  <option value="GR">gr</option>
+                  <option value="KG">kg</option>
+                  <option value="TON">ton</option>
+                </Select>
+              </InputGroup>
+              <FormHelperText>Pilih unit berat</FormHelperText>
+              <FormHelperText color="red.500">
+                {errors.weightUnit && <span>Unit berat tidak sesuai</span>}
               </FormHelperText>
             </FormControl>
             <FormControl>
