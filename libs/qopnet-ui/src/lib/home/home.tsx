@@ -6,13 +6,11 @@ import Carousel from 'react-multi-carousel'
 import 'react-multi-carousel/lib/styles.css'
 
 /* eslint-disable-next-line */
-export interface HomeBannerProps {
-  id?: string | ''
-}
+export interface HomeBannerProps {}
 
 export function HomeBanner(props: HomeBannerProps) {
   return (
-    <Box id={props.id}>
+    <Box>
       <HomeBannerCarousel />
     </Box>
   )
@@ -36,10 +34,9 @@ export const HomeBannerCarousel = () => {
     <Carousel responsive={carouselResponsive}>
       {carouselBannerImages.map((banner, index) => {
         return (
-          <NextLink href="/shop" passHref>
+          <NextLink key={index} href="/shop" passHref>
             <chakra.a>
               <NextImage
-                key={index}
                 alt="Gambar banner promosi"
                 src={carouselBannerImages[index]}
                 layout="responsive"

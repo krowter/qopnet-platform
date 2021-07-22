@@ -15,10 +15,8 @@ export const HomeContainer = () => {
 
   return (
     <Stack>
-      <HomeBanner id="slider-promo" />
-      <HomeProductCategory id="product-category" />
+      <HomeBanner />
       <HomeProductSpecial supplierProducts={supplierProducts} error={error} />
-      <SuppliersContainer />
     </Stack>
   )
 }

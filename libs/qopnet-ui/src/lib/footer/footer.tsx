@@ -1,14 +1,7 @@
 import NextLink from 'next/link'
-import {
-  Stack,
-  Text,
-  Link,
-  SimpleGrid,
-  Heading,
-  useColorModeValue,
-} from '@chakra-ui/react'
+import { Stack, Text, Link, SimpleGrid, Heading } from '@chakra-ui/react'
 
-import * as packageData from '../../../../../package.json'
+import packageData from '../../../../../package.json'
 
 /**
  * Can be refactored later
