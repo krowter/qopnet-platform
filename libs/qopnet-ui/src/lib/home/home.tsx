@@ -1,6 +1,14 @@
 import NextLink from 'next/link'
 import NextImage from 'next/image'
-import { chakra, Box, Heading, Stack, VStack, Text } from '@chakra-ui/react'
+import {
+  chakra,
+  Box,
+  Heading,
+  Stack,
+  VStack,
+  Text,
+  SimpleGrid,
+} from '@chakra-ui/react'
 
 import Carousel from 'react-multi-carousel'
 import 'react-multi-carousel/lib/styles.css'
@@ -57,6 +65,19 @@ export const testimonials = [
   },
 ]
 
+export const partners = [
+  {
+    name: 'Unilever',
+    imageUrl:
+      'https://ik.imagekit.io/qopnetlabs/logos/unilever.png?updatedAt=1626984413778',
+  },
+  {
+    name: 'Rose Brand',
+    imageUrl:
+      'https://ik.imagekit.io/qopnetlabs/logos/rosebrand.png?updatedAt=1626984413779',
+  },
+]
+
 export const HomeBannerCarousel = () => {
   return (
     <Carousel
@@ -88,16 +109,33 @@ export const HomeBannerCarousel = () => {
 
 export const HomePartners = () => {
   return (
-    <VStack id="home-partners">
+    <Stack id="home-partners" spacing={10} textAlign="center">
       <Heading>Partner Kami</Heading>
-    </VStack>
+      <VStack>
+        <SimpleGrid minChildWidth="100px" gap={5} maxW="220px">
+          {partners.map((partner, index) => {
+            return (
+              <Box key={index} maxW="100px">
+                <NextImage
+                  alt={partner.name}
+                  src={partner.imageUrl}
+                  layout="responsive"
+                  width={100}
+                  height={100}
+                />
+              </Box>
+            )
+          })}
+        </SimpleGrid>
+      </VStack>
+    </Stack>
   )
 }
 
 export const HomeTestimonials = () => {
   return (
     <Stack id="home-testimonials" spacing={10} textAlign="center">
-      <Heading textAlign="center">Testimonial</Heading>
+      <Heading>Testimonial</Heading>
       <Carousel
         responsive={carouselResponsive}
         swipeable={true}
@@ -108,13 +146,7 @@ export const HomeTestimonials = () => {
       >
         {testimonials.map((testimonial, index) => {
           return (
-            <Stack
-              key={index}
-              maxW="700px"
-              textAlign="center"
-              pb={10}
-              m="0 auto"
-            >
+            <Stack key={index} maxW="700px" pb={10} m="0 auto">
               <Text fontSize="lg">"{testimonial.text}"</Text>
               <Text fontWeight="bold">{testimonial.author}</Text>
               <Text fontSize="sm">{testimonial.affiliation}</Text>
