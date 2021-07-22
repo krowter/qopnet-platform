@@ -84,6 +84,7 @@ router.get('/search', async (req, res) => {
             { description: { contains: searchQuery, mode: 'insensitive' } },
           ],
         },
+        include: { supplier: { select: { handle: true } } },
       })
 
     res.json({
