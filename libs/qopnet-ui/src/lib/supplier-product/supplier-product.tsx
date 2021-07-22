@@ -100,7 +100,7 @@ export const HomeProductCategory = (props: HomeProductCategoryProps) => {
   return (
     <VStack id={props.id} py={10} spacing={10}>
       <Heading as="h2" size="lg">
-        Pilihan Kategori Produk
+        Kategori Produk
       </Heading>
       <SimpleGrid spacing={5} columns={[3, 4, 8]}>
         {supplierProductCategories.map((category) => {
@@ -125,13 +125,11 @@ export const HomeProductCategory = (props: HomeProductCategoryProps) => {
 }
 
 export const HomeProductSpecial = (props: HomeProductSpecialProps) => {
-  const { id, supplierProducts, error } = props
+  const { supplierProducts, error } = props
 
   return (
-    <VStack id={id} py={10} spacing={10}>
-      <Heading as="h2" size="lg">
-        Produk dan Supplier Pilihan
-      </Heading>
+    <VStack id="home-product-special" spacing={10}>
+      <Heading>Produk Pilihan</Heading>
 
       {error && <Text>Gagal mengambil produk pilihan</Text>}
       {!error && !supplierProducts && <Text>Memuat produk pilihan...</Text>}

@@ -10,3 +10,14 @@ img {
 .next-image-container > div {
   display: block !important;
 }
+
+@media (max-width: 768px) {
+  .header-logo {
+    max-width: 50px !important;
+    overflow: hidden;
+  }
+}
+
+.header-logo {
+  max-width: 161px;
+}
