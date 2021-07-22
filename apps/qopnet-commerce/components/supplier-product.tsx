@@ -188,7 +188,10 @@ export const SupplierProductForm = ({ supplierParam }) => {
               Tambah Produk Supplier
             </Heading>
             <Text>
-              Silakan lengkapi info produk untuk <b>{supplierParam}</b>
+              Silakan lengkapi info produk untuk
+              <NextLink href={`/${supplierParam}`} passHref>
+                <ChakraLink color="orange.500">{supplierParam}</ChakraLink>
+              </NextLink>
             </Text>
           </Stack>
         </VStack>
@@ -447,46 +450,52 @@ export const SupplierProductForm = ({ supplierParam }) => {
             <Heading as="h2" size="lg">
               Berat dan Pengiriman Produk
             </Heading>
-            <FormControl>
-              <FormLabel>Berat Produk</FormLabel>
-              <InputGroup>
-                <Input
-                  type="number"
-                  placeholder="1"
-                  defaultValue={1}
-                  {...register('weight', { min: 1, max: 9999 })}
-                />
-                {weightUnit && (
-                  <InputRightAddon>{weightUnit.toLowerCase()}</InputRightAddon>
-                )}
-              </InputGroup>
-              <FormHelperText>
-                Masukkan berat dengan menimbang produk setelah dikemas.
-                Perhatikan dengan baik berat produk agar tidak terjadi selisih
-                data dengan pihak kurir.
-              </FormHelperText>
-              <FormHelperText color="red.500">
-                {errors.weight && <span>Berat produk tidak sesuai</span>}
-              </FormHelperText>
-            </FormControl>
-            <FormControl>
-              <FormLabel>Unit Berat</FormLabel>
-              <InputGroup>
-                <Select
-                  placeholder="Unit berat"
-                  defaultValue="KG"
-                  {...register('weightUnit', { required: true })}
-                >
-                  <option value="GR">gr</option>
-                  <option value="KG">kg</option>
-                  <option value="TON">ton</option>
-                </Select>
-              </InputGroup>
-              <FormHelperText>Pilih unit berat</FormHelperText>
-              <FormHelperText color="red.500">
-                {errors.weightUnit && <span>Unit berat tidak sesuai</span>}
-              </FormHelperText>
-            </FormControl>
+
+            <Stack id="weight-unit" direction={['column', 'column', 'row']}>
+              <FormControl>
+                <FormLabel>Berat Produk</FormLabel>
+                <InputGroup>
+                  <Input
+                    type="number"
+                    placeholder="1"
+                    defaultValue={1}
+                    {...register('weight', { min: 1, max: 9999 })}
+                  />
+                  {weightUnit && (
+                    <InputRightAddon>
+                      {weightUnit.toLowerCase()}
+                    </InputRightAddon>
+                  )}
+                </InputGroup>
+                <FormHelperText>
+                  Masukkan berat dengan menimbang produk setelah dikemas.
+                  Perhatikan dengan baik berat produk agar tidak terjadi selisih
+                  data dengan pihak kurir.
+                </FormHelperText>
+                <FormHelperText color="red.500">
+                  {errors.weight && <span>Berat produk tidak sesuai</span>}
+                </FormHelperText>
+              </FormControl>
+              <FormControl>
+                <FormLabel>Unit Berat</FormLabel>
+                <InputGroup>
+                  <Select
+                    placeholder="Unit berat"
+                    defaultValue="KG"
+                    {...register('weightUnit', { required: true })}
+                  >
+                    <option value="GR">gr</option>
+                    <option value="KG">kg</option>
+                    <option value="TON">ton</option>
+                  </Select>
+                </InputGroup>
+                <FormHelperText>Pilih unit berat</FormHelperText>
+                <FormHelperText color="red.500">
+                  {errors.weightUnit && <span>Unit berat tidak sesuai</span>}
+                </FormHelperText>
+              </FormControl>
+            </Stack>
+
             <FormControl>
               <FormLabel>Ukuran/Dimensi Produk</FormLabel>
               <Stack direction={['column', 'row', 'row']}>
