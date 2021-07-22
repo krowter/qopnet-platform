@@ -6,6 +6,7 @@ import {
   AvatarBadge,
   Box,
   chakra,
+  Flex,
   Heading,
   HStack,
   IconButton,
@@ -37,16 +38,12 @@ export const Header = (props: HeaderProps) => {
   const user = useUser()
   const toast = useToast()
 
-  const [isDesktop] = useMediaQuery('(min-width: 60em)')
+  const [isDesktop] = useMediaQuery('(min-width: 768px)')
   const [showSearch] = useMediaQuery('(min-width: 425px)')
 
-  const qopnetLogoDesktop = useColorModeValue(
+  const qopnetLogo = useColorModeValue(
     '/images/qopnet-logo.png',
     '/images/qopnet-logo-dark.png'
-  )
-  const qopnetLogoMobile = useColorModeValue(
-    '/images/qopnet-icon.png',
-    '/images/qopnet-icon.png'
   )
 
   // Should be passed down from props of respective app
@@ -69,20 +66,22 @@ export const Header = (props: HeaderProps) => {
       justify="space-between"
       spacing={5}
     >
-      <HStack w={'500px'} spacing={3}>
-        {isDesktop && (
-          <NextLink href="/" passHref>
-            <chakra.a display="block" className="next-image-container">
-              <NextImage
-                key="qopnet-logo-desktop"
-                alt="Qopnet logo"
-                src={qopnetLogoDesktop}
-                width={161}
-                height={50}
-              />
-            </chakra.a>
-          </NextLink>
-        )}
+      <HStack spacing={3}>
+        <NextLink href="/" passHref>
+          <chakra.a
+            className="next-image-container header-logo"
+            display="block"
+            overflow="hidden"
+          >
+            <NextImage
+              alt="Qopnet logo"
+              src={qopnetLogo}
+              width={161}
+              height={50}
+              layout="fixed"
+            />
+          </chakra.a>
+        </NextLink>
 
         <IconButton
           aria-label="Change color mode"
@@ -91,6 +90,7 @@ export const Header = (props: HeaderProps) => {
         >
           {colorMode === 'light' ? <Icon name="moon" /> : <Icon name="sun" />}
         </IconButton>
+
         {isDesktop && (
           <Heading as="h1" size="md">
             <NextLink href="/shop">
@@ -164,6 +164,7 @@ export type SearchData = {
 
 export const SearchBar = () => {
   const router = useRouter()
+
   // React Hook Form for search
   const {
     register,
