@@ -68,7 +68,7 @@ router.get('/', async (req, res) => {
 })
 
 /**
- * GET /api/suppliers/search?q=keyword
+ * GET /api/suppliers/products/search?q=keyword
  */
 router.get('/search', async (req, res) => {
   const searchQuery: string = req.query.q as string
