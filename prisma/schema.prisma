@@ -21,10 +21,12 @@ generator client {
 
 // Copy of auth.users
 model User {
-  id           String        @id
-  email        String        @unique
-  profile      Profile?
-  adminProfile AdminProfile?
+  id    String @id
+  email String @unique
+
+  profile         Profile?
+  adminProfile    AdminProfile?
+  fundBeneficiary FundBeneficiary?
 
   @@map(name: "users")
 }
@@ -41,11 +43,12 @@ model Profile {
   user   User   @relation(fields: [userId], references: [id])
 
   // Data Relations
-  addresses        Address[]
-  wholesalers      Wholesaler[]
-  suppliers        Supplier[]
-  supplierProducts SupplierProduct[]
-  merchants        Merchant[]
+  addresses         Address[]
+  wholesalers       Wholesaler[]
+  suppliers         Supplier[]
+  supplierProducts  SupplierProduct[]
+  merchants         Merchant[]
+  fundBeneficiaries FundBeneficiary?
 
   // Timestamp
   createdAt DateTime @default(now())
@@ -180,19 +183,21 @@ model SupplierProduct {
   description String?
 
   // Price
-  price    Decimal? @db.Money
-  priceMax Decimal? @db.Money
-  priceMin Decimal? @db.Money
-  minOrder Int?
+  price                Decimal? @db.Money
+  priceMax             Decimal? @db.Money
+  priceMin             Decimal? @db.Money
+  minOrder             Int?
+  discount             Int?
+  discountMaxReduction Decimal? @db.Money
 
   // Weight and Size
   weight        Int?
-  weightUnit    SupplierProductWeightUnit?
+  weightUnit    SupplierProductWeightUnit? @default(KG)
   weightDetails String?
   dimension     Json?
 
   // Manage
-  status SupplierProductStatus?
+  status SupplierProductStatus? @default(ACTIVE)
   stock  Int?
 
   // Relations
@@ -227,4 +232,73 @@ model Merchant {
   updatedAt DateTime @default(now())
 
   @@map(name: "merchants")
+}
+
+// -----------------------------------------------------------------------------
+// Financing
+
+model FinancingService {
+  id     String  @id @default(cuid())
+  handle String? @unique
+
+  name    String?
+  website String?
+  phone   String?
+
+  // Relations
+  fundBeneficiariesRequests FundBeneficiary[]
+  fundBenefactors           FundBenefactor[]
+
+  // Timestamp
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@map(name: "financing_services")
+}
+
+enum FundBeneficiaryStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+model FundBeneficiary {
+  id String @id @default(cuid())
+
+  // Relations include access to Merchants
+  profile Profile? @relation(fields: [profileId], references: [id])
+  user    User?    @relation(fields: [userId], references: [id])
+
+  // Other personal info
+  nationalId String?
+  birthPlace String?
+  birthDate  DateTime?
+  income     Decimal?               @db.Money
+  status     FundBeneficiaryStatus? @default(PENDING)
+
+  // Relations
+  financingServiceId String?
+  financingService   FinancingService? @relation(fields: [financingServiceId], references: [id])
+
+  // Timestamp
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  profileId String?
+  userId    String?
+  @@map(name: "fund_beneficiaries")
+}
+
+model FundBenefactor {
+  id String @id @default(cuid())
+
+  // Relations
+  financingServiceId String?
+  financingService   FinancingService? @relation(fields: [financingServiceId], references: [id])
+
+  // Timestamp
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@map(name: "fund_benefactors")
 }
