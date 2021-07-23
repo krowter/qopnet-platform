@@ -8,13 +8,19 @@ Mostly used temporarily before merged into Prisma.
 
 ## AdminProfile
 
+---
+
 ## Address
 
 ## Wholesaler
 
+---
+
 ## Supplier
 
 ## SupplierProduct
+
+---
 
 ## Merchant
 
@@ -24,12 +30,13 @@ Mostly used temporarily before merged into Prisma.
 
 ## MerchantInvoice
 
-## Funder
+---
 
-- `public.funders`
-- Yang meminjamkan.
+## FinancingService
 
-Contoh:
+The organization which organize the fund.
+
+Examples:
 
 1. Duha Syariah
    - Financing for the purchase of goods, Umrah travel, halal tourism, education, and invoice financing in accordance with Sharia principles.
@@ -46,12 +53,13 @@ Contoh:
 }
 ```
 
+## FundBenefactor
+
+People who fund the money to financing services.
+
 ## FundBeneficiary
 
-- `public.fund_beneficiaries`
-- Yang meminjam atau dipinjamkan.
-- User already has email
-- Profile already has phone and address
+People who receive the fund.
 
 ```json
 {
@@ -68,10 +76,6 @@ Contoh:
   "user": { "id": "cuid()", "email": "jokowi@indonesia.go.id" }
 }
 ```
-
-## FundBenefactor
-
-- `public.fund_benefactors`
 
 ---
 
