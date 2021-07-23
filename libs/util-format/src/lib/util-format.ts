@@ -36,3 +36,8 @@ export const formatImageUrl = (env: string, text: string) => {
     return url
   }
 }
+
+// From 1234567 into 1.234.567
+export const formatMoney = (price: number) => {
+  return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+}

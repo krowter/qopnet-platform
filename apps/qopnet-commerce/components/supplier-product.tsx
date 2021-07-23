@@ -4,33 +4,47 @@ import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 import slugify from 'slugify'
 import cuid from 'cuid'
+import { Controller, useForm, SubmitHandler } from 'react-hook-form'
+import { DevTool } from '@hookform/devtools'
 import {
+  Box,
   Button,
+  Checkbox,
+  CheckboxGroup,
+  Divider,
   Flex,
   FormControl,
   FormHelperText,
   FormLabel,
   Heading,
-  Box,
+  HStack,
   Image as ChakraImage,
   Input,
   InputGroup,
+  InputLeftAddon,
   InputLeftElement,
+  InputRightAddon,
+  InputRightElement,
+  Link as ChakraLink,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  Radio,
+  RadioGroup,
   Select,
   Spinner,
-  VisuallyHidden,
   Stack,
+  Switch,
   Text,
-  Link as ChakraLink,
-  Divider,
   Textarea,
-  VStack,
   useToast,
+  VisuallyHidden,
+  chakra,
+  VStack,
 } from '@chakra-ui/react'
-import { useForm, SubmitHandler } from 'react-hook-form'
-import { DevTool } from '@hookform/devtools'
 
 import { Icon } from '@qopnet/qopnet-ui'
+import { formatMoney } from '@qopnet/util-format'
 import { UploadImageForm } from '../components'
 import { postToAPI } from '../utils/fetch'
 
@@ -46,6 +60,7 @@ export type SupplierProductData = {
   description?: string
 
   price?: number
+  discount?: number
   priceMax?: number
   priceMin?: number
   minOrder?: number
@@ -59,14 +74,14 @@ export type SupplierProductData = {
     height?: number
   }
 
-  status?: 'ACTIVE' | 'INACTIVE'
+  status?: boolean // Into database, convert to 'ACTIVE' | 'INACTIVE'
   stock?: number
 }
 
 /**
  * Create new Supplier form component
  */
-export const CreateSupplierProductForm = ({ supplierParam }) => {
+export const SupplierProductForm = ({ supplierParam }) => {
   const router = useRouter()
   const toast = useToast()
   const [loading, setLoading] = useState(false)
@@ -82,9 +97,45 @@ export const CreateSupplierProductForm = ({ supplierParam }) => {
     formState: { errors },
   } = useForm<SupplierProductData>({
     mode: 'onChange',
+    defaultValues: {
+      images: [],
+      slug: '',
+
+      name: '',
+      subname: '',
+      category: '',
+      sku: '',
+      description: '',
+
+      price: 100,
+      discount: null,
+      priceMax: null,
+      priceMin: null,
+      minOrder: 1,
+
+      weight: 1,
+      weightUnit: 'KG',
+      weightDetails: '',
+      dimension: {
+        length: 0,
+        width: 0,
+        height: 0,
+      },
+
+      status: true,
+      stock: 1,
+    },
   })
+
+  const price = watch('price')
+  const discount = watch('discount')
+  const priceDiscounted = price - Math.ceil((discount / 100) * price) || price
+  const minOrder = watch('minOrder')
+  const subTotal = minOrder * price
+  const subTotalDiscounted = minOrder * priceDiscounted
+  const status = watch('status')
+  const weightUnit = watch('weightUnit')
   const uploadedImagesUrl = watch('images')
-  console.log({ uploadedImagesUrl })
 
   // Append image URL from Image Form into React Hook Form field.images
   const appendImageUrl = (newUrl) => {
@@ -102,20 +153,34 @@ export const CreateSupplierProductForm = ({ supplierParam }) => {
 
   // Create supplier process and toast
   const handleSubmitCreateSupplier: SubmitHandler<SupplierProductData> = async (
-    supplierProductFormData
+    formData
   ) => {
     try {
       setLoading(true)
+      delete formData['discount']
+
+      const preparedFormData = {
+        ...formData,
+        // Be careful, supplier product uses slug, not handle
+        slug: slugify(formData.name.toLowerCase()),
+        status: formData.status ? 'ACTIVE' : 'INACTIVE',
+        minOrder: Number(formData.minOrder) || 1,
+        price: Number(formData.price) || 100,
+        // discount: Number(formData.discount) || null,
+        weight: Number(formData.weight) || 1,
+        stock: Number(formData.stock) || 1,
+      }
+      console.log({ preparedFormData })
 
       /**
        * POST /api/suppliers/:supplierParam/products
        * Create new supplier product for one supplier
        */
-      const data = await postToAPI(`/api/suppliers/${supplierParam}/products`, {
-        ...supplierProductFormData,
-        slug: slugify(supplierProductFormData.name.toLowerCase()),
-        // Be careful, supplier product uses slug, not handle
-      })
+      const data = await postToAPI(
+        `/api/suppliers/${supplierParam}/products`,
+        preparedFormData
+      )
+
       if (!data) throw new Error('Create supplier product response error')
 
       toast({ title: 'Berhasil menambah produk supplier', status: 'success' })
@@ -139,7 +204,12 @@ export const CreateSupplierProductForm = ({ supplierParam }) => {
               Tambah Produk Supplier
             </Heading>
             <Text>
-              Silakan lengkapi info produk untuk <b>{supplierParam}</b>
+              Silakan lengkapi info produk untuk{' '}
+              <NextLink href={`/${supplierParam}`} passHref>
+                <ChakraLink fontWeight="bold" color="orange.500">
+                  {supplierParam}
+                </ChakraLink>
+              </NextLink>
             </Text>
           </Stack>
         </VStack>
@@ -153,9 +223,9 @@ export const CreateSupplierProductForm = ({ supplierParam }) => {
             <UploadImageForm appendImageUrl={appendImageUrl} />
             <FormHelperText>
               <span>
-                Format gambar <code>.jpg</code> <code>.jpeg</code>{' '}
-                <code>.png</code>, ukuran minimum 300 x 300px, tidak lebih dari
-                5 MB
+                Bisa unggah lebih dari satu. Format gambar <code>.jpg</code>{' '}
+                <code>.jpeg</code> <code>.png</code>, ukuran minimum 300 x
+                300px, tidak lebih dari 5 MB.
               </span>
             </FormHelperText>
           </FormControl>
@@ -216,7 +286,10 @@ export const CreateSupplierProductForm = ({ supplierParam }) => {
                 />
               </InputGroup>
               <FormHelperText>
-                <span>Nama min. 1 kata</span>
+                <span>
+                  Nama minimum 1 kata. Harus sangat unik, tidak boleh sama
+                  dengan produk lain yang sudah ada.
+                </span>
               </FormHelperText>
               <FormHelperText color="red.500">
                 {errors.name && <span>Nama produk diperlukan</span>}
@@ -236,12 +309,12 @@ export const CreateSupplierProductForm = ({ supplierParam }) => {
               </InputGroup>
               <FormHelperText>
                 <span>
-                  Sub nama menjelaskan jenis produk, merek, dan keterangan
-                  seperti warna, bahan, atau tipe.
+                  Sub nama adalah jenis produk, merek, tagline, atau keterangan
+                  lain seperti warna, bahan, tipe.
                 </span>
               </FormHelperText>
               <FormHelperText color="red.500">
-                {errors.name && <span>Sub nama produk tidak jelas</span>}
+                {errors.name && <span>Sub nama produk tidak sesuai</span>}
               </FormHelperText>
             </FormControl>
             <FormControl>
@@ -281,7 +354,7 @@ export const CreateSupplierProductForm = ({ supplierParam }) => {
                 </span>
               </FormHelperText>
               <FormHelperText color="red.500">
-                {errors.sku && <span>SKU tidak jelas</span>}
+                {errors.sku && <span>SKU tidak sesuai</span>}
               </FormHelperText>
             </FormControl>
             <FormControl>
@@ -309,18 +382,109 @@ export const CreateSupplierProductForm = ({ supplierParam }) => {
 
           <Stack spacing={5}>
             <Heading as="h2" size="lg">
-              Harga Produk
+              Jumlah dan Harga Produk
             </Heading>
             <FormControl>
-              <FormLabel>Harga Satuan</FormLabel>
-              <FormHelperText>Tentukan harga per satu produk.</FormHelperText>
-            </FormControl>
-            <FormControl>
-              <FormLabel>Minimum Pemesanan</FormLabel>
+              <FormLabel>Jumlah Minimum Order</FormLabel>
+              <InputGroup>
+                <InputLeftElement pointerEvents="none">
+                  <Icon name="order" />
+                </InputLeftElement>
+                <Input
+                  type="number"
+                  defaultValue={1}
+                  min={1}
+                  max={9999}
+                  {...register('minOrder', {
+                    required: true,
+                    min: 1,
+                    max: 9999,
+                  })}
+                />
+              </InputGroup>
               <FormHelperText>
-                Atur jumlah minimum yang harus dibeli oleh merchant.
+                Atur jumlah minimum order yang harus dibeli oleh merchant.
+                Mininum 1, maksimum 9.999
+              </FormHelperText>
+              <FormHelperText color="red.500">
+                {errors.minOrder && <span>Minimum order tidak sesuai</span>}
               </FormHelperText>
             </FormControl>
+
+            <Stack id="price-discount" direction={['column', 'column', 'row']}>
+              <FormControl>
+                <FormLabel>Harga Satuan</FormLabel>
+                <InputGroup>
+                  <InputLeftAddon children="Rp" />
+                  <Input
+                    type="number"
+                    min={100}
+                    max={999999999}
+                    defaultValue={100}
+                    {...register('price', {
+                      required: true,
+                      min: 100,
+                      max: 999999999,
+                    })}
+                  />
+                </InputGroup>
+                <FormHelperText>
+                  Tentukan harga per satu produk. Mininum Rp 100, maksimum Rp
+                  999.999.999
+                </FormHelperText>
+                <FormHelperText color="red.500">
+                  {errors.price && <span>Harga tidak sesuai</span>}
+                </FormHelperText>
+              </FormControl>
+
+              <FormControl>
+                <FormLabel>Diskon Harga dalam Persen</FormLabel>
+                <InputGroup>
+                  <Input
+                    type="number"
+                    min={0}
+                    max={99}
+                    {...register('discount', { min: 0, max: 99 })}
+                  />
+                  <InputRightAddon children="%" />
+                </InputGroup>
+                <FormHelperText>
+                  Tentukan diskon harga dalam persentase dari 0% hingga 99%.
+                </FormHelperText>
+                <FormHelperText color="red.500">
+                  {errors.discount && <span>Diskon harga tidak sesuai</span>}
+                </FormHelperText>
+              </FormControl>
+            </Stack>
+
+            <Box>
+              <Text>
+                Harga satuan awal: Rp{' '}
+                <chakra.span color="red.500">{formatMoney(price)}</chakra.span>
+              </Text>
+              {discount && (
+                <Text>
+                  Harga satuan setelah diskon: Rp{' '}
+                  <chakra.span color="green.500">
+                    {formatMoney(priceDiscounted)}
+                  </chakra.span>
+                </Text>
+              )}
+              <Text>
+                Subtotal awal: Rp{' '}
+                <chakra.span color="blue.500">
+                  {formatMoney(subTotal)}
+                </chakra.span>
+              </Text>
+              {discount && (
+                <Text>
+                  Subtotal setelah diskon: Rp{' '}
+                  <chakra.span color="teal.500">
+                    {formatMoney(subTotalDiscounted)}
+                  </chakra.span>
+                </Text>
+              )}
+            </Box>
           </Stack>
 
           <Divider />
@@ -329,25 +493,120 @@ export const CreateSupplierProductForm = ({ supplierParam }) => {
             <Heading as="h2" size="lg">
               Berat dan Pengiriman Produk
             </Heading>
+
+            <Stack id="weight-unit" direction={['column', 'column', 'row']}>
+              <FormControl>
+                <FormLabel>Berat Produk</FormLabel>
+                <InputGroup>
+                  <Input
+                    type="number"
+                    defaultValue={1}
+                    min={1}
+                    max={9999}
+                    {...register('weight', {
+                      required: true,
+                      min: 1,
+                      max: 9999,
+                    })}
+                  />
+                  {weightUnit && (
+                    <InputRightAddon>
+                      {weightUnit.toLowerCase()}
+                    </InputRightAddon>
+                  )}
+                </InputGroup>
+                <FormHelperText>
+                  Masukkan berat dengan menimbang produk setelah dikemas.
+                  Perhatikan dengan baik berat produk agar tidak terjadi selisih
+                  data dengan pihak kurir.
+                </FormHelperText>
+                <FormHelperText color="red.500">
+                  {errors.weight && <span>Berat produk tidak sesuai</span>}
+                </FormHelperText>
+              </FormControl>
+              <FormControl>
+                <FormLabel>Unit Berat</FormLabel>
+                <InputGroup maxW="100px">
+                  <Select
+                    placeholder="Unit berat"
+                    defaultValue="KG"
+                    {...register('weightUnit', { required: true })}
+                  >
+                    <option value="GR">gr</option>
+                    <option value="KG">kg</option>
+                    <option value="TON">ton</option>
+                  </Select>
+                </InputGroup>
+                <FormHelperText>Pilih unit berat</FormHelperText>
+                <FormHelperText color="red.500">
+                  {errors.weightUnit && <span>Unit berat tidak sesuai</span>}
+                </FormHelperText>
+              </FormControl>
+            </Stack>
+
             <FormControl>
-              <FormLabel>Berat Produk</FormLabel>
+              <FormLabel>Ukuran/Dimensi Produk</FormLabel>
+              <Stack direction={['column', 'row', 'row']}>
+                <InputGroup>
+                  <InputLeftAddon children="P" />
+                  <NumberInput defaultValue={0} min={0} max={9999}>
+                    <NumberInputField
+                      id="dimension-length"
+                      placeholder="Panjang"
+                      borderRightRadius={0}
+                      min={0}
+                      max={9999}
+                      {...register('dimension.length', { min: 0, max: 9999 })}
+                    />
+                  </NumberInput>
+                  <InputRightAddon children="cm" />
+                </InputGroup>
+                <InputGroup>
+                  <InputLeftAddon children="L" />
+                  <NumberInput defaultValue={0} min={0} max={9999}>
+                    <NumberInputField
+                      id="dimension-width"
+                      placeholder="Lebar"
+                      borderRightRadius={0}
+                      min={0}
+                      max={9999}
+                      {...register('dimension.width', { min: 0, max: 9999 })}
+                    />
+                  </NumberInput>
+                  <InputRightAddon children="cm" />
+                </InputGroup>
+                <InputGroup>
+                  <InputLeftAddon children="T" />
+                  <NumberInput defaultValue={0} min={0} max={9999}>
+                    <NumberInputField
+                      id="dimension-height"
+                      placeholder="Tinggi"
+                      borderRightRadius={0}
+                      min={0}
+                      max={9999}
+                      {...register('dimension.height', { min: 0, max: 9999 })}
+                    />
+                  </NumberInput>
+                  <InputRightAddon children="cm" />
+                </InputGroup>
+              </Stack>
               <FormHelperText>
-                Masukkan berat dengan menimbang produk setelah dikemas.
-                Perhatikan dengan baik berat produk agar tidak terjadi selisih
-                data dengan pihak kurir.
+                Masukkan ukuran/dimensi produk yaitu panjang, lebar, dan tinggi
+                setelah dikemas untuk menghitung berat volume.
               </FormHelperText>
             </FormControl>
             <FormControl>
-              <FormLabel>Ukuran Produk</FormLabel>
+              <FormLabel>Layanan Kurir Pengiriman Produk</FormLabel>
+              <CheckboxGroup colorScheme="orange" defaultValue={['DELIVEREE']}>
+                <Stack direction={['column', 'column', 'row']} spacing={3}>
+                  <Checkbox value="DELIVEREE">Deliveree</Checkbox>
+                  <Checkbox value="LALAMOVE">Lalamove</Checkbox>
+                  <Checkbox value="MASKARGO">Mas Kargo</Checkbox>
+                </Stack>
+              </CheckboxGroup>
+
               <FormHelperText>
-                Masukkan ukuran produk setelah dikemas untuk menghitung berat
-                volume
-              </FormHelperText>
-            </FormControl>
-            <FormControl>
-              <FormLabel>Layanan Pengiriman Produk</FormLabel>
-              <FormHelperText>
-                Atur layanan pengiriman sesuai jenis produkmu.
+                Atur layanan kurir pengiriman sesuai jenis dan ukuran produkmu.
               </FormHelperText>
             </FormControl>
           </Stack>
@@ -360,14 +619,37 @@ export const CreateSupplierProductForm = ({ supplierParam }) => {
             </Heading>
             <FormControl>
               <FormLabel>Status Produk</FormLabel>
+              <HStack alignItems="center">
+                <Switch
+                  size="lg"
+                  id="status"
+                  colorScheme="green"
+                  {...register('status')}
+                />
+                <FormLabel htmlFor="status" userSelect="none" cursor="pointer">
+                  {status ? 'Aktif' : 'Nonaktif'}
+                </FormLabel>
+              </HStack>
               <FormHelperText>
                 Jika status aktif, produkmu dapat dicari oleh calon pembeli.
               </FormHelperText>
             </FormControl>
             <FormControl>
               <FormLabel>Stok Produk</FormLabel>
+              <InputGroup>
+                <NumberInput defaultValue={1} min={1} max={999999999}>
+                  <NumberInputField
+                    {...register('stock', {
+                      required: true,
+                      min: 1,
+                      max: 999999999,
+                    })}
+                  />
+                </NumberInput>
+              </InputGroup>
               <FormHelperText>
-                Masukkan jumlah stok yang tersedia
+                Masukkan jumlah stok yang tersedia. Mininum 1, maksimum
+                999.999.999
               </FormHelperText>
             </FormControl>
           </Stack>
@@ -384,7 +666,7 @@ export const CreateSupplierProductForm = ({ supplierParam }) => {
       </VStack>
       {/* Setup React Hook Form devtool */}
       {process.env.NODE_ENV === 'development' && (
-        <DevTool control={control} placement="bottom-left" />
+        <DevTool control={control} placement="bottom-right" />
       )}
     </>
   )

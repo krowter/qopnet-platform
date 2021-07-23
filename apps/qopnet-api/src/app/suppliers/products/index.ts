@@ -10,6 +10,8 @@ const allSupplierProductsFields = {
     images: true,
     slug: true,
     name: true,
+    subname: true,
+    sku: true,
     price: true,
     priceMax: true,
     priceMin: true,
@@ -66,7 +68,7 @@ router.get('/', async (req, res) => {
 })
 
 /**
- * GET /api/suppliers/search?q=keyword
+ * GET /api/suppliers/products/search?q=keyword
  */
 router.get('/search', async (req, res) => {
   const searchQuery: string = req.query.q as string
@@ -82,6 +84,7 @@ router.get('/search', async (req, res) => {
             { description: { contains: searchQuery, mode: 'insensitive' } },
           ],
         },
+        include: { supplier: { select: { handle: true } } },
       })
 
     res.json({
