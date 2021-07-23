@@ -1,7 +1,9 @@
-import { useState } from 'react'
 import NextLink from 'next/link'
+import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
+import { useForm, SubmitHandler } from 'react-hook-form'
+import { useUser, useSupabase } from 'use-supabase'
 import {
   Button,
   Text,
@@ -20,8 +22,6 @@ import {
   SimpleGrid,
   useToast,
 } from '@chakra-ui/react'
-import { useForm, SubmitHandler } from 'react-hook-form'
-import { useUser, useSupabase } from 'use-supabase'
 
 import { Icon } from '@qopnet/qopnet-ui'
 import { postToAPI } from '../utils/fetch'
@@ -90,7 +90,7 @@ export const CreateProfileForm = ({ profile }) => {
       <NextSeo title="Profil dan alamat - Qopnet" />
 
       <VStack>
-        <Stack align="center">
+        <Stack textAlign="center" align="center">
           <Heading as="h1" size="xl">
             Profil dan Alamat
           </Heading>
