@@ -48,14 +48,14 @@ export const SuppliersProductsPage = () => {
           </Box>
         )}
         {supplierProducts &&
-          <SupplierProductRows supplierProducts={supplierProducts} />
+          <SupplierProductGrid supplierProducts={supplierProducts} />
         }
       </Box>
     </DefaultLayout>
   )
 }
 
-export const SupplierProductRows = ({
+export const SupplierProductGrid = ({
   supplierProducts,
 }: {
   supplierProducts: any[]
