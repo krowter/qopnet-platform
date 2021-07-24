@@ -31,12 +31,12 @@ import { useSWR } from '../../utils/swr'
 import { ModifierButtons } from '../../components'
 import { Icon } from '@qopnet/qopnet-ui'
 
+import { SupplierProductsGrid } from './products'
+
 export const SupplierSlugPage = () => {
   const sidebar = useDisclosure()
   const { supplierParam }: { supplierParam: string } = useParams()
-  const { data, error } = useSWR(
-    `/api/suppliers/${supplierParam}`
-  )
+  const { data, error } = useSWR(`/api/suppliers/${supplierParam}`)
   const { supplier } = data || {}
 
   return (
@@ -220,6 +220,11 @@ export const SupplierSlugPage = () => {
                       ))
                     : null}
                   <Divider />
+                  {supplier?.supplierProducts.length > 0 && (
+                    <SupplierProductsGrid
+                      supplierProducts={supplier.supplierProducts}
+                    />
+                  )}
                 </Stack>
               </VStack>
             )}
@@ -249,11 +254,6 @@ export const SupplierSlugPage = () => {
               <Box>{supplier?.ownerId}</Box>
             </Flex>
 
-            <Flex pt={3} justifyContent="space-between" alignItems="center">
-              <Box>Kategori </Box>
-              <Box>{supplier?.category}</Box>
-            </Flex>
-
             <Divider />
 
             <Flex pt={5} justifyContent="space-between" alignItems="center">
@@ -264,18 +264,6 @@ export const SupplierSlugPage = () => {
             <Flex pt={5} justifyContent="space-between" alignItems="center">
               <Box>Terakhir diubah</Box>
               <Box>{supplier?.updatedAt}</Box>
-            </Flex>
-            <Flex pt={5} justifyContent="space-between" alignItems="center">
-              <Button
-                ml="auto"
-                as={Link}
-                to={`/suppliers/${supplier?.slug}/products`}
-                variant="outline"
-                size="xs"
-                colorScheme="orange.900"
-              >
-                Lihat Produk
-              </Button>
             </Flex>
           </Box>
         </Grid>
