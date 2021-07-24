@@ -1,5 +1,6 @@
 import { SupplierProduct } from '@prisma/client'
 import { prisma } from '@qopnet/util-prisma'
+import { Request, Response } from 'express'
 
 import * as express from 'express'
 const router = express.Router()
@@ -48,18 +49,47 @@ router.get('/special', async (req, res) => {
 })
 
 /**
+ * Middleware pagination
+ * ref: https://docs.commercelayer.io/api/pagination
+ * pagination will only run when page query exist
+ */
+function addPagination(req, res, next) {
+  let _pageNumber = 1
+  let _pageSize = 20
+  const { page } = req.query
+
+  // Only run pagination query exist
+  if (page) {
+    _pageNumber = page.number ? parseInt(page.number) : _pageNumber
+    _pageSize = page.size ? parseInt(page.size) : _pageSize
+    req.page = page
+    req.skip = (_pageNumber - 1 ) * _pageSize
+    req.take = _pageSize
+  }
+  next()
+}
+
+/**
  * GET /api/suppliers/products
  */
-router.get('/', async (req, res) => {
+router.get('/', addPagination, async (req: Request, res: Response) => {
   try {
     const supplierProducts: Partial<SupplierProduct>[] =
-      await prisma.supplierProduct.findMany(allSupplierProductsFields)
-
+      await prisma.supplierProduct.findMany({
+        ...allSupplierProductsFields,
+        skip: req.skip,
+        take: req.take
+      })
     res.json({
       message: 'Get all supplier products',
+      meta: {
+        page: req.page?.number,
+        record: supplierProducts.length,
+      },
       supplierProducts,
     })
   } catch (error) {
+    console.log(error)
     res.status(500).json({
       message: 'Get all supplier products failed',
       error,
