@@ -135,7 +135,7 @@ export const SupplierProductSlugPage = () => {
                       borderLeft=" 1px solid gray"
                     >
                       <Box pb={3} justifyContent="center">
-                        {productParam}
+                        {supplierProduct?.supplierId}
                       </Box>
 
                       <Divider />
@@ -146,7 +146,7 @@ export const SupplierProductSlugPage = () => {
                         alignItems="center"
                       >
                         <Box>Toko Supplier </Box>
-                        <Box>{supplierProduct.supplierId}</Box>
+                        <Box>{supplierProduct?.supplierId}</Box>
                       </Flex>
 
                       <Flex
@@ -233,7 +233,10 @@ export const SupplierProductSlugPage = () => {
                     {' '}
                     Harga Maximum: Rp. {supplierProduct?.priceMax ?? '-'}
                   </Text>
-                  <Text> Minimum Order: {supplierProduct?.minOrder ?? '-'}</Text>
+                  <Text>
+                    {' '}
+                    Minimum Order: {supplierProduct?.minOrder ?? '-'}
+                  </Text>
                   <Text> Berat: {supplierProduct?.weight ?? '-'} Kg</Text>
                   <Text>
                     {' '}
@@ -243,7 +246,10 @@ export const SupplierProductSlugPage = () => {
                     {' '}
                     Detail Berat: {supplierProduct?.weightDetails ?? ''}
                   </Text>
-                  <Text> Dimensi: {supplierProduct?.dimension?.width ?? ''}</Text>
+                  <Text>
+                    {' '}
+                    Dimensi: {supplierProduct?.dimension?.width ?? ''}
+                  </Text>
                   <Text> Stok: {supplierProduct.stock ?? ''} pcs</Text>
                   <Text>Deskripsi: {supplierProduct?.description ?? ''}</Text>
                 </Stack>
@@ -260,7 +266,7 @@ export const SupplierProductSlugPage = () => {
             display={{ base: 'none', lg: 'unset' }}
           >
             <Box pb={3} justifyContent="center">
-              {productParam}
+              {supplierProduct?.id}
             </Box>
 
             <Divider />

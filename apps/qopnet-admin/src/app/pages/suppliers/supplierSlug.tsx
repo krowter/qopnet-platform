@@ -223,6 +223,7 @@ export const SupplierSlugPage = () => {
                   {supplier?.supplierProducts.length > 0 && (
                     <SupplierProductsGrid
                       supplierProducts={supplier.supplierProducts}
+                      supplierParam={supplier.handle}
                     />
                   )}
                 </Stack>

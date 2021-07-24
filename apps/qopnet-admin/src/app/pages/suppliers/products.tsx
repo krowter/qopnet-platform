@@ -47,9 +47,9 @@ export const SuppliersProductsPage = () => {
             <Spinner color="orange.500" />
           </Box>
         )}
-        {supplierProducts &&
+        {supplierProducts && (
           <SupplierProductsGrid supplierProducts={supplierProducts} />
-        }
+        )}
       </Box>
     </DefaultLayout>
   )
@@ -57,8 +57,10 @@ export const SuppliersProductsPage = () => {
 
 export const SupplierProductsGrid = ({
   supplierProducts,
+  supplierParam,
 }: {
   supplierProducts: any[]
+  supplierParam?: string
 }) => {
   const bg = useColorModeValue('gray.50', 'gray.900')
   const border = useColorModeValue('gray.200', 'gray.700')
@@ -72,7 +74,7 @@ export const SupplierProductsGrid = ({
             columns={{ base: 1, md: 3 }}
             as={Link}
             key={`${supplierProduct.id}`}
-            to={`/suppliers/${supplierProduct.slug}/products/${supplierProduct.slug}`}
+            to={`/suppliers/${supplierParam}/products/${supplierProduct.slug}`}
             w="100%"
             px={5}
             py={3}
