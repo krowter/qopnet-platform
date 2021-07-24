@@ -1,6 +1,7 @@
 import { SupplierProduct } from '@prisma/client'
 import { prisma } from '@qopnet/util-prisma'
 import { Request, Response } from 'express'
+import { paginate } from '../../root/middleware'
 
 import * as express from 'express'
 const router = express.Router()
@@ -28,16 +29,21 @@ const allSupplierProductsFields = {
  * GET /api/suppliers/products/special
  * Take latest 10 products
  */
-router.get('/special', async (req, res) => {
+router.get('/special', paginate, async (req, res) => {
   try {
     const supplierProducts: Partial<SupplierProduct>[] =
       await prisma.supplierProduct.findMany({
         ...allSupplierProductsFields,
-        take: 10,
+        take: req.take || 10,
+        skip: req.skip
       })
 
     res.json({
       message: 'Get all supplier products',
+      meta: {
+        record_count: supplierProducts.length,
+        page: req.page.number
+      },
       supplierProducts,
     })
   } catch (error) {
@@ -49,30 +55,9 @@ router.get('/special', async (req, res) => {
 })
 
 /**
- * Middleware pagination
- * ref: https://docs.commercelayer.io/api/pagination
- * pagination will only run when page query exist
- */
-function addPagination(req, res, next) {
-  let _pageNumber = 1
-  let _pageSize = 20
-  const { page } = req.query
-
-  // Only run pagination query exist
-  if (page) {
-    _pageNumber = page.number ? parseInt(page.number) : _pageNumber
-    _pageSize = page.size ? parseInt(page.size) : _pageSize
-    req.page = page
-    req.skip = (_pageNumber - 1 ) * _pageSize
-    req.take = _pageSize
-  }
-  next()
-}
-
-/**
  * GET /api/suppliers/products
  */
-router.get('/', addPagination, async (req: Request, res: Response) => {
+router.get('/', paginate, async (req: Request, res: Response) => {
   try {
     const supplierProducts: Partial<SupplierProduct>[] =
       await prisma.supplierProduct.findMany({
@@ -84,7 +69,7 @@ router.get('/', addPagination, async (req: Request, res: Response) => {
       message: 'Get all supplier products',
       meta: {
         page: req.page?.number,
-        record: supplierProducts.length,
+        record_count: supplierProducts.length,
       },
       supplierProducts,
     })
@@ -100,7 +85,7 @@ router.get('/', addPagination, async (req: Request, res: Response) => {
 /**
  * GET /api/suppliers/products/search?q=keyword
  */
-router.get('/search', async (req, res) => {
+router.get('/search', paginate, async (req, res) => {
   const searchQuery: string = req.query.q as string
 
   try {
@@ -115,11 +100,16 @@ router.get('/search', async (req, res) => {
           ],
         },
         include: { supplier: { select: { handle: true } } },
+        skip: req.skip,
+        take: req.take
       })
 
     res.json({
       message: 'Get all supplier products by search query',
-      count: supplierProducts.length,
+      meta: {
+        record_count: supplierProducts.length,
+        page: req.page.number
+      },
       searchQuery,
       supplierProducts,
     })
