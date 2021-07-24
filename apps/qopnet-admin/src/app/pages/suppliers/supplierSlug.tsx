@@ -218,6 +218,7 @@ export const SupplierSlugPage = () => {
                         </Box>
                       ))
                     : null}
+                  <Divider />
                 </Stack>
               </VStack>
             )}

@@ -47,7 +47,9 @@ export const SuppliersProductsPage = () => {
             <Spinner color="orange.500" />
           </Box>
         )}
-        <SupplierProductRows supplierProducts={supplierProducts} />
+        {supplierProducts &&
+          <SupplierProductRows supplierProducts={supplierProducts} />
+        }
       </Box>
     </DefaultLayout>
   )
@@ -61,9 +63,6 @@ export const SupplierProductRows = ({
   const bg = useColorModeValue('gray.50', 'gray.900')
   const border = useColorModeValue('gray.200', 'gray.700')
 
-  if (!supplierProducts) {
-    return <div>No products</div>
-  }
   return (
     <Box mt={2}>
       {supplierProducts.map((supplierProduct: any, index: number) => {

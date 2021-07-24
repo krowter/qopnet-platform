@@ -7,6 +7,7 @@ import {
   Text,
   useColorModeValue,
 } from '@chakra-ui/react'
+import { SupplierProduct } from '@prisma/client'
 import { Link, useHistory } from 'react-router-dom'
 import { useParams } from 'react-router'
 
@@ -50,29 +51,28 @@ export const SupplierProductsPage = () => {
             <Spinner color="orange.500" />
           </Box>
         )}
-        <ProductRows
-          supplierProducts={supplierProducts?.supplierProducts || []}
-        />
+        {supplierProducts && 
+          <SupplierProductRows
+            supplierProducts={supplierProducts?.supplierProducts || []}
+          />
+        }
       </Box>
     </DefaultLayout>
   )
 }
 
-export const ProductRows = ({
+export const SupplierProductRows = ({
   supplierProducts,
 }: {
-  supplierProducts: any[]
+  supplierProducts: SupplierProduct[]
 }) => {
   const bg = useColorModeValue('gray.50', 'gray.900')
   const border = useColorModeValue('gray.200', 'gray.700')
 
-  if (!supplierProducts) {
-    return <div>No products</div>
-  }
   return (
     <Box mt={2}>
       {supplierProducts
-        ? supplierProducts.map((supplierProduct: any, index: number) => {
+        ? supplierProducts.map((supplierProduct: SupplierProduct, index: number) => {
             return (
               <SimpleGrid
                 spacingX={3}
@@ -86,14 +86,12 @@ export const ProductRows = ({
                 bg={bg}
                 borderBottom="1px solid gray"
                 borderColor={border}
-                gridTemplateColumns="repeat(6, 1fr)"
+                gridTemplateColumns="repeat(4, 1fr)"
               >
                 <Text>{supplierProduct.name}</Text>
                 <Text>{supplierProduct.slug}</Text>
                 <Text>{supplierProduct.sku}</Text>
                 <Text>{supplierProduct.price ?? '0'}</Text>
-                <Text>{supplierProduct.priceMin ?? '0'}</Text>
-                <Text>{supplierProduct.priceMax ?? '0'}</Text>
               </SimpleGrid>
             )
           })

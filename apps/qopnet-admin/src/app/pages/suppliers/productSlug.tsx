@@ -94,7 +94,7 @@ export const SupplierProductSlugPage = () => {
 
               <BreadcrumbItem>
                 <BreadcrumbLink as={Link} to={`/suppliers/${supplierParam}`}>
-                  {supplierParam}
+                  {supplierProduct?.supplier?.handle}
                 </BreadcrumbLink>
               </BreadcrumbItem>
 
@@ -222,30 +222,30 @@ export const SupplierProductSlugPage = () => {
                 alignItems="flex-start"
               >
                 <Stack id="product-detail">
-                  <Text> Kode SKU: {supplierProduct.sku}</Text>
-                  <Text>Nama Produk: {supplierProduct.name}</Text>
-                  <Text> Harga: Rp. {supplierProduct.price}</Text>
+                  <Text> Kode SKU: {supplierProduct?.sku}</Text>
+                  <Text>Nama Produk: {supplierProduct?.name}</Text>
+                  <Text> Harga: Rp. {supplierProduct?.price}</Text>
                   <Text>
                     {' '}
-                    Harga Minimum: Rp. {supplierProduct.priceMin ?? '-'}
+                    Harga Minimum: Rp. {supplierProduct?.priceMin ?? '-'}
                   </Text>
                   <Text>
                     {' '}
-                    Harga Maximum: Rp. {supplierProduct.priceMax ?? '-'}
+                    Harga Maximum: Rp. {supplierProduct?.priceMax ?? '-'}
                   </Text>
-                  <Text> Minimum Order: {supplierProduct.minOrder ?? '-'}</Text>
-                  <Text> Berat: {supplierProduct.weight ?? '-'} Kg</Text>
+                  <Text> Minimum Order: {supplierProduct?.minOrder ?? '-'}</Text>
+                  <Text> Berat: {supplierProduct?.weight ?? '-'} Kg</Text>
                   <Text>
                     {' '}
-                    Satuan Berat: {supplierProduct.weightUnit ?? 'Kg'}
+                    Satuan Berat: {supplierProduct?.weightUnit ?? 'Kg'}
                   </Text>
                   <Text>
                     {' '}
-                    Detail Berat: {supplierProduct.weightDetails ?? ''}
+                    Detail Berat: {supplierProduct?.weightDetails ?? ''}
                   </Text>
-                  <Text> Dimensi: {supplierProduct.dimension.width ?? ''}</Text>
+                  <Text> Dimensi: {supplierProduct?.dimension?.width ?? ''}</Text>
                   <Text> Stok: {supplierProduct.stock ?? ''} pcs</Text>
-                  <Text>Deskripsi: {supplierProduct.description}</Text>
+                  <Text>Deskripsi: {supplierProduct?.description ?? ''}</Text>
                 </Stack>
               </VStack>
             )}
@@ -267,12 +267,12 @@ export const SupplierProductSlugPage = () => {
 
             <Flex pt={5} justifyContent="space-between" alignItems="center">
               <Box>Toko Supplier </Box>
-              <Box>{supplierProduct.supplierId}</Box>
+              <Box>{supplierProduct?.supplierId ?? ''}</Box>
             </Flex>
 
             <Flex pt={5} justifyContent="space-between" alignItems="center">
               <Box>Pemilik </Box>
-              <Box>{supplierProduct.ownerId}</Box>
+              <Box>{supplierProduct?.ownerId ?? ''}</Box>
             </Flex>
 
             <Flex pt={3} justifyContent="space-between" alignItems="center">
