@@ -88,29 +88,29 @@ router.get('/:supplierParam', async (req, res) => {
 
 /**
  * GET /api/suppliers/:supplierParam/products
- * Get supplier products by two ways:
- * 1. :id
- * 2. :supplierParam or slug
- * If not found by id, try to find by supplierParam
  */
-router.get('/:id/products', async (req, res) => {
-  const { id } = req.params
+router.get('/:supplierParam/products', async (req, res) => {
+  const { supplierParam } = req.params
 
   try {
-    const supplierProducts = await prisma.supplier.findUnique({
-      where: { id },
-      include: { supplierProducts: true },
+    const supplierProducts = await prisma.supplierProduct.findMany({
+      ...allSupplierProductsFields,
+      where: {
+        supplier: {
+          handle: supplierParam,
+        },
+      },
     })
 
     res.json({
       message: 'Get all supplier products by supplierId',
-      id,
+      supplierParam,
       supplierProducts: supplierProducts,
     })
   } catch (error) {
     res.status(500).json({
       message: 'Get all supplier products by supplierId failed',
-      id,
+      supplierParam,
     })
   }
 })

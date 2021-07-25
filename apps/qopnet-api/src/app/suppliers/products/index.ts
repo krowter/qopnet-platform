@@ -7,6 +7,7 @@ import * as express from 'express'
 const router = express.Router()
 
 export const allSupplierProductsFields = {
+  // orderBy: [{ sku: 'desc' }, { name: 'desc' }],
   select: {
     id: true,
     images: true,
