@@ -107,8 +107,8 @@ router.get('/search', paginate, async (req, res) => {
     res.json({
       message: 'Get all supplier products by search query',
       meta: {
-        count: supplierProducts.length,
-        page: req.page?.number,
+        recordCount: supplierProducts.length,
+        pageCount: req.page?.number,
       },
       searchQuery,
       supplierProducts,

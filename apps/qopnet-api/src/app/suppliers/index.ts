@@ -184,9 +184,10 @@ router.get(
 
 /**
  * GET /api/suppliers/:supplierParam/search?q=keyword
+ * Search supplier products in one supplier
  */
 router.get('/:supplierParam/search', paginate, async (req, res) => {
-  const supplierParam: string = req.query.supplierParam as string
+  const supplierParam: string = req.params.supplierParam as string
   const searchQuery: string = req.query.q as string
 
   try {
@@ -210,9 +211,10 @@ router.get('/:supplierParam/search', paginate, async (req, res) => {
     res.json({
       message: 'Get selected supplier products by search query',
       meta: {
-        count: supplierProducts.length,
-        page: req.page?.number,
+        recordCount: supplierProducts.length,
+        pageCount: req.page?.number,
       },
+      supplierParam,
       searchQuery,
       supplierProducts,
     })
