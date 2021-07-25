@@ -55,12 +55,17 @@ router.get('/:supplierParam', async (req, res) => {
       include: {
         owner: {
           include: {
-            user: true,
+            user: {
+              select: {
+                id: true,
+              },
+            },
           },
         },
         addresses: true,
         supplierProducts: {
           ...allSupplierProductsFields,
+          orderBy: [{ sku: 'desc' }, { name: 'desc' }],
         },
       },
     })
