@@ -23,6 +23,7 @@ import {
 } from '@chakra-ui/react'
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import { Link } from 'react-router-dom'
+import { Supplier } from '@prisma/client'
 
 import { useParams, useHistory } from 'react-router'
 import { DefaultLayout } from '../../layouts'
@@ -30,12 +31,13 @@ import { useSWR } from '../../utils/swr'
 import { ModifierButtons } from '../../components'
 import { Icon } from '@qopnet/qopnet-ui'
 
+import { SupplierProductsGrid } from './products'
+
 export const SupplierSlugPage = () => {
   const sidebar = useDisclosure()
   const { supplierParam }: { supplierParam: string } = useParams()
-  const { data: { supplier = [], message } = [], error } = useSWR(
-    `/api/suppliers/${supplierParam}`
-  )
+  const { data, error } = useSWR(`/api/suppliers/${supplierParam}`)
+  const { supplier } = data || {}
 
   return (
     <DefaultLayout>
@@ -128,7 +130,7 @@ export const SupplierSlugPage = () => {
                         alignItems="center"
                       >
                         <Box>Toko Supplier </Box>
-                        <Box>{supplier.supplierId}</Box>
+                        <Box>{supplier?.id}</Box>
                       </Flex>
 
                       <Flex
@@ -137,7 +139,7 @@ export const SupplierSlugPage = () => {
                         alignItems="center"
                       >
                         <Box>Pemilik </Box>
-                        <Box>{supplier.ownerId}</Box>
+                        <Box>{supplier?.ownerId}</Box>
                       </Flex>
 
                       <Flex
@@ -146,7 +148,7 @@ export const SupplierSlugPage = () => {
                         alignItems="center"
                       >
                         <Box>Kategori </Box>
-                        <Box>{supplier.category}</Box>
+                        <Box>{supplier?.category}</Box>
                       </Flex>
 
                       <Divider />
@@ -157,7 +159,7 @@ export const SupplierSlugPage = () => {
                         alignItems="center"
                       >
                         <Box>Dibuat mulai </Box>
-                        <Box>{supplier.createdAt}</Box>
+                        <Box>{supplier?.createdAt}</Box>
                       </Flex>
 
                       <Flex
@@ -166,7 +168,7 @@ export const SupplierSlugPage = () => {
                         alignItems="center"
                       >
                         <Box>Terakhir diubah</Box>
-                        <Box>{supplier.updatedAt}</Box>
+                        <Box>{supplier?.updatedAt}</Box>
                       </Flex>
                     </Box>
                   </Stack>
@@ -178,10 +180,9 @@ export const SupplierSlugPage = () => {
             </Drawer>
             {error ? (
               <Box px={5} py={3}>
-                {' '}
-                {message ? message : 'Gagal memuat produk supplier'}
+                Gagal memuat produk supplier
               </Box>
-            ) : supplier.length === 0 ? (
+            ) : supplier?.length === 0 ? (
               <Box px={5} py={3}>
                 <Spinner color="orange.500" />
               </Box>
@@ -194,19 +195,19 @@ export const SupplierSlugPage = () => {
                 alignItems="flex-start"
               >
                 <Stack id="product-detail">
-                  <Text as="h1">Nama Supplier: {supplier.name}</Text>
-                  <Text>Kontak: {supplier.phone}</Text>
-                  <Text>NPWP: {supplier.nationalTax ?? ''}</Text>
+                  <Text as="h1">Nama Supplier: {supplier?.name}</Text>
+                  <Text>Kontak: {supplier?.phone}</Text>
+                  <Text>NPWP: {supplier?.nationalTax ?? ''}</Text>
                   <Text>
-                    Sertifikat Usaha: {supplier.certificationFile ?? ''}
+                    Sertifikat Usaha: {supplier?.certificationFile ?? ''}
                   </Text>
-                  <Text>Pemilik: {supplier.owner.name ?? ''}</Text>
-                  <Text>Handle: {supplier.owner.handle ?? ''}</Text>
-                  <Text>Kontak: {supplier.owner.phone ?? ''}</Text>
-                  <Text>Email: {supplier.owner.user.email ?? ''}</Text>
+                  <Text>Pemilik: {supplier?.owner.name ?? ''}</Text>
+                  <Text>Handle: {supplier?.owner.handle ?? ''}</Text>
+                  <Text>Kontak: {supplier?.owner.phone ?? ''}</Text>
+                  <Text>Email: {supplier?.owner.user.email ?? ''}</Text>
                   <Divider />
-                  {supplier.addresses.length > 0
-                    ? supplier.addresses.map((address: any, index: any) => (
+                  {supplier?.addresses.length > 0
+                    ? supplier?.addresses.map((address: any, index: number) => (
                         <Box key={index}>
                           <Text as="h2" fontWeight="700">
                             Alamat {index + 1}:
@@ -218,6 +219,13 @@ export const SupplierSlugPage = () => {
                         </Box>
                       ))
                     : null}
+                  <Divider />
+                  {supplier?.supplierProducts.length > 0 && (
+                    <SupplierProductsGrid
+                      supplierProducts={supplier.supplierProducts}
+                      supplierParam={supplier.handle}
+                    />
+                  )}
                 </Stack>
               </VStack>
             )}
@@ -239,41 +247,24 @@ export const SupplierSlugPage = () => {
 
             <Flex pt={5} justifyContent="space-between" alignItems="center">
               <Box>Toko Supplier </Box>
-              <Box>{supplier.supplierId}</Box>
+              <Box>{supplier?.id}</Box>
             </Flex>
 
             <Flex pt={5} justifyContent="space-between" alignItems="center">
               <Box>Pemilik </Box>
-              <Box>{supplier.ownerId}</Box>
-            </Flex>
-
-            <Flex pt={3} justifyContent="space-between" alignItems="center">
-              <Box>Kategori </Box>
-              <Box>{supplier.category}</Box>
+              <Box>{supplier?.ownerId}</Box>
             </Flex>
 
             <Divider />
 
             <Flex pt={5} justifyContent="space-between" alignItems="center">
               <Box>Dibuat mulai </Box>
-              <Box>{supplier.createdAt}</Box>
+              <Box>{supplier?.createdAt}</Box>
             </Flex>
 
             <Flex pt={5} justifyContent="space-between" alignItems="center">
               <Box>Terakhir diubah</Box>
-              <Box>{supplier.updatedAt}</Box>
-            </Flex>
-            <Flex pt={5} justifyContent="space-between" alignItems="center">
-              <Button
-                ml="auto"
-                as={Link}
-                to={`/suppliers/${supplier.id}/products`}
-                variant="outline"
-                size="xs"
-                colorScheme="orange.900"
-              >
-                Lihat Produk
-              </Button>
+              <Box>{supplier?.updatedAt}</Box>
             </Flex>
           </Box>
         </Grid>

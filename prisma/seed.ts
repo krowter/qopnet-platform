@@ -1,36 +1,52 @@
-import { Prisma, PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
 import axios, { AxiosResponse } from 'axios'
 const prisma = new PrismaClient()
 
 async function main() {
   // image url example
-  // https://rryitovbrajppywbpmit.supabase.co/storage/v1/object/public/images/anekabusa-AB-001-2.jpeg
+  // https://rryitovbrajppywbpmit.supabase.co/storage/v1/object/public/images/anekabusa/AB-001.jpeg
+
   // get storageUrl
   const storageUrl = process.env.NX_SUPABASE_URL
-
   const ownerId = 'ckr86vmxt005010pjeh4mqs6n' // qopnetlabs@gmail.com profile.id
+  const supplierHandle = 'anekabusa'
+  const supplierData = {
+    name: 'PT. Aneka Busa Internasional',
+    handle: supplierHandle,
+  }
 
   // create supplier -- aneka busa
-  const newSupplier = await prisma.supplier.create({
-    data: {
-      name: 'PT. Aneka Busa Internasional',
-      handle: 'anekabusa'
+  const supplier = await prisma.supplier.upsert({
+    where: {
+      handle: supplierHandle,
+    },
+    update: supplierData,
+    create: supplierData,
+  })
+
+  // remove existing products
+  await prisma.supplierProduct.deleteMany({
+    where: {
+      ownerId,
+      supplierId: supplier.id, // new supplier or existing supplier
     },
   })
 
+  // start creating supplierData
   // download data from gist
-  let {
-    data: products,
-  }: AxiosResponse<any[]> =
-    await axios.get(
-      'https://gist.githubusercontent.com/hwindo/c5d6dbeadb97048bc696d2bbba659a2b/raw/f0d5787f21c6bf87850fdaca88a3fe4222323b48/anekabusa_produst.json'
-      
-    )
-
+  let { data: products }: AxiosResponse<any[]> = await axios.get(
+    'https://gist.github.com/qopnetlabs/414f0a5e3404e6555165ccc67ff79b60/raw'
+  )
+  
+  // re-map 
+  // add ids and update storage url based on environment
   products = products.map((product) => {
     product.ownerId = ownerId
-    product.supplierId = newSupplier.id
-    product.images = product.images.map((image: string) => `${storageUrl}/storage/v1/object/public/images/${image}`)
+    product.supplierId = supplier.id
+    product.images = product.images.map(
+      (image: string) =>
+        `${storageUrl}/storage/v1/object/public/images/${supplierHandle}/${image}`
+    )
 
     return product
   })

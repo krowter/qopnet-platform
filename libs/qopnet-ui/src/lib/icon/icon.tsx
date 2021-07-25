@@ -33,6 +33,7 @@ import {
   FaBaby as Baby,
   FaMoneyBill as Price,
   FaSort as Order,
+  FaMoneyBillWave as Finance,
 } from 'react-icons/fa'
 import { FiMenu as Menu } from 'react-icons/fi'
 import { MdFreeBreakfast as Breakfast } from 'react-icons/md'
@@ -138,6 +139,8 @@ export const Icon = (props: IconProps) => {
       return <Price />
     case 'order':
       return <Order />
+    case 'finance':
+      return <Finance />
 
     /**
      * When nothing found
