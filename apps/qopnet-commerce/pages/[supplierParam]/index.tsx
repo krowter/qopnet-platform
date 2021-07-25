@@ -22,12 +22,7 @@ import {
   Input,
 } from '@chakra-ui/react'
 
-import {
-  Layout,
-  Icon,
-  SupplierProductsGrid,
-  SupplierProductCardLink,
-} from '@qopnet/qopnet-ui'
+import { Layout, Icon, SupplierProductsGrid } from '@qopnet/qopnet-ui'
 import { NextLinkButton } from '../../components'
 import { useSWR } from '../../utils'
 
@@ -48,7 +43,7 @@ export const SupplierContainer = ({ supplierParam }) => {
   const { supplier } = data || {}
 
   return (
-    <VStack spacing={10}>
+    <Stack spacing={10}>
       {error && <Text>Gagal memuat data supplier</Text>}
       {!error && !supplier && (
         <HStack>
@@ -141,7 +136,7 @@ export const SupplierContainer = ({ supplierParam }) => {
           </Stack>
         </>
       )}
-    </VStack>
+    </Stack>
   )
 }
 

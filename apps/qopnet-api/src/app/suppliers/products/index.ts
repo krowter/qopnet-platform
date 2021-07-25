@@ -6,7 +6,7 @@ import { paginate } from '../../root/middleware'
 import * as express from 'express'
 const router = express.Router()
 
-const allSupplierProductsFields = {
+export const allSupplierProductsFields = {
   select: {
     id: true,
     images: true,

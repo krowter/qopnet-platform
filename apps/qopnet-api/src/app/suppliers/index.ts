@@ -5,6 +5,7 @@ import * as express from 'express'
 
 import { checkUser } from '../auth/middleware'
 import { paginate } from '../root/middleware'
+import { allSupplierProductsFields } from './products'
 
 const router = express.Router()
 
@@ -58,7 +59,9 @@ router.get('/:supplierParam', async (req, res) => {
           },
         },
         addresses: true,
-        supplierProducts: true,
+        supplierProducts: {
+          ...allSupplierProductsFields,
+        },
       },
     })
 
@@ -191,12 +194,11 @@ router.get('/:supplierParam/search', paginate, async (req, res) => {
   const searchQuery: string = req.query.q as string
 
   try {
-    const supplierProducts: SupplierProduct[] =
+    const supplierProducts: Partial<SupplierProduct>[] =
       await prisma.supplierProduct.findMany({
+        ...allSupplierProductsFields,
         where: {
-          supplier: {
-            handle: supplierParam,
-          },
+          supplier: { handle: supplierParam },
           OR: [
             { slug: { contains: searchQuery, mode: 'insensitive' } },
             { sku: { contains: searchQuery, mode: 'insensitive' } },
