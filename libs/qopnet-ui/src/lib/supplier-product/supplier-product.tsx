@@ -268,7 +268,7 @@ export const SupplierProductDetail = ({
   const hasDimension = width || height || length
 
   return (
-    <Stack spacing={20}>
+    <Stack spacing={20} align={!isDesktop ? 'center' : ''}>
       <Stack direction={isDesktop ? 'row' : 'column'} spacing={10}>
         <Stack id="product-images">
           {/* The first product image */}
@@ -291,30 +291,32 @@ export const SupplierProductDetail = ({
             </ChakraLink>
           </Box>
           {/* The other product image */}
-          <Stack direction="row">
-            {productImages.map((imageUrl: string, index) => {
-              return (
-                <Box
-                  key={`${product?.slug}-${index}-${product?.id}`}
-                  display="inherit"
-                >
-                  <ChakraLink
-                    isExternal
-                    href={formatImageUrl(env, imageUrl)}
-                    display="block"
-                    className="next-image-container"
+          <Stack direction="row" maxW="420px" overflowX="auto">
+            {productImages
+              .filter((imageUrl, index) => index !== 0)
+              .map((imageUrl: string, index) => {
+                return (
+                  <Box
+                    key={`${product?.slug}-${index}-${product?.id}`}
+                    display="inherit"
                   >
-                    <NextImage
-                      src={formatImageUrl(env, imageUrl)}
-                      alt={product?.name || 'Small product image'}
-                      layout="fixed"
-                      width={100}
-                      height={100}
-                    />
-                  </ChakraLink>
-                </Box>
-              )
-            })}
+                    <ChakraLink
+                      isExternal
+                      href={formatImageUrl(env, imageUrl)}
+                      display="block"
+                      className="next-image-container"
+                    >
+                      <NextImage
+                        src={formatImageUrl(env, imageUrl)}
+                        alt={product?.name || 'Small product image'}
+                        layout="fixed"
+                        width={100}
+                        height={100}
+                      />
+                    </ChakraLink>
+                  </Box>
+                )
+              })}
           </Stack>
         </Stack>
 
@@ -371,7 +373,7 @@ export const SupplierProductDetail = ({
 
       <Divider />
 
-      <Stack id="product-more-details" spacing={5}>
+      <Stack id="product-more-details" spacing={5} w="100%" maxW="500px">
         <Heading as="h4" size="lg">
           Rincian Produk
         </Heading>
