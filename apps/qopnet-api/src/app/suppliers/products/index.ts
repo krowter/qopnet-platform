@@ -41,8 +41,8 @@ router.get('/special', paginate, async (req, res) => {
     res.json({
       message: 'Get all supplier products',
       meta: {
-        count: supplierProducts.length,
-        page: req.page?.number,
+        recordCount: supplierProducts.length,
+        pageCount: req.page?.number,
       },
       supplierProducts,
     })
@@ -68,8 +68,8 @@ router.get('/', paginate, async (req: Request, res: Response) => {
     res.json({
       message: 'Get all supplier products',
       meta: {
-        count: supplierProducts.length,
-        page: req.page?.number,
+        recordCount: supplierProducts.length,
+        pageCount: req.page?.number,
       },
       supplierProducts,
     })
