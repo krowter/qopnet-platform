@@ -58,10 +58,10 @@ export const SupplierContainer = ({ supplierParam }) => {
           />
           <Stack spacing={10} w="100%">
             <Stack spacing={5}>
-              <Flex id="supplier-brand">
-                <Avatar size="xl" name={supplier?.name} />
-                <Stack ml={5}>
-                  <Heading as="h1" size="xl">
+              <Flex id="supplier-brand" flexWrap="wrap">
+                <Avatar mr={5} mb={5} size="xl" name={supplier?.name} />
+                <Stack>
+                  <Heading as="h1" size="lg">
                     {supplier?.name}
                   </Heading>
                   <HStack>

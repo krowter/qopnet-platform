@@ -89,7 +89,7 @@ export const SignUpForm = () => {
     <VStack spacing={10}>
       <NextSeo title="Daftar akun - Qopnet" />
 
-      <Stack align="center">
+      <Stack align="center" textAlign="center">
         <NextImage
           alt="Qopnet icon"
           src={qopnetIcon}
@@ -205,7 +205,7 @@ export const SignInForm = () => {
 
   return (
     <VStack spacing={10}>
-      <VStack>
+      <VStack textAlign="center">
         <Heading as="h1" size="xl">
           Masuk ke akun Qopnet
         </Heading>

@@ -18,6 +18,7 @@ import {
   SimpleGrid,
   Stack,
   Text,
+  Image as ChakraImage,
   Link as ChakraLink,
   UnorderedList,
   useMediaQuery,
@@ -269,26 +270,19 @@ export const SupplierProductDetail = ({
 
   return (
     <Stack spacing={20} align={!isDesktop ? 'center' : ''}>
-      <Stack direction={isDesktop ? 'row' : 'column'} spacing={10}>
+      <Stack direction={isDesktop ? 'row' : 'column'} spacing={10} maxW="100%">
         <Stack id="product-images">
           {/* The first product image */}
-          <Box display="inherit">
-            <ChakraLink
-              isExternal
-              href={formatImageUrl(env, firstProductImageUrl)}
-              display="block"
-              className="next-image-container"
-            >
-              <NextImage
-                src={formatImageUrl(env, firstProductImageUrl)}
-                key={product?.slug + '-first'}
-                alt={product?.name || 'First product image'}
-                layout="fixed"
-                width={420}
-                height={420}
-                loading="eager"
-              />
-            </ChakraLink>
+          <Box className="next-image-container">
+            <NextImage
+              src={formatImageUrl(env, firstProductImageUrl)}
+              key={product?.slug + '-first'}
+              alt={product?.name || 'First product image'}
+              loading="eager"
+              layout="responsive"
+              width={420}
+              height={420}
+            />
           </Box>
           {/* The other product image */}
           <Stack direction="row" maxW="420px" overflowX="auto">

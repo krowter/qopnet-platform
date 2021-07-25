@@ -32,10 +32,10 @@ export const SearchBegin = () => {
 
 export const SearchResults = ({ keyword }) => {
   const { data, error } = useSWR(`/api/suppliers/products/search?q=${keyword}`)
-  const { count, supplierProducts } = data || {}
+  const { meta, supplierProducts } = data || {}
 
   return (
-    <Stack pt={10} spacing={3}>
+    <Stack spacing={3}>
       <NextSeo title={`Mencari: ${keyword} - Qopnet`} />
 
       <Heading as="h1" size="xl">
@@ -53,7 +53,7 @@ export const SearchResults = ({ keyword }) => {
       )}
       {!error && supplierProducts && (
         <Stack>
-          <Text>{count} produk ditemukan</Text>
+          <Text>{meta?.recordCount} produk ditemukan</Text>
           <SupplierProductsGrid supplierProducts={supplierProducts} />
         </Stack>
       )}
