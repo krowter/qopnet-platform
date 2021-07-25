@@ -6,7 +6,7 @@ import { paginate } from '../../root/middleware'
 import * as express from 'express'
 const router = express.Router()
 
-const allSupplierProductsFields = {
+export const allSupplierProductsFields = {
   select: {
     id: true,
     images: true,
@@ -36,6 +36,7 @@ router.get('/special', paginate, async (req, res) => {
         ...allSupplierProductsFields,
         take: req.take || 10,
         skip: req.skip,
+        orderBy: [{ sku: 'desc' }, { name: 'desc' }],
       })
 
     res.json({
@@ -62,6 +63,7 @@ router.get('/', paginate, async (req: Request, res: Response) => {
     const supplierProducts: Partial<SupplierProduct>[] =
       await prisma.supplierProduct.findMany({
         ...allSupplierProductsFields,
+        orderBy: [{ sku: 'desc' }, { name: 'desc' }],
         skip: req.skip,
         take: req.take,
       })
@@ -107,8 +109,8 @@ router.get('/search', paginate, async (req, res) => {
     res.json({
       message: 'Get all supplier products by search query',
       meta: {
-        count: supplierProducts.length,
-        page: req.page?.number,
+        recordCount: supplierProducts.length,
+        pageCount: req.page?.number,
       },
       searchQuery,
       supplierProducts,

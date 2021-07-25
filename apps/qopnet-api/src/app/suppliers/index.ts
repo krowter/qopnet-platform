@@ -5,6 +5,7 @@ import * as express from 'express'
 
 import { checkUser } from '../auth/middleware'
 import { paginate } from '../root/middleware'
+import { allSupplierProductsFields } from './products'
 
 const router = express.Router()
 
@@ -54,11 +55,18 @@ router.get('/:supplierParam', async (req, res) => {
       include: {
         owner: {
           include: {
-            user: true,
+            user: {
+              select: {
+                id: true,
+              },
+            },
           },
         },
         addresses: true,
-        supplierProducts: true,
+        supplierProducts: {
+          ...allSupplierProductsFields,
+          orderBy: [{ sku: 'desc' }, { name: 'desc' }],
+        },
       },
     })
 
@@ -84,29 +92,27 @@ router.get('/:supplierParam', async (req, res) => {
 })
 
 /**
- * Get supplier products by two ways:
- * 1. :id
- * 2. :supplierParam or slug
- * If not found by id, try to find by supplierParam
+ * GET /api/suppliers/:supplierParam/products
  */
-router.get('/:id/products', async (req, res) => {
-  const { id } = req.params
+router.get('/:supplierParam/products', async (req, res) => {
+  const { supplierParam } = req.params
 
   try {
-    const supplierProducts = await prisma.supplier.findUnique({
-      where: { id },
-      include: { supplierProducts: true },
+    const supplierProducts = await prisma.supplierProduct.findMany({
+      ...allSupplierProductsFields,
+      where: { supplier: { handle: supplierParam } },
+      orderBy: [{ sku: 'desc' }, { name: 'desc' }],
     })
 
     res.json({
       message: 'Get all supplier products by supplierId',
-      id,
+      supplierParam,
       supplierProducts: supplierProducts,
     })
   } catch (error) {
     res.status(500).json({
       message: 'Get all supplier products by supplierId failed',
-      id,
+      supplierParam,
     })
   }
 })
@@ -136,6 +142,9 @@ router.get('/:supplierParam/products', async (req, res) => {
   }
 })
 
+/**
+ * GET /api/suppliers/:supplierParam/products/:supplierProductParam
+ */
 router.get(
   '/:supplierParam/products/:supplierProductParam',
   async (req, res, next) => {
@@ -152,7 +161,7 @@ router.get(
       const supplierId = supplier.id
 
       // get supplier product
-      const supplierProducts = await prisma.supplierProduct.findMany({
+      const supplierProducts = await prisma.supplierProduct.findFirst({
         where: {
           supplierId: supplierId,
           slug: supplierProductParam,
@@ -177,6 +186,51 @@ router.get(
     }
   }
 )
+
+/**
+ * GET /api/suppliers/:supplierParam/search?q=keyword
+ * Search supplier products in one supplier
+ */
+router.get('/:supplierParam/search', paginate, async (req, res) => {
+  const supplierParam: string = req.params.supplierParam as string
+  const searchQuery: string = req.query.q as string
+
+  try {
+    const supplierProducts: Partial<SupplierProduct>[] =
+      await prisma.supplierProduct.findMany({
+        ...allSupplierProductsFields,
+        where: {
+          supplier: { handle: supplierParam },
+          OR: [
+            { slug: { contains: searchQuery, mode: 'insensitive' } },
+            { sku: { contains: searchQuery, mode: 'insensitive' } },
+            { name: { contains: searchQuery, mode: 'insensitive' } },
+            { description: { contains: searchQuery, mode: 'insensitive' } },
+          ],
+        },
+        skip: req.skip,
+        take: req.take,
+        orderBy: [{ sku: 'desc' }, { name: 'desc' }],
+      })
+
+    res.json({
+      message: 'Get selected supplier products by search query',
+      meta: {
+        recordCount: supplierProducts.length,
+        pageCount: req.page?.number,
+      },
+      supplierParam,
+      searchQuery,
+      supplierProducts,
+    })
+  } catch (error) {
+    res.status(500).json({
+      message: 'Get selected supplier products by search query failed',
+      searchQuery,
+      error,
+    })
+  }
+})
 
 /**
  * POST /api/suppliers
