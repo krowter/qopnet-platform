@@ -41,3 +41,20 @@ export const formatImageUrl = (env: string, text: string) => {
 export const formatMoney = (price: number) => {
   return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
 }
+
+export const formatWeight = (weight: number, weightUnit: string) => {
+  if (weightUnit) {
+    switch (weightUnit) {
+      case 'GR':
+        return `${weight} gr`
+      case 'KG':
+        return `${weight} kg`
+      case 'TON':
+        return `${weight} ton`
+      default:
+        return `${weight} kg`
+    }
+  } else {
+    return `${weight} kg`
+  }
+}

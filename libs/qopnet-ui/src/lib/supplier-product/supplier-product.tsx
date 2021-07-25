@@ -27,7 +27,11 @@ import {
   useToast,
 } from '@chakra-ui/react'
 
-import { formatDateTime, formatImageUrl } from '@qopnet/util-format'
+import {
+  formatDateTime,
+  formatImageUrl,
+  formatWeight,
+} from '@qopnet/util-format'
 import { Icon } from '../icon/icon'
 
 const env =
@@ -346,9 +350,7 @@ export const SupplierProductDetail = ({
             {product?.weight && product?.weightUnit && (
               <Text>
                 Berat:{' '}
-                <b>
-                  {product?.weightUnit} {product?.weight}
-                </b>
+                <b>{formatWeight(product?.weight, product?.weightUnit)}</b>
               </Text>
             )}
           </Stack>
