@@ -4,6 +4,7 @@ import slugify from 'slugify'
 import * as express from 'express'
 
 import { checkUser } from '../auth/middleware'
+import { paginate } from '../root/middleware'
 
 const router = express.Router()
 
@@ -11,7 +12,7 @@ const router = express.Router()
  * GET /api/suppliers
  * Get all suppliers
  */
-router.get('/', async (req, res) => {
+router.get('/', paginate, async (req, res) => {
   try {
     const suppliers: Supplier[] = await prisma.supplier.findMany({
       include: {
@@ -19,10 +20,16 @@ router.get('/', async (req, res) => {
         addresses: true,
         supplierProducts: true,
       },
+      skip: req.skip,
+      take: req.take,
     })
 
     res.json({
       message: 'Get all suppliers',
+      meta: {
+        recordCount: suppliers.length,
+        pageCount: req.page?.number,
+      },
       suppliers,
     })
   } catch (error) {
