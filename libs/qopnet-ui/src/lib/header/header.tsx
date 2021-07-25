@@ -171,7 +171,6 @@ export const SearchBar = () => {
     formState: { errors },
   } = useForm<SearchData>()
 
-  // Sign in process and toast
   const handleSubmitSearch: SubmitHandler<SearchData> = async ({ keyword }) => {
     try {
       router.push(`/search?q=${keyword}`)

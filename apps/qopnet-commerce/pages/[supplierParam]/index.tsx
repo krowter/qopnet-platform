@@ -2,6 +2,7 @@ import cuid from 'cuid'
 import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
 import { useUser } from 'use-supabase'
+import { useForm, SubmitHandler } from 'react-hook-form'
 import {
   Tag,
   Divider,
@@ -14,9 +15,19 @@ import {
   VStack,
   Stack,
   SimpleGrid,
+  Box,
+  InputGroup,
+  InputLeftElement,
+  useColorModeValue,
+  Input,
 } from '@chakra-ui/react'
 
-import { Layout, Icon, SupplierProductCardLink } from '@qopnet/qopnet-ui'
+import {
+  Layout,
+  Icon,
+  SupplierProductsGrid,
+  SupplierProductCardLink,
+} from '@qopnet/qopnet-ui'
 import { NextLinkButton } from '../../components'
 import { useSWR } from '../../utils'
 
@@ -122,8 +133,10 @@ export const SupplierContainer = ({ supplierParam }) => {
                 )}
               </Stack>
             )}
+
+            {/* List of all supplier's products             */}
             {supplier?.supplierProducts && (
-              <SupplierProducts supplier={supplier} />
+              <SupplierProductsContainer supplier={supplier} />
             )}
           </Stack>
         </>
@@ -132,19 +145,84 @@ export const SupplierContainer = ({ supplierParam }) => {
   )
 }
 
-export const SupplierProducts = ({ supplier }) => {
+export type SupplierProductsSearchData = {
+  keyword?: string | ''
+}
+
+export const SupplierProductsContainer = ({ supplier }) => {
+  const router = useRouter()
+  const { supplierParam, q: keyword } = router.query
+
+  // React Hook Form for search supplier products in one supplier
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SupplierProductsSearchData>()
+
+  const handleSubmitSearchSupplierProducts: SubmitHandler<SupplierProductsSearchData> =
+    async ({ keyword }) => {
+      console.log({ keyword })
+
+      try {
+        router.push(`/${supplierParam}?q=${keyword}`)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
   return (
-    <SimpleGrid spacing={5} columns={[2, 2, 4]}>
-      {supplier?.supplierProducts.map((product, index) => {
-        return (
-          <SupplierProductCardLink
-            key={product.id}
-            href={`/${supplier.handle}/${product.slug}`}
-            product={product}
+    <Stack spacing={5}>
+      <Box
+        as="form"
+        w="100%"
+        onSubmit={handleSubmit(handleSubmitSearchSupplierProducts)}
+      >
+        <InputGroup>
+          <InputLeftElement color={useColorModeValue('black', 'white')}>
+            <Icon name="search" />
+          </InputLeftElement>
+          <Input
+            placeholder="Cari produk dalam supplier..."
+            bg={useColorModeValue('white', 'black')}
+            {...register('keyword', { required: true })}
           />
-        )
-      })}
-    </SimpleGrid>
+        </InputGroup>
+      </Box>
+
+      {!keyword && supplier?.supplierProducts && (
+        <SupplierProductsGrid supplierProducts={supplier?.supplierProducts} />
+      )}
+
+      {keyword && <SearchSupplierProductsResults keyword={keyword} />}
+    </Stack>
+  )
+}
+
+export const SearchSupplierProductsResults = ({ keyword }) => {
+  const { data, error } = useSWR(`/api/suppliers/anekabusa/search?q=${keyword}`)
+  const { meta, supplierProducts } = data || {}
+
+  return (
+    <Stack>
+      <Heading as="h2" size="md">
+        Hasil pencarian untuk <b>"{keyword}"</b>
+      </Heading>
+
+      {error && <Text>Gagal mencari produk</Text>}
+      {!error && !supplierProducts && (
+        <Flex>
+          <Spinner mr={5} />
+          <Text>Mencari produk...</Text>
+        </Flex>
+      )}
+      {!error && supplierProducts && (
+        <Stack>
+          <Text>{meta.recordCount} produk ditemukan</Text>
+          <SupplierProductsGrid supplierProducts={supplierProducts} />
+        </Stack>
+      )}
+    </Stack>
   )
 }
 
