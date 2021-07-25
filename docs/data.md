@@ -40,35 +40,31 @@ Examples:
 
 1. Duha Syariah
    - Financing for the purchase of goods, Umrah travel, halal tourism, education, and invoice financing in accordance with Sharia principles.
-   - API: https://duhasyariah.id/documentation
-2. Amartha
+   - https://duhasyariah.id/documentation
+2. ALAMI Sharia Funding
+3. Amartha P2P
 
 ```json
 {
   "name": "Duha Syariah",
   "website": "https://duhasyariah.id",
   "phone": "+62 8 1234 5678",
-  "beneficiaryRequests": [],
-  "fundedMerchants": []
+  "fundBeneficiariesRequests": [],
+  "fundBeneficiaries": []
 }
 ```
 
-## FundBenefactor
-
-People who fund the money to financing services.
-
 ## FundBeneficiary
 
-People who receive the fund.
+People who receive the fund. This acts as the information details for the prospective people from merchants.
 
 ```json
 {
-  "id": "cuid()",
   "nationalId": "12345678901234567890", // KTP
   "birthPlace": "Surakarta",
   "birthDate": "1960-01-01",
   "income": 30240000, // in Rupiah
-  "status": "ACCEPTED", // | REJECTED | PENDING
+  "status": "ACCEPTED", // PENDING | ACCEPTED | REJECTED
   "merchant": [{ "id": "" }],
   "funder": { "id": "", "name": "Duha Syariah" },
   "benefactors": [{ "id": "", "name": "Duha Syariah" }],
@@ -76,6 +72,10 @@ People who receive the fund.
   "user": { "id": "cuid()", "email": "jokowi@indonesia.go.id" }
 }
 ```
+
+## FundBenefactor
+
+People who fund the money to financing services. Qopnet might not know these data.
 
 ---
 

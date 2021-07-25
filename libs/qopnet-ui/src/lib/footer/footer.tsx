@@ -36,7 +36,7 @@ export const Footer = (props: FooterProps) => {
       p={5}
       color="orange.50"
       bg="orange.900"
-      mt={60}
+      mt={40}
     >
       {process.env.NODE_ENV === 'development' && (
         <Stack>
