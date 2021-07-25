@@ -18,7 +18,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 
-import { Supplier } from '@qopnet/shared-types'
+import { Supplier } from '@prisma/client'
 import { Link } from 'react-router-dom'
 import { DefaultLayout } from '../layouts'
 import { useSWR } from '../utils/swr'
@@ -60,23 +60,21 @@ export const SuppliersPage = () => {
             <Spinner color="orange.500" />
           </Box>
         )}
-        <SupplierRows suppliers={suppliers} />
+        {suppliers && 
+          <SupplierRows suppliers={suppliers} />
+        }
       </Box>
     </DefaultLayout>
   )
 }
 
-export const SupplierRows = ({ suppliers }: { suppliers: any[] }) => {
+export const SupplierRows = ({ suppliers }: { suppliers: Supplier[] }) => {
   const bg = useColorModeValue('gray.50', 'gray.900')
   const border = useColorModeValue('gray.200', 'gray.700')
 
-  if (!suppliers) {
-    return <div>No products</div>
-  }
   return (
     <Box mt={2}>
-      {suppliers.map((supplier: any, index: number) => {
-        const supplierHandle = { handle: 'placeholder' }
+      {suppliers.map((supplier: Supplier, index: number) => {
         return (
           <SimpleGrid
             spacingX={3}
@@ -90,15 +88,12 @@ export const SupplierRows = ({ suppliers }: { suppliers: any[] }) => {
             bg={bg}
             borderBottom="1px solid gray"
             borderColor={border}
-            gridTemplateColumns="50px 50px repeat(5, 1fr)"
+            gridTemplateColumns="50px 50px 100px 1fr"
           >
             <Text>#{index}</Text>
-            <Avatar size="xs" name={supplier.name} />
-            <Text>{supplier.name}</Text>
+            <Avatar size="xs" name={supplier.name as string}  />
             <Text>{supplier.handle}</Text>
-            <Text>{supplier.sku}</Text>
-            <Text>{supplier.nationalTax}</Text>
-            <Text>{supplier.certificationFile}</Text>
+            <Text>{supplier.name}</Text>
           </SimpleGrid>
         )
       })}
