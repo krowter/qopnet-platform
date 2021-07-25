@@ -199,7 +199,9 @@ export const SupplierProductsContainer = ({ supplier }) => {
 }
 
 export const SearchSupplierProductsResults = ({ supplier, keyword }) => {
-  const { data, error } = useSWR(`/api/suppliers/anekabusa/search?q=${keyword}`)
+  const { data, error } = useSWR(
+    `/api/suppliers/${supplier.handle}/search?q=${keyword}`
+  )
   const { meta, supplierProducts } = data || {}
 
   return (
