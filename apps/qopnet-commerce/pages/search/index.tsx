@@ -36,7 +36,7 @@ export const SearchResults = ({ keyword }) => {
 
   return (
     <Stack pt={10} spacing={3}>
-      <NextSeo title={`Pencarian: ${keyword} - Qopnet`} />
+      <NextSeo title={`Mencari: ${keyword} - Qopnet`} />
 
       <Heading as="h1" size="xl">
         Cari produk dan toko supplier

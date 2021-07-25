@@ -162,10 +162,12 @@ export const SupplierProductsContainer = ({ supplier }) => {
 
   const handleSubmitSearchSupplierProducts: SubmitHandler<SupplierProductsSearchData> =
     async ({ keyword }) => {
-      console.log({ keyword })
-
       try {
-        router.push(`/${supplierParam}?q=${keyword}`)
+        if (keyword) {
+          router.push(`/${supplierParam}?q=${keyword}`)
+        } else {
+          router.push(`/${supplierParam}`)
+        }
       } catch (error) {
         console.error(error)
       }
@@ -185,7 +187,7 @@ export const SupplierProductsContainer = ({ supplier }) => {
           <Input
             placeholder="Cari produk dalam supplier..."
             bg={useColorModeValue('white', 'black')}
-            {...register('keyword', { required: true })}
+            {...register('keyword')}
           />
         </InputGroup>
       </Box>
@@ -194,17 +196,23 @@ export const SupplierProductsContainer = ({ supplier }) => {
         <SupplierProductsGrid supplierProducts={supplier?.supplierProducts} />
       )}
 
-      {keyword && <SearchSupplierProductsResults keyword={keyword} />}
+      {keyword && (
+        <SearchSupplierProductsResults supplier={supplier} keyword={keyword} />
+      )}
     </Stack>
   )
 }
 
-export const SearchSupplierProductsResults = ({ keyword }) => {
+export const SearchSupplierProductsResults = ({ supplier, keyword }) => {
   const { data, error } = useSWR(`/api/suppliers/anekabusa/search?q=${keyword}`)
   const { meta, supplierProducts } = data || {}
 
   return (
     <Stack>
+      <NextSeo
+        title={`Mencari: ${keyword} di ${supplier?.name} - ${supplier?.addresses[0]?.city}, ${supplier?.addresses[0]?.state} - Qopnet`}
+      />
+
       <Heading as="h2" size="md">
         Hasil pencarian untuk <b>"{keyword}"</b>
       </Heading>
