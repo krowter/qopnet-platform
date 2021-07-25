@@ -78,12 +78,15 @@ export const DashboardContent = ({ profile }) => {
         direction={['column', 'column', 'row']}
         spacing={10}
       >
-        <Stack spacing={5} maxW="300px">
+        <Stack spacing={5} minW="250px" maxW="300px">
           <Heading as="h3" size="md">
-            Mau apa?
+            Ingin melakukan apa?
           </Heading>
           {!profile && (
             <Stack>
+              <Heading as="h4" size="sm">
+                Fitur pribadi
+              </Heading>
               <DashboardActionLink name="shop" href="/shop">
                 Lanjut belanja
               </DashboardActionLink>
@@ -93,17 +96,30 @@ export const DashboardContent = ({ profile }) => {
             </Stack>
           )}
           {profile && (
-            <Stack>
-              <DashboardActionLink name="shop" href="/shop">
-                Lanjut belanja
-              </DashboardActionLink>
-              <DashboardActionLink name="profile" href="/create-profile">
-                Ubah profil saya
-              </DashboardActionLink>
-              <DashboardActionLink name="supplier" href="/create-supplier">
-                Membuat toko supplier
-              </DashboardActionLink>
-            </Stack>
+            <>
+              <Stack>
+                <Heading as="h4" size="sm">
+                  Fitur pribadi
+                </Heading>
+                <DashboardActionLink name="shop" href="/shop">
+                  Lanjut belanja
+                </DashboardActionLink>
+                <DashboardActionLink name="profile" href="/create-profile">
+                  Ubah profil saya
+                </DashboardActionLink>
+                <DashboardActionLink name="supplier" href="/create-supplier">
+                  Buat toko supplier
+                </DashboardActionLink>
+              </Stack>
+              <Stack>
+                <Heading as="h4" size="sm">
+                  Layanan pinjaman
+                </Heading>
+                <DashboardActionLink name="finance" href="/financing/request">
+                  Ajukan pinjaman
+                </DashboardActionLink>
+              </Stack>
+            </>
           )}
         </Stack>
 
@@ -149,7 +165,7 @@ export const DashboardContent = ({ profile }) => {
                       />
                     )
                   })}
-                </SimpleGrid>{' '}
+                </SimpleGrid>
                 <DashboardActionLink
                   name="plus"
                   href="/create-supplier"

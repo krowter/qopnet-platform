@@ -45,7 +45,8 @@
     "prisma:push": "prisma db push",
     "prisma:generate": "prisma generate",
     "prisma:studio": "prisma studio",
-    "prisma:format": "prisma format"
+    "prisma:format": "prisma format",
+    "prisma:seed": "prisma db seed --preview-feature"
   },
   "dependencies": {
     "@chakra-ui/icons": "^1.0.14",

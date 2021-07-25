@@ -6,7 +6,7 @@ export const shopPage = () => {
   return (
     <Layout
       meta={{
-        title: 'Belanja produk supplier - Qopnet',
+        title: 'Belanja produk supplier',
         description:
           'Lihat katalog semua produk supplier yang tersedia di Qopnet.',
       }}
