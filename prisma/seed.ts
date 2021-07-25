@@ -11,7 +11,7 @@ async function main() {
   const ownerId = 'ckr86vmxt005010pjeh4mqs6n' // qopnetlabs@gmail.com profile.id
   const supplierHandle = 'anekabusa'
   const supplierData = {
-    name: 'PT. Aneka Busa Internasional',
+    name: 'Aneka Busa (PT. Aneka Busa Indonesia)',
     handle: supplierHandle,
   }
 
@@ -37,8 +37,8 @@ async function main() {
   let { data: products }: AxiosResponse<any[]> = await axios.get(
     'https://gist.github.com/qopnetlabs/414f0a5e3404e6555165ccc67ff79b60/raw'
   )
-  
-  // re-map 
+
+  // re-map
   // add ids and update storage url based on environment
   products = products.map((product) => {
     product.ownerId = ownerId
