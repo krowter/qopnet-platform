@@ -35,14 +35,14 @@ router.get('/special', paginate, async (req, res) => {
       await prisma.supplierProduct.findMany({
         ...allSupplierProductsFields,
         take: req.take || 10,
-        skip: req.skip
+        skip: req.skip,
       })
 
     res.json({
       message: 'Get all supplier products',
       meta: {
-        record_count: supplierProducts.length,
-        page: req.page?.number
+        count: supplierProducts.length,
+        page: req.page?.number,
       },
       supplierProducts,
     })
@@ -63,13 +63,13 @@ router.get('/', paginate, async (req: Request, res: Response) => {
       await prisma.supplierProduct.findMany({
         ...allSupplierProductsFields,
         skip: req.skip,
-        take: req.take
+        take: req.take,
       })
     res.json({
       message: 'Get all supplier products',
       meta: {
+        count: supplierProducts.length,
         page: req.page?.number,
-        record_count: supplierProducts.length,
       },
       supplierProducts,
     })
@@ -101,14 +101,14 @@ router.get('/search', paginate, async (req, res) => {
         },
         include: { supplier: { select: { handle: true } } },
         skip: req.skip,
-        take: req.take
+        take: req.take,
       })
 
     res.json({
       message: 'Get all supplier products by search query',
       meta: {
-        record_count: supplierProducts.length,
-        page: req.page?.number
+        count: supplierProducts.length,
+        page: req.page?.number,
       },
       searchQuery,
       supplierProducts,
