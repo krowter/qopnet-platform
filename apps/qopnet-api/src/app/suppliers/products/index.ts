@@ -42,7 +42,7 @@ router.get('/special', paginate, async (req, res) => {
       message: 'Get all supplier products',
       meta: {
         record_count: supplierProducts.length,
-        page: req.page.number
+        page: req.page?.number
       },
       supplierProducts,
     })
@@ -108,7 +108,7 @@ router.get('/search', paginate, async (req, res) => {
       message: 'Get all supplier products by search query',
       meta: {
         record_count: supplierProducts.length,
-        page: req.page.number
+        page: req.page?.number
       },
       searchQuery,
       supplierProducts,
