@@ -84,6 +84,7 @@ router.get('/:supplierParam', async (req, res) => {
 })
 
 /**
+ * GET /api/suppliers/:supplierParam/products
  * Get supplier products by two ways:
  * 1. :id
  * 2. :supplierParam or slug
@@ -136,6 +137,9 @@ router.get('/:supplierParam/products', async (req, res) => {
   }
 })
 
+/**
+ * GET /api/suppliers/:supplierParam/products/:supplierProductParam
+ */
 router.get(
   '/:supplierParam/products/:supplierProductParam',
   async (req, res, next) => {
@@ -177,6 +181,49 @@ router.get(
     }
   }
 )
+
+/**
+ * GET /api/suppliers/:supplierParam/search?q=keyword
+ */
+router.get('/:supplierParam/search', paginate, async (req, res) => {
+  const supplierParam: string = req.query.supplierParam as string
+  const searchQuery: string = req.query.q as string
+
+  try {
+    const supplierProducts: SupplierProduct[] =
+      await prisma.supplierProduct.findMany({
+        where: {
+          supplier: {
+            handle: supplierParam,
+          },
+          OR: [
+            { slug: { contains: searchQuery, mode: 'insensitive' } },
+            { sku: { contains: searchQuery, mode: 'insensitive' } },
+            { name: { contains: searchQuery, mode: 'insensitive' } },
+            { description: { contains: searchQuery, mode: 'insensitive' } },
+          ],
+        },
+        skip: req.skip,
+        take: req.take,
+      })
+
+    res.json({
+      message: 'Get selected supplier products by search query',
+      meta: {
+        count: supplierProducts.length,
+        page: req.page?.number,
+      },
+      searchQuery,
+      supplierProducts,
+    })
+  } catch (error) {
+    res.status(500).json({
+      message: 'Get selected supplier products by search query failed',
+      searchQuery,
+      error,
+    })
+  }
+})
 
 /**
  * POST /api/suppliers
