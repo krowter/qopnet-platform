@@ -27,7 +27,7 @@ router.get('/', paginate, async (req, res) => {
     res.json({
       message: 'Get all suppliers',
       meta: {
-        record_count: supplierProducts.length,
+        record_count: suppliers.length,
         page: req.page?.number
       },
       suppliers,
