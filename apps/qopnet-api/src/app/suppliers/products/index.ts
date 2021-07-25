@@ -1,5 +1,7 @@
 import { SupplierProduct } from '@prisma/client'
 import { prisma } from '@qopnet/util-prisma'
+import { Request, Response } from 'express'
+import { paginate } from '../../root/middleware'
 
 import * as express from 'express'
 const router = express.Router()
@@ -27,16 +29,21 @@ const allSupplierProductsFields = {
  * GET /api/suppliers/products/special
  * Take latest 10 products
  */
-router.get('/special', async (req, res) => {
+router.get('/special', paginate, async (req, res) => {
   try {
     const supplierProducts: Partial<SupplierProduct>[] =
       await prisma.supplierProduct.findMany({
         ...allSupplierProductsFields,
-        take: 10,
+        take: req.take || 10,
+        skip: req.skip,
       })
 
     res.json({
       message: 'Get all supplier products',
+      meta: {
+        recordCount: supplierProducts.length,
+        pageCount: req.page?.number,
+      },
       supplierProducts,
     })
   } catch (error) {
@@ -50,16 +57,24 @@ router.get('/special', async (req, res) => {
 /**
  * GET /api/suppliers/products
  */
-router.get('/', async (req, res) => {
+router.get('/', paginate, async (req: Request, res: Response) => {
   try {
     const supplierProducts: Partial<SupplierProduct>[] =
-      await prisma.supplierProduct.findMany(allSupplierProductsFields)
-
+      await prisma.supplierProduct.findMany({
+        ...allSupplierProductsFields,
+        skip: req.skip,
+        take: req.take,
+      })
     res.json({
       message: 'Get all supplier products',
+      meta: {
+        recordCount: supplierProducts.length,
+        pageCount: req.page?.number,
+      },
       supplierProducts,
     })
   } catch (error) {
+    console.log(error)
     res.status(500).json({
       message: 'Get all supplier products failed',
       error,
@@ -70,7 +85,7 @@ router.get('/', async (req, res) => {
 /**
  * GET /api/suppliers/products/search?q=keyword
  */
-router.get('/search', async (req, res) => {
+router.get('/search', paginate, async (req, res) => {
   const searchQuery: string = req.query.q as string
 
   try {
@@ -85,11 +100,16 @@ router.get('/search', async (req, res) => {
           ],
         },
         include: { supplier: { select: { handle: true } } },
+        skip: req.skip,
+        take: req.take,
       })
 
     res.json({
       message: 'Get all supplier products by search query',
-      count: supplierProducts.length,
+      meta: {
+        count: supplierProducts.length,
+        page: req.page?.number,
+      },
       searchQuery,
       supplierProducts,
     })
