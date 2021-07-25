@@ -7,7 +7,6 @@ import * as express from 'express'
 const router = express.Router()
 
 export const allSupplierProductsFields = {
-  // orderBy: [{ sku: 'desc' }, { name: 'desc' }],
   select: {
     id: true,
     images: true,
@@ -37,6 +36,7 @@ router.get('/special', paginate, async (req, res) => {
         ...allSupplierProductsFields,
         take: req.take || 10,
         skip: req.skip,
+        orderBy: [{ sku: 'desc' }, { name: 'desc' }],
       })
 
     res.json({
@@ -63,6 +63,7 @@ router.get('/', paginate, async (req: Request, res: Response) => {
     const supplierProducts: Partial<SupplierProduct>[] =
       await prisma.supplierProduct.findMany({
         ...allSupplierProductsFields,
+        orderBy: [{ sku: 'desc' }, { name: 'desc' }],
         skip: req.skip,
         take: req.take,
       })

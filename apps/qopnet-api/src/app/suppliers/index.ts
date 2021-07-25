@@ -95,11 +95,8 @@ router.get('/:supplierParam/products', async (req, res) => {
   try {
     const supplierProducts = await prisma.supplierProduct.findMany({
       ...allSupplierProductsFields,
-      where: {
-        supplier: {
-          handle: supplierParam,
-        },
-      },
+      where: { supplier: { handle: supplierParam } },
+      orderBy: [{ sku: 'desc' }, { name: 'desc' }],
     })
 
     res.json({
@@ -159,7 +156,7 @@ router.get(
       const supplierId = supplier.id
 
       // get supplier product
-      const supplierProducts = await prisma.supplierProduct.findMany({
+      const supplierProducts = await prisma.supplierProduct.findFirst({
         where: {
           supplierId: supplierId,
           slug: supplierProductParam,
@@ -208,6 +205,7 @@ router.get('/:supplierParam/search', paginate, async (req, res) => {
         },
         skip: req.skip,
         take: req.take,
+        orderBy: [{ sku: 'desc' }, { name: 'desc' }],
       })
 
     res.json({
