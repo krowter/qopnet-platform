@@ -282,6 +282,7 @@ export const SupplierProductDetail = ({
                 layout="fixed"
                 width={420}
                 height={420}
+                loading="eager"
               />
             </ChakraLink>
           </Box>
