@@ -273,17 +273,26 @@ export const SupplierProductDetail = ({
       <Stack direction={isDesktop ? 'row' : 'column'} spacing={10} maxW="100%">
         <Stack id="product-images">
           {/* The first product image */}
-          <Box className="next-image-container">
-            <NextImage
-              src={formatImageUrl(env, firstProductImageUrl)}
-              key={product?.slug + '-first'}
-              alt={product?.name || 'First product image'}
-              loading="eager"
-              layout="responsive"
-              width={420}
-              height={420}
-            />
+          <Box display="inherit">
+            <ChakraLink
+              isExternal
+              href={formatImageUrl(env, firstProductImageUrl)}
+              display="block"
+              className="next-image-container"
+              maxW="100%"
+              w="420px"
+            >
+              <NextImage
+                src={formatImageUrl(env, firstProductImageUrl)}
+                key={product?.slug + '-first'}
+                alt={product?.name || 'First product image'}
+                layout="responsive"
+                width={420}
+                height={420}
+              />
+            </ChakraLink>
           </Box>
+
           {/* The other product image */}
           <Stack direction="row" maxW="420px" overflowX="auto">
             {productImages
