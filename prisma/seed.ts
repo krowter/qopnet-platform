@@ -13,6 +13,7 @@ async function main() {
   const supplierData = {
     name: 'Aneka Busa (PT. Aneka Busa Indonesia)',
     handle: supplierHandle,
+    ownerId: 'ckr86vmxt005010pjeh4mqs6n',
   }
 
   // create supplier -- aneka busa

@@ -464,7 +464,7 @@ export const SupplierCardForProductLink = ({
         </Heading>
         {supplier?.owner && (
           <Text>
-            Dimiliki oleh <b>{supplier?.owner?.name}</b>
+            Dikelola oleh <b>{supplier?.owner?.name}</b>
           </Text>
         )}
         {supplier?.addresses && (

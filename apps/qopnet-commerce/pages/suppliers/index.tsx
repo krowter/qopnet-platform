@@ -68,7 +68,7 @@ export const SupplierCardLink = ({
         </Heading>
         {supplier?.owner && (
           <Text>
-            Dimiliki oleh <b>{supplier?.owner?.name}</b>
+            Dikelola oleh <b>{supplier?.owner?.name}</b>
           </Text>
         )}
         {supplier?.addresses[0]?.city && (
