@@ -157,7 +157,6 @@ export const SupplierProductForm = ({ supplierParam }) => {
   ) => {
     try {
       setLoading(true)
-      delete formData['discount']
 
       const preparedFormData = {
         ...formData,

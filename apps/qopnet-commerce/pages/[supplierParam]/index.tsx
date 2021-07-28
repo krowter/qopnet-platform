@@ -104,10 +104,9 @@ export const SupplierContainer = ({ supplierParam }) => {
                 )}
             </Stack>
 
-            <Divider />
-
             {!supplier?.supplierProducts?.length && (
               <Stack>
+                <Divider />
                 <Heading as="h3" size="lg">
                   Toko supplier belum memiliki produk
                 </Heading>
