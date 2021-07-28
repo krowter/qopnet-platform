@@ -65,7 +65,7 @@ export const createOneMerchant = async (req, res) => {
       avatarUrl: formData.avatarUrl,
       phone: formData.phone,
       email: formData.email,
-      owner: profileId,
+      ownerId: profileId,
       addresses: { create: [formData.address] },
     }
 
