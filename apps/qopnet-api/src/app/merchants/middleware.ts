@@ -11,6 +11,16 @@ export const merchantFields = {
   },
 }
 
+// Delete all merchants
+export const deleteAllMerchants = async (req, res) => {
+  try {
+    const result = await prisma.merchant.deleteMany()
+    res.send({ message: 'Delete all merchants', result })
+  } catch (error) {
+    res.status(500).send({ message: 'Delete all merchants failed', error })
+  }
+}
+
 // Get all merchants
 export const getAllMerchants = async (req, res) => {
   try {
