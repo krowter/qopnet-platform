@@ -306,8 +306,10 @@ export const SupplierProductDetail = ({
                     <ChakraLink
                       isExternal
                       href={formatImageUrl(env, imageUrl)}
-                      display="block"
                       className="next-image-container"
+                      display="block"
+                      maxW="100%"
+                      w="100px"
                     >
                       <NextImage
                         src={formatImageUrl(env, imageUrl)}
@@ -331,12 +333,15 @@ export const SupplierProductDetail = ({
 
             <Stack id="product-price-unit" spacing={3}>
               {product?.subname && <Text>{product?.subname}</Text>}
-              <Flex alignItems="center">
-                <Box color="green.500">
+              <Flex
+                align={isDesktop ? 'center' : 'flex-start'}
+                direction={isDesktop ? 'row' : 'column'}
+              >
+                <Box color="green.500" mr={3}>
                   <SupplierProductPrice product={product} fontSize="3xl" />
                 </Box>
                 {product?.weightDetails && (
-                  <Text ml={3}> untuk {product?.weightDetails}</Text>
+                  <Text> {product?.weightDetails}</Text>
                 )}
               </Flex>
             </Stack>

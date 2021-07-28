@@ -38,7 +38,7 @@ export const carouselBannerImages = [
 // Hardcode for now
 export const testimonials = [
   {
-    text: 'Qopnet sangat membantu saya dalam perdagangan yang selama ini saya jalankan mengguanakan toko offline. Terima kasih Qopnet!',
+    text: 'Qopnet sangat membantu saya dalam perdagangan yang selama ini saya jalankan menggunakan toko offline. Terima kasih Qopnet!',
     author: 'Irfan',
     affiliation: 'Pedagang Pasar Induk Beras Cipinang',
   },
