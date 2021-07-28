@@ -165,11 +165,16 @@ export const SupplierProductForm = ({ supplierParam }) => {
         status: formData.status ? 'ACTIVE' : 'INACTIVE',
         minOrder: Number(formData.minOrder) || 1,
         price: Number(formData.price) || 100,
-        // discount: Number(formData.discount) || null,
+        discount: Number(formData.discount) || 0,
         weight: Number(formData.weight) || 1,
         stock: Number(formData.stock) || 1,
+        dimension: {
+          height: Number(formData?.dimension?.height) || 0,
+          length: Number(formData?.dimension?.height) || 0,
+          width: Number(formData?.dimension?.height) || 0,
+        },
       }
-      console.log({ preparedFormData })
+      console.info({ preparedFormData })
 
       /**
        * POST /api/suppliers/:supplierParam/products
