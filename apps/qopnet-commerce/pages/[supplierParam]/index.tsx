@@ -129,8 +129,8 @@ export const SupplierContainer = ({ supplierParam }) => {
               </Stack>
             )}
 
-            {/* List of all supplier's products             */}
-            {supplier?.supplierProducts && (
+            {/* List of all supplier's products */}
+            {supplier?.supplierProducts?.length && (
               <SupplierProductsContainer supplier={supplier} />
             )}
           </Stack>
