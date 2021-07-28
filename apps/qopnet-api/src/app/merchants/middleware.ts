@@ -11,16 +11,6 @@ export const merchantFields = {
   },
 }
 
-// Delete all merchants
-export const deleteAllMerchants = async (req, res) => {
-  try {
-    const result = await prisma.merchant.deleteMany()
-    res.send({ message: 'Delete all merchants', result })
-  } catch (error) {
-    res.status(500).send({ message: 'Delete all merchants failed', error })
-  }
-}
-
 // Get all merchants
 export const getAllMerchants = async (req, res) => {
   try {
@@ -29,7 +19,7 @@ export const getAllMerchants = async (req, res) => {
     })
 
     res.send({
-      message: 'Get all merchants',
+      message: 'Get all merchants success',
       merchants,
     })
   } catch (error) {
@@ -51,7 +41,7 @@ export const getOneMerchant = async (req, res) => {
     })
 
     res.send({
-      message: 'Get one merchant',
+      message: 'Get one merchant success',
       merchantParam,
       merchant,
     })
@@ -88,7 +78,7 @@ export const createOneMerchant = async (req, res) => {
     })
 
     res.json({
-      message: 'Create new merchant',
+      message: 'Create new merchant success',
       merchant: createdMerchant,
     })
   } catch (error) {
@@ -110,6 +100,56 @@ export const createOneMerchant = async (req, res) => {
     } else {
       res.status(500).json({
         message: 'Create new merchant failed because unknown error',
+        error,
+      })
+    }
+  }
+}
+
+// Delete all merchants
+export const deleteAllMerchants = async (req, res) => {
+  try {
+    const result = await prisma.merchant.deleteMany()
+    res.send({ message: 'Delete all merchants success', result })
+  } catch (error) {
+    res.status(500).send({ message: 'Delete all merchants failed', error })
+  }
+}
+
+// Delete one merchant
+export const deleteOneMerchant = async (req, res) => {
+  const { merchantParam } = req.params
+  const ownerId = req.profile.id
+
+  try {
+    const foundMerchant: Partial<Merchant> = await prisma.merchant.findFirst({
+      where: { handle: merchantParam, ownerId },
+    })
+    if (!foundMerchant) throw 'Delete one merchant not found or not allowed'
+    const deletedMerchant: Partial<Merchant> = await prisma.merchant.delete({
+      where: { handle: merchantParam },
+    })
+
+    res.send({
+      message: 'Delete one merchant success',
+      merchantParam,
+      ownerId,
+      foundMerchant,
+      deletedMerchant,
+    })
+  } catch (error) {
+    if (error.code === 'P2025') {
+      res.status(404).send({
+        message: 'Delete one merchant failed because it does not exist',
+        merchantParam,
+        ownerId,
+        error,
+      })
+    } else {
+      res.status(500).send({
+        message: 'Delete one merchant failed',
+        merchantParam,
+        ownerId,
         error,
       })
     }
