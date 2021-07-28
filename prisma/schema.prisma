@@ -54,6 +54,7 @@ model Profile {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
+  MerchantProduct MerchantProduct[]
   @@map(name: "profiles")
 }
 
@@ -152,6 +153,7 @@ model Supplier {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
+
   @@map(name: "suppliers")
 }
 
@@ -201,10 +203,10 @@ model SupplierProduct {
   stock  Int?
 
   // Relations
+  ownerId    String?
+  owner      Profile?  @relation(fields: [ownerId], references: [id])
   supplierId String?
   supplier   Supplier? @relation(fields: [supplierId], references: [id])
-  ownerId    String
-  owner      Profile   @relation(fields: [ownerId], references: [id])
 
   // Timestamp
   createdAt DateTime @default(now())
@@ -217,21 +219,60 @@ model SupplierProduct {
 // Merchant
 
 model Merchant {
-  id        String  @id @default(cuid())
+  id String @id @default(cuid())
+
+  // Info
   handle    String  @unique
   name      String
   avatarUrl String?
 
   // Relations
-  ownerId   String?
-  owner     Profile?  @relation(fields: [ownerId], references: [id])
-  addresses Address[]
+  ownerId          String?
+  owner            Profile?          @relation(fields: [ownerId], references: [id])
+  addresses        Address[]
+  merchantProducts MerchantProduct[]
 
   // Timestamp
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
   @@map(name: "merchants")
+}
+
+enum MerchantProductStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model MerchantProduct {
+  id String @id @default(cuid())
+
+  // Info
+  images      Json? // string[]
+  slug        String? @unique
+  name        String?
+  category    String?
+  sku         String?
+  description String?
+
+  // Price
+  price    Decimal? @db.Money
+  discount Int?
+
+  // Manage
+  status MerchantProductStatus? @default(ACTIVE)
+
+  // Relations
+  ownerId    String?
+  owner      Profile?  @relation(fields: [ownerId], references: [id])
+  merchantId String?
+  merchant   Merchant? @relation(fields: [merchantId], references: [id])
+
+  // Timestamp
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@map(name: "merchant_products")
 }
 
 // -----------------------------------------------------------------------------
