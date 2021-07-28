@@ -63,7 +63,7 @@ export const Header = (props: HeaderProps) => {
       color={useColorModeValue('orange.900', 'orange.100')}
       bg={useColorModeValue('orange.100', 'orange.900')}
       justify="space-between"
-      spacing={5}
+      spacing={3}
     >
       <HStack spacing={3}>
         <NextLink href="/" passHref>
@@ -115,12 +115,7 @@ export const Header = (props: HeaderProps) => {
                 </Avatar>
               </chakra.a>
             </NextLink>
-            <ButtonGroup
-              id="user-action-buttons"
-              spacing={3}
-              size="md"
-              variant="ghost"
-            >
+            <ButtonGroup id="user-action-buttons" size="md" variant="ghost">
               <IconButton
                 id="shopping-cart-button"
                 colorScheme="green"
