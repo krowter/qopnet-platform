@@ -8,23 +8,25 @@ import { SupplierProduct, Supplier, Profile, Address } from '@prisma/client'
 import { Decimal } from '@prisma/client/runtime'
 import {
   Box,
+  Button,
   ButtonGroup,
   Divider,
   Flex,
   Heading,
+  HStack,
   IconButton,
-  Button,
-  ListItem,
+  Image as ChakraImage,
   Input,
+  Link as ChakraLink,
+  ListItem,
   SimpleGrid,
   Stack,
   Text,
-  Image as ChakraImage,
-  Link as ChakraLink,
   UnorderedList,
   useMediaQuery,
   useNumberInput,
   VStack,
+  Tag,
   useColorModeValue,
   useToast,
 } from '@chakra-ui/react'
@@ -200,13 +202,35 @@ export const SupplierProductPrice = ({
   product,
   fontSize = 'lg',
 }: SupplierProductPriceProps) => {
+  // Calculate if there is a discount
+  const discountValue =
+    (Number(product?.price) * Number(product?.discount)) / 100
+  const discountedPrice = Number(product?.price) - discountValue
+
   /**
+   * 1. Discounted price
    * 1. Price
    * 2. Min - Max
    * 3. Min
    * 4. Max
    */
-  if (product?.price) {
+  if (product?.discount && product?.price && discountedPrice) {
+    return (
+      <Box>
+        <HStack>
+          <Text fontSize="md" color="red.500" textDecoration="line-through">
+            {formatPrice(product?.price)}
+          </Text>
+          <Tag colorScheme="red" size="sm">
+            {product?.discount}%
+          </Tag>
+        </HStack>
+        <Text fontWeight="bold" fontSize={fontSize}>
+          {formatPrice(discountedPrice)}
+        </Text>
+      </Box>
+    )
+  } else if (product?.price) {
     return (
       <Text fontWeight="bold" fontSize={fontSize}>
         {formatPrice(product?.price)}
