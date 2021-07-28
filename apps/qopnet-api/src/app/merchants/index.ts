@@ -11,9 +11,9 @@ import {
 const router = express.Router()
 
 // GET /api/merchants
-router.get('/', checkUser, paginate, getAllMerchants)
+router.get('/', paginate, getAllMerchants)
 // GET /api/merchants/:merchantParam
-router.get('/:merchantParam', checkUser, getOneMerchant)
+router.get('/:merchantParam', getOneMerchant)
 // POST /api/merchants
 router.post('/', checkUser, createOneMerchant)
 
