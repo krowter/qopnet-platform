@@ -104,10 +104,9 @@ export const SupplierContainer = ({ supplierParam }) => {
                 )}
             </Stack>
 
-            <Divider />
-
             {!supplier?.supplierProducts?.length && (
               <Stack>
+                <Divider />
                 <Heading as="h3" size="lg">
                   Toko supplier belum memiliki produk
                 </Heading>
@@ -129,8 +128,8 @@ export const SupplierContainer = ({ supplierParam }) => {
               </Stack>
             )}
 
-            {/* List of all supplier's products             */}
-            {supplier?.supplierProducts && (
+            {/* List of all supplier's products */}
+            {supplier?.supplierProducts?.length && (
               <SupplierProductsContainer supplier={supplier} />
             )}
           </Stack>
