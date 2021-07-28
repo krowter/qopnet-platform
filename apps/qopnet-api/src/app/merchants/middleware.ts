@@ -61,7 +61,8 @@ export const createOneMerchant = async (req, res) => {
   try {
     const payloadData = {
       name: formData.name,
-      handle: formData.handle || slugify(formData.name),
+      handle:
+        formData.handle.toLowerCase() || slugify(formData.name.toLowerCase()),
       avatarUrl: formData.avatarUrl,
       phone: formData.phone,
       email: formData.email,
