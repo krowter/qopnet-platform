@@ -195,12 +195,12 @@ model SupplierProduct {
 
   // Weight and Size
   weight        Int?
-  weightUnit    SupplierProductWeightUnit? @default(KG)
+  weightUnit    SupplierProductWeightUnit?
   weightDetails String?
   dimension     Json?
 
   // Manage
-  status SupplierProductStatus? @default(ACTIVE)
+  status SupplierProductStatus?
   stock  Int?
 
   // Relations
@@ -263,7 +263,7 @@ model MerchantProduct {
   discount Int?
 
   // Manage
-  status MerchantProductStatus? @default(ACTIVE)
+  status MerchantProductStatus?
 
   // Relations
   ownerId    String?
@@ -318,7 +318,7 @@ model FundBeneficiary {
   birthPlace String?
   birthDate  DateTime?
   income     Decimal?               @db.Money
-  status     FundBeneficiaryStatus? @default(PENDING)
+  status     FundBeneficiaryStatus?
 
   // Relations
   financingServiceId String?
