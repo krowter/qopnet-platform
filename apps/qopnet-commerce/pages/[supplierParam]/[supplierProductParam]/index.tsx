@@ -9,7 +9,7 @@ const SupplierParamSlashSupplierProductParamPage = () => {
   const { supplierParam, supplierProductParam } = router.query
 
   return (
-    <Layout pt={5}>
+    <Layout pt={5} meta={{ title: 'Produk supplier' }}>
       {supplierParam && supplierProductParam && (
         <SupplierProductContainer supplierProductParam={supplierProductParam} />
       )}

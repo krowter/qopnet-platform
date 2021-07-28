@@ -107,16 +107,24 @@ export const DashboardContent = ({ profile }) => {
                 <DashboardActionLink name="profile" href="/create-profile">
                   Ubah profil saya
                 </DashboardActionLink>
+                <DashboardActionLink name="order" href="/orders">
+                  Cek order saya
+                </DashboardActionLink>
+              </Stack>
+              <Stack>
+                <Heading as="h4" size="sm">
+                  Fitur supplier
+                </Heading>
                 <DashboardActionLink name="supplier" href="/create-supplier">
                   Buat toko supplier
                 </DashboardActionLink>
               </Stack>
               <Stack>
                 <Heading as="h4" size="sm">
-                  Layanan pinjaman
+                  Fitur merchant
                 </Heading>
-                <DashboardActionLink name="finance" href="/financing/request">
-                  Ajukan pinjaman
+                <DashboardActionLink name="merchant" href="/create-merchant">
+                  Buat toko merchant
                 </DashboardActionLink>
               </Stack>
             </>
@@ -125,9 +133,12 @@ export const DashboardContent = ({ profile }) => {
 
         {/* Only show owned suppliers list when exist */}
         <Stack id="dashboard-suppliers" spacing={5} maxW="500px">
-          <Heading as="h3" size="md">
-            List toko supplier milik saya
-          </Heading>
+          <HStack>
+            <Icon name="supplier" />
+            <Heading as="h3" size="md">
+              List toko supplier milik saya
+            </Heading>
+          </HStack>
 
           <Stack align="flex-start" spacing={5}>
             {!profile && (
@@ -222,7 +233,7 @@ export const DashboardSupplierCardLink = ({
       bg={useColorModeValue('gray.50', 'gray.900')}
     >
       <Stack mb={5}>
-        <Heading size="lg">{supplier.name}</Heading>
+        <Heading size="md">{supplier.name}</Heading>
         <Text>/{supplier.handle}</Text>
       </Stack>
       <NextLink href={supplier.handle} passHref>

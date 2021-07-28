@@ -58,12 +58,12 @@ export const SupplierProductAddPage = () => {
         `/api/suppliers/${handle}/products`,
         finalFormData
       )
-      if (!submitData) throw new Error('Create supplier response error')
+      if (!submitData) throw new Error('Create supplier product response error')
 
       // router.push(`/${data.supplier.handle}`)
       history.push('/suppliers/products')
     } catch (error) {
-      alert('Gagal membuat supplier')
+      alert('Gagal membuat produk supplier')
     }
   }
   const {

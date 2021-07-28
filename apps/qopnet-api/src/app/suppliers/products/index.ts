@@ -14,6 +14,8 @@ export const allSupplierProductsFields = {
     name: true,
     subname: true,
     sku: true,
+    discount: true,
+    discountMaxReduction: true,
     price: true,
     priceMax: true,
     priceMin: true,

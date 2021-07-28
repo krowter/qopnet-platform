@@ -3,27 +3,30 @@
 
 import NextLink from 'next/link'
 import NextImage from 'next/image'
+import { NextSeo } from 'next-seo'
 import { SupplierProduct, Supplier, Profile, Address } from '@prisma/client'
 import { Decimal } from '@prisma/client/runtime'
 import {
   Box,
+  Button,
   ButtonGroup,
   Divider,
   Flex,
   Heading,
+  HStack,
   IconButton,
-  Button,
-  ListItem,
+  Image as ChakraImage,
   Input,
+  Link as ChakraLink,
+  ListItem,
   SimpleGrid,
   Stack,
   Text,
-  Image as ChakraImage,
-  Link as ChakraLink,
   UnorderedList,
   useMediaQuery,
   useNumberInput,
   VStack,
+  Tag,
   useColorModeValue,
   useToast,
 } from '@chakra-ui/react'
@@ -199,13 +202,35 @@ export const SupplierProductPrice = ({
   product,
   fontSize = 'lg',
 }: SupplierProductPriceProps) => {
+  // Calculate if there is a discount
+  const discountValue =
+    (Number(product?.price) * Number(product?.discount)) / 100
+  const discountedPrice = Number(product?.price) - discountValue
+
   /**
+   * 1. Discounted price
    * 1. Price
    * 2. Min - Max
    * 3. Min
    * 4. Max
    */
-  if (product?.price) {
+  if (product?.discount && product?.price && discountedPrice) {
+    return (
+      <Box>
+        <HStack>
+          <Text fontSize="md" color="red.500" textDecoration="line-through">
+            {formatPrice(product?.price)}
+          </Text>
+          <Tag colorScheme="red" size="sm">
+            {product?.discount}%
+          </Tag>
+        </HStack>
+        <Text fontWeight="bold" fontSize={fontSize}>
+          {formatPrice(discountedPrice)}
+        </Text>
+      </Box>
+    )
+  } else if (product?.price) {
     return (
       <Text fontWeight="bold" fontSize={fontSize}>
         {formatPrice(product?.price)}
@@ -270,20 +295,31 @@ export const SupplierProductDetail = ({
 
   return (
     <Stack spacing={20} align={!isDesktop ? 'center' : ''}>
+      <NextSeo title={`${product.name} - ${product.supplier.name} - Qopnet`} />
+
       <Stack direction={isDesktop ? 'row' : 'column'} spacing={10} maxW="100%">
         <Stack id="product-images">
           {/* The first product image */}
-          <Box className="next-image-container">
-            <NextImage
-              src={formatImageUrl(env, firstProductImageUrl)}
-              key={product?.slug + '-first'}
-              alt={product?.name || 'First product image'}
-              loading="eager"
-              layout="responsive"
-              width={420}
-              height={420}
-            />
+          <Box display="inherit">
+            <ChakraLink
+              isExternal
+              href={formatImageUrl(env, firstProductImageUrl)}
+              display="block"
+              className="next-image-container"
+              maxW="100%"
+              w="420px"
+            >
+              <NextImage
+                src={formatImageUrl(env, firstProductImageUrl)}
+                key={product?.slug + '-first'}
+                alt={product?.name || 'First product image'}
+                layout="responsive"
+                width={420}
+                height={420}
+              />
+            </ChakraLink>
           </Box>
+
           {/* The other product image */}
           <Stack direction="row" maxW="420px" overflowX="auto">
             {productImages
@@ -297,8 +333,10 @@ export const SupplierProductDetail = ({
                     <ChakraLink
                       isExternal
                       href={formatImageUrl(env, imageUrl)}
-                      display="block"
                       className="next-image-container"
+                      display="block"
+                      maxW="100%"
+                      w="100px"
                     >
                       <NextImage
                         src={formatImageUrl(env, imageUrl)}
@@ -322,12 +360,15 @@ export const SupplierProductDetail = ({
 
             <Stack id="product-price-unit" spacing={3}>
               {product?.subname && <Text>{product?.subname}</Text>}
-              <Flex alignItems="center">
-                <Box color="green.500">
+              <Flex
+                align={isDesktop ? 'center' : 'flex-start'}
+                direction={isDesktop ? 'row' : 'column'}
+              >
+                <Box color="green.500" mr={3}>
                   <SupplierProductPrice product={product} fontSize="3xl" />
                 </Box>
                 {product?.weightDetails && (
-                  <Text ml={3}> untuk {product?.weightDetails}</Text>
+                  <Text> {product?.weightDetails}</Text>
                 )}
               </Flex>
             </Stack>

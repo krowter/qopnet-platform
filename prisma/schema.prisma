@@ -7,7 +7,7 @@
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("PRISMA_DATABASE_URL")
 }
 
 generator client {
@@ -54,6 +54,7 @@ model Profile {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
+  MerchantProduct MerchantProduct[]
   @@map(name: "profiles")
 }
 
@@ -136,6 +137,7 @@ model Supplier {
   handle String? @unique
   name   String?
   phone  String?
+  email  String?
 
   avatarUrl         String?
   nationalTax       String?
@@ -151,6 +153,7 @@ model Supplier {
   // Timestamp
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
+
 
   @@map(name: "suppliers")
 }
@@ -192,19 +195,19 @@ model SupplierProduct {
 
   // Weight and Size
   weight        Int?
-  weightUnit    SupplierProductWeightUnit? @default(KG)
+  weightUnit    SupplierProductWeightUnit?
   weightDetails String?
   dimension     Json?
 
   // Manage
-  status SupplierProductStatus? @default(ACTIVE)
+  status SupplierProductStatus?
   stock  Int?
 
   // Relations
+  ownerId    String?
+  owner      Profile?  @relation(fields: [ownerId], references: [id])
   supplierId String?
   supplier   Supplier? @relation(fields: [supplierId], references: [id])
-  ownerId    String
-  owner      Profile   @relation(fields: [ownerId], references: [id])
 
   // Timestamp
   createdAt DateTime @default(now())
@@ -217,21 +220,62 @@ model SupplierProduct {
 // Merchant
 
 model Merchant {
-  id        String  @id @default(cuid())
+  id String @id @default(cuid())
+
+  // Info
   handle    String  @unique
   name      String
+  phone     String?
+  email     String?
   avatarUrl String?
 
   // Relations
-  ownerId   String?
-  owner     Profile?  @relation(fields: [ownerId], references: [id])
-  addresses Address[]
+  ownerId          String?
+  owner            Profile?          @relation(fields: [ownerId], references: [id])
+  addresses        Address[]
+  merchantProducts MerchantProduct[]
 
   // Timestamp
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
   @@map(name: "merchants")
+}
+
+enum MerchantProductStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model MerchantProduct {
+  id String @id @default(cuid())
+
+  // Info
+  images      Json? // string[]
+  slug        String? @unique
+  name        String?
+  category    String?
+  sku         String?
+  description String?
+
+  // Price
+  price    Decimal? @db.Money
+  discount Int?
+
+  // Manage
+  status MerchantProductStatus?
+
+  // Relations
+  ownerId    String?
+  owner      Profile?  @relation(fields: [ownerId], references: [id])
+  merchantId String?
+  merchant   Merchant? @relation(fields: [merchantId], references: [id])
+
+  // Timestamp
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@map(name: "merchant_products")
 }
 
 // -----------------------------------------------------------------------------
@@ -274,7 +318,7 @@ model FundBeneficiary {
   birthPlace String?
   birthDate  DateTime?
   income     Decimal?               @db.Money
-  status     FundBeneficiaryStatus? @default(PENDING)
+  status     FundBeneficiaryStatus?
 
   // Relations
   financingServiceId String?

@@ -1,39 +1,42 @@
 import {
+  FaBaby as Baby,
   FaBold as SubName,
   FaBoxes as All,
-  FaBuilding as Supplier,
+  FaIndustry as Supplier,
   FaCarrot as SupplierProduct,
   FaCarrot as Vegetable,
   FaCertificate as New,
   FaCircle as Circle,
   FaCubes as Category,
   FaDoorOpen as Saving,
+  FaEgg as Dairy,
   FaEye as Show,
   FaEyeSlash as Hide,
   FaFont as Name,
   FaHome as Home,
   FaIdBadge as Handle,
   FaIdBadge as Profile,
+  FaLeaf as Organic,
   FaLemon as Fruit,
   FaMinus as Minus,
+  FaMoneyBill as Price,
   FaMoneyBillAlt as Cheap,
+  FaMoneyBillWave as Finance,
   FaMoon as Moon, // Light Icon
   FaPercentage as Promo,
   FaPhone as Phone,
   FaPlus as Plus,
+  FaReceipt as Order,
+  FaReceipt as Receipt,
   FaSearch as Search,
   FaShoppingCart as Cart,
   FaSignOutAlt as SignOut,
+  FaSort as Sort,
   FaSortNumericDown as SKU,
+  FaStore as Merchant,
   FaSun as Sun, // Dark Icon
   FaUser as Users,
   FaWalking as Shop,
-  FaLeaf as Organic,
-  FaEgg as Dairy,
-  FaBaby as Baby,
-  FaMoneyBill as Price,
-  FaSort as Order,
-  FaMoneyBillWave as Finance,
 } from 'react-icons/fa'
 import { FiMenu as Menu } from 'react-icons/fi'
 import { MdFreeBreakfast as Breakfast } from 'react-icons/md'
@@ -137,10 +140,16 @@ export const Icon = (props: IconProps) => {
       return <Spice />
     case 'price':
       return <Price />
-    case 'order':
-      return <Order />
     case 'finance':
       return <Finance />
+    case 'merchant':
+      return <Merchant />
+    case 'order':
+      return <Order />
+    case 'receipt':
+      return <Receipt />
+    case 'sort':
+      return <Sort />
 
     /**
      * When nothing found

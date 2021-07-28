@@ -157,7 +157,6 @@ export const SupplierProductForm = ({ supplierParam }) => {
   ) => {
     try {
       setLoading(true)
-      delete formData['discount']
 
       const preparedFormData = {
         ...formData,
@@ -166,11 +165,16 @@ export const SupplierProductForm = ({ supplierParam }) => {
         status: formData.status ? 'ACTIVE' : 'INACTIVE',
         minOrder: Number(formData.minOrder) || 1,
         price: Number(formData.price) || 100,
-        // discount: Number(formData.discount) || null,
+        discount: Number(formData.discount) || 0,
         weight: Number(formData.weight) || 1,
         stock: Number(formData.stock) || 1,
+        dimension: {
+          height: Number(formData?.dimension?.height) || 0,
+          length: Number(formData?.dimension?.height) || 0,
+          width: Number(formData?.dimension?.height) || 0,
+        },
       }
-      console.log({ preparedFormData })
+      console.info({ preparedFormData })
 
       /**
        * POST /api/suppliers/:supplierParam/products
@@ -549,7 +553,7 @@ export const SupplierProductForm = ({ supplierParam }) => {
               <Stack direction={['column', 'row', 'row']}>
                 <InputGroup>
                   <InputLeftAddon children="P" />
-                  <NumberInput defaultValue={0} min={0} max={9999}>
+                  <NumberInput min={0} max={9999}>
                     <NumberInputField
                       id="dimension-length"
                       placeholder="Panjang"
@@ -563,7 +567,7 @@ export const SupplierProductForm = ({ supplierParam }) => {
                 </InputGroup>
                 <InputGroup>
                   <InputLeftAddon children="L" />
-                  <NumberInput defaultValue={0} min={0} max={9999}>
+                  <NumberInput min={0} max={9999}>
                     <NumberInputField
                       id="dimension-width"
                       placeholder="Lebar"
@@ -577,7 +581,7 @@ export const SupplierProductForm = ({ supplierParam }) => {
                 </InputGroup>
                 <InputGroup>
                   <InputLeftAddon children="T" />
-                  <NumberInput defaultValue={0} min={0} max={9999}>
+                  <NumberInput min={0} max={9999}>
                     <NumberInputField
                       id="dimension-height"
                       placeholder="Tinggi"
