@@ -549,7 +549,7 @@ export const SupplierProductForm = ({ supplierParam }) => {
               <Stack direction={['column', 'row', 'row']}>
                 <InputGroup>
                   <InputLeftAddon children="P" />
-                  <NumberInput defaultValue={0} min={0} max={9999}>
+                  <NumberInput min={0} max={9999}>
                     <NumberInputField
                       id="dimension-length"
                       placeholder="Panjang"
@@ -563,7 +563,7 @@ export const SupplierProductForm = ({ supplierParam }) => {
                 </InputGroup>
                 <InputGroup>
                   <InputLeftAddon children="L" />
-                  <NumberInput defaultValue={0} min={0} max={9999}>
+                  <NumberInput min={0} max={9999}>
                     <NumberInputField
                       id="dimension-width"
                       placeholder="Lebar"
@@ -577,7 +577,7 @@ export const SupplierProductForm = ({ supplierParam }) => {
                 </InputGroup>
                 <InputGroup>
                   <InputLeftAddon children="T" />
-                  <NumberInput defaultValue={0} min={0} max={9999}>
+                  <NumberInput min={0} max={9999}>
                     <NumberInputField
                       id="dimension-height"
                       placeholder="Tinggi"

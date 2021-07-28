@@ -3,6 +3,7 @@
 
 import NextLink from 'next/link'
 import NextImage from 'next/image'
+import { NextSeo } from 'next-seo'
 import { SupplierProduct, Supplier, Profile, Address } from '@prisma/client'
 import { Decimal } from '@prisma/client/runtime'
 import {
@@ -270,6 +271,8 @@ export const SupplierProductDetail = ({
 
   return (
     <Stack spacing={20} align={!isDesktop ? 'center' : ''}>
+      <NextSeo title={`${product.name} - ${product.supplier.name} - Qopnet`} />
+
       <Stack direction={isDesktop ? 'row' : 'column'} spacing={10} maxW="100%">
         <Stack id="product-images">
           {/* The first product image */}
