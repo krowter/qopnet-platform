@@ -116,13 +116,16 @@ export const Header = (props: HeaderProps) => {
               </chakra.a>
             </NextLink>
             <ButtonGroup id="user-action-buttons" size="md" variant="ghost">
-              <IconButton
-                id="shopping-cart-button"
-                colorScheme="green"
-                aria-label="Keranjang belanja"
-              >
-                <Icon name="cart" />
-              </IconButton>
+              <NextLink href="/cart" passHref>
+                <IconButton
+                  id="shopping-cart-button"
+                  as="a"
+                  colorScheme="green"
+                  aria-label="Keranjang belanja"
+                >
+                  <Icon name="cart" />
+                </IconButton>
+              </NextLink>
               <IconButton
                 id="signout-button"
                 colorScheme="red"
