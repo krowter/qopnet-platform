@@ -1,3 +1,4 @@
+import { prisma } from '@qopnet/util-prisma'
 import * as jwt from 'jsonwebtoken'
 
 export const checkUser = async (req, res, next) => {
@@ -17,10 +18,18 @@ export const checkUser = async (req, res, next) => {
           message: 'Check user is failed because there is no user in JWT',
         })
       } else {
+        // Get user id, but not checked yet
         req.user = userInJWT // { sub: "a1b2c3-d4e5f6" }
 
-        // TODO: Can check valid user later here via Prisma.user.findUnique
+        // Check if user actually exist by userId from token.sub
+        const user = await prisma.user.findFirst({
+          where: { id: req.user.sub },
+          include: { profile: true },
+        })
+        if (!user) throw new Error('Failed to findUnique user')
 
+        // Assign profile once get the user
+        req.profile = user.profile
         next()
       }
     } else {
@@ -31,7 +40,7 @@ export const checkUser = async (req, res, next) => {
   } catch (error) {
     res.status(500).json({
       message:
-        'Check user is failed because request is not authorized and cannot decode JWT',
+        'Check user is failed because request is not authorized, cannot decode JWT, or user not found',
       error,
     })
   }

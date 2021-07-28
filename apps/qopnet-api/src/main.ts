@@ -11,6 +11,7 @@ import users from './app/users'
 import profiles from './app/profiles'
 import suppliers from './app/suppliers'
 import supplierProducts from './app/suppliers/products'
+import merchants from './app/merchants'
 
 const app = express()
 
@@ -48,6 +49,7 @@ app.use('/api/users', users)
 app.use('/api/profiles', profiles)
 app.use('/api/suppliers/products', supplierProducts)
 app.use('/api/suppliers', suppliers)
+app.use('/api/merchants', merchants)
 
 // The error handler must be before any other error middleware
 // and after all controllers
