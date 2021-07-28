@@ -12,13 +12,14 @@ export const getAllMerchants = (req, res) => {
 export const getOneMerchant = (req, res) => {
   res.send({
     message: 'Get one merchant',
+    merchantParam: req.params.merchantParam,
     merchant: {},
   })
 }
 
-export const addOneMerchant = (req, res) => {
+export const createOneMerchant = (req, res) => {
   res.send({
-    message: 'Add one merchant',
+    message: 'Create one merchant',
     merchant: {},
   })
 }

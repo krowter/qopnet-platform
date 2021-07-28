@@ -2,15 +2,19 @@ import * as express from 'express'
 
 import { checkUser } from '../auth/middleware'
 import { paginate } from '../root/middleware'
-import { getAllMerchants, getOneMerchant, addOneMerchant } from './middleware'
+import {
+  getAllMerchants,
+  getOneMerchant,
+  createOneMerchant,
+} from './middleware'
 
 const router = express.Router()
 
 // GET /api/merchants
-router.get('/merchants', checkUser, paginate, getAllMerchants)
+router.get('/', checkUser, paginate, getAllMerchants)
 // GET /api/merchants/:merchantParam
-router.get('/merchants/:merchantParam', checkUser, getOneMerchant)
+router.get('/:merchantParam', checkUser, getOneMerchant)
 // POST /api/merchants
-router.post('/merchants', checkUser, addOneMerchant)
+router.post('/', checkUser, createOneMerchant)
 
 export default router
