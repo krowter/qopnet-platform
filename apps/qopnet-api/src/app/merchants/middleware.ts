@@ -46,6 +46,7 @@ export const getOneMerchant = async (req, res) => {
 
   try {
     const merchant: Partial<Merchant> = await prisma.merchant.findFirst({
+      where: { handle: merchantParam },
       ...merchantFields,
     })
 
@@ -70,14 +71,15 @@ export const createOneMerchant = async (req, res) => {
 
   try {
     const payloadData = {
-      name: formData.name,
+      name: formData?.name,
       handle:
-        formData.handle.toLowerCase() || slugify(formData.name.toLowerCase()),
-      avatarUrl: formData.avatarUrl,
-      phone: formData.phone,
-      email: formData.email,
+        formData?.handle?.toLowerCase() ||
+        slugify(formData?.name, { replacement: '', lower: true, strict: true }),
+      avatarUrl: formData?.avatarUrl,
+      phone: formData?.phone,
+      email: formData?.email,
       ownerId: profileId,
-      addresses: { create: [formData.address] },
+      addresses: { create: [formData?.address] },
     }
 
     const createdMerchant: Partial<Merchant> = await prisma.merchant.create({
@@ -94,8 +96,8 @@ export const createOneMerchant = async (req, res) => {
       res.status(400).json({
         message:
           'Create new merchant failed because name/handle need to be unique',
-        name: formData.name,
-        handle: formData.handle,
+        name: formData?.name,
+        handle: formData?.handle,
         error,
       })
     } else if (error.code === 'P2011') {
@@ -107,7 +109,7 @@ export const createOneMerchant = async (req, res) => {
       })
     } else {
       res.status(500).json({
-        message: 'Create new merchant failed because unknown reason',
+        message: 'Create new merchant failed because unknown error',
         error,
       })
     }
