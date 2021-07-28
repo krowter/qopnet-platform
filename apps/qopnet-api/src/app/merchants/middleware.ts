@@ -1,7 +1,8 @@
 import { prisma } from '@qopnet/util-prisma'
-import { Merchant } from '@prisma/client'
+import { Prisma, Merchant, MerchantProduct, Address } from '@prisma/client'
 import slugify from 'slugify'
 
+// Specify merchant fields for Prisma
 export const merchantFields = {
   include: {
     owner: true,
@@ -10,9 +11,12 @@ export const merchantFields = {
   },
 }
 
+// Get all merchants
 export const getAllMerchants = async (req, res) => {
   try {
-    const merchants = await prisma.merchant.findMany({ ...merchantFields })
+    const merchants: Partial<Merchant>[] = await prisma.merchant.findMany({
+      ...merchantFields,
+    })
 
     res.send({
       message: 'Get all merchants',
@@ -26,12 +30,14 @@ export const getAllMerchants = async (req, res) => {
   }
 }
 
+// Get one merchant
 export const getOneMerchant = async (req, res) => {
   const { merchantParam } = req.params
 
   try {
-    const merchant = await prisma.merchant.findFirst({ ...merchantFields })
-    console.log({ merchant })
+    const merchant: Partial<Merchant> = await prisma.merchant.findFirst({
+      ...merchantFields,
+    })
 
     res.send({
       message: 'Get one merchant',
@@ -47,9 +53,52 @@ export const getOneMerchant = async (req, res) => {
   }
 }
 
+// Create one merchant
 export const createOneMerchant = async (req, res) => {
-  res.send({
-    message: 'Create one merchant',
-    merchant: {},
-  })
+  const profileId = req.profile.id
+  const formData = req.body
+
+  try {
+    const payloadData = {
+      name: formData.name,
+      handle: formData.handle || slugify(formData.name),
+      avatarUrl: formData.avatarUrl,
+      phone: formData.phone,
+      email: formData.email,
+      owner: profileId,
+      addresses: { create: [formData.address] },
+    }
+
+    const createdMerchant: Partial<Merchant> = await prisma.merchant.create({
+      data: payloadData,
+      include: { owner: true, addresses: true, merchantProducts: true },
+    })
+
+    res.json({
+      message: 'Create new merchant',
+      merchant: createdMerchant,
+    })
+  } catch (error) {
+    if (error.code === 'P2002') {
+      res.status(400).json({
+        message:
+          'Create new merchant failed because name/handle need to be unique',
+        name: formData.name,
+        handle: formData.handle,
+        error,
+      })
+    } else if (error.code === 'P2011') {
+      res.status(400).json({
+        message:
+          'Create new merchant failed because some fields cannot be empty',
+        field: error.meta.constraint,
+        error,
+      })
+    } else {
+      res.status(500).json({
+        message: 'Create new merchant failed because unknown reason',
+        error,
+      })
+    }
+  }
 }

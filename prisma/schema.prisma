@@ -137,6 +137,7 @@ model Supplier {
   handle String? @unique
   name   String?
   phone  String?
+  email  String?
 
   avatarUrl         String?
   nationalTax       String?
@@ -224,6 +225,8 @@ model Merchant {
   // Info
   handle    String  @unique
   name      String
+  phone     String?
+  email     String?
   avatarUrl String?
 
   // Relations
