@@ -26,7 +26,7 @@
           "addresses": [{ "city": "Tangerang", "state": "Banten" }]
         }
       },
-      "quantity": 1
+      "quantity": 100
     },
     {
       "id": 2,
@@ -37,14 +37,14 @@
         ],
         "name": "Tepung Beras",
         "price": 21000,
-        "discount": null,
+        "discount": 3,
         "supplier": {
           "name": "Raja Bubuk",
           "handle": "rajabubuk",
           "addresses": [{ "city": "Tangerang", "state": "Banten" }]
         }
       },
-      "quantity": 1
+      "quantity": 200
     }
   ],
 
