@@ -4,7 +4,7 @@ const router = express.Router()
 
 router.get('/', (req, res) => {
   res.send({
-    message: 'This is the root of qopnet-api',
+    message: 'This is the root of Qopnet API',
     environment: `${process.env.NX_NODE_ENV || process.env.NODE_ENV}`,
     version: `${packageData.version}`,
     supabase: {

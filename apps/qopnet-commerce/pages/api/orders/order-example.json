@@ -1,0 +1,61 @@
+{
+  "id": 1,
+  "status": "DRAFT",
+
+  "ownerId": 1,
+  "supplierId": null,
+  "merchantId": null,
+  "shipmentAddressId": null,
+  "paymentId": null,
+
+  "businessOrderItems": [
+    {
+      "id": 1,
+      "supplierProduct": {
+        "id": 1,
+        "images": [
+          "https://ik.imagekit.io/qopnetlabs/images/gula-gulaku-premium.jpg?updatedAt=1627651178391"
+        ],
+        "name": "Gulaku",
+        "slug": "gulaku",
+        "price": 15000,
+        "discount": 5,
+        "supplier": {
+          "name": "Raja Bubuk",
+          "handle": "rajabubuk",
+          "addresses": [{ "city": "Tangerang", "state": "Banten" }]
+        }
+      },
+      "quantity": 1
+    },
+    {
+      "id": 2,
+      "supplierProduct": {
+        "id": 1,
+        "images": [
+          "https://ik.imagekit.io/qopnetlabs/images/tepungberas-rosebrand.webp?updatedAt=1627651177951"
+        ],
+        "name": "Tepung Beras",
+        "price": 21000,
+        "discount": null,
+        "supplier": {
+          "name": "Raja Bubuk",
+          "handle": "rajabubuk",
+          "addresses": [{ "city": "Tangerang", "state": "Banten" }]
+        }
+      },
+      "quantity": 1
+    }
+  ],
+
+  "totalItems": 2,
+  "totalPrice": 4200000,
+  "totalWeight": 200,
+  "totalWeightUnit": "KG",
+  "totalShippingCost": 150000,
+  "shippingDiscount": 75000,
+  "totalPayment": 42750000,
+
+  "createdAt": "2021-08-01",
+  "updatedAt": "2021-08-01"
+}
