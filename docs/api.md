@@ -49,3 +49,15 @@ https://api.qopnet.id
 ## /api/suppliers/products
 
 ## /api/financing
+
+## /api/business-orders
+
+| Method | Endpoint                            |
+| ------ | ----------------------------------- |
+| GET    | /api/business-orders                |
+| GET    | /api/business-orders/:userParam     |
+| GET    | /api/business-orders/:supplierParam |
+| GET    | /api/business-orders/:merchantparam |
+| POST   | /api/business-orders                |
+| PUT    | /api/business-orders                |
+| DELETE | /api/business-orders                |

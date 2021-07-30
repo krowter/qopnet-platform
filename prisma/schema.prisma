@@ -49,6 +49,7 @@ model Profile {
   supplierProducts  SupplierProduct[]
   merchants         Merchant[]
   fundBeneficiaries FundBeneficiary?
+  businessOrders    BusinessOrder[]
 
   // Timestamp
   createdAt DateTime @default(now())
@@ -85,14 +86,15 @@ model Address {
   countryCode   String // Save as ID, not Indonesia
 
   // Relations
-  profileId    String?
-  profile      Profile?    @relation(fields: [profileId], references: [id])
-  wholesalerId String?
-  wholesaler   Wholesaler? @relation(fields: [wholesalerId], references: [id])
-  supplierId   String?
-  supplier     Supplier?   @relation(fields: [supplierId], references: [id])
-  merchantId   String?
-  merchant     Merchant?   @relation(fields: [merchantId], references: [id])
+  profileId     String?
+  profile       Profile?        @relation(fields: [profileId], references: [id])
+  wholesalerId  String?
+  wholesaler    Wholesaler?     @relation(fields: [wholesalerId], references: [id])
+  supplierId    String?
+  supplier      Supplier?       @relation(fields: [supplierId], references: [id])
+  merchantId    String?
+  merchant      Merchant?       @relation(fields: [merchantId], references: [id])
+  BusinessOrder BusinessOrder[]
 
   // Timestamp
   createdAt DateTime @default(now())
@@ -149,11 +151,11 @@ model Supplier {
   owner            Profile?          @relation(fields: [ownerId], references: [id])
   addresses        Address[]
   supplierProducts SupplierProduct[]
+  BusinessOrder    BusinessOrder[]
 
   // Timestamp
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
-
 
   @@map(name: "suppliers")
 }
@@ -204,10 +206,12 @@ model SupplierProduct {
   stock  Int?
 
   // Relations
-  ownerId    String?
-  owner      Profile?  @relation(fields: [ownerId], references: [id])
-  supplierId String?
-  supplier   Supplier? @relation(fields: [supplierId], references: [id])
+  ownerId            String?
+  owner              Profile?            @relation(fields: [ownerId], references: [id])
+  supplierId         String?
+  supplier           Supplier?           @relation(fields: [supplierId], references: [id])
+  businessOrderItems BusinessOrderItem[]
+
 
   // Timestamp
   createdAt DateTime @default(now())
@@ -234,6 +238,7 @@ model Merchant {
   owner            Profile?          @relation(fields: [ownerId], references: [id])
   addresses        Address[]
   merchantProducts MerchantProduct[]
+  BusinessOrder    BusinessOrder[]
 
   // Timestamp
   createdAt DateTime @default(now())
@@ -345,4 +350,106 @@ model FundBenefactor {
   updatedAt DateTime @default(now())
 
   @@map(name: "fund_benefactors")
+}
+
+enum OrderStatus {
+  DRAFT // cart
+  PAID
+
+  ONGOING
+  WAITING
+  PROCESSED
+  SENT
+
+  PICKED
+  ONDELIVERY
+
+  FINISHED
+  ARRIVED
+  DELIVERED
+  CONFIRMED
+  COMPLAINED
+
+  FAILED
+  CANCELED
+  LOST
+}
+
+model BusinessOrder {
+  id     String       @id @default(cuid())
+  status OrderStatus? @default(DRAFT)
+
+  // relations
+  ownerId    String?
+  owner      Profile?  @relation(fields: [ownerId], references: [id])
+  supplierId String?
+  supplier   Supplier? @relation(fields: [supplierId], references: [id])
+  merchantId String?
+  merchant   Merchant? @relation(fields: [merchantId], references: [id])
+
+  shipmentAddressId String?
+  shipmentAddress   Address? @relation(fields: [shipmentAddressId], references: [id])
+  payment           Payment  @relation(fields: [paymentId], references: [id])
+
+  businessOrderItems BusinessOrderItem[]
+
+  totalItems        Int?
+  totalPrice        Decimal?
+  totalWeight       Decimal?
+  totalShippingCost Decimal?
+  shippingDiscount  Decimal?
+  totalPayment      Decimal?
+
+  // Timestamp
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  paymentId String
+  @@map(name: "business_orders")
+}
+
+model BusinessOrderItem {
+  id String @id @default(cuid())
+
+  checked  Boolean @default(true)
+  quantity Int     @default(1)
+
+  // relations
+  promoId           String?
+  courierId         String?
+  fleetId           String?
+  supplierProductId String
+  supplierProduct   SupplierProduct @relation(fields: [supplierProductId], references: [id])
+  businessOrderId   String
+  businessOrder     BusinessOrder   @relation(fields: [businessOrderId], references: [id])
+
+  // Timestamp
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@map(name: "business_order_items")
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+}
+
+enum PaymentMethod {
+  COD
+  TRANSFER
+  VIRTUALACCOUNT
+}
+
+model Payment {
+  id            String        @id @default(cuid())
+  paymentStatus PaymentStatus @default(PENDING)
+  paymentMethod PaymentMethod @default(TRANSFER)
+
+  // TimeStamp
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  BusinessOrder BusinessOrder[]
+  @@map(name: "payments")
 }
