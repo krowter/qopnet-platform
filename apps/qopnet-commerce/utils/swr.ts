@@ -32,6 +32,16 @@ console.info({
 })
 
 /**
+ * Set webUrl if needed
+ */
+export const webUrl =
+  process.env.NEXT_PUBLIC_ENV === 'production'
+    ? 'https://new.qopnet.id'
+    : process.env.NEXT_PUBLIC_ENV === 'staging'
+    ? 'https://staging.qopnet.id'
+    : 'http://localhost:3000'
+
+/**
  * Dynamic fetcher which use apiUrl automatically
  * Use accessToken from headers if authenticated
  */
@@ -54,4 +64,20 @@ export const fetcher = async (endpoint: string) => {
  */
 export const useSWR = (endpoint: string) => {
   return useSWROriginal(endpoint, fetcher)
+}
+
+// -----------------------------------------------------------------------------
+
+/**
+ * Static fetcher for Next.js API routes
+ */
+export const fetcherNext = async (endpoint: string) => {
+  return await utilFetcher(webUrl || 'http://localhost:3000', endpoint)
+}
+
+/**
+ * To fetch from Next.js API routes
+ */
+export const useSWRNext = (endpoint: string) => {
+  return useSWROriginal(endpoint, fetcherNext)
 }
