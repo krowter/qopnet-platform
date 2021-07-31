@@ -81,3 +81,50 @@ export const formatAddressComplete = ({
 }) => {
   return `${street}, ${streetDetails}, ${city}, ${state} ${zip}, Indonesia`
 }
+
+export const calculateProductPriceDiscount = (order) => {
+  // Total Items
+  const totalItemArray = order?.businessOrderItems?.map(
+    (item) => item.quantity || 0
+  )
+  const totalItems = order?.totalItems || totalItemArray.reduce((a, c) => a + c)
+
+  // Total Price
+  const totalPriceArray = order?.businessOrderItems?.map(
+    (item) => item.supplierProduct?.price * item.quantity || 0
+  )
+  const totalPrice =
+    order?.totalPrice || totalPriceArray.reduce((a, c) => a + c)
+
+  // Total Discount
+  const totalDiscountArray = order?.businessOrderItems?.map((item) => {
+    if (item.supplierProduct?.discount) {
+      const totalDiscountedPrice =
+        item.quantity *
+        item.supplierProduct?.price *
+        (item.supplierProduct?.discount / 100)
+      return totalDiscountedPrice
+    } else return 0
+  })
+  const totalDiscount =
+    order?.totalDiscount || totalDiscountArray.reduce((a, c) => a + c)
+
+  // Total Calculated Price
+  // Not including the Shipping Cost, before final payment
+  const totalCalculatedPrice = totalPrice - totalDiscount || 0
+
+  return {
+    totalItems,
+    totalPrice,
+    totalDiscount,
+    totalCalculatedPrice,
+  }
+}
+
+export const calculateBillShipment = (order) => {
+  const totalShipmentCost = 100
+
+  return {
+    totalShipmentCost,
+  }
+}

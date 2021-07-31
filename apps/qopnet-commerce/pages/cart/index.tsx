@@ -22,7 +22,10 @@ import {
 } from '@chakra-ui/react'
 
 import { Layout, Icon, SupplierProductPrice } from '@qopnet/qopnet-ui'
-import { formatRupiah } from '@qopnet/util-format'
+import {
+  formatRupiah,
+  calculateProductPriceDiscount,
+} from '@qopnet/util-format'
 import { BreadcrumbCart } from '../../components'
 import { useSWRNext } from '../../utils'
 
@@ -65,35 +68,8 @@ const CartPage = () => {
  * Most of them should be calculated in the backend/API
  */
 export const CartSummaryContainer = ({ order }) => {
-  // Total Items
-  const totalItemArray = order?.businessOrderItems?.map(
-    (item) => item.quantity || 0
-  )
-  const totalItems = order?.totalItems || totalItemArray.reduce((a, c) => a + c)
-
-  // Total Price
-  const totalPriceArray = order?.businessOrderItems?.map(
-    (item) => item.supplierProduct?.price * item.quantity || 0
-  )
-  const totalPrice =
-    order?.totalPrice || totalPriceArray.reduce((a, c) => a + c)
-
-  // Total Discount
-  const totalDiscountArray = order?.businessOrderItems?.map((item) => {
-    if (item.supplierProduct?.discount) {
-      const totalDiscountedPrice =
-        item.quantity *
-        item.supplierProduct?.price *
-        (item.supplierProduct?.discount / 100)
-      return totalDiscountedPrice
-    } else return 0
-  })
-  const totalDiscount =
-    order?.totalDiscount || totalDiscountArray.reduce((a, c) => a + c)
-
-  // Total Calculated Price
-  // Not including the Shipping Cost, before final payment
-  const totalCalculatedPrice = totalPrice - totalDiscount || 0
+  const { totalItems, totalPrice, totalDiscount, totalCalculatedPrice } =
+    calculateProductPriceDiscount(order)
 
   return (
     <Stack

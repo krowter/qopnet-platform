@@ -22,7 +22,11 @@ import {
 } from '@chakra-ui/react'
 
 import { Layout, Icon, SupplierProductPrice } from '@qopnet/qopnet-ui'
-import { formatRupiah, formatAddressComplete } from '@qopnet/util-format'
+import {
+  calculateProductPriceDiscount,
+  formatRupiah,
+  formatAddressComplete,
+} from '@qopnet/util-format'
 import { BreadcrumbCart } from '../../components'
 import { useSWRNext } from '../../utils'
 
@@ -53,11 +57,8 @@ export const CartShipmentPage = () => {
 }
 
 export const ShipmentSummaryContainer = ({ order }) => {
-  // Total Items
-  const totalItemArray = order?.businessOrderItems?.map(
-    (item) => item.quantity || 0
-  )
-  const totalItems = order?.totalItems || totalItemArray.reduce((a, c) => a + c)
+  const { totalItems, totalPrice, totalDiscount, totalCalculatedPrice } =
+    calculateProductPriceDiscount(order)
 
   return (
     <Stack
@@ -77,13 +78,13 @@ export const ShipmentSummaryContainer = ({ order }) => {
         <Stack>
           <HStack justify="space-between">
             <Text>Total Harga ({totalItems} barang)</Text>
-            {/* <Text>{formatRupiah(totalPrice)}</Text> */}
+            <Text>{formatRupiah(totalPrice)}</Text>
           </HStack>
         </Stack>
         <Divider />
         <HStack justify="space-between">
           <Text>Total Tagihan</Text>
-          {/* <Text>{formatRupiah(totalCalculatedPrice)}</Text> */}
+          <Text>{formatRupiah(totalCalculatedPrice)}</Text>
         </HStack>
       </Stack>
 
@@ -123,7 +124,9 @@ export const ShipmentContainer = ({ order }) => {
   return (
     <Stack flex={1} minW="420px" spacing={10}>
       <Stack>
-        <Text>Pilih alamat pengiriman:</Text>
+        <Heading as="h3" size="md">
+          Pilih alamat pengiriman:
+        </Heading>
         <Stack>
           {myAddresses.map((address) => {
             return (
@@ -151,6 +154,10 @@ export const ShipmentContainer = ({ order }) => {
 }
 
 export const BusinessOrderItem = ({ item }) => {
+  const calculatedPrice =
+    item.quantity * item.supplierProduct?.price -
+      item.supplierProduct?.price * (item.supplierProduct?.discount / 100) || 0
+
   return (
     <Stack spacing={5}>
       <Stack
@@ -174,32 +181,37 @@ export const BusinessOrderItem = ({ item }) => {
           )}
 
           <Stack>
-            <NextLink href={item.supplierProduct?.supplier?.handle} passHref>
-              <Text as="a" fontSize="xs" fontWeight="bold">
-                {item.supplierProduct?.supplier?.name}
-                <chakra.span opacity={0.5}>
-                  {' di '}
-                  {item.supplierProduct?.supplier?.addresses?.length &&
-                    item.supplierProduct?.supplier?.addresses[0]?.city}
-                </chakra.span>
-              </Text>
-            </NextLink>
-            <NextLink
-              passHref
-              href={`/${item.supplierProduct?.supplier?.handle}/${item.supplierProduct?.slug}`}
-            >
-              <Box as="a">
-                <Heading as="h2" size="md">
-                  {item.supplierProduct?.name}
-                </Heading>
-                <Heading as="h3" size="sm">
-                  {item.supplierProduct?.subname}
-                </Heading>
-              </Box>
-            </NextLink>
+            <Text fontSize="xs" fontWeight="bold">
+              {item.supplierProduct?.supplier?.name}
+              <chakra.span opacity={0.5}>
+                {' di '}
+                {item.supplierProduct?.supplier?.addresses?.length &&
+                  item.supplierProduct?.supplier?.addresses[0]?.city}
+              </chakra.span>
+            </Text>
+            <Box>
+              <Heading as="h2" size="md">
+                {item.supplierProduct?.name}
+              </Heading>
+              <Heading as="h3" size="sm">
+                {item.supplierProduct?.subname}
+              </Heading>
+            </Box>
             <SupplierProductPrice product={item.supplierProduct} />
           </Stack>
         </Stack>
+
+        <Box>
+          <Text>
+            Kuantitas: <span>{item.quantity} barang</span>
+          </Text>
+          <Text>
+            Berat: <span>{item.quantity * item.supplierProduct.weight} kg</span>
+          </Text>
+          <Text>
+            Subtotal: <span>{formatRupiah(calculatedPrice)}</span>
+          </Text>
+        </Box>
       </Stack>
     </Stack>
   )
