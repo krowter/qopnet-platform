@@ -26,7 +26,8 @@
           "addresses": [{ "city": "Tangerang", "state": "Banten" }]
         }
       },
-      "quantity": 100
+      "quantity": 100,
+      "subTotal": 1425000
     },
     {
       "id": 2,
@@ -44,7 +45,8 @@
           "addresses": [{ "city": "Tangerang", "state": "Banten" }]
         }
       },
-      "quantity": 200
+      "quantity": 200,
+      "subTotal": 2037000
     }
   ],
 

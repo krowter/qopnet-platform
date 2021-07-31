@@ -42,15 +42,28 @@ const CartPage = () => {
         <Heading>Keranjang belanja</Heading>
         {error && <Text>Gagal memuat data order</Text>}
         {!error && !data && <Text>Memuat data order...</Text>}
-        {!error && data && order && <CartContainer order={order} />}
+        {!error && data && order && (
+          <Stack direction={['column', 'column', 'row']}>
+            <CartContainer order={order} />
+            <SummaryContainer order={order} />
+          </Stack>
+        )}
       </Stack>
     </Layout>
   )
 }
 
+export const SummaryContainer = ({ order }) => {
+  return (
+    <Stack maxW="420px">
+      <Text fontSize="xs">{JSON.stringify(order, null, 2)}</Text>
+    </Stack>
+  )
+}
+
 export const CartContainer = ({ order }) => {
   return (
-    <Stack>
+    <Stack flex={1} minW="420px">
       <HStack>
         <Text>Status Pesanan:</Text>
         <Tag>{order.status}</Tag>
@@ -82,9 +95,10 @@ export const BusinessOrderItem = ({ item }) => {
   return (
     <Stack spacing={5}>
       <Stack
-        direction={['column', 'column', 'row']}
         spacing={10}
+        direction={['column', 'column', 'row']}
         justify="space-between"
+        align="flex-end"
       >
         <Stack spacing={5} direction="row">
           {item.supplierProduct?.images[0] && (
@@ -128,7 +142,7 @@ export const BusinessOrderItem = ({ item }) => {
           </Stack>
         </Stack>
 
-        <Stack>
+        <HStack>
           <Box>{item.quantity}</Box>
           <IconButton
             aria-label="Hapus barang"
@@ -139,7 +153,7 @@ export const BusinessOrderItem = ({ item }) => {
           >
             Hapus
           </IconButton>
-        </Stack>
+        </HStack>
       </Stack>
     </Stack>
   )

@@ -537,7 +537,7 @@ export const SupplierProductCartModifier = ({
       </Text>
 
       <Text>
-        <span>Subtotal: </span>
+        <span>Sub Total: </span>
         <b>{formattedProductSubTotal}</b>
       </Text>
 
