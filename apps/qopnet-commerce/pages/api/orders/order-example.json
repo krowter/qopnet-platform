@@ -51,11 +51,15 @@
   ],
 
   "totalItems": 2,
-  "totalPrice": 4200000,
+  "totalPrice": null,
+  "totalDiscount": null,
+  "totalCalculatedPrice": null,
+
   "totalWeight": 200,
   "totalWeightUnit": "KG",
   "totalShippingCost": 150000,
   "shippingDiscount": 75000,
+
   "totalPayment": 42750000,
 
   "createdAt": "2021-08-01",

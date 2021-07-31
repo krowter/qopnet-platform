@@ -11,12 +11,14 @@ import {
   Link,
   Stack,
   StackDivider,
+  Divider,
   Tag,
   Text,
   useColorModeValue,
 } from '@chakra-ui/react'
 
 import { Layout, Icon, SupplierProductPrice } from '@qopnet/qopnet-ui'
+import { formatRupiah } from '@qopnet/util-format'
 import { useSWRNext } from '../../utils'
 
 /**
@@ -53,10 +55,79 @@ const CartPage = () => {
   )
 }
 
+/**
+ * Most of them should be calculated in the backend/API
+ */
 export const SummaryContainer = ({ order }) => {
+  // Total Items
+  const totalItemArray = order?.businessOrderItems?.map((item) => {
+    return item.quantity || 0
+  })
+  const totalItems = order?.totalItems || totalItemArray.reduce((a, c) => a + c)
+
+  // Total Price
+  const totalPriceArray = order?.businessOrderItems?.map((item) => {
+    if (item.supplierProduct?.price) {
+      return item.supplierProduct?.price * item.quantity
+    } else return 0
+  })
+  const totalPrice =
+    order?.totalPrice || totalPriceArray.reduce((a, c) => a + c)
+
+  // Total Discount
+  const totalDiscountArray = order?.businessOrderItems?.map((item) => {
+    if (item.supplierProduct?.discount) {
+      const totalDiscountedPrice =
+        item.quantity *
+        item.supplierProduct?.price *
+        (item.supplierProduct?.discount / 100)
+      return totalDiscountedPrice
+    } else return 0
+  })
+  const totalDiscount =
+    order?.totalDiscount || totalDiscountArray.reduce((a, c) => a + c)
+
+  // Total Calculated Price
+  // Not including the Shipping Cost, before final payment
+  const totalCalculatedPrice = totalPrice - totalDiscount || 0
+
   return (
-    <Stack maxW="420px">
-      <Text fontSize="xs">{JSON.stringify(order, null, 2)}</Text>
+    <Stack
+      maxW="420px"
+      w="100%"
+      p={3}
+      spacing={5}
+      rounded="md"
+      height="fit-content"
+      bg={useColorModeValue('gray.100', 'gray.700')}
+    >
+      <Heading as="h2" size="md">
+        Ringkasan belanja
+      </Heading>
+
+      <Stack id="order-calculation" spacing={5}>
+        <Stack>
+          <HStack justify="space-between">
+            <Text>Total Harga ({totalItems} barang)</Text>
+            <Text>{formatRupiah(totalPrice)}</Text>
+          </HStack>
+          <HStack justify="space-between">
+            <Text>Total Diskon Barang</Text>
+            <Text>-{formatRupiah(totalDiscount)}</Text>
+          </HStack>
+        </Stack>
+        <Divider />
+        <HStack justify="space-between">
+          <Text>Total Harga</Text>
+          <Text>{formatRupiah(totalCalculatedPrice)}</Text>
+        </HStack>
+      </Stack>
+
+      <NextLink href="/cart/checkout" passHref>
+        <Button as="a" colorScheme="orange">
+          Beli ({totalItems})
+        </Button>
+      </NextLink>
     </Stack>
   )
 }
@@ -71,11 +142,7 @@ export const CartContainer = ({ order }) => {
 
       <Stack
         py={5}
-        divider={
-          <StackDivider
-            borderColor={useColorModeValue('gray.100', 'gray.700')}
-          />
-        }
+        divider={<StackDivider />}
         spacing={5}
         align="stretch"
         maxW="720px"
@@ -98,7 +165,7 @@ export const BusinessOrderItem = ({ item }) => {
         spacing={10}
         direction={['column', 'column', 'row']}
         justify="space-between"
-        align="flex-end"
+        align={['flex-start', 'flex-start', 'flex-end']}
       >
         <Stack spacing={5} direction="row">
           {item.supplierProduct?.images[0] && (

@@ -37,6 +37,18 @@ export const formatImageUrl = (env: string, text: string) => {
   }
 }
 
+// From 1234567 into Rp 1.234.567
+export const formatRupiah = (price: number) => {
+  const formattedPrice = new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+  })
+    .format(Number(price))
+    .replace(/\D00$/, '')
+
+  return formattedPrice
+}
+
 // From 1234567 into 1.234.567
 export const formatMoney = (price: number) => {
   return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
