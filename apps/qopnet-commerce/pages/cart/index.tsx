@@ -2,13 +2,17 @@ import NextLink from 'next/link'
 import NextImage from 'next/image'
 import {
   Box,
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbSeparator,
   Button,
   chakra,
   Flex,
   Heading,
   HStack,
   IconButton,
-  Link,
+  Link as ChakraLink,
   Stack,
   StackDivider,
   Divider,
@@ -40,6 +44,24 @@ const CartPage = () => {
         description: 'Daftar barang produk supplier yang akan dibelanjakan.',
       }}
     >
+      <Breadcrumb separator={<Icon name="chevron-right" />}>
+        <BreadcrumbItem>
+          <BreadcrumbLink isCurrentPage>
+            <BreadcrumbLink>Cart</BreadcrumbLink>
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbItem>
+          <BreadcrumbLink as={NextLink} href="/cart/shipment" passHref>
+            <ChakraLink>Shipment</ChakraLink>
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbItem>
+          <BreadcrumbLink as={NextLink} href="/cart/payment" passHref>
+            <ChakraLink>Payment</ChakraLink>
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+      </Breadcrumb>
+
       <Stack spacing={10}>
         <Heading>Keranjang belanja</Heading>
         {error && <Text>Gagal memuat data order</Text>}
