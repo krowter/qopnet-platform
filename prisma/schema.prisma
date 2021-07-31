@@ -353,26 +353,18 @@ model FundBenefactor {
 }
 
 enum OrderStatus {
-  DRAFT // cart
-  PAID
-
-  ONGOING
-  WAITING
-  PROCESSED
-  SENT
-
-  PICKED
-  ONDELIVERY
-
-  FINISHED
-  ARRIVED
-  DELIVERED
-  CONFIRMED
-  COMPLAINED
-
-  FAILED
-  CANCELED
-  LOST
+  DRAFT // order is still a cart
+  WAITING_FOR_PAYMENT // order is waiting to be paid by buyer
+  PAID // order has been paid
+  WAITING_FOR_CONFIRMATION // waiting confirmation from supplier 
+  PROCESSED // supplier processed order internally
+  WAITING_FOR_PICKUP // supplier waiting for pickup by courier
+  ONDELIVERY // supplier product is on delivery by courier
+  DELIVERED // supplier product is delivered to shipment address
+  CONFIRMED // confirmed by recipient
+  COMPLAINED // confirmed, product arrived but something went wrong, include lost
+  CANCELED // before PAID/PROCESSED/ONDELIVERY
+  REFUNDED // somewhere after PAID
 }
 
 model BusinessOrder {
