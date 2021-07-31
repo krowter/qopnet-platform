@@ -121,10 +121,12 @@ export const calculateProductPriceDiscount = (order) => {
   }
 }
 
-export const calculateBillShipment = (order) => {
-  const totalShipmentCost = 100
+export const calculateBillShipment = (order, totalCalculatedPrice) => {
+  const totalShipmentCost = 135000 || 0
+  const totalCalculatedBill = totalCalculatedPrice + totalShipmentCost
 
   return {
     totalShipmentCost,
+    totalCalculatedBill,
   }
 }

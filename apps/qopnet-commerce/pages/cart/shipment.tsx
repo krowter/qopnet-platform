@@ -26,6 +26,7 @@ import {
   calculateProductPriceDiscount,
   formatRupiah,
   formatAddressComplete,
+  calculateBillShipment,
 } from '@qopnet/util-format'
 import { BreadcrumbCart } from '../../components'
 import { useSWRNext } from '../../utils'
@@ -59,6 +60,10 @@ export const CartShipmentPage = () => {
 export const ShipmentSummaryContainer = ({ order }) => {
   const { totalItems, totalPrice, totalDiscount, totalCalculatedPrice } =
     calculateProductPriceDiscount(order)
+  const { totalShipmentCost, totalCalculatedBill } = calculateBillShipment(
+    order,
+    totalCalculatedPrice
+  )
 
   return (
     <Stack
@@ -78,13 +83,17 @@ export const ShipmentSummaryContainer = ({ order }) => {
         <Stack>
           <HStack justify="space-between">
             <Text>Total Harga ({totalItems} barang)</Text>
-            <Text>{formatRupiah(totalPrice)}</Text>
+            <Text>{formatRupiah(totalCalculatedPrice)}</Text>
+          </HStack>
+          <HStack justify="space-between">
+            <Text>Total Ongkos Kirim</Text>
+            <Text>{formatRupiah(totalShipmentCost)}</Text>
           </HStack>
         </Stack>
         <Divider />
         <HStack justify="space-between">
           <Text>Total Tagihan</Text>
-          <Text>{formatRupiah(totalCalculatedPrice)}</Text>
+          <Text>{formatRupiah(totalCalculatedBill)}</Text>
         </HStack>
       </Stack>
 
@@ -119,7 +128,12 @@ export const ShipmentContainer = ({ order }) => {
     },
   ]
 
-  const addressCardBg = useColorModeValue('gray.100', 'gray.700')
+  const couriers = [
+    { id: 1, name: 'Lalamove' },
+    { id: 2, name: 'Deliveree' },
+  ]
+
+  const cardBackground = useColorModeValue('gray.100', 'gray.700')
 
   return (
     <Stack flex={1} minW="420px" spacing={10}>
@@ -130,8 +144,23 @@ export const ShipmentContainer = ({ order }) => {
         <Stack>
           {myAddresses.map((address) => {
             return (
-              <Box p={3} bg={addressCardBg}>
+              <Box p={3} bg={cardBackground}>
                 <Text key={address.id}>{formatAddressComplete(address)}</Text>
+              </Box>
+            )
+          })}
+        </Stack>
+      </Stack>
+
+      <Stack>
+        <Heading as="h3" size="md">
+          Pilih kurir pengiriman:
+        </Heading>
+        <Stack>
+          {couriers.map((courier) => {
+            return (
+              <Box p={3} bg={cardBackground}>
+                <Text key={courier.id}>{courier.name}</Text>
               </Box>
             )
           })}
@@ -154,9 +183,10 @@ export const ShipmentContainer = ({ order }) => {
 }
 
 export const BusinessOrderItem = ({ item }) => {
-  const calculatedPrice =
-    item.quantity * item.supplierProduct?.price -
-      item.supplierProduct?.price * (item.supplierProduct?.discount / 100) || 0
+  const itemDiscountedPrice =
+    item.supplierProduct?.price -
+    item.supplierProduct?.price * (item.supplierProduct?.discount / 100)
+  const itemCalculatedPrice = item.quantity * itemDiscountedPrice
 
   return (
     <Stack spacing={5}>
@@ -209,7 +239,7 @@ export const BusinessOrderItem = ({ item }) => {
             Berat: <span>{item.quantity * item.supplierProduct.weight} kg</span>
           </Text>
           <Text>
-            Subtotal: <span>{formatRupiah(calculatedPrice)}</span>
+            Subtotal: <span>{formatRupiah(itemCalculatedPrice)}</span>
           </Text>
         </Box>
       </Stack>
