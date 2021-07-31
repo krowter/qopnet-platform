@@ -25,21 +25,22 @@ export const apiUrl =
     ? apiStaging
     : apiDevelopment // development
 
+/**
+ * Set webUrl if needed
+ */
+export let webUrl = ''
+if (process.browser) {
+  webUrl = window ? String(window.location.origin) : 'http://localhost:3000'
+}
+
 console.info({
   message: 'Qopnet Commerce is ready',
   env: process.env.NEXT_PUBLIC_ENV,
   apiUrl,
+  webUrl,
 })
 
-/**
- * Set webUrl if needed
- */
-export const webUrl =
-  process.env.NEXT_PUBLIC_ENV === 'production'
-    ? 'https://new.qopnet.id'
-    : process.env.NEXT_PUBLIC_ENV === 'staging'
-    ? 'https://staging.qopnet.id'
-    : 'http://localhost:3000'
+// -----------------------------------------------------------------------------
 
 /**
  * Dynamic fetcher which use apiUrl automatically
@@ -72,7 +73,7 @@ export const useSWR = (endpoint: string) => {
  * Static fetcher for Next.js API routes
  */
 export const fetcherNext = async (endpoint: string) => {
-  return await utilFetcher(webUrl || 'http://localhost:3000', endpoint)
+  return await utilFetcher(webUrl, endpoint)
 }
 
 /**
