@@ -69,7 +69,7 @@ const server = app.listen(port, () => {
   console.info({
     message: `Qopnet API listening at :${port}`,
     env: process.env.NODE_ENV,
-    databaseUrl: process.env.DATABASE_URL,
+    databaseUrl: process.env.PRISMA_DATABASE_URL,
   })
 })
 
