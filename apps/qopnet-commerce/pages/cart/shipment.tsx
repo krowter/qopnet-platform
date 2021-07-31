@@ -145,8 +145,8 @@ export const ShipmentContainer = ({ order }) => {
         <Stack>
           {myAddresses.map((address) => {
             return (
-              <Box p={3} bg={cardBackground}>
-                <Text key={address.id}>{formatAddressComplete(address)}</Text>
+              <Box key={address.id} p={3} bg={cardBackground} rounded="full">
+                <Text>{formatAddressComplete(address)}</Text>
               </Box>
             )
           })}
@@ -160,8 +160,8 @@ export const ShipmentContainer = ({ order }) => {
         <Stack>
           {couriers.map((courier) => {
             return (
-              <Box p={3} bg={cardBackground}>
-                <Text key={courier.id}>{courier.name}</Text>
+              <Box key={courier.id} p={3} bg={cardBackground} rounded="full">
+                <Text>{courier.name}</Text>
               </Box>
             )
           })}

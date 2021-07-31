@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import NextLink from 'next/link'
 import NextImage from 'next/image'
+import { useRouter } from 'next/router'
 import {
   Box,
   Button,
@@ -23,6 +24,12 @@ import { formatRupiah, calculateEverything } from '@qopnet/util-format'
 import { BreadcrumbCart } from '../../components'
 import { useSWRNext } from '../../utils'
 
+const paymentOptions = [
+  { id: 1, name: 'COD (Cash on Delivery)' },
+  { id: 2, name: 'Transfer Manual Bank BCA' },
+  { id: 3, name: 'Transfer Manual Bank Permata' },
+]
+
 /**
  * /cart/payment
  */
@@ -38,8 +45,12 @@ export const CartPaymentPage = () => {
         {error && <Text>Gagal memuat data order</Text>}
         {!error && !data && <Text>Memuat data order...</Text>}
         {!error && data && order && (
-          <Stack direction={['column', 'column', 'row']}>
-            {/* <PaymentContainer order={order} /> */}
+          <Stack
+            direction={['column', 'column', 'row']}
+            spacing={5}
+            justify="space-between"
+          >
+            <PaymentContainer order={order} />
             <PaymentSummaryContainer order={order} />
           </Stack>
         )}
@@ -48,13 +59,36 @@ export const CartPaymentPage = () => {
   )
 }
 
-export const PaymentSummaryContainer = ({ order }) => {
-  const paymentOptions = [
-    { id: 1, name: 'COD (Cash on Delivery)' },
-    { id: 2, name: 'Transfer Manual Bank BCA' },
-    { id: 3, name: 'Transfer Manual Bank Permata' },
-  ]
+export const PaymentContainer = ({ order }) => {
+  const cardBackground = useColorModeValue('gray.100', 'gray.700')
 
+  return (
+    <Stack flex={1} spacing={10} maxW="420px">
+      <Stack>
+        <Heading as="h3" size="md">
+          Pilih metode pembayaran:
+        </Heading>
+        <Stack>
+          {paymentOptions.map((paymentOption) => {
+            return (
+              <Box
+                key={paymentOption.id}
+                p={3}
+                bg={cardBackground}
+                rounded="full"
+              >
+                <Text>{paymentOption?.name}</Text>
+              </Box>
+            )
+          })}
+        </Stack>
+      </Stack>
+    </Stack>
+  )
+}
+
+export const PaymentSummaryContainer = ({ order }) => {
+  const router = useRouter()
   const [paymentOption, setPaymentOption] = useState(paymentOptions[1])
 
   const {
@@ -65,6 +99,10 @@ export const PaymentSummaryContainer = ({ order }) => {
     totalShipmentCost,
     totalCalculatedBill,
   } = calculateEverything(order)
+
+  const onClickPay = () => {
+    router.push('/dashboard/orders')
+  }
 
   return (
     <Stack
@@ -90,11 +128,9 @@ export const PaymentSummaryContainer = ({ order }) => {
         </HStack>
       </Stack>
 
-      <NextLink href="/cart/pay" passHref>
-        <Button as="a" colorScheme="orange">
-          Lanjut Bayar
-        </Button>
-      </NextLink>
+      <Button colorScheme="orange" onClick={onClickPay}>
+        Lanjut Bayar
+      </Button>
     </Stack>
   )
 }
