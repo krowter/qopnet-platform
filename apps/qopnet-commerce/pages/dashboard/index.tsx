@@ -10,9 +10,6 @@ import {
   SimpleGrid,
   Spinner,
   Stack,
-  Stat,
-  StatHelpText,
-  StatLabel,
   Text,
   useColorModeValue,
 } from '@chakra-ui/react'
@@ -22,7 +19,10 @@ import { Layout, Icon } from '@qopnet/qopnet-ui'
 import { useSWR } from '../../utils/swr'
 
 /**
- * Dashboard for links and manading suppliers.
+ * Dashboard for:
+ * - personal links
+ * - managing suppliers
+ * - managing merchants
  */
 const DashboardPage = () => {
   const user = useUser()
