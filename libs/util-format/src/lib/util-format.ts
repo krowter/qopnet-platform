@@ -70,3 +70,14 @@ export const formatWeight = (weight: number, weightUnit: string) => {
     return `${weight} kg`
   }
 }
+
+export const formatAddressComplete = ({
+  street,
+  streetDetails,
+  city,
+  state,
+  zip,
+  countryCode,
+}) => {
+  return `${street}, ${streetDetails}, ${city}, ${state} ${zip}, Indonesia`
+}

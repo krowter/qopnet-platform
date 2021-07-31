@@ -90,13 +90,13 @@ export const Header = (props: HeaderProps) => {
           {colorMode === 'light' ? <Icon name="moon" /> : <Icon name="sun" />}
         </IconButton>
 
-        {isDesktop && (
-          <Heading as="h1" size="md">
+        <Heading as="h1" size="md">
+          {isDesktop && (
             <NextLink href="/shop">
               <Link>Belanja</Link>
             </NextLink>
-          </Heading>
-        )}
+          )}
+        </Heading>
       </HStack>
 
       <SearchBar />

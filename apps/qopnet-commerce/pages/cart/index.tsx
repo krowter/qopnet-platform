@@ -66,17 +66,15 @@ const CartPage = () => {
  */
 export const CartSummaryContainer = ({ order }) => {
   // Total Items
-  const totalItemArray = order?.businessOrderItems?.map((item) => {
-    return item.quantity || 0
-  })
+  const totalItemArray = order?.businessOrderItems?.map(
+    (item) => item.quantity || 0
+  )
   const totalItems = order?.totalItems || totalItemArray.reduce((a, c) => a + c)
 
   // Total Price
-  const totalPriceArray = order?.businessOrderItems?.map((item) => {
-    if (item.supplierProduct?.price) {
-      return item.supplierProduct?.price * item.quantity
-    } else return 0
-  })
+  const totalPriceArray = order?.businessOrderItems?.map(
+    (item) => item.supplierProduct?.price * item.quantity || 0
+  )
   const totalPrice =
     order?.totalPrice || totalPriceArray.reduce((a, c) => a + c)
 
@@ -154,9 +152,6 @@ export const CartContainer = ({ order }) => {
         maxW="720px"
       >
         {order?.businessOrderItems?.map((item, index) => {
-          if (!item?.supplierProduct) {
-            return <Box />
-          }
           return <BusinessOrderItem key={item.supplierProduct.id} item={item} />
         })}
       </Stack>
