@@ -23,6 +23,7 @@ import {
 
 import { Layout, Icon, SupplierProductPrice } from '@qopnet/qopnet-ui'
 import { formatRupiah } from '@qopnet/util-format'
+import { BreadcrumbCart } from '../../components'
 import { useSWRNext } from '../../utils'
 
 /**
@@ -34,21 +35,7 @@ export const CartShipmentPage = () => {
 
   return (
     <Layout pt={10} meta={{ title: 'Checkout dan pengiriman' }}>
-      <Breadcrumb separator={<Icon name="chevron-right" />}>
-        <BreadcrumbItem>
-          <BreadcrumbLink as={NextLink} href="/cart" passHref>
-            <ChakraLink>Cart</ChakraLink>
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbItem>
-          <BreadcrumbLink isCurrentPage>Shipment</BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbItem>
-          <BreadcrumbLink as={NextLink} href="/cart/payment" passHref>
-            <ChakraLink>Payment</ChakraLink>
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-      </Breadcrumb>
+      <BreadcrumbCart />
 
       <Stack spacing={10}>
         <Heading>Checkout dan pengiriman</Heading>

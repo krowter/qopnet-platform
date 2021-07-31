@@ -23,6 +23,7 @@ import {
 
 import { Layout, Icon, SupplierProductPrice } from '@qopnet/qopnet-ui'
 import { formatRupiah } from '@qopnet/util-format'
+import { BreadcrumbCart } from '../../components'
 import { useSWRNext } from '../../utils'
 
 /**
@@ -44,22 +45,7 @@ const CartPage = () => {
         description: 'Daftar barang produk supplier yang akan dibelanjakan.',
       }}
     >
-      <Breadcrumb separator={<Icon name="chevron-right" />}>
-        <BreadcrumbItem>
-          <BreadcrumbLink isCurrentPage>Cart</BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbItem>
-          <BreadcrumbLink as={NextLink} href="/cart/shipment" passHref>
-            <ChakraLink>Shipment</ChakraLink>
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbItem>
-          <BreadcrumbLink as={NextLink} href="/cart/payment" passHref>
-            <ChakraLink>Payment</ChakraLink>
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-      </Breadcrumb>
-
+      <BreadcrumbCart />
       <Stack spacing={10}>
         <Heading>Keranjang belanja</Heading>
         {error && <Text>Gagal memuat data order</Text>}

@@ -19,6 +19,7 @@ import {
 
 import { Layout, Icon, SupplierProductPrice } from '@qopnet/qopnet-ui'
 import { formatRupiah } from '@qopnet/util-format'
+import { BreadcrumbCart } from '../../components'
 import { useSWRNext } from '../../utils'
 
 /**
@@ -30,6 +31,7 @@ export const CartPaymentPage = () => {
 
   return (
     <Layout pt={10} meta={{ title: 'Pembayaran' }}>
+      <BreadcrumbCart />
       <Stack spacing={10}>
         <Heading>Pembayaran</Heading>
         {error && <Text>Gagal memuat data order</Text>}
