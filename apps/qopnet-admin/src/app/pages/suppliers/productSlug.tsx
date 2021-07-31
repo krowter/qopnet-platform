@@ -30,7 +30,7 @@ import { useParams, useHistory } from 'react-router'
 import { DefaultLayout } from '../../layouts'
 import { useSWR } from '../../utils/swr'
 import { ModifierButtons } from '../../components'
-import { Icon } from '@qopnet/qopnet-ui'
+import { Icon, formatPrice } from '@qopnet/qopnet-ui'
 
 export const SupplierProductSlugPage = () => {
   const sidebar = useDisclosure()
@@ -224,15 +224,15 @@ export const SupplierProductSlugPage = () => {
                 <Stack id="product-detail">
                   <Text> Kode SKU: {supplierProduct?.sku}</Text>
                   <Text>Nama Produk: {supplierProduct?.name}</Text>
-                  <Text> Harga: Rp. {supplierProduct?.price}</Text>
-                  <Text>
+                  <Text> Harga: Rp. {formatPrice(supplierProduct?.price)}</Text>
+                  {/* <Text>
                     {' '}
                     Harga Minimum: Rp. {supplierProduct?.priceMin ?? '-'}
                   </Text>
                   <Text>
                     {' '}
                     Harga Maximum: Rp. {supplierProduct?.priceMax ?? '-'}
-                  </Text>
+                  </Text> */}
                   <Text>
                     {' '}
                     Minimum Order: {supplierProduct?.minOrder ?? '-'}

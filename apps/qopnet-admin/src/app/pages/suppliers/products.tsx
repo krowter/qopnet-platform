@@ -10,6 +10,7 @@ import {
 import { Link } from 'react-router-dom'
 import { DefaultLayout } from '../../layouts'
 import { useSWR } from '../../utils/swr'
+import { formatPrice } from '@qopnet/qopnet-ui'
 
 export const SuppliersProductsPage = () => {
   const { data, error } = useSWR('/api/suppliers/products')
@@ -81,14 +82,12 @@ export const SupplierProductsGrid = ({
             bg={bg}
             borderBottom="1px solid gray"
             borderColor={border}
-            gridTemplateColumns="repeat(6, 1fr)"
+            gridTemplateColumns="repeat(4, 1fr)"
           >
             <Text>{supplierProduct.name}</Text>
             <Text>{supplierProduct.slug}</Text>
             <Text>{supplierProduct.sku}</Text>
-            <Text>{supplierProduct.price ?? '0'}</Text>
-            <Text>{supplierProduct.priceMin ?? '0'}</Text>
-            <Text>{supplierProduct.priceMax ?? '0'}</Text>
+            <Text>{formatPrice(supplierProduct.price ?? '0')}</Text>
           </SimpleGrid>
         )
       })}
