@@ -82,7 +82,7 @@ export const formatAddressComplete = ({
   return `${street}, ${streetDetails}, ${city}, ${state} ${zip}, Indonesia`
 }
 
-export const calculateProductPriceDiscount = (order) => {
+export const calculateEverything = (order) => {
   // Total Items
   const totalItemArray = order?.businessOrderItems?.map(
     (item) => item.quantity || 0
@@ -113,19 +113,14 @@ export const calculateProductPriceDiscount = (order) => {
   // Not including the Shipping Cost, before final payment
   const totalCalculatedPrice = totalPrice - totalDiscount || 0
 
+  const totalShipmentCost = 135000 || 0
+  const totalCalculatedBill = totalCalculatedPrice + totalShipmentCost
+
   return {
     totalItems,
     totalPrice,
     totalDiscount,
     totalCalculatedPrice,
-  }
-}
-
-export const calculateBillShipment = (order, totalCalculatedPrice) => {
-  const totalShipmentCost = 135000 || 0
-  const totalCalculatedBill = totalCalculatedPrice + totalShipmentCost
-
-  return {
     totalShipmentCost,
     totalCalculatedBill,
   }

@@ -22,10 +22,7 @@ import {
 } from '@chakra-ui/react'
 
 import { Layout, Icon, SupplierProductPrice } from '@qopnet/qopnet-ui'
-import {
-  formatRupiah,
-  calculateProductPriceDiscount,
-} from '@qopnet/util-format'
+import { calculateEverything, formatRupiah } from '@qopnet/util-format'
 import { BreadcrumbCart } from '../../components'
 import { useSWRNext } from '../../utils'
 
@@ -69,7 +66,7 @@ const CartPage = () => {
  */
 export const CartSummaryContainer = ({ order }) => {
   const { totalItems, totalPrice, totalDiscount, totalCalculatedPrice } =
-    calculateProductPriceDiscount(order)
+    calculateEverything(order)
 
   return (
     <Stack
@@ -98,7 +95,7 @@ export const CartSummaryContainer = ({ order }) => {
         </Stack>
         <Divider />
         <HStack justify="space-between">
-          <Text>Total Harga</Text>
+          <Text>Total Harga (Setelah Diskon)</Text>
           <Text>{formatRupiah(totalCalculatedPrice)}</Text>
         </HStack>
       </Stack>

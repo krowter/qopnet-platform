@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import NextLink from 'next/link'
 import NextImage from 'next/image'
 import {
@@ -18,7 +19,7 @@ import {
 } from '@chakra-ui/react'
 
 import { Layout, Icon, SupplierProductPrice } from '@qopnet/qopnet-ui'
-import { formatRupiah } from '@qopnet/util-format'
+import { formatRupiah, calculateEverything } from '@qopnet/util-format'
 import { BreadcrumbCart } from '../../components'
 import { useSWRNext } from '../../utils'
 
@@ -38,12 +39,63 @@ export const CartPaymentPage = () => {
         {!error && !data && <Text>Memuat data order...</Text>}
         {!error && data && order && (
           <Stack direction={['column', 'column', 'row']}>
-            {/* <PaymentContainer order={order} />
-            <PaymentSummaryContainer order={order} /> */}
+            {/* <PaymentContainer order={order} /> */}
+            <PaymentSummaryContainer order={order} />
           </Stack>
         )}
       </Stack>
     </Layout>
+  )
+}
+
+export const PaymentSummaryContainer = ({ order }) => {
+  const paymentOptions = [
+    { id: 1, name: 'COD (Cash on Delivery)' },
+    { id: 2, name: 'Transfer Manual Bank BCA' },
+    { id: 3, name: 'Transfer Manual Bank Permata' },
+  ]
+
+  const [paymentOption, setPaymentOption] = useState(paymentOptions[1])
+
+  const {
+    totalItems,
+    totalPrice,
+    totalDiscount,
+    totalCalculatedPrice,
+    totalShipmentCost,
+    totalCalculatedBill,
+  } = calculateEverything(order)
+
+  return (
+    <Stack
+      maxW="420px"
+      w="100%"
+      p={3}
+      spacing={5}
+      rounded="md"
+      height="fit-content"
+      bg={useColorModeValue('gray.100', 'gray.700')}
+    >
+      <Heading as="h2" size="md">
+        Ringkasan tagihan belanja
+      </Heading>
+      <Stack id="order-calculation">
+        <HStack justify="space-between">
+          <Text>Pilihan Pembayaran</Text>
+          <Text>{paymentOption?.name}</Text>
+        </HStack>
+        <HStack justify="space-between">
+          <Text>Total Tagihan</Text>
+          <Text>{formatRupiah(totalCalculatedBill)}</Text>
+        </HStack>
+      </Stack>
+
+      <NextLink href="/cart/pay" passHref>
+        <Button as="a" colorScheme="orange">
+          Lanjut Bayar
+        </Button>
+      </NextLink>
+    </Stack>
   )
 }
 

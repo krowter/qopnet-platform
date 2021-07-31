@@ -23,10 +23,9 @@ import {
 
 import { Layout, Icon, SupplierProductPrice } from '@qopnet/qopnet-ui'
 import {
-  calculateProductPriceDiscount,
+  calculateEverything,
   formatRupiah,
   formatAddressComplete,
-  calculateBillShipment,
 } from '@qopnet/util-format'
 import { BreadcrumbCart } from '../../components'
 import { useSWRNext } from '../../utils'
@@ -58,12 +57,14 @@ export const CartShipmentPage = () => {
 }
 
 export const ShipmentSummaryContainer = ({ order }) => {
-  const { totalItems, totalPrice, totalDiscount, totalCalculatedPrice } =
-    calculateProductPriceDiscount(order)
-  const { totalShipmentCost, totalCalculatedBill } = calculateBillShipment(
-    order,
-    totalCalculatedPrice
-  )
+  const {
+    totalItems,
+    totalPrice,
+    totalDiscount,
+    totalCalculatedPrice,
+    totalShipmentCost,
+    totalCalculatedBill,
+  } = calculateEverything(order)
 
   return (
     <Stack

@@ -26,6 +26,11 @@ export const BreadcrumbCart = () => {
           <ChakraLink>Payment</ChakraLink>
         </BreadcrumbLink>
       </BreadcrumbItem>
+      <BreadcrumbItem>
+        <BreadcrumbLink as={NextLink} href="/dashboard/orders" passHref>
+          <ChakraLink>Orders</ChakraLink>
+        </BreadcrumbLink>
+      </BreadcrumbItem>
     </Breadcrumb>
   )
 }
