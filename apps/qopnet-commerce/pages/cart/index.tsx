@@ -46,9 +46,7 @@ const CartPage = () => {
     >
       <Breadcrumb separator={<Icon name="chevron-right" />}>
         <BreadcrumbItem>
-          <BreadcrumbLink isCurrentPage>
-            <BreadcrumbLink>Cart</BreadcrumbLink>
-          </BreadcrumbLink>
+          <BreadcrumbLink isCurrentPage>Cart</BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbItem>
           <BreadcrumbLink as={NextLink} href="/cart/shipment" passHref>

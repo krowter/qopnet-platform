@@ -37,11 +37,11 @@ export const CartShipmentPage = () => {
       <Breadcrumb separator={<Icon name="chevron-right" />}>
         <BreadcrumbItem>
           <BreadcrumbLink as={NextLink} href="/cart" passHref>
-            <ChakraLink as="a">Cart</ChakraLink>
+            <ChakraLink>Cart</ChakraLink>
           </BreadcrumbLink>
         </BreadcrumbItem>
-        <BreadcrumbItem isCurrentPage>
-          <BreadcrumbLink>Shipment</BreadcrumbLink>
+        <BreadcrumbItem>
+          <BreadcrumbLink isCurrentPage>Shipment</BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbItem>
           <BreadcrumbLink as={NextLink} href="/cart/payment" passHref>
