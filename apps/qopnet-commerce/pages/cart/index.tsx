@@ -47,7 +47,7 @@ const CartPage = () => {
         {!error && data && order && (
           <Stack direction={['column', 'column', 'row']}>
             <CartContainer order={order} />
-            <SummaryContainer order={order} />
+            <CartSummaryContainer order={order} />
           </Stack>
         )}
       </Stack>
@@ -58,7 +58,7 @@ const CartPage = () => {
 /**
  * Most of them should be calculated in the backend/API
  */
-export const SummaryContainer = ({ order }) => {
+export const CartSummaryContainer = ({ order }) => {
   // Total Items
   const totalItemArray = order?.businessOrderItems?.map((item) => {
     return item.quantity || 0
@@ -123,7 +123,7 @@ export const SummaryContainer = ({ order }) => {
         </HStack>
       </Stack>
 
-      <NextLink href="/cart/checkout" passHref>
+      <NextLink href="/cart/shipment" passHref>
         <Button as="a" colorScheme="orange">
           Beli ({totalItems})
         </Button>
