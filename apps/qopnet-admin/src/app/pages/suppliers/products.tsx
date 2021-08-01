@@ -68,6 +68,22 @@ export const SupplierProductsGrid = ({
 
   return (
     <Box mt={2}>
+      <SimpleGrid
+        spacingX={3}
+        columns={{ base: 1, md: 3 }}
+        w="100%"
+        px={5}
+        py={3}
+        bg={bg}
+        borderBottom="1px solid gray"
+        borderColor={border}
+        gridTemplateColumns="repeat(4, 1fr)"
+      >
+        <Text fontWeight={700}>Nama</Text>
+        <Text fontWeight={700}>Slug</Text>
+        <Text fontWeight={700}>SKU</Text>
+        <Text fontWeight={700}>Harga</Text>
+      </SimpleGrid>
       {supplierProducts.map((supplierProduct: any, index: number) => {
         return (
           <SimpleGrid

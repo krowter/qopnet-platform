@@ -37,7 +37,7 @@ export const Sidebar = () => {
         m={2}
         size="sm"
         position="fixed"
-        top={0}
+        top={'8px'}
         left={0}
       />
       <Drawer
@@ -85,6 +85,7 @@ export const Sidebar = () => {
         justify="space-between"
         py={5}
         minWidth="250px"
+        position="fixed"
       >
         <Stack as="nav" w="auto" spacing={5} mx={4}>
           <SidebarUser />

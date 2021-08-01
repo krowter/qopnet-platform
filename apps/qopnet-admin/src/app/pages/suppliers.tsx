@@ -60,9 +60,7 @@ export const SuppliersPage = () => {
             <Spinner color="orange.500" />
           </Box>
         )}
-        {suppliers && 
-          <SupplierRows suppliers={suppliers} />
-        }
+        {suppliers && <SupplierRows suppliers={suppliers} />}
       </Box>
     </DefaultLayout>
   )
@@ -74,6 +72,22 @@ export const SupplierRows = ({ suppliers }: { suppliers: Supplier[] }) => {
 
   return (
     <Box mt={2}>
+      <SimpleGrid
+        spacingX={3}
+        columns={{ base: 1, md: 3 }}
+        w="100%"
+        px={5}
+        py={3}
+        bg={bg}
+        borderBottom="1px solid gray"
+        borderColor={border}
+        gridTemplateColumns="50px 100px 100px 1fr"
+      >
+        <Text fontWeight={700}>No</Text>
+        <Text fontWeight={700}>Avatar</Text>
+        <Text fontWeight={700}>Handle</Text>
+        <Text fontWeight={700}>Nama</Text>
+      </SimpleGrid>
       {suppliers.map((supplier: Supplier, index: number) => {
         return (
           <SimpleGrid
@@ -88,10 +102,10 @@ export const SupplierRows = ({ suppliers }: { suppliers: Supplier[] }) => {
             bg={bg}
             borderBottom="1px solid gray"
             borderColor={border}
-            gridTemplateColumns="50px 50px 100px 1fr"
+            gridTemplateColumns="50px 100px 100px 1fr"
           >
             <Text>#{index}</Text>
-            <Avatar size="xs" name={supplier.name as string}  />
+            <Avatar size="xs" name={supplier.name as string} />
             <Text>{supplier.handle}</Text>
             <Text>{supplier.name}</Text>
           </SimpleGrid>
