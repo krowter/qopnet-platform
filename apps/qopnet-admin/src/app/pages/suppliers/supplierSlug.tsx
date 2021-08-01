@@ -201,10 +201,10 @@ export const SupplierSlugPage = () => {
                   <Text>
                     Sertifikat Usaha: {supplier?.certificationFile ?? ''}
                   </Text>
-                  <Text>Pemilik: {supplier?.owner.name ?? ''}</Text>
-                  <Text>Handle: {supplier?.owner.handle ?? ''}</Text>
-                  <Text>Kontak: {supplier?.owner.phone ?? ''}</Text>
-                  <Text>Email: {supplier?.owner.user.email ?? ''}</Text>
+                  <Text>Pemilik: {supplier?.name ?? ''}</Text>
+                  <Text>Handle: {supplier?.handle ?? ''}</Text>
+                  <Text>Kontak: {supplier?.phone ?? ''}</Text>
+                  <Text>Email: {supplier?.email ?? ''}</Text>
                   <Divider />
                   {supplier?.addresses.length > 0
                     ? supplier?.addresses.map((address: any, index: number) => (
