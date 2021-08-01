@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Flex,
+  Heading,
   SimpleGrid,
   Spinner,
   Text,
@@ -11,6 +12,7 @@ import { Link } from 'react-router-dom'
 import { DefaultLayout } from '../../layouts'
 import { useSWR } from '../../utils/swr'
 import { formatPrice } from '@qopnet/qopnet-ui'
+import { Header } from '../../components'
 
 export const SuppliersProductsPage = () => {
   const { data, error } = useSWR('/api/suppliers/products')
@@ -18,40 +20,38 @@ export const SuppliersProductsPage = () => {
 
   return (
     <DefaultLayout>
-      <Box p={5}>
-        <Flex alignItems="center">
-          <Box h={5} w={5} borderRadius={20} bg="#4C2602" />
-          <Text ml={5} fontWeight={700}>
-            Semua Produk Supplier
-          </Text>
-          <Text ml={5} fontWeight={500}>
-            {supplierProducts?.length ?? 0} produk
-          </Text>
-          <Button
-            as={Link}
-            ml="auto"
-            variant="outline"
-            size="xs"
-            colorScheme="orange.900"
-            to="/suppliers/products/add"
-          >
-            Tambah Produk
-          </Button>
-        </Flex>
-        {error && (
-          <Box px={5} py={3}>
-            Gagal memuat produk supplier
-          </Box>
-        )}
-        {!supplierProducts && !error && (
-          <Box px={5} py={3}>
-            <Spinner color="orange.500" />
-          </Box>
-        )}
-        {supplierProducts && (
-          <SupplierProductsGrid supplierProducts={supplierProducts} />
-        )}
-      </Box>
+      <Flex alignItems="center">
+        <Header width="100%">
+          <Heading as="h1" size="md">
+            Semua Produk Supplier {supplierProducts?.name ?? ''}
+          </Heading>
+          <Text>{supplierProducts?.length} produk</Text>
+          <div style={{ marginLeft: 'auto' }}>
+            <Button
+              as={Link}
+              variant="outline"
+              size="xs"
+              colorScheme="orange.900"
+              to={`/suppliers/products/add`}
+            >
+              Tambah Produk
+            </Button>
+          </div>
+        </Header>
+      </Flex>
+      {error && (
+        <Box px={5} py={3}>
+          Gagal memuat produk supplier
+        </Box>
+      )}
+      {!supplierProducts && !error && (
+        <Box px={5} py={3}>
+          <Spinner color="orange.500" />
+        </Box>
+      )}
+      {supplierProducts && (
+        <SupplierProductsGrid supplierProducts={supplierProducts} />
+      )}
     </DefaultLayout>
   )
 }
@@ -67,7 +67,7 @@ export const SupplierProductsGrid = ({
   const border = useColorModeValue('gray.200', 'gray.700')
 
   return (
-    <Box mt={2}>
+    <Box>
       <SimpleGrid
         spacingX={3}
         columns={{ base: 1, md: 3 }}
