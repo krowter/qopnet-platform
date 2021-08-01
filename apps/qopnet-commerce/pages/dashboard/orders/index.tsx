@@ -16,10 +16,14 @@ import {
 import { useUser } from 'use-supabase'
 
 import { Layout, Icon } from '@qopnet/qopnet-ui'
-import { useSWR } from '../../../utils/swr'
+import { useSWRNext } from '../../../utils'
 
 /**
- * Dashboard Orders managing owned profile orders.
+ * /dashboard/orders
+ *
+ * Dashboard Orders
+ *
+ * Manage owned business orders from my profile.
  */
 const DashboardOrdersPage = () => {
   const user = useUser()
@@ -34,7 +38,8 @@ const DashboardOrdersPage = () => {
 }
 
 export const OrdersContainer = ({ user }) => {
-  const { data, error } = useSWR('/api/profiles/my/orders')
+  // const { data, error } = useSWR('/api/profiles/my/business/orders')
+  const { data, error } = useSWRNext('/api/profiles/my-business-orders')
   const { orders } = data || {}
 
   return (

@@ -29,6 +29,8 @@ import { useSWRNext } from '../../utils'
 /**
  * /cart
  *
+ * Shopping Cart
+ *
  * Even though this is the Cart page,
  * the API is using /api/business/orders/:businessOrderId
  * Because BusinessCart is just a draft BusinessOrder.

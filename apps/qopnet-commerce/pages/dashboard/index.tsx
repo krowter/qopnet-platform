@@ -107,7 +107,7 @@ export const DashboardContent = ({ profile }) => {
                 <DashboardActionLink name="profile" href="/create-profile">
                   Ubah profil saya
                 </DashboardActionLink>
-                <DashboardActionLink name="order" href="/orders">
+                <DashboardActionLink name="order" href="/dashboard/orders">
                   Cek order saya
                 </DashboardActionLink>
               </Stack>
