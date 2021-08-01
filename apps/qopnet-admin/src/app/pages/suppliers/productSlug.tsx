@@ -21,7 +21,10 @@ import {
   DrawerOverlay,
   useDisclosure,
   IconButton,
+  Link as ChakraLink,
+  Image as ChakraImage,
 } from '@chakra-ui/react'
+import cuid from 'cuid'
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import { Link } from 'react-router-dom'
 
@@ -222,6 +225,36 @@ export const SupplierProductSlugPage = () => {
                 alignItems="flex-start"
               >
                 <Stack id="product-detail">
+                  {supplierProduct?.images?.length && (
+                    <Flex>
+                      {supplierProduct.images.map(
+                        (uploadedImageUrl: string, index: number) => {
+                          return (
+                            <Box
+                              key={cuid()}
+                              border="1px solid gray"
+                              rounded="base"
+                              mr={5}
+                            >
+                              <ChakraLink
+                                isExternal
+                                href={uploadedImageUrl}
+                                passHref
+                                display="block"
+                              >
+                                <ChakraImage
+                                  src={uploadedImageUrl}
+                                  alt={`Uploaded image ${index + 1}`}
+                                  width={150}
+                                  height={150}
+                                />
+                              </ChakraLink>
+                            </Box>
+                          )
+                        }
+                      )}
+                    </Flex>
+                  )}
                   <Text> Kode SKU: {supplierProduct?.sku}</Text>
                   <Text>Nama Produk: {supplierProduct?.name}</Text>
                   <Text> Harga: Rp. {formatPrice(supplierProduct?.price)}</Text>
