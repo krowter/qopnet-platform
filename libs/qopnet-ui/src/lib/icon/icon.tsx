@@ -37,6 +37,9 @@ import {
   FaSun as Sun, // Dark Icon
   FaUser as Users,
   FaWalking as Shop,
+  FaTrash as Delete,
+  FaChevronRight as ChevronRight,
+  FaChevronLeft as ChevronLeft,
 } from 'react-icons/fa'
 import { FiMenu as Menu } from 'react-icons/fi'
 import { MdFreeBreakfast as Breakfast } from 'react-icons/md'
@@ -150,6 +153,12 @@ export const Icon = (props: IconProps) => {
       return <Receipt />
     case 'sort':
       return <Sort />
+    case 'delete':
+      return <Delete />
+    case 'chevron-right':
+      return <ChevronRight />
+    case 'chevron-left':
+      return <ChevronLeft />
 
     /**
      * When nothing found

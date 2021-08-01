@@ -1,0 +1,125 @@
+[
+  {
+    "id": "ckrtmdep0000108jscgws0b4b",
+    "status": "CONFIRMED",
+
+    "ownerId": 1,
+    "supplierId": null,
+    "merchantId": null,
+    "shipmentAddressId": null,
+    "paymentId": null,
+
+    "businessOrderItems": [
+      {
+        "id": 1,
+        "quantity": 100,
+        "subTotal": 1425000,
+        "supplierProduct": {
+          "id": 1,
+          "images": [
+            "https://ik.imagekit.io/qopnetlabs/images/gula-gulaku-premium.jpg?updatedAt=1627651178391"
+          ],
+          "name": "Gulaku",
+          "slug": "gulaku",
+          "price": 15000,
+          "discount": 5,
+          "weight": 1,
+          "weightUnit": "KG",
+          "supplier": {
+            "name": "Raja Bubuk",
+            "handle": "rajabubuk",
+            "addresses": [{ "city": "Tangerang", "state": "Banten" }]
+          }
+        }
+      },
+      {
+        "id": 2,
+        "quantity": 200,
+        "subTotal": null,
+        "supplierProduct": {
+          "id": 1,
+          "images": [
+            "https://ik.imagekit.io/qopnetlabs/images/tepungberas-rosebrand.webp?updatedAt=1627651177951"
+          ],
+          "name": "Tepung Beras",
+          "price": 21000,
+          "discount": 3,
+          "weight": 1,
+          "weightUnit": "KG",
+          "supplier": {
+            "name": "Raja Bubuk",
+            "handle": "rajabubuk",
+            "addresses": [{ "city": "Tangerang", "state": "Banten" }]
+          }
+        }
+      }
+    ],
+
+    "totalItems": null,
+    "totalPrice": null,
+    "totalDiscount": null,
+    "totalCalculatedPrice": null,
+
+    "totalWeight": null,
+    "totalWeightUnit": "KG",
+    "totalShippingCost": null,
+    "shippingDiscount": null,
+
+    "totalPayment": null,
+
+    "createdAt": "2021-08-01",
+    "updatedAt": "2021-08-01"
+  },
+
+  {
+    "id": "ckrtmd6g1000008jsgyjvb561",
+    "status": "ONDELIVERY",
+
+    "ownerId": 1,
+    "supplierId": null,
+    "merchantId": null,
+    "shipmentAddressId": null,
+    "paymentId": null,
+
+    "businessOrderItems": [
+      {
+        "id": 1,
+        "quantity": 100,
+        "subTotal": 1425000,
+        "supplierProduct": {
+          "id": 1,
+          "images": [
+            "https://ik.imagekit.io/qopnetlabs/images/gula-gulaku-premium.jpg?updatedAt=1627651178391"
+          ],
+          "name": "Garamku",
+          "slug": "garamku",
+          "price": 15000,
+          "discount": 5,
+          "weight": 1,
+          "weightUnit": "KG",
+          "supplier": {
+            "name": "Raja Bubuk",
+            "handle": "rajabubuk",
+            "addresses": [{ "city": "Tangerang", "state": "Banten" }]
+          }
+        }
+      }
+    ],
+
+    "totalItems": null,
+    "totalPrice": null,
+    "totalDiscount": null,
+    "totalCalculatedPrice": null,
+
+    "totalWeight": null,
+    "totalWeightUnit": "KG",
+    "totalShippingCost": null,
+    "shippingDiscount": null,
+
+    "totalPayment": null,
+    "totalBill": null,
+
+    "createdAt": "2021-08-03",
+    "updatedAt": "2021-08-03"
+  }
+]

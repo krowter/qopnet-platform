@@ -36,6 +36,11 @@ https://api.qopnet.id
 
 ## /api/profiles
 
+| Method | Endpoint         |
+| ------ | ---------------- |
+| GET    | /api/profiles    |
+| GET    | /api/profiles/my |
+
 ## /api/suppliers
 
 | Method | Endpoint                      |
@@ -65,6 +70,7 @@ https://api.qopnet.id
 
 | Method | Endpoint                                 |
 | ------ | ---------------------------------------- |
+| GET    | /api/profiles/my/cart                    |
 | GET    | /api/profiles/:profileParam/orders/draft |
 | GET    | /api/profiles/:profileParam/orders       |
 
@@ -73,6 +79,8 @@ https://api.qopnet.id
    - The logic is the same with `POST /api/business/orders`.
 
 ```http
+GET /api/profiles/my/cart
+GET /api/profiles/my/business/orders
 GET /api/profiles/:profileParam/orders/draft
 {
   businessOrder: {

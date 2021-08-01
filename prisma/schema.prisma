@@ -28,6 +28,10 @@ model User {
   adminProfile    AdminProfile?
   fundBeneficiary FundBeneficiary?
 
+  // Timestamp
+  // createdAt DateTime @default(now())
+  // updatedAt DateTime @default(now())
+
   @@map(name: "users")
 }
 
@@ -50,12 +54,12 @@ model Profile {
   merchants         Merchant[]
   fundBeneficiaries FundBeneficiary?
   businessOrders    BusinessOrder[]
+  MerchantProduct   MerchantProduct[]
 
   // Timestamp
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
-  MerchantProduct MerchantProduct[]
   @@map(name: "profiles")
 }
 
@@ -313,9 +317,11 @@ enum FundBeneficiaryStatus {
 model FundBeneficiary {
   id String @id @default(cuid())
 
-  // Relations include access to Merchants
-  profile Profile? @relation(fields: [profileId], references: [id])
-  user    User?    @relation(fields: [userId], references: [id])
+  // Relations can also include access to Merchants
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  profileId String?
+  profile   Profile? @relation(fields: [profileId], references: [id])
 
   // Other personal info
   nationalId String?
@@ -332,8 +338,6 @@ model FundBeneficiary {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
-  profileId String?
-  userId    String?
   @@map(name: "fund_beneficiaries")
 }
 
@@ -370,7 +374,7 @@ model BusinessOrder {
   id     String       @id @default(cuid())
   status OrderStatus?
 
-  // relations
+  // Relations
   ownerId String?
   owner   Profile? @relation(fields: [ownerId], references: [id])
 
@@ -400,7 +404,7 @@ model BusinessOrderItem {
 
   quantity Int @default(1)
 
-  // relations
+  // Relations
   supplierId        String
   supplier          Supplier        @relation(fields: [supplierId], references: [id])
   supplierProductId String
@@ -429,10 +433,10 @@ model Payment {
   name            String
   paymentCategory PaymentCategory
 
-  // relations
+  // Relations
   businessOrders BusinessOrder[]
 
-  // TimeStamp
+  // Timestamp
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 

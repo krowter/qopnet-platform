@@ -64,6 +64,7 @@ export const Header = (props: HeaderProps) => {
       bg={useColorModeValue('orange.100', 'orange.900')}
       justify="space-between"
       spacing={3}
+      userSelect="none"
     >
       <HStack spacing={3}>
         <NextLink href="/" passHref>
@@ -90,13 +91,13 @@ export const Header = (props: HeaderProps) => {
           {colorMode === 'light' ? <Icon name="moon" /> : <Icon name="sun" />}
         </IconButton>
 
-        {isDesktop && (
-          <Heading as="h1" size="md">
+        <Heading as="h1" size="md">
+          {isDesktop && (
             <NextLink href="/shop">
               <Link>Belanja</Link>
             </NextLink>
-          </Heading>
-        )}
+          )}
+        </Heading>
       </HStack>
 
       <SearchBar />
@@ -116,13 +117,16 @@ export const Header = (props: HeaderProps) => {
               </chakra.a>
             </NextLink>
             <ButtonGroup id="user-action-buttons" size="md" variant="ghost">
-              <IconButton
-                id="shopping-cart-button"
-                colorScheme="green"
-                aria-label="Keranjang belanja"
-              >
-                <Icon name="cart" />
-              </IconButton>
+              <NextLink href="/cart" passHref>
+                <IconButton
+                  id="shopping-cart-button"
+                  as="a"
+                  colorScheme="green"
+                  aria-label="Keranjang belanja"
+                >
+                  <Icon name="cart" />
+                </IconButton>
+              </NextLink>
               <IconButton
                 id="signout-button"
                 colorScheme="red"
