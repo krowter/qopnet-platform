@@ -21,7 +21,12 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react'
 
-import { Layout, Icon, SupplierProductPrice } from '@qopnet/qopnet-ui'
+import {
+  Layout,
+  Icon,
+  SupplierProductPrice,
+  OptionBox,
+} from '@qopnet/qopnet-ui'
 import {
   calculateEverything,
   formatRupiah,
@@ -134,7 +139,8 @@ export const ShipmentContainer = ({ order }) => {
     { id: 2, name: 'Deliveree' },
   ]
 
-  const cardBackground = useColorModeValue('gray.100', 'gray.700')
+  const selectedAddressId = 1
+  const selectedCourierId = 2
 
   return (
     <Stack flex={1} minW="420px" spacing={10}>
@@ -145,15 +151,13 @@ export const ShipmentContainer = ({ order }) => {
         <Stack>
           {myAddresses.map((address) => {
             return (
-              <Box
+              <OptionBox
                 key={address.id}
-                id={address.id}
-                p={3}
-                bg={cardBackground}
-                rounded="full"
+                id={`address-${address.id}`}
+                selected={selectedAddressId === address.id}
               >
                 <Text>{formatAddressComplete(address)}</Text>
-              </Box>
+              </OptionBox>
             )
           })}
         </Stack>
@@ -166,9 +170,13 @@ export const ShipmentContainer = ({ order }) => {
         <Stack>
           {couriers.map((courier) => {
             return (
-              <Box key={courier.id} p={3} bg={cardBackground} rounded="full">
+              <OptionBox
+                key={courier.id}
+                id={`courier-${courier.id}`}
+                selected={selectedCourierId === courier.id}
+              >
                 <Text>{courier.name}</Text>
-              </Box>
+              </OptionBox>
             )
           })}
         </Stack>

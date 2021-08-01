@@ -11,22 +11,33 @@ export function Form(props: FormProps) {
   )
 }
 
-export interface OptionCardProps {
-  selected: boolean
+export interface OptionBoxProps {
+  id?: string
+  selected?: boolean
   children: JSX.Element | JSX.Element[]
 }
 
-export const OptionCard = ({ selected, children }: OptionCardProps) => {
-  const borderColor = useColorModeValue('gray.700', 'gray.200')
-  const cardBackground = useColorModeValue('gray.100', 'gray.700')
+export const OptionBox = (props: OptionBoxProps) => {
+  const { selected, children } = props
+  const borderColor = useColorModeValue(
+    selected ? 'orange.500' : 'gray.100', // light
+    selected ? 'orange.500' : 'gray.700' // dark
+  )
+  const boxBackground = useColorModeValue(
+    selected ? 'gray.100' : 'white', // light
+    selected ? 'gray.700' : 'gray.800' // dark
+  )
 
   return (
     <Box
-      p={3}
-      bg={cardBackground}
+      {...props}
+      py={3}
+      px={5}
+      bg={boxBackground}
       rounded="full"
       border="2px solid black"
       borderColor={borderColor}
+      cursor="pointer"
     >
       {children}
     </Box>
