@@ -21,8 +21,8 @@ import {
 
 import { Layout, Icon, SupplierProductPrice } from '@qopnet/qopnet-ui'
 import { formatRupiah, calculateEverything } from '@qopnet/util-format'
-import { BreadcrumbCart } from '../../components'
-import { useSWRNext } from '../../utils'
+import { BreadcrumbCart } from '../../../components'
+import { useSWRNext } from '../../../utils'
 
 const paymentOptions = [
   { id: 1, name: 'COD (Cash on Delivery)' },

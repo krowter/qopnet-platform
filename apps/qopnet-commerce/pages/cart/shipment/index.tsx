@@ -27,8 +27,8 @@ import {
   formatRupiah,
   formatAddressComplete,
 } from '@qopnet/util-format'
-import { BreadcrumbCart } from '../../components'
-import { useSWRNext } from '../../utils'
+import { BreadcrumbCart } from '../../../components'
+import { useSWRNext } from '../../../utils'
 
 /**
  * /cart/shipment
