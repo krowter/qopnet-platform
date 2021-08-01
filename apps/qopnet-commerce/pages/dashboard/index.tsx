@@ -16,6 +16,7 @@ import {
 import { useUser } from 'use-supabase'
 
 import { Layout, Icon } from '@qopnet/qopnet-ui'
+import { formatAddressComplete } from '@qopnet/util-format'
 import { useSWR } from '../../utils/swr'
 
 /**
@@ -42,6 +43,7 @@ export const DashboardContainer = ({ user }) => {
 
   return (
     <Stack>
+      {/* <Text as="pre">{JSON.stringify(data, null, 2)}</Text> */}
       {error && !data && <Text>Gagal memuat profil Anda</Text>}
       {!error && !data && (
         <HStack>
@@ -65,11 +67,16 @@ export const DashboardContent = ({ profile }) => {
       <Stack id="dashboard-title">
         <Heading as="h1">Dasbor Saya</Heading>
         {profile && (
-          <Text>
-            <span>{profile.user.email} / </span>
-            <span>@{profile.handle} / </span>
-            <span>{profile.phone}</span>
-          </Text>
+          <Stack>
+            <Text>
+              <span>{profile.user.email} / </span>
+              <span>@{profile.handle} / </span>
+              <span>{profile.phone}</span>
+            </Text>
+            {profile?.addresses[0] && (
+              <Text>{formatAddressComplete(profile.addresses[0])}</Text>
+            )}
+          </Stack>
         )}
       </Stack>
 
