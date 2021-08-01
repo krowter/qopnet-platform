@@ -4,10 +4,18 @@ dayjs.locale('id')
 
 /**
  * Format from string or date
+ * 31 January 2021
+ */
+export const formatDate = (text: string | Date) => {
+  return dayjs(text).format('D MMMM YYYY')
+}
+
+/**
+ * Format from string or date
  * 31 January 2021, 12:34
  */
 export const formatDateTime = (text: string | Date) => {
-  return dayjs(text).format('DD MMMM YYYY, HH:mm')
+  return dayjs(text).format('D MMMM YYYY, HH:mm')
 }
 
 /**
@@ -37,6 +45,18 @@ export const formatImageUrl = (env: string, text: string) => {
   }
 }
 
+// From 1234567 into Rp 1.234.567
+export const formatRupiah = (price: number) => {
+  const formattedPrice = new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+  })
+    .format(Number(price))
+    .replace(/\D00$/, '')
+
+  return formattedPrice
+}
+
 // From 1234567 into 1.234.567
 export const formatMoney = (price: number) => {
   return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
@@ -56,5 +76,72 @@ export const formatWeight = (weight: number, weightUnit: string) => {
     }
   } else {
     return `${weight} kg`
+  }
+}
+
+export const formatAddressComplete = ({
+  street,
+  streetDetails,
+  city,
+  state,
+  zip,
+  countryCode,
+}) => {
+  return `${street}, ${streetDetails}, ${city}, ${state} ${zip}, Indonesia`
+}
+
+export const calculateEverything = (order) => {
+  // Total Items
+  const totalItemArray = order?.businessOrderItems?.map(
+    (item) => item.quantity || 0
+  )
+  const totalItems = order?.totalItems || totalItemArray.reduce((a, c) => a + c)
+
+  // Total Price
+  const totalPriceArray = order?.businessOrderItems?.map(
+    (item) => item.supplierProduct?.price * item.quantity || 0
+  )
+  const totalPrice =
+    order?.totalPrice || totalPriceArray.reduce((a, c) => a + c)
+
+  // Total Discount
+  const totalDiscountArray = order?.businessOrderItems?.map((item) => {
+    if (item.supplierProduct?.discount) {
+      const totalDiscountedPrice =
+        item.quantity *
+        item.supplierProduct?.price *
+        (item.supplierProduct?.discount / 100)
+      return totalDiscountedPrice
+    } else return 0
+  })
+  const totalDiscount =
+    order?.totalDiscount || totalDiscountArray.reduce((a, c) => a + c)
+
+  // Total Calculated Price
+  // Not including the Shipping Cost, before final payment
+  const totalCalculatedPrice = totalPrice - totalDiscount || 0
+
+  const totalShipmentCost = 135000 || 0
+  const totalCalculatedBill = totalCalculatedPrice + totalShipmentCost
+
+  return {
+    totalItems,
+    totalPrice,
+    totalDiscount,
+    totalCalculatedPrice,
+    totalShipmentCost,
+    totalCalculatedBill,
+  }
+}
+
+export const calculateSupplierProductItem = (item) => {
+  const calculatedDiscount =
+    item.supplierProduct?.price * (item.supplierProduct?.discount / 100)
+  const calculatedPrice = item.supplierProduct?.price - calculatedDiscount
+  const subTotalCalculatedPrice = item.quantity * calculatedPrice
+
+  return {
+    calculatedPrice,
+    subTotalCalculatedPrice,
   }
 }

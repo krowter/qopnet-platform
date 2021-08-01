@@ -464,7 +464,7 @@ export const SupplierCardForProductLink = ({
         </Heading>
         {supplier?.owner && (
           <Text>
-            Dimiliki oleh <b>{supplier?.owner?.name}</b>
+            Dikelola oleh <b>{supplier?.owner?.name}</b>
           </Text>
         )}
         {supplier?.addresses && (
@@ -537,7 +537,7 @@ export const SupplierProductCartModifier = ({
       </Text>
 
       <Text>
-        <span>Subtotal: </span>
+        <span>Sub Total: </span>
         <b>{formattedProductSubTotal}</b>
       </Text>
 

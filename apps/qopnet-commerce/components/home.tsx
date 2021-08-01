@@ -1,4 +1,4 @@
-import { Stack } from '@chakra-ui/react'
+import { Stack, Divider } from '@chakra-ui/react'
 
 import {
   HomeBanner,
@@ -18,7 +18,9 @@ export const HomeContainer = () => {
     <Stack spacing={20}>
       <HomeBanner />
       <HomeProductSpecial supplierProducts={supplierProducts} error={error} />
+      <Divider />
       <HomePartners />
+      <Divider />
       <HomeTestimonials />
     </Stack>
   )

@@ -108,7 +108,7 @@ router.get('/my', checkUser, async (req, res) => {
   })
 
   res.json({
-    message: 'Get my profile',
+    message: 'Get my complete profile',
     profile,
   })
 })

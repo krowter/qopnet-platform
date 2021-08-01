@@ -7,6 +7,8 @@ import {
   Stack,
   VStack,
   Text,
+  Image as ChakraImage,
+  Flex,
   SimpleGrid,
 } from '@chakra-ui/react'
 
@@ -30,8 +32,8 @@ export const carouselResponsive = {
 
 // Hardcode for now
 export const carouselBannerImages = [
-  'https://ik.imagekit.io/qopnetlabs/banners/qopnet-25-percent-discount.jpg?updatedAt=1626892509930',
-  'https://ik.imagekit.io/qopnetlabs/banners/qopnet-dream-bed.jpg?updatedAt=1626892510466',
+  'https://ik.imagekit.io/qopnetlabs/banners/qopnet-25-percent-discount.jpg?updatedAt=1627324141941',
+  'https://ik.imagekit.io/qopnetlabs/banners/qopnet-dream-bed.jpg?updatedAt=1627324142848',
   'https://ik.imagekit.io/qopnetlabs/banners/qopnet-eid-adha.jpg?updatedAt=1626892511418',
 ]
 
@@ -67,14 +69,91 @@ export const testimonials = [
 
 export const partners = [
   {
-    name: 'Unilever',
+    name: 'Adira Semesta Industry',
     imageUrl:
-      'https://ik.imagekit.io/qopnetlabs/logos/unilever.png?updatedAt=1626984413778',
+      'https://ik.imagekit.io/qopnetlabs/logos/adirasemestraindustry.png?updatedAt=1627850431787',
   },
   {
-    name: 'Rose Brand',
+    name: 'Berry Kitchen',
     imageUrl:
-      'https://ik.imagekit.io/qopnetlabs/logos/rosebrand.png?updatedAt=1626984413779',
+      'https://ik.imagekit.io/qopnetlabs/logos/berrykitchen.png?updatedAt=1627850432466',
+  },
+  {
+    name: 'Dapur Miji Catering',
+    imageUrl:
+      'https://ik.imagekit.io/qopnetlabs/logos/dapurmiji.png?updatedAt=1627850433416',
+  },
+  {
+    name: 'Deliveree',
+    imageUrl:
+      'https://ik.imagekit.io/qopnetlabs/logos/deliveree.png?updatedAt=1627850434312',
+  },
+  {
+    name: 'Duha Syariah',
+    imageUrl:
+      'https://ik.imagekit.io/qopnetlabs/logos/duhasyariah.png?updatedAt=1627850435228',
+  },
+  {
+    name: 'Eatever',
+    imageUrl:
+      'https://ik.imagekit.io/qopnetlabs/logos/eatever.png?updatedAt=1627850436093',
+  },
+  {
+    name: 'IDX Incubator',
+    imageUrl:
+      'https://ik.imagekit.io/qopnetlabs/logos/idxincubator.png?updatedAt=1627850437030',
+  },
+  {
+    name: 'Koinworks',
+    imageUrl:
+      'https://ik.imagekit.io/qopnetlabs/logos/koinworks.png?updatedAt=1627850437885',
+  },
+  {
+    name: 'Kredivo',
+    imageUrl:
+      'https://ik.imagekit.io/qopnetlabs/logos/kredivo.png?updatedAt=1627850438824',
+  },
+  {
+    name: 'Lalamove',
+    imageUrl:
+      'https://ik.imagekit.io/qopnetlabs/logos/lalamove.png?updatedAt=1627850439712',
+  },
+  {
+    name: 'Mas Kargo',
+    imageUrl:
+      'https://ik.imagekit.io/qopnetlabs/logos/maskargo.png?updatedAt=1627850440648',
+  },
+  {
+    name: 'Panarub Industry',
+    imageUrl:
+      'https://ik.imagekit.io/qopnetlabs/logos/panarubindustry.png?updatedAt=1627850441525',
+  },
+  {
+    name: 'Permata Bank',
+    imageUrl:
+      'https://ik.imagekit.io/qopnetlabs/logos/permatabank.png?updatedAt=1627850442444',
+  },
+  {
+    name: 'Soul in a Box',
+    imageUrl:
+      'https://ik.imagekit.io/qopnetlabs/logos/soulinabox.png?updatedAt=1627850443285',
+  },
+  {
+    name: 'Unilever Food Solutions',
+    imageUrl:
+      'https://ik.imagekit.io/qopnetlabs/logos/unileverfoodsolutions.png?updatedAt=1627850444203',
+  },
+  { name: 'Penggerak Oke Oce' },
+  { name: 'Himpunan Pengusaha Muda Indonesia' },
+  { name: 'Berrill Jaya (Beras Anak Raja Group)' },
+  { name: 'Koperasi Nelayan Cilincing' },
+  { name: 'Koperasi Pedagang Pasar Cipinang' },
+  { name: 'Koperasi UNIKA Soegijapranata' },
+  { name: 'Koperasi Karyawan PT Panarub Industry' },
+  { name: 'Koperasi Karyawan PT Argha Karya Prima Tbk' },
+  { name: 'Koperasi Karyawan PT Indah Jaya (Terry Palmer)' },
+  {
+    name: 'Koperasi Karyawan PT Trio Putera Utama (Adira Semesta Industry Group)',
   },
 ]
 
@@ -112,21 +191,29 @@ export const HomePartners = () => {
     <Stack id="home-partners" spacing={10} textAlign="center">
       <Heading>Partner Kami</Heading>
       <VStack>
-        <SimpleGrid minChildWidth="100px" gap={5} maxW="220px">
+        <Flex flexWrap="wrap" align="center" justify="center">
           {partners.map((partner, index) => {
             return (
-              <Box key={index} maxW="100px">
-                <NextImage
-                  alt={partner.name}
-                  src={partner.imageUrl}
-                  layout="responsive"
-                  width={100}
-                  height={100}
-                />
+              <Box key={index} m={2}>
+                {partner?.imageUrl ? (
+                  <ChakraImage
+                    alt={partner?.name}
+                    src={partner?.imageUrl}
+                    h="50px"
+                    px={3}
+                    // layout="responsive"
+                    // width={100}
+                    // height={100}
+                  />
+                ) : (
+                  <Text fontSize="sm" mx={5} fontWeight="bold">
+                    {partner.name}
+                  </Text>
+                )}
               </Box>
             )
           })}
-        </SimpleGrid>
+        </Flex>
       </VStack>
     </Stack>
   )

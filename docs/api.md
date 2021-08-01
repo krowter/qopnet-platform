@@ -36,6 +36,11 @@ https://api.qopnet.id
 
 ## /api/profiles
 
+| Method | Endpoint         |
+| ------ | ---------------- |
+| GET    | /api/profiles    |
+| GET    | /api/profiles/my |
+
 ## /api/suppliers
 
 | Method | Endpoint                      |
@@ -49,3 +54,39 @@ https://api.qopnet.id
 ## /api/suppliers/products
 
 ## /api/financing
+
+## /api/business/orders
+
+| Method | Endpoint                              |
+| ------ | ------------------------------------- |
+| GET    | /api/business/orders                  |
+| GET    | /api/business/orders/:businessOrderId |
+| POST   | /api/business/orders                  |
+| PUT    | /api/business/orders/:businessOrderId |
+| DELETE | /api/business/orders                  |
+| DELETE | /api/business/orders/:businessOrderId |
+
+## /api/profiles | orders
+
+| Method | Endpoint                                 |
+| ------ | ---------------------------------------- |
+| GET    | /api/profiles/my/cart                    |
+| GET    | /api/profiles/:profileParam/orders/draft |
+| GET    | /api/profiles/:profileParam/orders       |
+
+1. If DRAFT Order is not empty, then get the `businessOrder` data.
+2. If DRAFT Order is empty, then backend create new `BusinessOrder` automatically, then get the `businessOrder` data.
+   - The logic is the same with `POST /api/business/orders`.
+
+```http
+GET /api/profiles/my/cart
+GET /api/profiles/my/business/orders
+GET /api/profiles/:profileParam/orders/draft
+{
+  businessOrder: {
+    id: "",
+    ownerId: "",
+    owner: {}
+  }
+}
+```
