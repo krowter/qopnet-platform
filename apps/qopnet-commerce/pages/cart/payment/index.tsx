@@ -3,28 +3,20 @@ import NextLink from 'next/link'
 import NextImage from 'next/image'
 import { useRouter } from 'next/router'
 import {
-  Box,
   Button,
-  chakra,
-  Flex,
   Heading,
   HStack,
-  IconButton,
-  Link,
   Stack,
-  StackDivider,
-  Divider,
-  Tag,
   Text,
   useColorModeValue,
 } from '@chakra-ui/react'
 
-import { Layout, Icon, SupplierProductPrice } from '@qopnet/qopnet-ui'
+import { Layout, OptionBox } from '@qopnet/qopnet-ui'
 import { formatRupiah, calculateEverything } from '@qopnet/util-format'
 import { BreadcrumbCart } from '../../../components'
 import { useSWRNext } from '../../../utils'
 
-const paymentOptions = [
+const payments = [
   { id: 1, name: 'COD (Cash on Delivery)' },
   { id: 2, name: 'Transfer Manual Bank BCA' },
   { id: 3, name: 'Transfer Manual Bank Permata' },
@@ -60,7 +52,7 @@ export const CartPaymentPage = () => {
 }
 
 export const PaymentContainer = ({ order }) => {
-  const cardBackground = useColorModeValue('gray.100', 'gray.700')
+  const selectedPaymentId = 2
 
   return (
     <Stack flex={1} spacing={10} maxW="420px">
@@ -69,16 +61,15 @@ export const PaymentContainer = ({ order }) => {
           Pilih metode pembayaran:
         </Heading>
         <Stack>
-          {paymentOptions.map((paymentOption) => {
+          {payments.map((payment) => {
             return (
-              <Box
-                key={paymentOption.id}
-                p={3}
-                bg={cardBackground}
-                rounded="full"
+              <OptionBox
+                key={payment.id}
+                id={`payment-${payment.id}`}
+                selected={selectedPaymentId === payment.id}
               >
-                <Text>{paymentOption?.name}</Text>
-              </Box>
+                <Text>{payment?.name}</Text>
+              </OptionBox>
             )
           })}
         </Stack>
@@ -89,7 +80,7 @@ export const PaymentContainer = ({ order }) => {
 
 export const PaymentSummaryContainer = ({ order }) => {
   const router = useRouter()
-  const [paymentOption, setPaymentOption] = useState(paymentOptions[1])
+  const [payment, setPaymentOption] = useState(payments[1])
 
   const {
     totalItems,
@@ -120,7 +111,7 @@ export const PaymentSummaryContainer = ({ order }) => {
       <Stack id="order-calculation">
         <HStack justify="space-between">
           <Text>Pilihan Pembayaran</Text>
-          <Text>{paymentOption?.name}</Text>
+          <Text>{payment?.name}</Text>
         </HStack>
         <HStack justify="space-between">
           <Text>Total Tagihan</Text>
