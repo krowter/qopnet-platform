@@ -145,7 +145,13 @@ export const ShipmentContainer = ({ order }) => {
         <Stack>
           {myAddresses.map((address) => {
             return (
-              <Box key={address.id} p={3} bg={cardBackground} rounded="full">
+              <Box
+                key={address.id}
+                id={address.id}
+                p={3}
+                bg={cardBackground}
+                rounded="full"
+              >
                 <Text>{formatAddressComplete(address)}</Text>
               </Box>
             )
