@@ -64,6 +64,7 @@ export const Header = (props: HeaderProps) => {
       bg={useColorModeValue('orange.100', 'orange.900')}
       justify="space-between"
       spacing={3}
+      userSelect="none"
     >
       <HStack spacing={3}>
         <NextLink href="/" passHref>

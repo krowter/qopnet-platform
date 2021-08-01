@@ -168,16 +168,23 @@ export const ShipmentContainer = ({ order }) => {
         </Stack>
       </Stack>
 
-      <Stack
-        py={5}
-        divider={<StackDivider />}
-        spacing={5}
-        align="stretch"
-        maxW="720px"
-      >
-        {order?.businessOrderItems?.map((item, index) => {
-          return <BusinessOrderItem key={item.supplierProduct.id} item={item} />
-        })}
+      <Stack>
+        <Heading as="h3" size="md">
+          Ringkasan barang:
+        </Heading>
+        <Stack
+          py={5}
+          divider={<StackDivider />}
+          spacing={5}
+          align="stretch"
+          maxW="720px"
+        >
+          {order?.businessOrderItems?.map((item, index) => {
+            return (
+              <BusinessOrderItem key={item.supplierProduct.id} item={item} />
+            )
+          })}
+        </Stack>
       </Stack>
     </Stack>
   )
