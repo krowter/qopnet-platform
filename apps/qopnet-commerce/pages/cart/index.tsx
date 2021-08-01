@@ -50,8 +50,8 @@ const CartPage = () => {
       <BreadcrumbCart />
       <Stack spacing={10}>
         <Heading>Keranjang belanja</Heading>
-        {error && <Text>Gagal memuat data order</Text>}
-        {!error && !data && <Text>Memuat data order...</Text>}
+        {error && <Text>Gagal memuat data keranjang untuk order</Text>}
+        {!error && !data && <Text>Memuat data keranjang untuk order...</Text>}
         {!error && data && order && (
           <Stack direction={['column', 'column', 'row']}>
             <CartContainer order={order} />

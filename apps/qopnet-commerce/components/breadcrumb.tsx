@@ -34,3 +34,20 @@ export const BreadcrumbCart = () => {
     </Breadcrumb>
   )
 }
+
+export const BreadcrumbOrders = () => {
+  return (
+    <Breadcrumb separator={<Icon name="chevron-right" />}>
+      <BreadcrumbItem>
+        <BreadcrumbLink as={NextLink} href="/dashboard" passHref>
+          <ChakraLink>Dashboard</ChakraLink>
+        </BreadcrumbLink>
+      </BreadcrumbItem>
+      <BreadcrumbItem>
+        <BreadcrumbLink as={NextLink} href="/dashboard/orders" passHref>
+          <ChakraLink>Orders</ChakraLink>
+        </BreadcrumbLink>
+      </BreadcrumbItem>
+    </Breadcrumb>
+  )
+}

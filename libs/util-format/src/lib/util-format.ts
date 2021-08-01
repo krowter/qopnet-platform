@@ -4,10 +4,18 @@ dayjs.locale('id')
 
 /**
  * Format from string or date
+ * 31 January 2021
+ */
+export const formatDate = (text: string | Date) => {
+  return dayjs(text).format('D MMMM YYYY')
+}
+
+/**
+ * Format from string or date
  * 31 January 2021, 12:34
  */
 export const formatDateTime = (text: string | Date) => {
-  return dayjs(text).format('DD MMMM YYYY, HH:mm')
+  return dayjs(text).format('D MMMM YYYY, HH:mm')
 }
 
 /**
@@ -123,5 +131,17 @@ export const calculateEverything = (order) => {
     totalCalculatedPrice,
     totalShipmentCost,
     totalCalculatedBill,
+  }
+}
+
+export const calculateSupplierProductItem = (item) => {
+  const calculatedDiscount =
+    item.supplierProduct?.price * (item.supplierProduct?.discount / 100)
+  const calculatedPrice = item.supplierProduct?.price - calculatedDiscount
+  const subTotalCalculatedPrice = item.quantity * calculatedPrice
+
+  return {
+    calculatedPrice,
+    subTotalCalculatedPrice,
   }
 }
