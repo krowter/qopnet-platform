@@ -30,6 +30,7 @@ router.put(
   '/my/cart',
   auth.checkUser,
   businessOrder.checkMyCart,
+  businessOrder.autoCreateMyCart,
   businessOrder.updateMyCart
 )
 

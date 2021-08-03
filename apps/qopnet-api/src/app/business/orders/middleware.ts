@@ -1,5 +1,10 @@
 import { prisma } from '@qopnet/util-prisma'
-import { Prisma, BusinessOrder, Address } from '@prisma/client'
+import {
+  Prisma,
+  BusinessOrder,
+  BusinessOrderItem,
+  Address,
+} from '@prisma/client'
 
 // -----------------------------------------------------------------------------
 // User Only
@@ -43,10 +48,7 @@ export const getMyCart = async (req, res) => {
   try {
     const businessOrder: Partial<BusinessOrder> =
       await prisma.businessOrder.findFirst({
-        where: {
-          ownerId,
-          status: 'DRAFT',
-        },
+        where: { ownerId, status: 'DRAFT' },
         include: {
           businessOrderItems: true,
           shipmentAddress: true,
@@ -80,18 +82,10 @@ export const createMyCart = async (req, res) => {
     try {
       const createdCart: Partial<BusinessOrder> =
         await prisma.businessOrder.create({
-          data: {
-            ownerId,
-            status: 'DRAFT',
-          },
-          include: {
-            businessOrderItems: true,
-            shipmentAddress: true,
-            payment: true,
-          },
+          data: { ownerId, status: 'DRAFT' },
         })
 
-      res.json({
+      res.status(201).json({
         message: 'Create my cart or draft business order success',
         businessOrder: createdCart,
         formData,
@@ -121,22 +115,66 @@ export const createMyCart = async (req, res) => {
 }
 
 // Update my cart with one business order item
+// PUT /api/business/orders/my/cart
 export const updateMyCart = async (req, res) => {
-  const isCartExist = req.isCartExist
   const ownerId = req.profile.id
+  const isCartExist = req.isCartExist
+  const businessOrder = req.businessOrder
   const formData = req.body
 
-  // Only continue if cart exist is true
-  if (isCartExist) {
-    res.status(500).json({
-      message: 'Update my cart or draft business order success',
-      ownerId,
-      formData,
-    })
+  // Only continue if both cart exist and business order available
+  if (isCartExist && businessOrder) {
+    try {
+      // 1. Find one supplier product by id
+      const supplierProduct = await prisma.supplierProduct.findUnique({
+        where: {
+          id: formData.id,
+        },
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+          price: true,
+          supplier: { select: { id: true, name: true } },
+        },
+      })
+      if (!supplierProduct) throw 'Supplier product not found'
+
+      // 2. Decide to add new or increment quantity
+
+      const businessOrderItem: Partial<BusinessOrderItem> = {
+        quantity: formData.quantity, // From req.body
+        businessOrderId: businessOrder.id, // From check cart
+        supplierProductId: supplierProduct.id, // From database
+        supplierId: supplierProduct.supplier.id, // From database
+      }
+
+      res.status(200).json({
+        message: 'Update my cart or draft business order success',
+        isCartExist,
+        ownerId,
+        formData,
+        supplierProduct,
+        businessOrderItem,
+        businessOrder,
+      })
+    } catch (error) {
+      res.status(404).json({
+        message:
+          'Update my cart or draft business order failed because supplier product is not found',
+        isCartExist,
+        ownerId,
+        formData,
+        businessOrder,
+      })
+    }
   } else {
     res.status(400).json({
       message:
-        'Update my cart or draft business order failed because is not exist',
+        'Update my cart or draft business order failed because cart is not exist',
+      isCartExist,
+      ownerId,
+      businessOrder,
       formData,
     })
   }
@@ -210,19 +248,13 @@ export const createOneBusinessOrder = async (req, res) => {
   try {
     const createdCart: Partial<BusinessOrder> =
       await prisma.businessOrder.create({
-        data: {
-          ownerId,
-          status: 'DRAFT',
-        },
+        data: { ownerId, status: 'DRAFT' },
         include: {
           owner: true,
-          businessOrderItems: true,
-          shipmentAddress: true,
-          payment: true,
         },
       })
 
-    res.json({
+    res.status(201).json({
       message: 'Create new cart or draft business order success',
       businessOrder: createdCart,
       formData,
@@ -325,7 +357,7 @@ export const deleteOneBusinessOrder = async (req, res) => {
 }
 
 // -----------------------------------------------------------------------------
-// Check Middlewares
+// Next Middlewares
 
 // Check my cart
 export const checkMyCart = async (req, res, next) => {
@@ -334,19 +366,11 @@ export const checkMyCart = async (req, res, next) => {
   try {
     const businessOrder: Partial<BusinessOrder> =
       await prisma.businessOrder.findFirst({
-        where: {
-          ownerId,
-          status: 'DRAFT',
-        },
-        include: {
-          owner: true,
-          businessOrderItems: true,
-          shipmentAddress: true,
-          payment: true,
-        },
+        where: { ownerId, status: 'DRAFT' },
       })
 
     if (businessOrder) {
+      req.businessOrder = businessOrder
       req.isCartExist = true
       next()
     } else {
@@ -359,5 +383,34 @@ export const checkMyCart = async (req, res, next) => {
       ownerId,
       error,
     })
+  }
+}
+
+// Decide to automatically create my cart if request is update
+export const autoCreateMyCart = async (req, res, next) => {
+  const isCartExist = req.isCartExist
+  const ownerId = req.profile.id
+
+  // Automatically create if cart exist is false
+  if (!isCartExist) {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const createdCart: Partial<BusinessOrder> =
+        await prisma.businessOrder.create({
+          data: { ownerId, status: 'DRAFT' },
+        })
+
+      next() // Don't do res.send()
+    } catch (error) {
+      res.status(500).json({
+        message:
+          'Automatically create my cart or draft business order failed because unknown error',
+        isCartExist,
+        ownerId,
+        error,
+      })
+    }
+  } else {
+    next()
   }
 }
