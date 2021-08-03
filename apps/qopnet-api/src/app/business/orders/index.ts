@@ -9,21 +9,28 @@ const router = express.Router()
 // -----------------------------------------------------------------------------
 // User Only
 
-// GET /api/business/orders/my | GET /api/profiles/my/orders
+// GET /api/business/orders/my
 router.get('/my', auth.checkUser, businessOrder.getMyAllBusinessOrders)
-// GET /api/business/orders/my/cart | GET /api/profiles/my/cart
+// GET /api/business/orders/my/cart
 router.get(
   '/my/cart',
   auth.checkUser,
   businessOrder.checkMyCart,
   businessOrder.getMyCart
 )
-// POST /api/business/orders/my
+// POST /api/business/orders/my/cart
 router.post(
-  '/my',
+  '/my/cart',
   auth.checkUser,
   businessOrder.checkMyCart,
   businessOrder.createMyCart
+)
+// PUT /api/business/orders/my/cart
+router.put(
+  '/my/cart',
+  auth.checkUser,
+  businessOrder.checkMyCart,
+  businessOrder.updateMyCart
 )
 
 // -----------------------------------------------------------------------------

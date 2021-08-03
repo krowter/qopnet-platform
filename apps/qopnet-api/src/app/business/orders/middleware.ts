@@ -36,6 +36,7 @@ export const getMyAllBusinessOrders = async (req, res) => {
   }
 }
 
+// Get my cart
 export const getMyCart = async (req, res) => {
   const ownerId = req.profile.id
 
@@ -68,6 +69,7 @@ export const getMyCart = async (req, res) => {
   }
 }
 
+// Create my cart
 export const createMyCart = async (req, res) => {
   const isCartExist = req.isCartExist
   const ownerId = req.profile.id
@@ -118,8 +120,31 @@ export const createMyCart = async (req, res) => {
   }
 }
 
+// Update my cart with one business order item
+export const updateMyCart = async (req, res) => {
+  const isCartExist = req.isCartExist
+  const ownerId = req.profile.id
+  const formData = req.body
+
+  // Only continue if cart exist is true
+  if (isCartExist) {
+    res.status(500).json({
+      message: 'Update my cart or draft business order success',
+      ownerId,
+      formData,
+    })
+  } else {
+    res.status(400).json({
+      message:
+        'Update my cart or draft business order failed because is not exist',
+      formData,
+    })
+  }
+}
+
 // -----------------------------------------------------------------------------
 // Admin Only
+// -----------------------------------------------------------------------------
 
 // Get all business orders
 export const getAllBusinessOrders = async (req, res) => {
