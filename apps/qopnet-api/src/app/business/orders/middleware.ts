@@ -1,5 +1,5 @@
 import { prisma } from '@qopnet/util-prisma'
-import { BusinessOrder } from '@prisma/client'
+import { BusinessOrder, BusinessOrderItem } from '@prisma/client'
 
 // -----------------------------------------------------------------------------
 // User Only
@@ -24,7 +24,7 @@ export const getMyAllBusinessOrders = async (req, res) => {
     res.send({
       message: 'Get my all business orders success',
       meta: {
-        recordCount: businessOrders.length,
+        recordCount: businessOrders?.length,
       },
       businessOrders,
     })
@@ -51,53 +51,59 @@ export const getMyCart = async (req, res) => {
   const ownerId = req.profile.id
 
   try {
-    const businessOrder: Partial<BusinessOrder> =
-      await prisma.businessOrder.findFirst({
-        where: { ownerId, status: 'DRAFT' },
-        include: {
-          businessOrderItems: {
-            include: {
-              supplierProduct: {
-                // The most sophisticated select that necessary to view in
-                // Commerce /cart/* pages
-                select: {
-                  id: true,
-                  slug: true,
-                  name: true,
-                  images: true,
-                  price: true,
-                  discount: true,
-                  weight: true,
-                  weightUnit: true,
-                  weightDetails: true,
-                  minOrder: true,
-                  stock: true,
-                  status: true,
-                },
+    const businessOrder: Partial<BusinessOrder> & {
+      businessOrderItems: BusinessOrderItem[]
+    } = await prisma.businessOrder.findFirst({
+      where: { ownerId, status: 'DRAFT' },
+      include: {
+        businessOrderItems: {
+          include: {
+            supplierProduct: {
+              // The most sophisticated select that necessary to view in
+              // Commerce /cart/* pages
+              select: {
+                id: true,
+                slug: true,
+                name: true,
+                images: true,
+                price: true,
+                discount: true,
+                weight: true,
+                weightUnit: true,
+                weightDetails: true,
+                minOrder: true,
+                stock: true,
+                status: true,
               },
-              supplier: {
-                select: {
-                  id: true,
-                  handle: true,
-                  name: true,
-                  addresses: {
-                    select: {
-                      city: true,
-                    },
+            },
+            supplier: {
+              select: {
+                id: true,
+                handle: true,
+                name: true,
+                addresses: {
+                  select: {
+                    city: true,
                   },
                 },
               },
             },
           },
-          shipmentAddress: true,
-          payment: true,
         },
-      })
+        shipmentAddress: true,
+        payment: true,
+      },
+    })
     if (!businessOrder) throw 'My cart or draft business order is not found'
 
     res.send({
       message: 'Get my cart or draft business order draft success',
       ownerId,
+      meta: {
+        recordCount: {
+          businessOrderItems: businessOrder?.businessOrderItems?.length,
+        },
+      },
       businessOrder,
     })
   } catch (error) {
@@ -179,11 +185,14 @@ export const updateMyCart = async (req, res) => {
       if (!supplierProduct) throw 'Supplier product not found'
 
       // 2. Find if any existing SupplierProduct in BusinessOrderItem[]
-      const isExistInItems = false
+      // Check via businessOrderItem.id by looping through the items
+      const foundBusinessOrderItem = businessOrder?.businessOrderItems?.find(
+        (item) => item.supplierProductId === supplierProduct.id
+      )
 
       // 3. Decide to add new or increment quantity
       // Based on if SupplierProduct exist in BusinessOrderItem[]
-      if (!isExistInItems) {
+      if (!foundBusinessOrderItem) {
         // 3.A. Add new item
         console.log({ message: 'Add new item' })
         // Only update, never upsert, as the cart already available
@@ -210,16 +219,45 @@ export const updateMyCart = async (req, res) => {
         res.status(200).json({
           message:
             'Added new item on update my cart or draft business order success',
-          isCartExist,
           ownerId,
+          meta: {
+            recordCount: {
+              businessOrderItems: businessOrder?.businessOrderItems?.length,
+            },
+          },
+          isCartExist,
           formData,
           supplierProduct,
-          isExistInItems,
+          foundBusinessOrderItem,
           businessOrder: updatedCart,
         })
       } else {
         // 3.B. Increment item quantity
         console.log({ message: 'Increment item quantity' })
+        // Only update via BusinessOrder, not BusinessOrderItem
+        const updatedCart = await prisma.businessOrder.update({
+          where: {
+            id: businessOrder.id,
+          },
+          include: {
+            businessOrderItems: true,
+          },
+          data: {
+            businessOrderItems: {
+              update: {
+                where: {
+                  id: foundBusinessOrderItem.id,
+                },
+                data: {
+                  quantity: {
+                    // Increment item quantity via Prisma
+                    increment: formData.quantity, // From req.body
+                  },
+                },
+              },
+            },
+          },
+        })
         // Incremented item quantity, finally send the response
         res.status(200).json({
           message:
@@ -228,21 +266,33 @@ export const updateMyCart = async (req, res) => {
           ownerId,
           formData,
           supplierProduct,
-          isExistInItems,
-          // businessOrderItem,
-          businessOrder,
+          foundBusinessOrderItem,
+          businessOrderItemId,
+          businessOrder: updatedCart,
         })
       }
     } catch (error) {
-      res.status(400).json({
-        message:
-          'Update my cart or draft business order failed because supplier product is not found',
-        error,
-        isCartExist,
-        ownerId,
-        formData,
-        businessOrder,
-      })
+      if (error.code === 'P2016') {
+        res.status(400).json({
+          message:
+            'Update my cart or draft business order failed because BusinessOrderItem id is not valid',
+          error,
+          isCartExist,
+          ownerId,
+          formData,
+          businessOrder,
+        })
+      } else {
+        res.status(400).json({
+          message:
+            'Update my cart or draft business order failed because supplier product is not found',
+          error,
+          isCartExist,
+          ownerId,
+          formData,
+          businessOrder,
+        })
+      }
     }
   } else {
     res.status(400).json({
