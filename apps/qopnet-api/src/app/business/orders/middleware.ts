@@ -41,7 +41,17 @@ export const getMyAllBusinessOrders = async (req, res) => {
   }
 }
 
-// Get my cart
+/**
+ * Get my cart
+ *
+ * @param req
+ * @param res
+ * businessOrder
+ *   businessOrderItems
+ *     supplierProduct
+ *       supplier
+ *         addresses
+ */
 export const getMyCart = async (req, res) => {
   const ownerId = req.profile.id
 
@@ -50,7 +60,40 @@ export const getMyCart = async (req, res) => {
       await prisma.businessOrder.findFirst({
         where: { ownerId, status: 'DRAFT' },
         include: {
-          businessOrderItems: true,
+          businessOrderItems: {
+            include: {
+              supplierProduct: {
+                // The most sophisticated select that necessary to view in
+                // Commerce /cart/* pages
+                select: {
+                  id: true,
+                  slug: true,
+                  name: true,
+                  images: true,
+                  price: true,
+                  discount: true,
+                  weight: true,
+                  weightUnit: true,
+                  weightDetails: true,
+                  minOrder: true,
+                  stock: true,
+                  status: true,
+                },
+              },
+              supplier: {
+                select: {
+                  id: true,
+                  handle: true,
+                  name: true,
+                  addresses: {
+                    select: {
+                      city: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
           shipmentAddress: true,
           payment: true,
         },
