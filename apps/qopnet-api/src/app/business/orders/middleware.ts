@@ -1,10 +1,5 @@
 import { prisma } from '@qopnet/util-prisma'
-import {
-  Prisma,
-  BusinessOrder,
-  BusinessOrderItem,
-  Address,
-} from '@prisma/client'
+import { BusinessOrder } from '@prisma/client'
 
 // -----------------------------------------------------------------------------
 // User Only
@@ -190,7 +185,7 @@ export const updateMyCart = async (req, res) => {
       // Based on if SupplierProduct exist in BusinessOrderItem[]
       if (!isExistInItems) {
         // 3.A. Add new item
-        console.log('Add new')
+        console.log({ message: 'Add new item' })
         // Only update, never upsert, as the cart already available
         const updatedCart = await prisma.businessOrder.update({
           where: {
@@ -223,9 +218,8 @@ export const updateMyCart = async (req, res) => {
           businessOrder: updatedCart,
         })
       } else {
-        // 3.B. Increment quantity
-        console.log('Increment quantity')
-
+        // 3.B. Increment item quantity
+        console.log({ message: 'Increment item quantity' })
         // Incremented item quantity, finally send the response
         res.status(200).json({
           message:
