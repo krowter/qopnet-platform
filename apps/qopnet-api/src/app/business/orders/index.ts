@@ -30,7 +30,7 @@ router.put(
   '/my/cart',
   auth.checkUser,
   businessOrder.checkMyCart,
-  businessOrder.autoCreateMyCart,
+  businessOrder.autoCreateMyCart, // If isCartExist, just continue
   businessOrder.updateMyCart
 )
 

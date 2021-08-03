@@ -140,24 +140,51 @@ export const updateMyCart = async (req, res) => {
       })
       if (!supplierProduct) throw 'Supplier product not found'
 
-      // 2. Decide to add new or increment quantity
+      // 2. Find if any existing SupplierProduct in BusinessOrderItem[]
+      const isExistInItems = false
 
-      const businessOrderItem: Partial<BusinessOrderItem> = {
-        quantity: formData.quantity, // From req.body
-        businessOrderId: businessOrder.id, // From check cart
-        supplierProductId: supplierProduct.id, // From database
-        supplierId: supplierProduct.supplier.id, // From database
+      // 3. Decide to add new or increment quantity
+
+      if (!isExistInItems) {
+        // 3.A. Add new
+        console.log('Add new')
+
+        const businessOrderItem: Partial<BusinessOrderItem> = {
+          quantity: formData.quantity, // From req.body
+          businessOrderId: businessOrder.id, // From check cart
+          supplierProductId: supplierProduct.id, // From database
+          supplierId: supplierProduct.supplier.id, // From database
+        }
+
+        // Added new item, finally send the response
+        res.status(200).json({
+          message:
+            'Added new item on update my cart or draft business order success',
+          isCartExist,
+          ownerId,
+          formData,
+          supplierProduct,
+          isExistInItems,
+          businessOrderItem,
+          businessOrder,
+        })
+      } else {
+        // 3.B. Increment quantity
+        console.log('Increment quantity')
+
+        // Incremented item quantity, finally send the response
+        res.status(200).json({
+          message:
+            'Incremented item quantity on update my cart or draft business order success',
+          isCartExist,
+          ownerId,
+          formData,
+          supplierProduct,
+          isExistInItems,
+          // businessOrderItem,
+          businessOrder,
+        })
       }
-
-      res.status(200).json({
-        message: 'Update my cart or draft business order success',
-        isCartExist,
-        ownerId,
-        formData,
-        supplierProduct,
-        businessOrderItem,
-        businessOrder,
-      })
     } catch (error) {
       res.status(404).json({
         message:
@@ -367,6 +394,9 @@ export const checkMyCart = async (req, res, next) => {
     const businessOrder: Partial<BusinessOrder> =
       await prisma.businessOrder.findFirst({
         where: { ownerId, status: 'DRAFT' },
+        include: {
+          businessOrderItems: true,
+        },
       })
 
     if (businessOrder) {
@@ -416,6 +446,7 @@ export const autoCreateMyCart = async (req, res, next) => {
       })
     }
   } else {
+    // Continue just fine if cart is already exist
     next()
   }
 }
