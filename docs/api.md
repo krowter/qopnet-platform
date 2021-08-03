@@ -38,18 +38,18 @@ https://api.qopnet.id
 
 | Method | Endpoint         |
 | ------ | ---------------- |
-| GET    | /api/profiles    |
-| GET    | /api/profiles/my |
+| `GET`  | /api/profiles    |
+| `GET`  | /api/profiles/my |
 
 ## /api/suppliers
 
-| Method | Endpoint                      |
-| ------ | ----------------------------- |
-| GET    | /api/suppliers                |
-| GET    | /api/suppliers/:supplierParam |
-| POST   | /api/suppliers                |
-| PUT    | /api/suppliers/:supplierParam |
-| DELETE | /api/suppliers/:supplierParam |
+| Method   | Endpoint                      |
+| -------- | ----------------------------- |
+| `GET`    | /api/suppliers                |
+| `GET`    | /api/suppliers/:supplierParam |
+| `POST`   | /api/suppliers                |
+| `PUT`    | /api/suppliers/:supplierParam |
+| `DELETE` | /api/suppliers/:supplierParam |
 
 ## /api/suppliers/products
 
@@ -57,27 +57,29 @@ https://api.qopnet.id
 
 ## /api/business/orders
 
-### General
+### Admin
 
-| Method | Endpoint                              |
-| ------ | ------------------------------------- |
-| GET    | /api/business/orders                  |
-| GET    | /api/business/orders/:businessOrderId |
-| POST   | /api/business/orders                  |
-| PUT    | /api/business/orders/:businessOrderId |
-| DELETE | /api/business/orders                  |
-| DELETE | /api/business/orders/:businessOrderId |
+| Method   | Endpoint                                 |
+| -------- | ---------------------------------------- |
+| `GET`    | /api/business/orders                     |
+| `GET`    | /api/business/orders/:businessOrderParam |
+| `POST`   | /api/business/orders                     |
+| `PUT`    | /api/business/orders/:businessOrderParam |
+| `DELETE` | /api/business/orders                     |
+| `DELETE` | /api/business/orders/:businessOrderParam |
 
-### Profile
+### User
 
-| Method | Endpoint                     | Description                        |
-| ------ | ---------------------------- | ---------------------------------- |
-| GET    | /api/business/orders/my      | Get my all business orders         |
-| GET    | /api/business/orders/my/cart | Get my draft business order (cart) |
-| POST   | /api/business/orders/my      | Create my business order (cart)    |
+| Label | Method | Endpoint                     | Description                                 |
+| ----- | ------ | ---------------------------- | ------------------------------------------- |
+| A     | `GET`  | /api/business/orders/my      | Get my all business orders                  |
+| B     | `GET`  | /api/business/orders/my/cart | Get my cart or draft business order         |
+| C     | `POST` | /api/business/orders/my/cart | Create my cart of draft business order      |
+| D     | `PUT`  | /api/business/orders/my/cart | Update my cart with one business order item |
 
-1. If my cart is not exist, create my cart first.
-2. If my cart exist, update my cart with one business order item.
-   - Should check if existing business order item already exist
+1. Get my all business orders (A) is always available.
+2. If my cart (B) is not exist, create my cart first (C).
+3. If my cart (B) exist, update my cart with one business order item (D).
+   - (D) Should check if existing business order item already exist.
    - If exist, increment quantity only.
    - If not exist, append new record.
