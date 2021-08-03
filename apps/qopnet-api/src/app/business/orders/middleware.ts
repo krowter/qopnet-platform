@@ -228,13 +228,14 @@ export const updateMyCart = async (req, res) => {
           isCartExist,
           formData,
           supplierProduct,
-          foundBusinessOrderItem,
+          businessOrderItem: foundBusinessOrderItem,
           businessOrder: updatedCart,
         })
       } else {
         // 3.B. Increment item quantity
         console.log({ message: 'Increment item quantity' })
         // Only update via BusinessOrder, not BusinessOrderItem
+        // Because need to check the final result of the update
         const updatedCart = await prisma.businessOrder.update({
           where: {
             id: businessOrder.id,
@@ -258,16 +259,21 @@ export const updateMyCart = async (req, res) => {
             },
           },
         })
+
         // Incremented item quantity, finally send the response
         res.status(200).json({
           message:
             'Incremented item quantity on update my cart or draft business order success',
+          meta: {
+            recordCount: {
+              businessOrderItems: businessOrder?.businessOrderItems?.length,
+            },
+          },
           isCartExist,
           ownerId,
           formData,
           supplierProduct,
-          foundBusinessOrderItem,
-          businessOrderItemId,
+          businessOrderItem: foundBusinessOrderItem,
           businessOrder: updatedCart,
         })
       }
