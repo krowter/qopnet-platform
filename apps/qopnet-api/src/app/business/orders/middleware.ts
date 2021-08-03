@@ -1,22 +1,137 @@
 import { prisma } from '@qopnet/util-prisma'
 import { Prisma, BusinessOrder, Address } from '@prisma/client'
 
-// Specify businessOrder fields for Prisma
-export const businessOrderFields = {
-  include: {
-    owner: true,
-    businessOrderItems: true,
-    shipmentAddress: true,
-    payment: true,
-  },
+// -----------------------------------------------------------------------------
+// User Only
+
+// Get my all business orders
+export const getMyAllBusinessOrders = async (req, res) => {
+  const ownerId = req.profile.id
+
+  try {
+    const businessOrders: Partial<BusinessOrder>[] =
+      await prisma.businessOrder.findMany({
+        where: {
+          ownerId,
+        },
+        include: {
+          businessOrderItems: true,
+          shipmentAddress: true,
+          payment: true,
+        },
+      })
+
+    res.send({
+      message: 'Get my all business orders success',
+      meta: {
+        recordCount: businessOrders.length,
+      },
+      businessOrders,
+    })
+  } catch (error) {
+    res.status(500).send({
+      message: 'Get my all business orders failed',
+      error,
+    })
+  }
 }
+
+export const getMyCart = async (req, res) => {
+  const ownerId = req.profile.id
+
+  try {
+    const businessOrder: Partial<BusinessOrder> =
+      await prisma.businessOrder.findFirst({
+        where: {
+          ownerId,
+          status: 'DRAFT',
+        },
+        include: {
+          businessOrderItems: true,
+          shipmentAddress: true,
+          payment: true,
+        },
+      })
+    if (!businessOrder) throw 'My cart or draft business order is not found'
+
+    res.send({
+      message: 'Get my cart or draft business order draft success',
+      ownerId,
+      businessOrder,
+    })
+  } catch (error) {
+    res.status(404).send({
+      message: 'Get my cart or draft business order failed because not found',
+      ownerId,
+      error,
+    })
+  }
+}
+
+export const createMyCart = async (req, res) => {
+  const isCartExist = req.isCartExist
+  const ownerId = req.profile.id
+  const formData = req.body
+
+  // Only continue if cart exist is false
+  if (!isCartExist) {
+    try {
+      const createdCart: Partial<BusinessOrder> =
+        await prisma.businessOrder.create({
+          data: {
+            ownerId,
+            status: 'DRAFT',
+          },
+          include: {
+            businessOrderItems: true,
+            shipmentAddress: true,
+            payment: true,
+          },
+        })
+
+      res.json({
+        message: 'Create my cart or draft business order success',
+        businessOrder: createdCart,
+        formData,
+      })
+    } catch (error) {
+      if (error.code === 'P2011') {
+        res.status(400).json({
+          message:
+            'Create my cart or draft business order failed because some fields cannot be empty',
+          field: error.meta.constraint,
+          error,
+        })
+      } else {
+        res.status(500).json({
+          message:
+            'Create my cart or draft business order failed because unknown error',
+          error,
+        })
+      }
+    }
+  } else {
+    res.status(400).json({
+      message: 'Create my cart or draft business order failed already exist',
+      formData,
+    })
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Admin Only
 
 // Get all business orders
 export const getAllBusinessOrders = async (req, res) => {
   try {
     const businessOrders: Partial<BusinessOrder>[] =
       await prisma.businessOrder.findMany({
-        ...businessOrderFields,
+        include: {
+          owner: true,
+          businessOrderItems: true,
+          shipmentAddress: true,
+          payment: true,
+        },
       })
 
     res.send({
@@ -39,7 +154,12 @@ export const getOneBusinessOrder = async (req, res) => {
     const businessOrder: Partial<BusinessOrder> =
       await prisma.businessOrder.findFirst({
         where: { id: businessOrderParam },
-        ...businessOrderFields,
+        include: {
+          owner: true,
+          businessOrderItems: true,
+          shipmentAddress: true,
+          payment: true,
+        },
       })
     if (!businessOrder) throw 'Business order by param is not found'
 
@@ -59,22 +179,27 @@ export const getOneBusinessOrder = async (req, res) => {
 
 // Create one business order
 export const createOneBusinessOrder = async (req, res) => {
-  const profileId = req.profile.id
+  const ownerId = req.profile.id
   const formData = req.body
 
   try {
-    const createdBusinessOrder: Partial<BusinessOrder> =
+    const createdCart: Partial<BusinessOrder> =
       await prisma.businessOrder.create({
         data: {
-          ownerId: profileId,
+          ownerId,
           status: 'DRAFT',
         },
-        ...businessOrderFields,
+        include: {
+          owner: true,
+          businessOrderItems: true,
+          shipmentAddress: true,
+          payment: true,
+        },
       })
 
     res.json({
-      message: 'Create new business order success (act as a Cart)',
-      businessOrder: createdBusinessOrder,
+      message: 'Create new cart or draft business order success',
+      businessOrder: createdCart,
       formData,
     })
   } catch (error) {
@@ -177,7 +302,8 @@ export const deleteOneBusinessOrder = async (req, res) => {
 // -----------------------------------------------------------------------------
 // Check Middlewares
 
-export const checkExistingBusinessOrder = async (req, res, next) => {
+// Check my cart
+export const checkMyCart = async (req, res, next) => {
   const ownerId = req.profile.id
 
   try {
@@ -187,15 +313,24 @@ export const checkExistingBusinessOrder = async (req, res, next) => {
           ownerId,
           status: 'DRAFT',
         },
-        ...businessOrderFields,
+        include: {
+          owner: true,
+          businessOrderItems: true,
+          shipmentAddress: true,
+          payment: true,
+        },
       })
-    if (businessOrder) throw 'Draft business order (a Cart) already exist'
 
-    next()
+    if (businessOrder) {
+      req.isCartExist = true
+      next()
+    } else {
+      req.isCartExist = false
+      next()
+    }
   } catch (error) {
     res.status(500).send({
-      message:
-        'Create one business order (a Cart) failed because already exist',
+      message: 'Check existing cart or business order draft failed',
       ownerId,
       error,
     })

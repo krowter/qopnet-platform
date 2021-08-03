@@ -57,6 +57,8 @@ https://api.qopnet.id
 
 ## /api/business/orders
 
+### General
+
 | Method | Endpoint                              |
 | ------ | ------------------------------------- |
 | GET    | /api/business/orders                  |
@@ -66,27 +68,16 @@ https://api.qopnet.id
 | DELETE | /api/business/orders                  |
 | DELETE | /api/business/orders/:businessOrderId |
 
-## /api/profiles | orders
+### Profile
 
-| Method | Endpoint                                 |
-| ------ | ---------------------------------------- |
-| GET    | /api/profiles/my/cart                    |
-| GET    | /api/profiles/:profileParam/orders/draft |
-| GET    | /api/profiles/:profileParam/orders       |
+| Method | Endpoint                     | Description                        |
+| ------ | ---------------------------- | ---------------------------------- |
+| GET    | /api/business/orders/my      | Get my all business orders         |
+| GET    | /api/business/orders/my/cart | Get my draft business order (cart) |
+| POST   | /api/business/orders/my      | Create my business order (cart)    |
 
-1. If DRAFT Order is not empty, then get the `businessOrder` data.
-2. If DRAFT Order is empty, then backend create new `BusinessOrder` automatically, then get the `businessOrder` data.
-   - The logic is the same with `POST /api/business/orders`.
-
-```http
-GET /api/profiles/my/cart
-GET /api/profiles/my/business/orders
-GET /api/profiles/:profileParam/orders/draft
-{
-  businessOrder: {
-    id: "",
-    ownerId: "",
-    owner: {}
-  }
-}
-```
+1. If my cart is not exist, create my cart first.
+2. If my cart exist, update my cart with one business order item.
+   - Should check if existing business order item already exist
+   - If exist, increment quantity only.
+   - If not exist, append new record.
