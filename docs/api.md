@@ -77,9 +77,13 @@ https://api.qopnet.id
 | C     | `POST` | /api/business/orders/my/cart | Create my cart of draft business order      |
 | D     | `PUT`  | /api/business/orders/my/cart | Update my cart with one business order item |
 
+Rules:
+
 1. Get my all business orders (A) is always available.
 2. If my cart (B) is not exist, create my cart first (C).
 3. If my cart (B) exist, update my cart with one business order item (D).
    - (D) Should check if existing business order item already exist.
    - If exist, increment quantity only.
    - If not exist, append new record.
+4. Update my cart (D) can automatically create my cart if it is not exist.
+   - This can bypass rule (2)

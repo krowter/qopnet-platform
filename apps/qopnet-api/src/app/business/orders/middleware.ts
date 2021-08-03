@@ -395,12 +395,17 @@ export const autoCreateMyCart = async (req, res, next) => {
   if (!isCartExist) {
     try {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const createdCart: Partial<BusinessOrder> =
+      const businessOrder: Partial<BusinessOrder> =
         await prisma.businessOrder.create({
           data: { ownerId, status: 'DRAFT' },
         })
 
-      next() // Don't do res.send()
+      // Change the flags because auto create
+      req.isCartExist = true
+      req.businessOrder = businessOrder
+
+      // Don't do res.send()
+      next()
     } catch (error) {
       res.status(500).json({
         message:
