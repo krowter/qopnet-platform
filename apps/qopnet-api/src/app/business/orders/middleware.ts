@@ -63,43 +63,31 @@ export const createOneBusinessOrder = async (req, res) => {
   const formData = req.body
 
   try {
-    const payloadData = {
-      ownerId: profileId,
-    }
-
     const createdBusinessOrder: Partial<BusinessOrder> =
       await prisma.businessOrder.create({
-        data: payloadData,
-        include: {
-          owner: true,
-          shipmentAddress: true,
-          businessOrderItems: true,
+        data: {
+          ownerId: profileId,
+          status: 'DRAFT',
         },
+        ...businessOrderFields,
       })
 
     res.json({
-      message: 'Create new businessOrder success',
+      message: 'Create new business order success (act as a Cart)',
       businessOrder: createdBusinessOrder,
+      formData,
     })
   } catch (error) {
-    if (error.code === 'P2002') {
+    if (error.code === 'P2011') {
       res.status(400).json({
         message:
-          'Create new businessOrder failed because name/handle need to be unique',
-        name: formData?.name,
-        handle: formData?.handle,
-        error,
-      })
-    } else if (error.code === 'P2011') {
-      res.status(400).json({
-        message:
-          'Create new businessOrder failed because some fields cannot be empty',
+          'Create new business order failed because some fields cannot be empty',
         field: error.meta.constraint,
         error,
       })
     } else {
       res.status(500).json({
-        message: 'Create new businessOrder failed because unknown error',
+        message: 'Create new business order failed because unknown error',
         error,
       })
     }
@@ -183,5 +171,33 @@ export const deleteOneBusinessOrder = async (req, res) => {
         error,
       })
     }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Check Middlewares
+
+export const checkExistingBusinessOrder = async (req, res, next) => {
+  const ownerId = req.profile.id
+
+  try {
+    const businessOrder: Partial<BusinessOrder> =
+      await prisma.businessOrder.findFirst({
+        where: {
+          ownerId,
+          status: 'DRAFT',
+        },
+        ...businessOrderFields,
+      })
+    if (businessOrder) throw 'Draft business order (a Cart) already exist'
+
+    next()
+  } catch (error) {
+    res.status(500).send({
+      message:
+        'Create one business order (a Cart) failed because already exist',
+      ownerId,
+      error,
+    })
   }
 }

@@ -365,8 +365,8 @@ enum OrderStatus {
   ONDELIVERY // supplier product is on delivery by courier
   DELIVERED // supplier product is delivered to shipment address
   CONFIRMED // confirmed by recipient
-  COMPLAINED // confirmed, product arrived but something went wrong, include lost
-  CANCELED // before PAID/PROCESSED/ONDELIVERY
+  COMPLAINED // confirmed, product arrived but something wrong, include lost
+  CANCELED // before PAID | PROCESSED | ONDELIVERY
   REFUNDED // somewhere after PAID
 }
 
@@ -410,15 +410,22 @@ model BusinessOrderItem {
 
   quantity Int @default(1)
 
+  // Business order
+  businessOrderId String
+  businessOrder   BusinessOrder @relation(fields: [businessOrderId], references: [id])
+
   // Relations
-  supplierId        String
-  supplier          Supplier        @relation(fields: [supplierId], references: [id])
+  // Supplier
+  supplierId String
+  supplier   Supplier @relation(fields: [supplierId], references: [id])
+
+  // Supplier product
   supplierProductId String
   supplierProduct   SupplierProduct @relation(fields: [supplierProductId], references: [id])
-  businessOrderId   String
-  businessOrder     BusinessOrder   @relation(fields: [businessOrderId], references: [id])
-  courierId         String?
-  fleetId           String?
+
+  // Courier and fleet
+  courierId String?
+  fleetId   String?
 
   // Timestamp
   createdAt DateTime @default(now())

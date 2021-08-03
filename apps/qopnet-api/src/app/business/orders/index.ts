@@ -1,28 +1,36 @@
 import * as express from 'express'
 
-import { checkUser } from '../../auth/middleware'
-import { paginate } from '../../root/middleware'
+import * as root from '../../root/middleware'
+import * as auth from '../../auth/middleware'
 import * as businessOrder from './middleware'
 
 const router = express.Router()
 
 // GET /api/business/orders
-router.get('/', paginate, businessOrder.getAllBusinessOrders)
+router.get('/', root.paginate, businessOrder.getAllBusinessOrders)
 // GET /api/business/orders/:businessOrderParam
 router.get('/:businessOrderParam', businessOrder.getOneBusinessOrder)
 
+// GET /api/business/orders/check
+router.get('/', businessOrder.checkExistingBusinessOrder)
+
 // POST /api/business/orders
-router.post('/', checkUser, businessOrder.createOneBusinessOrder)
+router.post(
+  '/',
+  auth.checkUser,
+  businessOrder.checkExistingBusinessOrder,
+  businessOrder.createOneBusinessOrder
+)
 
 // PUT /api/business/orders/:businessOrderId
-router.put('/', checkUser, businessOrder.updateOneBusinessOrder)
+router.put('/', auth.checkUser, businessOrder.updateOneBusinessOrder)
 
 // DELETE /api/business/orders
-router.delete('/', checkUser, businessOrder.deleteAllBusinessOrders)
+router.delete('/', auth.checkUser, businessOrder.deleteAllBusinessOrders)
 // DELETE /api/business/orders/:businessOrderParam
 router.delete(
   '/:businessOrderParam',
-  checkUser,
+  auth.checkUser,
   businessOrder.deleteOneBusinessOrder
 )
 
