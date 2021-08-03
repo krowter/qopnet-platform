@@ -87,3 +87,4 @@ Rules:
    - If not exist, append new record.
 4. Update my cart (D) can automatically create my cart if it is not exist.
    - This can bypass rule (2)
+5. Delete my cart is not available, only able to clear the items.
