@@ -378,19 +378,25 @@ model BusinessOrder {
   ownerId String?
   owner   Profile? @relation(fields: [ownerId], references: [id])
 
-  shipmentAddressId String?
-  shipmentAddress   Address? @relation(fields: [shipmentAddressId], references: [id])
-  paymentId         String?
-  payment           Payment? @relation(fields: [paymentId], references: [id])
-
+  // Business order items
   businessOrderItems BusinessOrderItem[]
 
+  // Shipment address
+  shipmentAddressId String?
+  shipmentAddress   Address? @relation(fields: [shipmentAddressId], references: [id])
+
+  // Payment
+  paymentId String?
+  payment   Payment? @relation(fields: [paymentId], references: [id])
+
+  // Calculation for business order items
   totalItems        Int?
   totalPrice        Decimal?
   totalWeight       Decimal?
   totalShippingCost Decimal?
   shippingDiscount  Decimal?
   totalPayment      Decimal?
+  // totalBillPayment
 
   // Timestamp
   createdAt DateTime @default(now())

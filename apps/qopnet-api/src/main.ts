@@ -12,6 +12,7 @@ import profiles from './app/profiles'
 import suppliers from './app/suppliers'
 import supplierProducts from './app/suppliers/products'
 import merchants from './app/merchants'
+import businessOrders from './app/business/orders'
 
 const app = express()
 
@@ -40,8 +41,8 @@ app.use(Sentry.Handlers.requestHandler())
 // TracingHandler creates a trace for every incoming request
 app.use(Sentry.Handlers.tracingHandler())
 
-// Our API endpoints
-// The order is very important
+// The API endpoints
+// Priority order is very important
 app.use('/', root)
 app.use('/images', images)
 app.use('/auth', auth)
@@ -50,6 +51,7 @@ app.use('/api/profiles', profiles)
 app.use('/api/suppliers/products', supplierProducts)
 app.use('/api/suppliers', suppliers)
 app.use('/api/merchants', merchants)
+app.use('/api/business/orders', businessOrders)
 
 // The error handler must be before any other error middleware
 // and after all controllers
