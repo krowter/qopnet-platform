@@ -144,18 +144,30 @@ export const updateMyCart = async (req, res) => {
       const isExistInItems = false
 
       // 3. Decide to add new or increment quantity
-
+      // Based on if SupplierProduct exist in BusinessOrderItem[]
       if (!isExistInItems) {
-        // 3.A. Add new
+        // 3.A. Add new item
         console.log('Add new')
-
-        const businessOrderItem: Partial<BusinessOrderItem> = {
-          quantity: formData.quantity, // From req.body
-          businessOrderId: businessOrder.id, // From check cart
-          supplierProductId: supplierProduct.id, // From database
-          supplierId: supplierProduct.supplier.id, // From database
-        }
-
+        // Only update, never upsert, as the cart already available
+        const updatedCart = await prisma.businessOrder.update({
+          where: {
+            id: businessOrder.id,
+          },
+          include: {
+            businessOrderItems: true,
+          },
+          data: {
+            // Only focus on businessOrderItems, not other fields
+            // This will create a new BusinessOrderItem record
+            businessOrderItems: {
+              create: {
+                quantity: formData.quantity, // From req.body
+                supplierProductId: supplierProduct.id, // From database
+                supplierId: supplierProduct.supplier.id, // From database
+              },
+            },
+          },
+        })
         // Added new item, finally send the response
         res.status(200).json({
           message:
@@ -165,8 +177,7 @@ export const updateMyCart = async (req, res) => {
           formData,
           supplierProduct,
           isExistInItems,
-          businessOrderItem,
-          businessOrder,
+          businessOrder: updatedCart,
         })
       } else {
         // 3.B. Increment quantity
@@ -186,9 +197,10 @@ export const updateMyCart = async (req, res) => {
         })
       }
     } catch (error) {
-      res.status(404).json({
+      res.status(400).json({
         message:
           'Update my cart or draft business order failed because supplier product is not found',
+        error,
         isCartExist,
         ownerId,
         formData,
