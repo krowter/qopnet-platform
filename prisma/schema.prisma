@@ -455,3 +455,50 @@ model Payment {
 
   @@map(name: "payments")
 }
+
+// PromoProvider
+// Example:
+// - Koperasi Panarub with Bank Permata = Rp X
+// - Koperasi Nelayan with Bank BRI = Rp X
+model PromoProvider {
+  id String @id @default(cuid())
+
+  name        String?
+  description String?
+
+  submissions PromoSubmission[]
+
+  @@map(name: "promo_providers")
+}
+
+enum PromoSubmissionStatus {
+  PENDING // Submission diterima
+  APPROVED // Lolos seleksi
+}
+
+model PromoSubmission {
+  id String @id @default(cuid())
+
+  // Bio
+  name       String?
+  phone      String?
+  email      String?
+  birthPlace String?
+  birthDate  DateTime?
+
+  // Address
+  street        String? // Jl. Street Name
+  streetDetails String? // Optional details such as floor number
+  city          String? // Ex: Tangerang
+  state         String? // Province. Ex: Banten
+  zip           String? // Postal code
+
+  // Status
+  status PromoSubmissionStatus?
+
+  // Relations
+  providerId String?
+  provider   PromoProvider? @relation(fields: [providerId], references: [id])
+
+  @@map(name: "promo_submissions")
+}
