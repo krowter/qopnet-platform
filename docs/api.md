@@ -38,18 +38,18 @@ https://api.qopnet.id
 
 | Method | Endpoint         |
 | ------ | ---------------- |
-| GET    | /api/profiles    |
-| GET    | /api/profiles/my |
+| `GET`  | /api/profiles    |
+| `GET`  | /api/profiles/my |
 
 ## /api/suppliers
 
-| Method | Endpoint                      |
-| ------ | ----------------------------- |
-| GET    | /api/suppliers                |
-| GET    | /api/suppliers/:supplierParam |
-| POST   | /api/suppliers                |
-| PUT    | /api/suppliers/:supplierParam |
-| DELETE | /api/suppliers/:supplierParam |
+| Method   | Endpoint                      |
+| -------- | ----------------------------- |
+| `GET`    | /api/suppliers                |
+| `GET`    | /api/suppliers/:supplierParam |
+| `POST`   | /api/suppliers                |
+| `PUT`    | /api/suppliers/:supplierParam |
+| `DELETE` | /api/suppliers/:supplierParam |
 
 ## /api/suppliers/products
 
@@ -57,36 +57,34 @@ https://api.qopnet.id
 
 ## /api/business/orders
 
-| Method | Endpoint                              |
-| ------ | ------------------------------------- |
-| GET    | /api/business/orders                  |
-| GET    | /api/business/orders/:businessOrderId |
-| POST   | /api/business/orders                  |
-| PUT    | /api/business/orders/:businessOrderId |
-| DELETE | /api/business/orders                  |
-| DELETE | /api/business/orders/:businessOrderId |
+### Admin
 
-## /api/profiles | orders
+| Method   | Endpoint                                 |
+| -------- | ---------------------------------------- |
+| `GET`    | /api/business/orders                     |
+| `GET`    | /api/business/orders/:businessOrderParam |
+| `POST`   | /api/business/orders                     |
+| `PUT`    | /api/business/orders/:businessOrderParam |
+| `DELETE` | /api/business/orders                     |
+| `DELETE` | /api/business/orders/:businessOrderParam |
 
-| Method | Endpoint                                 |
-| ------ | ---------------------------------------- |
-| GET    | /api/profiles/my/cart                    |
-| GET    | /api/profiles/:profileParam/orders/draft |
-| GET    | /api/profiles/:profileParam/orders       |
+### User
 
-1. If DRAFT Order is not empty, then get the `businessOrder` data.
-2. If DRAFT Order is empty, then backend create new `BusinessOrder` automatically, then get the `businessOrder` data.
-   - The logic is the same with `POST /api/business/orders`.
+| Label | Method | Endpoint                     | Description                                 |
+| ----- | ------ | ---------------------------- | ------------------------------------------- |
+| A     | `GET`  | /api/business/orders/my      | Get my all business orders                  |
+| B     | `GET`  | /api/business/orders/my/cart | Get my cart or draft business order         |
+| C     | `POST` | /api/business/orders/my/cart | Create my cart of draft business order      |
+| D     | `PUT`  | /api/business/orders/my/cart | Update my cart with one business order item |
 
-```http
-GET /api/profiles/my/cart
-GET /api/profiles/my/business/orders
-GET /api/profiles/:profileParam/orders/draft
-{
-  businessOrder: {
-    id: "",
-    ownerId: "",
-    owner: {}
-  }
-}
-```
+Rules:
+
+1. Get my all business orders (A) is always available.
+2. If my cart (B) is not exist, create my cart first (C).
+3. If my cart (B) exist, update my cart with one business order item (D).
+   - (D) Should check if existing business order item already exist.
+   - If exist, increment quantity only.
+   - If not exist, append new record.
+4. Update my cart (D) can automatically create my cart if it is not exist.
+   - This can bypass rule (2)
+5. Delete my cart is not available, only able to clear the items.

@@ -8,6 +8,23 @@ CREATE TYPE "SupplierProductStatus" AS ENUM ('ACTIVE', 'INACTIVE');
 CREATE TYPE "MerchantProductStatus" AS ENUM ('ACTIVE', 'INACTIVE');
 -- CreateEnum
 CREATE TYPE "FundBeneficiaryStatus" AS ENUM ('PENDING', 'ACCEPTED', 'REJECTED');
+-- CreateEnum
+CREATE TYPE "OrderStatus" AS ENUM (
+    'DRAFT',
+    'WAITING_FOR_PAYMENT',
+    'PAID',
+    'WAITING_FOR_CONFIRMATION',
+    'PROCESSED',
+    'WAITING_FOR_PICKUP',
+    'ONDELIVERY',
+    'DELIVERED',
+    'CONFIRMED',
+    'COMPLAINED',
+    'CANCELED',
+    'REFUNDED'
+);
+-- CreateEnum
+CREATE TYPE "PaymentCategory" AS ENUM ('COD', 'TRANSFER', 'VIRTUALACCOUNT');
 -- CreateTable
 CREATE TABLE "users" (
     "id" TEXT NOT NULL,
@@ -38,7 +55,7 @@ CREATE TABLE "admin_profiles" (
 CREATE TABLE "addresses" (
     "id" TEXT NOT NULL,
     "street" TEXT NOT NULL,
-    "streetDetails" TEXT NOT NULL,
+    "streetDetails" TEXT,
     "city" TEXT NOT NULL,
     "state" TEXT NOT NULL,
     "zip" TEXT NOT NULL,
@@ -150,6 +167,8 @@ CREATE TABLE "financing_services" (
 -- CreateTable
 CREATE TABLE "fund_beneficiaries" (
     "id" TEXT NOT NULL,
+    "userId" TEXT,
+    "profileId" TEXT,
     "nationalId" TEXT,
     "birthPlace" TEXT,
     "birthDate" TIMESTAMP(3),
@@ -158,14 +177,51 @@ CREATE TABLE "fund_beneficiaries" (
     "financingServiceId" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "profileId" TEXT,
-    "userId" TEXT,
     PRIMARY KEY ("id")
 );
 -- CreateTable
 CREATE TABLE "fund_benefactors" (
     "id" TEXT NOT NULL,
     "financingServiceId" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY ("id")
+);
+-- CreateTable
+CREATE TABLE "business_orders" (
+    "id" TEXT NOT NULL,
+    "status" "OrderStatus",
+    "ownerId" TEXT,
+    "shipmentAddressId" TEXT,
+    "paymentId" TEXT,
+    "totalItems" INTEGER,
+    "totalPrice" DECIMAL(65, 30),
+    "totalWeight" DECIMAL(65, 30),
+    "totalShippingCost" DECIMAL(65, 30),
+    "shippingDiscount" DECIMAL(65, 30),
+    "totalPayment" DECIMAL(65, 30),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY ("id")
+);
+-- CreateTable
+CREATE TABLE "business_order_items" (
+    "id" TEXT NOT NULL,
+    "quantity" INTEGER NOT NULL DEFAULT 1,
+    "businessOrderId" TEXT NOT NULL,
+    "supplierId" TEXT NOT NULL,
+    "supplierProductId" TEXT NOT NULL,
+    "courierId" TEXT,
+    "fleetId" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY ("id")
+);
+-- CreateTable
+CREATE TABLE "payments" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "paymentCategory" "PaymentCategory" NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY ("id")
@@ -191,9 +247,9 @@ CREATE UNIQUE INDEX "merchant_products.slug_unique" ON "merchant_products"("slug
 -- CreateIndex
 CREATE UNIQUE INDEX "financing_services.handle_unique" ON "financing_services"("handle");
 -- CreateIndex
-CREATE UNIQUE INDEX "fund_beneficiaries_profileId_unique" ON "fund_beneficiaries"("profileId");
--- CreateIndex
 CREATE UNIQUE INDEX "fund_beneficiaries_userId_unique" ON "fund_beneficiaries"("userId");
+-- CreateIndex
+CREATE UNIQUE INDEX "fund_beneficiaries_profileId_unique" ON "fund_beneficiaries"("profileId");
 -- AddForeignKey
 ALTER TABLE "profiles"
 ADD FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -245,11 +301,11 @@ ADD FOREIGN KEY ("merchantId") REFERENCES "merchants"("id") ON DELETE
 SET NULL ON UPDATE CASCADE;
 -- AddForeignKey
 ALTER TABLE "fund_beneficiaries"
-ADD FOREIGN KEY ("profileId") REFERENCES "profiles"("id") ON DELETE
+ADD FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE
 SET NULL ON UPDATE CASCADE;
 -- AddForeignKey
 ALTER TABLE "fund_beneficiaries"
-ADD FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE
+ADD FOREIGN KEY ("profileId") REFERENCES "profiles"("id") ON DELETE
 SET NULL ON UPDATE CASCADE;
 -- AddForeignKey
 ALTER TABLE "fund_beneficiaries"
@@ -259,6 +315,27 @@ SET NULL ON UPDATE CASCADE;
 ALTER TABLE "fund_benefactors"
 ADD FOREIGN KEY ("financingServiceId") REFERENCES "financing_services"("id") ON DELETE
 SET NULL ON UPDATE CASCADE;
+-- AddForeignKey
+ALTER TABLE "business_orders"
+ADD FOREIGN KEY ("ownerId") REFERENCES "profiles"("id") ON DELETE
+SET NULL ON UPDATE CASCADE;
+-- AddForeignKey
+ALTER TABLE "business_orders"
+ADD FOREIGN KEY ("shipmentAddressId") REFERENCES "addresses"("id") ON DELETE
+SET NULL ON UPDATE CASCADE;
+-- AddForeignKey
+ALTER TABLE "business_orders"
+ADD FOREIGN KEY ("paymentId") REFERENCES "payments"("id") ON DELETE
+SET NULL ON UPDATE CASCADE;
+-- AddForeignKey
+ALTER TABLE "business_order_items"
+ADD FOREIGN KEY ("businessOrderId") REFERENCES "business_orders"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+-- AddForeignKey
+ALTER TABLE "business_order_items"
+ADD FOREIGN KEY ("supplierId") REFERENCES "suppliers"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+-- AddForeignKey
+ALTER TABLE "business_order_items"
+ADD FOREIGN KEY ("supplierProductId") REFERENCES "supplier_products"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 -- This trigger can be pasted into the first init migration
 -- Copy from auth.users to public.users
 CREATE OR REPLACE FUNCTION public.signup_copy_to_users_table() RETURNS TRIGGER AS $$ BEGIN
