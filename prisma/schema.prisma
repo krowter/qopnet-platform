@@ -187,9 +187,10 @@ model SupplierProduct {
   // Info
   name        String?
   subname     String?
-  category    String?
-  sku         String?
   description String?
+  sku         String?
+  category    String?
+  // tags        Json?
 
   // Price
   price                Decimal? @db.Money
@@ -455,6 +456,8 @@ model Payment {
 
   @@map(name: "payments")
 }
+
+// model PaymentRecord {}
 
 // PromoProvider
 // Example:
