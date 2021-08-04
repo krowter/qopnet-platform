@@ -30,7 +30,7 @@ model User {
 
   // Timestamp
   // createdAt DateTime @default(now())
-  // updatedAt DateTime @default(now())
+  // updatedAt DateTime @updatedAt
 
   @@map(name: "users")
 }
@@ -58,7 +58,7 @@ model Profile {
 
   // Timestamp
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map(name: "profiles")
 }
@@ -72,7 +72,7 @@ model AdminProfile {
 
   // Timestamp
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map(name: "admin_profiles")
 }
@@ -102,7 +102,7 @@ model Address {
 
   // Timestamp
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map(name: "addresses")
 }
@@ -122,7 +122,7 @@ model Wholesaler {
 
   // Timestamp
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map(name: "wholesalers")
 }
@@ -159,7 +159,7 @@ model Supplier {
 
   // Timestamp
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map(name: "suppliers")
 }
@@ -219,7 +219,7 @@ model SupplierProduct {
 
   // Timestamp
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map(name: "supplier_products")
 }
@@ -245,7 +245,7 @@ model Merchant {
 
   // Timestamp
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map(name: "merchants")
 }
@@ -281,7 +281,7 @@ model MerchantProduct {
 
   // Timestamp
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map(name: "merchant_products")
 }
@@ -303,7 +303,7 @@ model FinancingService {
 
   // Timestamp
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map(name: "financing_services")
 }
@@ -336,7 +336,7 @@ model FundBeneficiary {
 
   // Timestamp
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map(name: "fund_beneficiaries")
 }
@@ -350,7 +350,7 @@ model FundBenefactor {
 
   // Timestamp
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map(name: "fund_benefactors")
 }
@@ -400,7 +400,7 @@ model BusinessOrder {
 
   // Timestamp
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map(name: "business_orders")
 }
@@ -429,7 +429,7 @@ model BusinessOrderItem {
 
   // Timestamp
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map(name: "business_order_items")
 }
@@ -451,7 +451,7 @@ model Payment {
 
   // Timestamp
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map(name: "payments")
 }

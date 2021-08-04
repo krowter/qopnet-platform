@@ -194,7 +194,6 @@ export const updateMyCart = async (req, res) => {
       // Based on if SupplierProduct exist in BusinessOrderItem[]
       if (!foundBusinessOrderItem) {
         // 3.A. Add new item
-        console.log({ message: 'Add new item' })
         // Only update, never upsert, as the cart already available
         const updatedCart = await prisma.businessOrder.update({
           where: {
@@ -233,7 +232,6 @@ export const updateMyCart = async (req, res) => {
         })
       } else {
         // 3.B. Increment item quantity
-        console.log({ message: 'Increment item quantity' })
         // Only update via BusinessOrder, not BusinessOrderItem
         // Because need to check the final result of the update
         const updatedCart = await prisma.businessOrder.update({
@@ -321,6 +319,7 @@ export const getAllBusinessOrders = async (req, res) => {
   try {
     const businessOrders: Partial<BusinessOrder>[] =
       await prisma.businessOrder.findMany({
+        orderBy: [{ updatedAt: 'desc' }],
         include: {
           owner: true,
           businessOrderItems: true,
