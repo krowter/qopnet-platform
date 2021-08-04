@@ -112,7 +112,7 @@ async function main() {
   }
 
   // Seeds
-  // await seedQopnetProducts()
+  await seedQopnetProducts()
   await seedAnekaBusaProducts()
 }
 
