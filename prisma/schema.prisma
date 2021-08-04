@@ -30,7 +30,7 @@ model User {
 
   // Timestamp
   // createdAt DateTime @default(now())
-  // updatedAt DateTime @default(now())
+  // updatedAt DateTime @default(now()) @updatedAt
 
   @@map(name: "users")
 }
@@ -58,7 +58,7 @@ model Profile {
 
   // Timestamp
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@map(name: "profiles")
 }
@@ -72,7 +72,7 @@ model AdminProfile {
 
   // Timestamp
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@map(name: "admin_profiles")
 }
@@ -81,9 +81,9 @@ model AdminProfile {
 // Address can be used for Profile, Wholesaler, Supplier, Merchant, Customer
 
 model Address {
-  id            String @id @default(cuid())
+  id            String  @id @default(cuid())
   street        String // Jl. Street Name
-  streetDetails String // Optional details such as floor number
+  streetDetails String? // Optional details such as floor number
   city          String
   state         String // Province
   zip           String // Postal code
@@ -102,7 +102,7 @@ model Address {
 
   // Timestamp
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@map(name: "addresses")
 }
@@ -122,7 +122,7 @@ model Wholesaler {
 
   // Timestamp
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@map(name: "wholesalers")
 }
@@ -159,7 +159,7 @@ model Supplier {
 
   // Timestamp
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@map(name: "suppliers")
 }
@@ -219,7 +219,7 @@ model SupplierProduct {
 
   // Timestamp
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@map(name: "supplier_products")
 }
@@ -245,7 +245,7 @@ model Merchant {
 
   // Timestamp
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@map(name: "merchants")
 }
@@ -281,7 +281,7 @@ model MerchantProduct {
 
   // Timestamp
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@map(name: "merchant_products")
 }
@@ -303,7 +303,7 @@ model FinancingService {
 
   // Timestamp
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@map(name: "financing_services")
 }
@@ -336,7 +336,7 @@ model FundBeneficiary {
 
   // Timestamp
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@map(name: "fund_beneficiaries")
 }
@@ -350,7 +350,7 @@ model FundBenefactor {
 
   // Timestamp
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@map(name: "fund_benefactors")
 }
@@ -365,8 +365,8 @@ enum OrderStatus {
   ONDELIVERY // supplier product is on delivery by courier
   DELIVERED // supplier product is delivered to shipment address
   CONFIRMED // confirmed by recipient
-  COMPLAINED // confirmed, product arrived but something went wrong, include lost
-  CANCELED // before PAID/PROCESSED/ONDELIVERY
+  COMPLAINED // confirmed, product arrived but something wrong, include lost
+  CANCELED // before PAID | PROCESSED | ONDELIVERY
   REFUNDED // somewhere after PAID
 }
 
@@ -378,23 +378,29 @@ model BusinessOrder {
   ownerId String?
   owner   Profile? @relation(fields: [ownerId], references: [id])
 
-  shipmentAddressId String?
-  shipmentAddress   Address? @relation(fields: [shipmentAddressId], references: [id])
-  paymentId         String?
-  payment           Payment? @relation(fields: [paymentId], references: [id])
-
+  // Business order items
   businessOrderItems BusinessOrderItem[]
 
+  // Shipment address
+  shipmentAddressId String?
+  shipmentAddress   Address? @relation(fields: [shipmentAddressId], references: [id])
+
+  // Payment
+  paymentId String?
+  payment   Payment? @relation(fields: [paymentId], references: [id])
+
+  // Calculation for business order items
   totalItems        Int?
   totalPrice        Decimal?
   totalWeight       Decimal?
   totalShippingCost Decimal?
   shippingDiscount  Decimal?
   totalPayment      Decimal?
+  // totalBillPayment
 
   // Timestamp
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@map(name: "business_orders")
 }
@@ -404,19 +410,26 @@ model BusinessOrderItem {
 
   quantity Int @default(1)
 
+  // Business order
+  businessOrderId String
+  businessOrder   BusinessOrder @relation(fields: [businessOrderId], references: [id])
+
   // Relations
-  supplierId        String
-  supplier          Supplier        @relation(fields: [supplierId], references: [id])
+  // Supplier
+  supplierId String
+  supplier   Supplier @relation(fields: [supplierId], references: [id])
+
+  // Supplier product
   supplierProductId String
   supplierProduct   SupplierProduct @relation(fields: [supplierProductId], references: [id])
-  businessOrderId   String
-  businessOrder     BusinessOrder   @relation(fields: [businessOrderId], references: [id])
-  courierId         String?
-  fleetId           String?
+
+  // Courier and fleet
+  courierId String?
+  fleetId   String?
 
   // Timestamp
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@map(name: "business_order_items")
 }
@@ -438,7 +451,7 @@ model Payment {
 
   // Timestamp
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@map(name: "payments")
 }

@@ -78,7 +78,6 @@ router.get('/', paginate, async (req: Request, res: Response) => {
       supplierProducts,
     })
   } catch (error) {
-    console.log(error)
     res.status(500).json({
       message: 'Get all supplier products failed',
       error,
