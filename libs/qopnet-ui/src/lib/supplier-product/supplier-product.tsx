@@ -506,18 +506,32 @@ export const SupplierProductCartModifier = ({
   const input = getInputProps()
 
   // @ts-ignore
-  const productSubTotal = input.value
+  const productQuantity = Number(input.value)
   const formattedProductSubTotal = formatPrice(
-    Number(product?.price) * Number(productSubTotal)
+    Number(product?.price) * productQuantity
   )
 
   const handleAddToCart = () => {
-    setJustAddedToCart(true)
-    // console.info({ productSubTotal })
-    // toast({
-    //   title: `Menambahkan produk ke keranjang`,
-    //   description: `Subtotal: ${formattedProductSubTotal}`,
-    // })
+    try {
+      const requestBodyData = {
+        productId: product.id,
+        quantity: productQuantity,
+      }
+      console.log({ requestBodyData })
+
+      setJustAddedToCart(true)
+
+      // toast({
+      //   title: `Menambahkan produk ke keranjang`,
+      //   description: `Subtotal: ${formattedProductSubTotal}`,
+      // })
+    } catch (error) {
+      console.error({ message: 'Add to cart failed', error })
+      toast({
+        title: `Gagal menambah produk ke keranjang`,
+        status: 'error',
+      })
+    }
   }
 
   return (
@@ -546,7 +560,7 @@ export const SupplierProductCartModifier = ({
       </Text>
 
       <Button
-        disabled={!productSubTotal}
+        disabled={!productQuantity}
         colorScheme="orange"
         size="sm"
         leftIcon={<Icon name="plus" />}
