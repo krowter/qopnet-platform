@@ -103,7 +103,6 @@ router.get('/my', checkUser, async (req, res) => {
       suppliers: {
         include: { addresses: true },
       },
-      supplierProducts: true,
       wholesalers: {
         include: { addresses: true },
       },

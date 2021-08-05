@@ -27,6 +27,7 @@ import {
 } from '@qopnet/util-format'
 import { BreadcrumbCart } from '../../../components'
 import { useSWR } from '../../../utils'
+import { useState } from 'react'
 
 /**
  * /cart/shipment
@@ -122,33 +123,21 @@ export const ShipmentSummaryContainer = ({ businessOrder }) => {
 }
 
 export const ShipmentContainer = ({ businessOrder }) => {
-  const myAddresses = [
-    {
-      id: 1,
-      street: 'Jl. Monas No. 1',
-      streetDetails: 'Tugu Emas',
-      city: 'Jakarta',
-      state: 'DKI Jakarta',
-      zip: '12345',
-      countryCode: 'ID',
-    },
-    {
-      id: 2,
-      street: 'Jl. Ancol No. 20',
-      streetDetails: 'Patung Ikan',
-      city: 'Jakarta',
-      state: 'DKI Jakarta',
-      zip: '12345',
-      countryCode: 'ID',
-    },
-  ]
+  // Fetch multiple addresses from my profile
+  const { data, error } = useSWR('/api/profiles/my')
+  const { profile, suppliers } = data || {}
 
+  // Display addresses
+  const myAddresses = profile?.addresses || []
+  const [selectedAddressId, setSelectedAddressId] = useState(
+    myAddresses ? myAddresses[0]?.id : ''
+  )
+
+  // DIsplay couriers
   const couriers = [
     { id: 1, name: 'Lalamove' },
     { id: 2, name: 'Deliveree' },
   ]
-
-  const selectedAddressId = 1
   const selectedCourierId = 2
 
   return (
@@ -169,6 +158,7 @@ export const ShipmentContainer = ({ businessOrder }) => {
               </OptionBox>
             )
           })}
+          {/* <Text as="pre">{JSON.stringify({ data, myAddresses }, null, 2)}</Text> */}
         </Stack>
       </Stack>
 

@@ -80,15 +80,17 @@ export const formatWeight = (weight: number, weightUnit: string) => {
 }
 
 export const formatAddressComplete = ({
-  street,
-  streetDetails,
-  city,
-  state,
-  zip,
-  countryCode,
+  street = '',
+  streetDetails = '',
+  city = '',
+  state = '',
+  zip = '',
+  countryCode = 'ID',
 }) => {
   const country = countryCode === 'ID' && 'Indonesia'
-  return `${street}, ${streetDetails}, ${city}, ${state} ${zip}, ${country}`
+  return `${street}, ${
+    streetDetails ?? ''
+  }, ${city}, ${state} ${zip}, ${country}`
 }
 
 export const calculateCart = (businessOrder) => {
