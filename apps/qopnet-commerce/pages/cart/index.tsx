@@ -116,10 +116,12 @@ export const CartSummaryContainer = ({ businessOrder }) => {
             <Text>Total Harga ({totalItems} barang)</Text>
             <Text>{formatRupiah(totalPrice)}</Text>
           </HStack>
-          <HStack justify="space-between">
-            <Text>Total Diskon Barang</Text>
-            <Text>-{formatRupiah(totalDiscount)}</Text>
-          </HStack>
+          {totalDiscount > 0 && (
+            <HStack justify="space-between">
+              <Text>Total Diskon Barang</Text>
+              <Text>-{formatRupiah(totalDiscount)}</Text>
+            </HStack>
+          )}
         </Stack>
         <Divider />
         <HStack justify="space-between">
