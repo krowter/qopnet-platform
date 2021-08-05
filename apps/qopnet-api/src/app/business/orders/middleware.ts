@@ -46,6 +46,9 @@ export const getMyAllBusinessOrders = async (req, res) => {
  *     supplierProduct
  *       supplier
  *         addresses
+ *   shipmentAddress
+ *   courier
+ *   payment
  */
 export const getMyCart = async (req, res) => {
   const ownerId = req.profile.id

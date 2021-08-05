@@ -125,7 +125,7 @@ export const calculateCart = (businessOrder) => {
   // Not including the Shipping Cost, before final payment
   const totalCalculatedPrice = totalPrice - totalDiscount || 0
 
-  const totalShipmentCost = 135000 || 0
+  const totalShipmentCost = 512000 || 0
   const totalCalculatedBill = totalCalculatedPrice + totalShipmentCost
 
   return {

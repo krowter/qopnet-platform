@@ -66,6 +66,7 @@ export const CartShipmentPage = () => {
             )}
           </Box>
         )}
+        {/* <Text as="pre">{JSON.stringify(businessOrder, null, 2)}</Text> */}
       </Stack>
     </Layout>
   )
@@ -105,6 +106,10 @@ export const ShipmentSummaryContainer = ({ businessOrder }) => {
             <Text>Total Ongkos Kirim</Text>
             <Text>{formatRupiah(totalShipmentCost)}</Text>
           </HStack>
+          <Stack justify="space-between">
+            <Text>Alamat dipilih</Text>
+            <Text>{businessOrder?.shipmentAddress}</Text>
+          </Stack>
         </Stack>
         <Divider />
         <HStack justify="space-between">
