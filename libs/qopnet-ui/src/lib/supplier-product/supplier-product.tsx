@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
+import { useState } from 'react'
 import NextLink from 'next/link'
 import NextImage from 'next/image'
 import { NextSeo } from 'next-seo'
@@ -37,7 +38,6 @@ import {
   formatWeight,
 } from '@qopnet/util-format'
 import { Icon } from '../icon/icon'
-import { useState } from 'react'
 
 const env =
   process.env.NEXT_PUBLIC_ENV === 'production'
@@ -81,6 +81,7 @@ export interface HomeProductSpecialProps {
 export interface SupplierProductsGridProps {
   supplierProducts: SupplierProduct[]
 }
+
 export interface SupplierProductCardProps {
   href?: string
   product: SupplierProduct
@@ -103,6 +104,7 @@ export interface SupplierProductDetailProps {
       length: number
     }
   }
+  putToAPI: any
 }
 
 export const HomeProductCategory = (props: HomeProductCategoryProps) => {
@@ -280,6 +282,7 @@ export const formatPrice = (price: number | Decimal) => {
  */
 export const SupplierProductDetail = ({
   product,
+  putToAPI,
 }: SupplierProductDetailProps) => {
   const productImages =
     (product?.images as string[]) || defaultSupplierProductImages
@@ -377,7 +380,7 @@ export const SupplierProductDetail = ({
 
           <Divider variant="dashed" />
 
-          <SupplierProductCartModifier product={product} />
+          <SupplierProductCartModifier product={product} putToAPI={putToAPI} />
 
           <Divider variant="dashed" />
 
@@ -483,13 +486,16 @@ export const SupplierCardForProductLink = ({
 
 export const SupplierProductCartModifier = ({
   product,
+  putToAPI,
 }: {
   product: SupplierProduct
+  putToAPI: any
 }) => {
   const toast = useToast()
   const productMinOrder = product?.minOrder || 1
   const productStock = product?.stock || 100
 
+  const [isLoading, setLoading] = useState(false)
   const [isJustAddedToCart, setJustAddedToCart] = useState(false)
 
   // https://chakra-ui.com/docs/form/number-input#create-a-mobile-spinner
@@ -511,26 +517,34 @@ export const SupplierProductCartModifier = ({
     Number(product?.price) * productQuantity
   )
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     try {
+      setLoading(true)
       const requestBodyData = {
-        productId: product.id,
+        id: product.id,
         quantity: productQuantity,
       }
-      console.log({ requestBodyData })
-
-      setJustAddedToCart(true)
-
-      // toast({
-      //   title: `Menambahkan produk ke keranjang`,
-      //   description: `Subtotal: ${formattedProductSubTotal}`,
-      // })
+      const response = await putToAPI(
+        '/api/business/orders/my/cart',
+        requestBodyData
+      )
+      if (response) {
+        setJustAddedToCart(true)
+      } else {
+        throw new Error('Add to cart failed')
+      }
+      toast({
+        title: `Menambahkan produk ke keranjang`,
+        description: `${productQuantity} × ${product.name}`,
+      })
     } catch (error) {
       console.error({ message: 'Add to cart failed', error })
       toast({
         title: `Gagal menambah produk ke keranjang`,
         status: 'error',
       })
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -560,23 +574,28 @@ export const SupplierProductCartModifier = ({
       </Text>
 
       <Button
-        disabled={!productQuantity}
+        leftIcon={<Icon name="plus" />}
         colorScheme="orange"
         size="sm"
-        leftIcon={<Icon name="plus" />}
+        w="200px"
         onClick={handleAddToCart}
+        disabled={!productQuantity || isLoading}
       >
-        Tambah Keranjang
+        {isLoading ? 'Menambahkan...' : 'Tambah Keranjang'}
       </Button>
 
       {isJustAddedToCart && (
         <Stack>
-          <Text>
-            Telah ditambahkan,{' '}
-            <NextLink href="/cart" passHref>
-              <ChakraLink color="orange.500">cek keranjang belanja</ChakraLink>
-            </NextLink>
-          </Text>
+          {!isLoading && (
+            <Text>
+              Telah ditambahkan,{' '}
+              <NextLink href="/cart" passHref>
+                <ChakraLink color="orange.500">
+                  cek keranjang belanja
+                </ChakraLink>
+              </NextLink>
+            </Text>
+          )}
         </Stack>
       )}
     </Stack>

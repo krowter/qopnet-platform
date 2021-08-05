@@ -2,7 +2,7 @@ import { useRouter } from 'next/router'
 import { HStack, Spinner, Text } from '@chakra-ui/react'
 
 import { Layout, SupplierProductDetail } from '@qopnet/qopnet-ui'
-import { useSWR } from '../../../utils/swr'
+import { useSWR, putToAPI } from '../../../utils'
 
 const SupplierParamSlashSupplierProductParamPage = () => {
   const router = useRouter()
@@ -40,7 +40,9 @@ export const SupplierProductContainer = ({
           <Text>Memuat produk supplier...</Text>
         </HStack>
       )}
-      {!error && data && <SupplierProductDetail product={supplierProduct} />}
+      {!error && data && (
+        <SupplierProductDetail product={supplierProduct} putToAPI={putToAPI} />
+      )}
     </>
   )
 }
