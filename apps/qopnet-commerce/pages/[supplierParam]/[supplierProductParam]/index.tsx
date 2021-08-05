@@ -9,15 +9,21 @@ const SupplierParamSlashSupplierProductParamPage = () => {
   const { supplierParam, supplierProductParam } = router.query
 
   return (
-    <Layout pt={5} meta={{ title: 'Produk supplier' }}>
+    <Layout pt={10} meta={{ title: 'Produk supplier' }}>
       {supplierParam && supplierProductParam && (
-        <SupplierProductContainer supplierProductParam={supplierProductParam} />
+        <SupplierProductContainer
+          supplierParam={supplierParam}
+          supplierProductParam={supplierProductParam}
+        />
       )}
     </Layout>
   )
 }
 
-export const SupplierProductContainer = ({ supplierProductParam }) => {
+export const SupplierProductContainer = ({
+  supplierParam,
+  supplierProductParam,
+}) => {
   // Although this is GET /api/suppliers/:supplierParam/:supplierProductParam
   // We can still GET /api/suppliers/products/:supplierProductParam
   const { data, error } = useSWR(

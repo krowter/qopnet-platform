@@ -37,6 +37,7 @@ import {
   formatWeight,
 } from '@qopnet/util-format'
 import { Icon } from '../icon/icon'
+import { useState } from 'react'
 
 const env =
   process.env.NEXT_PUBLIC_ENV === 'production'
@@ -489,6 +490,8 @@ export const SupplierProductCartModifier = ({
   const productMinOrder = product?.minOrder || 1
   const productStock = product?.stock || 100
 
+  const [isJustAddedToCart, setJustAddedToCart] = useState(false)
+
   // https://chakra-ui.com/docs/form/number-input#create-a-mobile-spinner
   const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
     useNumberInput({
@@ -509,11 +512,12 @@ export const SupplierProductCartModifier = ({
   )
 
   const handleAddToCart = () => {
-    console.info({ productSubTotal })
-    toast({
-      title: `Berhasil menambah produk`,
-      description: `Subtotal: ${formattedProductSubTotal}`,
-    })
+    setJustAddedToCart(true)
+    // console.info({ productSubTotal })
+    // toast({
+    //   title: `Menambahkan produk ke keranjang`,
+    //   description: `Subtotal: ${formattedProductSubTotal}`,
+    // })
   }
 
   return (
@@ -543,13 +547,24 @@ export const SupplierProductCartModifier = ({
 
       <Button
         disabled={!productSubTotal}
-        colorScheme="green"
+        colorScheme="orange"
         size="sm"
         leftIcon={<Icon name="plus" />}
         onClick={handleAddToCart}
       >
         Tambah Keranjang
       </Button>
+
+      {isJustAddedToCart && (
+        <Stack>
+          <Text>
+            Telah ditambahkan,{' '}
+            <NextLink href="/cart" passHref>
+              <ChakraLink color="orange.500">cek keranjang belanja</ChakraLink>
+            </NextLink>
+          </Text>
+        </Stack>
+      )}
     </Stack>
   )
 }
