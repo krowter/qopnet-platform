@@ -123,58 +123,11 @@ export const ShipmentSummaryContainer = ({ businessOrder }) => {
 }
 
 export const ShipmentContainer = ({ businessOrder }) => {
-  // Display couriers
-  const couriers = [
-    { id: 1, name: 'Lalamove' },
-    { id: 2, name: 'Deliveree' },
-  ]
-  const selectedCourierId = 2
-
-  // Only set couriers once data has been retrieved
-
-  // Handle select courier option with just courier id
-
   return (
     <Stack flex={1} minW="420px" spacing={10}>
       <AddressesContainer />
-
-      <Stack>
-        <Heading as="h3" size="md">
-          Pilih kurir pengiriman:
-        </Heading>
-        <Stack>
-          {couriers.map((courier) => {
-            return (
-              <OptionBox
-                key={courier.id}
-                id={`courier-${courier.id}`}
-                selected={selectedCourierId === courier.id}
-              >
-                <Text>{courier.name}</Text>
-              </OptionBox>
-            )
-          })}
-        </Stack>
-      </Stack>
-
-      <Stack>
-        <Heading as="h3" size="md">
-          Ringkasan barang:
-        </Heading>
-        <Stack
-          py={5}
-          divider={<StackDivider />}
-          spacing={5}
-          align="stretch"
-          maxW="720px"
-        >
-          {businessOrder?.businessOrderItems?.map((item, index) => {
-            return (
-              <BusinessOrderItem key={item.supplierProduct.id} item={item} />
-            )
-          })}
-        </Stack>
-      </Stack>
+      <CouriersContainer />
+      <BusinessOrderItemsContainer businessOrder={businessOrder} />
     </Stack>
   )
 }
@@ -210,7 +163,16 @@ export const AddressesContainer = () => {
       <Heading as="h3" size="md">
         Pilih alamat pengiriman:
       </Heading>
-      {availableAddresses?.length > 0 ? (
+      {error && <div>Gagal memuat daftar alamat</div>}
+      {!error && !data && <div>Memuat daftar alamat...</div>}
+      {!error && data && availableAddresses?.length < 1 && (
+        <Stack>
+          <Text>
+            Anda belum memiliki alamat di profil atau entitas manapun.
+          </Text>
+        </Stack>
+      )}
+      {availableAddresses?.length > 0 && (
         <Stack>
           {availableAddresses?.map((address) => {
             return (
@@ -225,14 +187,63 @@ export const AddressesContainer = () => {
             )
           })}
         </Stack>
-      ) : (
-        <Stack>
-          <Text>
-            Anda belum memiliki alamat di profil atau entitas manapun.
-          </Text>
-        </Stack>
       )}
       {/* <Text as="pre">{JSON.stringify({ data }, null, 2)}</Text> */}
+    </Stack>
+  )
+}
+
+export const CouriersContainer = () => {
+  // Display couriers
+  const couriers = [
+    { id: 1, name: 'Lalamove' },
+    { id: 2, name: 'Deliveree' },
+  ]
+  const selectedCourierId = 2
+
+  // Only set couriers once data has been retrieved
+
+  // Handle select courier option with just courier id
+
+  return (
+    <Stack>
+      <Heading as="h3" size="md">
+        Pilih kurir pengiriman:
+      </Heading>
+      <Stack>
+        {couriers.map((courier) => {
+          return (
+            <OptionBox
+              key={courier.id}
+              id={`courier-${courier.id}`}
+              selected={selectedCourierId === courier.id}
+            >
+              <Text>{courier.name}</Text>
+            </OptionBox>
+          )
+        })}
+      </Stack>
+    </Stack>
+  )
+}
+
+export const BusinessOrderItemsContainer = ({ businessOrder }) => {
+  return (
+    <Stack>
+      <Heading as="h3" size="md">
+        Ringkasan barang:
+      </Heading>
+      <Stack
+        py={5}
+        divider={<StackDivider />}
+        spacing={5}
+        align="stretch"
+        maxW="720px"
+      >
+        {businessOrder?.businessOrderItems?.map((item, index) => {
+          return <BusinessOrderItem key={item.supplierProduct.id} item={item} />
+        })}
+      </Stack>
     </Stack>
   )
 }
