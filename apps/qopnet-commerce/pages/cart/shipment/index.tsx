@@ -2,21 +2,14 @@ import NextLink from 'next/link'
 import NextImage from 'next/image'
 import {
   Box,
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbSeparator,
   Button,
   chakra,
   Divider,
-  Flex,
   Heading,
   HStack,
-  IconButton,
   Link as ChakraLink,
   Stack,
   StackDivider,
-  Tag,
   Text,
   useColorModeValue,
 } from '@chakra-ui/react'
@@ -28,19 +21,20 @@ import {
   OptionBox,
 } from '@qopnet/qopnet-ui'
 import {
-  calculateEverything,
+  calculateCart,
   formatRupiah,
   formatAddressComplete,
 } from '@qopnet/util-format'
 import { BreadcrumbCart } from '../../../components'
-import { useSWRNext } from '../../../utils'
+import { useSWR } from '../../../utils'
+import { useEffect, useState } from 'react'
 
 /**
  * /cart/shipment
  */
 export const CartShipmentPage = () => {
-  const { data, error } = useSWRNext('/api/orders/1')
-  const { order } = data || {}
+  const { data, error } = useSWR('/api/business/orders/my/cart')
+  const { businessOrder } = data || {}
 
   return (
     <Layout pt={10} meta={{ title: 'Checkout dan pengiriman' }}>
@@ -48,20 +42,37 @@ export const CartShipmentPage = () => {
 
       <Stack spacing={10}>
         <Heading>Checkout dan pengiriman</Heading>
-        {error && <Text>Gagal memuat data order</Text>}
-        {!error && !data && <Text>Memuat data order...</Text>}
-        {!error && data && order && (
-          <Stack direction={['column', 'column', 'row']} spacing={5}>
-            <ShipmentContainer order={order} />
-            <ShipmentSummaryContainer order={order} />
-          </Stack>
+        {error && <Text>Gagal memuat data order untuk pengiriman</Text>}
+        {!error && !data && <Text>Memuat data order untuk pengiriman...</Text>}
+        {!error && data && businessOrder && (
+          <Box>
+            {data?.meta?.recordCount?.businessOrderItems > 0 ? (
+              <Stack direction={['column', 'column', 'row']} spacing={5}>
+                <ShipmentContainer businessOrder={businessOrder} />
+                <ShipmentSummaryContainer businessOrder={businessOrder} />
+              </Stack>
+            ) : (
+              <Stack align="flex-start">
+                <Text>
+                  Maaf Anda belum bisa checkout dan mengatur pengiriman, karena
+                  keranjang belanja Anda masih kosong.
+                </Text>
+                <NextLink href="/shop" passHref>
+                  <Button as="a" colorScheme="orange">
+                    Lanjut belanja dahulu
+                  </Button>
+                </NextLink>
+              </Stack>
+            )}
+          </Box>
         )}
+        {/* <Text as="pre">{JSON.stringify(businessOrder, null, 2)}</Text> */}
       </Stack>
     </Layout>
   )
 }
 
-export const ShipmentSummaryContainer = ({ order }) => {
+export const ShipmentSummaryContainer = ({ businessOrder }) => {
   const {
     totalItems,
     totalPrice,
@@ -69,7 +80,7 @@ export const ShipmentSummaryContainer = ({ order }) => {
     totalCalculatedPrice,
     totalShipmentCost,
     totalCalculatedBill,
-  } = calculateEverything(order)
+  } = calculateCart(businessOrder)
 
   return (
     <Stack
@@ -85,7 +96,7 @@ export const ShipmentSummaryContainer = ({ order }) => {
         Ringkasan belanja
       </Heading>
 
-      <Stack id="order-calculation" spacing={5}>
+      <Stack id="businessOrder-calculation" spacing={5}>
         <Stack>
           <HStack justify="space-between">
             <Text>Total Harga ({totalItems} barang)</Text>
@@ -95,6 +106,10 @@ export const ShipmentSummaryContainer = ({ order }) => {
             <Text>Total Ongkos Kirim</Text>
             <Text>{formatRupiah(totalShipmentCost)}</Text>
           </HStack>
+          <Stack justify="space-between">
+            <Text>Alamat dipilih</Text>
+            <Text>{businessOrder?.shipmentAddress}</Text>
+          </Stack>
         </Stack>
         <Divider />
         <HStack justify="space-between">
@@ -112,93 +127,151 @@ export const ShipmentSummaryContainer = ({ order }) => {
   )
 }
 
-export const ShipmentContainer = ({ order }) => {
-  const myAddresses = [
-    {
-      id: 1,
-      street: 'Jl. Monas No. 1',
-      streetDetails: 'Tugu Emas',
-      city: 'Jakarta',
-      state: 'DKI Jakarta',
-      zip: '12345',
-      countryCode: 'ID',
-    },
-    {
-      id: 2,
-      street: 'Jl. Ancol No. 20',
-      streetDetails: 'Patung Ikan',
-      city: 'Jakarta',
-      state: 'DKI Jakarta',
-      zip: '12345',
-      countryCode: 'ID',
-    },
-  ]
-
-  const couriers = [
-    { id: 1, name: 'Lalamove' },
-    { id: 2, name: 'Deliveree' },
-  ]
-
-  const selectedAddressId = 1
-  const selectedCourierId = 2
-
+export const ShipmentContainer = ({ businessOrder }) => {
   return (
     <Stack flex={1} minW="420px" spacing={10}>
-      <Stack>
-        <Heading as="h3" size="md">
-          Pilih alamat pengiriman:
-        </Heading>
+      <AddressesContainer />
+      <CouriersContainer />
+      <BusinessOrderItemsContainer businessOrder={businessOrder} />
+    </Stack>
+  )
+}
+
+export const AddressesContainer = () => {
+  // Fetch multiple addresses from my profile
+  const { data, error } = useSWR('/api/profiles/my')
+  const { profile, suppliers, wholesalers, merchants } = data || {}
+
+  // Display addresses
+  const [availableAddresses, setAvailableAddresses] = useState([])
+  const [selectedAddressId, setSelectedAddressId] = useState('')
+
+  // Only set addresses once data has been retrieved
+  useEffect(() => {
+    if (data) {
+      // Should concat multiple addresses
+      // const mySupplierAddresses = []
+      setAvailableAddresses(profile?.addresses || [])
+
+      // Default to set the first availableAddresses
+      setSelectedAddressId(availableAddresses[0]?.id || '')
+    }
+  }, [data, profile, availableAddresses])
+
+  // Handle select address option with just address id
+  const handleSelectAddressOption = (addressId) => {
+    setSelectedAddressId(addressId)
+  }
+
+  return (
+    <Stack>
+      <Heading as="h3" size="md">
+        Pilih alamat pengiriman:
+      </Heading>
+      {error && <div>Gagal memuat daftar alamat</div>}
+      {!error && !data && <div>Memuat daftar alamat...</div>}
+      {!error && data && availableAddresses?.length < 1 && (
         <Stack>
-          {myAddresses.map((address) => {
+          <Text>
+            Anda belum memiliki alamat di profil atau entitas manapun.
+          </Text>
+        </Stack>
+      )}
+      {availableAddresses?.length > 0 && (
+        <Stack>
+          {availableAddresses?.map((address) => {
             return (
               <OptionBox
                 key={address.id}
                 id={`address-${address.id}`}
                 selected={selectedAddressId === address.id}
+                onClick={() => handleSelectAddressOption(address.id)}
               >
                 <Text>{formatAddressComplete(address)}</Text>
               </OptionBox>
             )
           })}
         </Stack>
-      </Stack>
+      )}
+      {/* <Text as="pre">{JSON.stringify({ data }, null, 2)}</Text> */}
+    </Stack>
+  )
+}
 
+export const CouriersContainer = () => {
+  // Fetch couriers
+  const { data, error } = useSWR('/api/couriers')
+  const { couriers } = data || {}
+
+  // Display addresses
+  const [availableCouriers, setAvailableCouriers] = useState([
+    { id: '1', name: 'Lalamove' },
+    { id: '2', name: 'Deliveree' },
+  ])
+  // Should be empty array if API Courier is available
+  const [selectedCourierId, setSelectedCourierId] = useState('')
+
+  // Only set couriers once data has been retrieved
+  useEffect(() => {
+    if (data) {
+      setAvailableCouriers(couriers || [])
+      // Default to set the first available courier
+      setSelectedCourierId(availableCouriers[0]?.id || '')
+    }
+  }, [data, couriers, availableCouriers])
+
+  // Handle select courier option with just courier id
+  const handleSelectCourierOption = (courierId) => {
+    setSelectedCourierId(courierId)
+  }
+
+  return (
+    <Stack>
+      <Heading as="h3" size="md">
+        Pilih kurir pengiriman:
+      </Heading>
       <Stack>
-        <Heading as="h3" size="md">
-          Pilih kurir pengiriman:
-        </Heading>
-        <Stack>
-          {couriers.map((courier) => {
+        {/* {error && <div>Gagal memuat pilihan kurir pengiriman</div>} */}
+        {!error && !data && <div>Memuat pilihan kurir pengiriman...</div>}
+        {!error && data && availableCouriers?.length < 1 && (
+          <Stack>
+            <Text>Belum ada pilihan kurir pengiriman yang tersedia.</Text>
+          </Stack>
+        )}
+        {availableCouriers?.length > 0 &&
+          availableCouriers?.map((courier) => {
             return (
               <OptionBox
                 key={courier.id}
                 id={`courier-${courier.id}`}
                 selected={selectedCourierId === courier.id}
+                onClick={() => handleSelectCourierOption(courier.id)}
               >
                 <Text>{courier.name}</Text>
               </OptionBox>
             )
           })}
-        </Stack>
       </Stack>
+    </Stack>
+  )
+}
 
-      <Stack>
-        <Heading as="h3" size="md">
-          Ringkasan barang:
-        </Heading>
-        <Stack
-          py={5}
-          divider={<StackDivider />}
-          spacing={5}
-          align="stretch"
-          maxW="720px"
-        >
-          {order?.businessOrderItems?.map((item, index) => {
-            return (
-              <BusinessOrderItem key={item.supplierProduct.id} item={item} />
-            )
-          })}
-        </Stack>
+export const BusinessOrderItemsContainer = ({ businessOrder }) => {
+  return (
+    <Stack>
+      <Heading as="h3" size="md">
+        Ringkasan barang:
+      </Heading>
+      <Stack
+        py={5}
+        divider={<StackDivider />}
+        spacing={5}
+        align="stretch"
+        maxW="720px"
+      >
+        {businessOrder?.businessOrderItems?.map((item, index) => {
+          return <BusinessOrderItem key={item.supplierProduct.id} item={item} />
+        })}
       </Stack>
     </Stack>
   )
@@ -233,22 +306,32 @@ export const BusinessOrderItem = ({ item }) => {
           )}
 
           <Stack>
-            <Text fontSize="xs" fontWeight="bold">
-              {item.supplierProduct?.supplier?.name}
-              <chakra.span opacity={0.5}>
-                {' di '}
-                {item.supplierProduct?.supplier?.addresses?.length &&
-                  item.supplierProduct?.supplier?.addresses[0]?.city}
-              </chakra.span>
-            </Text>
-            <Box>
-              <Heading as="h2" size="md">
-                {item.supplierProduct?.name}
-              </Heading>
-              <Heading as="h3" size="sm">
-                {item.supplierProduct?.subname}
-              </Heading>
-            </Box>
+            {item.supplier?.name && (
+              <NextLink href={`/${item.supplier?.handle}`} passHref>
+                <Text as="a" fontSize="xs" fontWeight="bold">
+                  {item.supplier?.name}
+                  {item.supplier?.addresses?.length > 0 && (
+                    <chakra.span opacity={0.5}>
+                      {' di '}
+                      {item.supplier?.addresses[0]?.city}
+                    </chakra.span>
+                  )}
+                </Text>
+              </NextLink>
+            )}
+            <NextLink
+              passHref
+              href={`/${item.supplier?.handle}/${item.supplierProduct?.slug}`}
+            >
+              <Box as="a">
+                <Heading as="h2" size="md">
+                  {item.supplierProduct?.name}
+                </Heading>
+                <Heading as="h3" size="sm">
+                  {item.supplierProduct?.subname}
+                </Heading>
+              </Box>
+            </NextLink>
             <SupplierProductPrice product={item.supplierProduct} />
           </Stack>
         </Stack>

@@ -1,19 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Box, useColorModeValue } from '@chakra-ui/react'
-
-/* eslint-disable-next-line */
-export interface FormProps {}
-
-export function Form(props: FormProps) {
-  return (
-    <form>
-      <h1>Form</h1>
-    </form>
-  )
-}
 
 export interface OptionBoxProps {
   id?: string
   selected?: boolean
+  onClick?: any
   children: JSX.Element | JSX.Element[]
 }
 
@@ -43,5 +34,3 @@ export const OptionBox = (props: OptionBoxProps) => {
     </Box>
   )
 }
-
-export default Form
