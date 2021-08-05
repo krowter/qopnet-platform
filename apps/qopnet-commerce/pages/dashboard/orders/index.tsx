@@ -26,63 +26,64 @@ import {
   formatRupiah,
 } from '@qopnet/util-format'
 import { BreadcrumbOrders } from '../../../components'
-import { useSWRNext } from '../../../utils'
+import { useSWR } from '../../../utils'
 
 /**
- * /dashboard/orders
+ * /dashboard/businessOrders
  *
  * Dashboard Orders
  *
- * Manage owned business orders from my profile.
+ * Manage owned business businessOrders from my profile.
  */
 const DashboardOrdersPage = () => {
   const user = useUser()
   const router = useRouter()
   useEffect(() => {
-    if (!user) {
-      router.replace('/signin')
-    }
+    // if (!user) {
+    //   router.replace('/signin')
+    // }
   }, [user, router])
 
   return <Layout pt={10}>{user && <OrdersContainer user={user} />}</Layout>
 }
 
 export const OrdersContainer = ({ user }) => {
-  // const { data, error } = useSWR('/api/profiles/my/business/orders')
-  const { data, error } = useSWRNext('/api/profiles/my-business-orders')
-  const { orders } = data || []
+  const { data, error } = useSWR('/api/business/orders/my')
+  const { businessOrders } = data || []
 
   return (
     <Stack>
-      <NextSeo title="Daftar order saya - Qopnet" />
+      <NextSeo title="Dasbor daftar pesanan saya - Qopnet" />
 
       <BreadcrumbOrders />
       <Stack spacing={10}>
-        <Heading>Daftar order saya</Heading>
-        {error && !data && <Text>Gagal memuat daftar order saya</Text>}
+        <Heading>Dasbor daftar pesanan saya</Heading>
+        {error && !data && <Text>Gagal memuat daftar pesanan saya</Text>}
         {!error && !data && (
           <HStack>
             <Spinner />
-            <Text>Memuat daftar order saya...</Text>
+            <Text>Memuat daftar pesanan saya...</Text>
           </HStack>
         )}
-        {!error && data && orders && <OrdersList orders={orders} />}
+        {!error && data && businessOrders && (
+          <BusinessOrdersList businessOrders={businessOrders} />
+        )}
       </Stack>
     </Stack>
   )
 }
 
-export const OrdersList = ({ orders }) => {
+export const BusinessOrdersList = ({ businessOrders }) => {
   const orderCardBackground = useColorModeValue('gray.50', 'gray.900')
 
   return (
     <Stack spacing={5}>
-      {orders.map((order, index) => {
-        const { totalCalculatedBill } = calculateCart(order)
+      {businessOrders.map((businessOrder, index) => {
+        const { totalCalculatedBill } = calculateCart(businessOrder)
 
         return (
           <Stack
-            key={order.id}
+            key={businessOrder.id}
             spacing={5}
             p={3}
             rounded="md"
@@ -91,19 +92,19 @@ export const OrdersList = ({ orders }) => {
             align={['flex-start', 'flex-start', 'flex-end']}
             justify="space-between"
           >
-            <Box className="order-details">
+            <Box className="businessOrder-details">
               <HStack mb={3}>
                 <Heading as="h2" size="sm">
                   #{index + 1}
                 </Heading>
                 <Tag size="sm" colorScheme="green">
-                  {order.status}
+                  {businessOrder.status}
                 </Tag>
-                <Text fontSize="sm">{formatDate(order.updatedAt)}</Text>
-                <Code fontSize="xs">{order.id}</Code>
+                <Text fontSize="sm">{formatDate(businessOrder.updatedAt)}</Text>
+                <Code fontSize="xs">{businessOrder.id}</Code>
               </HStack>
               <Stack>
-                {order.businessOrderItems.map((item, index) => {
+                {businessOrder.businessOrderItems.map((item, index) => {
                   const { calculatedPrice, subTotalCalculatedPrice } =
                     calculateSupplierProductItem(item)
 
@@ -113,12 +114,22 @@ export const OrdersList = ({ orders }) => {
                         <Heading as="h4" size="sm">
                           {item.supplierProduct?.name}
                         </Heading>
-                        <Text fontSize="sm">
-                          dari{' '}
-                          <chakra.span fontWeight="bold">
-                            {item.supplierProduct?.supplier?.name}
-                          </chakra.span>
-                        </Text>
+                        {item.supplier?.name && (
+                          <Text fontSize="sm">
+                            <chakra.span> dari </chakra.span>
+                            <chakra.span fontWeight="bold">
+                              {item.supplier?.name}
+                            </chakra.span>
+                          </Text>
+                        )}
+                        {/* {item.supplier?.addresses[0]?.city && (
+                          <Text fontSize="sm">
+                            <chakra.span> di </chakra.span>
+                            <chakra.span fontWeight="bold">
+                              {item.supplier?.addresses[0]?.city}
+                            </chakra.span>
+                          </Text>
+                        )} */}
                       </HStack>
                       <Text>
                         {item.quantity} barang × {formatRupiah(calculatedPrice)}{' '}
@@ -130,7 +141,10 @@ export const OrdersList = ({ orders }) => {
               </Stack>
             </Box>
 
-            <Box className="order-total" textAlign={['left', 'left', 'right']}>
+            <Box
+              className="businessOrder-total"
+              textAlign={['left', 'left', 'right']}
+            >
               <Heading as="h4" size="sm">
                 Total Belanja
               </Heading>
@@ -139,6 +153,7 @@ export const OrdersList = ({ orders }) => {
           </Stack>
         )
       })}
+      <Text as="pre">{JSON.stringify(businessOrders, null, 2)}</Text>
     </Stack>
   )
 }

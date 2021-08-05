@@ -15,7 +15,23 @@ export const getMyAllBusinessOrders = async (req, res) => {
           ownerId,
         },
         include: {
-          businessOrderItems: true,
+          businessOrderItems: {
+            include: {
+              supplierProduct: true,
+              supplier: {
+                select: {
+                  id: true,
+                  name: true,
+                  handle: true,
+                  addresses: {
+                    select: {
+                      city: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
           shipmentAddress: true,
           payment: true,
         },
