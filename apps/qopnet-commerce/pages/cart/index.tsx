@@ -18,7 +18,11 @@ import {
 } from '@chakra-ui/react'
 
 import { Layout, Icon, SupplierProductPrice } from '@qopnet/qopnet-ui'
-import { calculateCart, formatRupiah } from '@qopnet/util-format'
+import {
+  formatBusinessOrderStatus,
+  formatRupiah,
+  calculateCart,
+} from '@qopnet/util-format'
 import { BreadcrumbCart } from '../../components'
 import { useSWR, postToAPI } from '../../utils'
 import { useEffect } from 'react'
@@ -144,7 +148,9 @@ export const CartContainer = ({ businessOrder }) => {
     <Stack flex={1} minW="420px">
       <HStack>
         <Text>Status Pesanan:</Text>
-        <Tag>{businessOrder.status}</Tag>
+        <Tag colorScheme="green">
+          {formatBusinessOrderStatus(businessOrder?.status)}
+        </Tag>
       </HStack>
 
       <Stack
@@ -173,16 +179,21 @@ export const BusinessOrderItem = ({ item }) => {
       >
         <Stack spacing={5} direction="row">
           {item.supplierProduct?.images[0] && (
-            <Box className="next-image-container">
-              <NextImage
-                src={item.supplierProduct?.images[0]}
-                key={item.supplierProduct?.slug}
-                alt={item.supplierProduct?.name}
-                layout="fixed"
-                width={100}
-                height={100}
-              />
-            </Box>
+            <NextLink
+              href={`/${item.supplier?.handle}/${item.supplierProduct?.slug}`}
+              passHref
+            >
+              <Box as="a" className="next-image-container">
+                <NextImage
+                  src={item.supplierProduct?.images[0]}
+                  key={item.supplierProduct?.slug}
+                  alt={item.supplierProduct?.name}
+                  layout="fixed"
+                  width={100}
+                  height={100}
+                />
+              </Box>
+            </NextLink>
           )}
 
           <Stack>
