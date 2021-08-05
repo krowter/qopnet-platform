@@ -125,7 +125,13 @@ export const createMyCart = async (req, res) => {
     try {
       const createdCart: Partial<BusinessOrder> =
         await prisma.businessOrder.create({
-          data: { ownerId, status: 'DRAFT' },
+          data: {
+            ownerId,
+            status: 'DRAFT',
+          },
+          include: {
+            businessOrderItems: true,
+          },
         })
 
       res.status(201).json({
