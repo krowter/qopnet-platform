@@ -32,7 +32,7 @@ import { useEffect } from 'react'
  * the API is using /api/business/orders/:businessOrderId
  * Because BusinessCart is just a draft BusinessOrder.
  */
-const CartPage = () => {
+export const CartPage = () => {
   const { data, error } = useSWR('/api/business/orders/my/cart')
   const { businessOrder } = data || {}
 
@@ -184,24 +184,22 @@ export const BusinessOrderItem = ({ item }) => {
           )}
 
           <Stack>
-            {item.supplierProduct?.supplier?.name && (
-              <NextLink
-                href={`/${item.supplierProduct?.supplier?.handle}`}
-                passHref
-              >
+            {item.supplier?.name && (
+              <NextLink href={`/${item.supplier?.handle}`} passHref>
                 <Text as="a" fontSize="xs" fontWeight="bold">
-                  {item.supplierProduct?.supplier?.name}
-                  <chakra.span opacity={0.5}>
-                    {' di '}
-                    {item.supplierProduct?.supplier?.addresses?.length &&
-                      item.supplierProduct?.supplier?.addresses[0]?.city}
-                  </chakra.span>
+                  {item.supplier?.name}
+                  {item.supplier?.addresses?.length > 0 && (
+                    <chakra.span opacity={0.5}>
+                      {' di '}
+                      {item.supplier?.addresses[0]?.city}
+                    </chakra.span>
+                  )}
                 </Text>
               </NextLink>
             )}
             <NextLink
               passHref
-              href={`/${item.supplierProduct?.supplier?.handle}/${item.supplierProduct?.slug}`}
+              href={`/${item.supplier?.handle}/${item.supplierProduct?.slug}`}
             >
               <Box as="a">
                 <Heading as="h2" size="md">

@@ -2,21 +2,14 @@ import NextLink from 'next/link'
 import NextImage from 'next/image'
 import {
   Box,
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbSeparator,
   Button,
   chakra,
   Divider,
-  Flex,
   Heading,
   HStack,
-  IconButton,
   Link as ChakraLink,
   Stack,
   StackDivider,
-  Tag,
   Text,
   useColorModeValue,
 } from '@chakra-ui/react'
@@ -33,14 +26,14 @@ import {
   formatAddressComplete,
 } from '@qopnet/util-format'
 import { BreadcrumbCart } from '../../../components'
-import { useSWRNext } from '../../../utils'
+import { useSWR } from '../../../utils'
 
 /**
  * /cart/shipment
  */
 export const CartShipmentPage = () => {
-  const { data, error } = useSWRNext('/api/orders/1')
-  const { order } = data || {}
+  const { data, error } = useSWR('/api/business/orders/my/cart')
+  const { businessOrder } = data || {}
 
   return (
     <Layout pt={10} meta={{ title: 'Checkout dan pengiriman' }}>
@@ -50,18 +43,34 @@ export const CartShipmentPage = () => {
         <Heading>Checkout dan pengiriman</Heading>
         {error && <Text>Gagal memuat data order</Text>}
         {!error && !data && <Text>Memuat data order...</Text>}
-        {!error && data && order && (
-          <Stack direction={['column', 'column', 'row']} spacing={5}>
-            <ShipmentContainer order={order} />
-            <ShipmentSummaryContainer order={order} />
-          </Stack>
+        {!error && data && businessOrder && (
+          <Box>
+            {data?.meta?.recordCount?.businessOrderItems > 0 ? (
+              <Stack direction={['column', 'column', 'row']} spacing={5}>
+                <ShipmentContainer businessOrder={businessOrder} />
+                <ShipmentSummaryContainer businessOrder={businessOrder} />
+              </Stack>
+            ) : (
+              <Stack align="flex-start">
+                <Text>
+                  Maaf Anda belum bisa checkout dan mengatur pengiriman, karena
+                  keranjang belanja Anda masih kosong.
+                </Text>
+                <NextLink href="/shop" passHref>
+                  <Button as="a" colorScheme="orange">
+                    Lanjut belanja dahulu
+                  </Button>
+                </NextLink>
+              </Stack>
+            )}
+          </Box>
         )}
       </Stack>
     </Layout>
   )
 }
 
-export const ShipmentSummaryContainer = ({ order }) => {
+export const ShipmentSummaryContainer = ({ businessOrder }) => {
   const {
     totalItems,
     totalPrice,
@@ -69,7 +78,7 @@ export const ShipmentSummaryContainer = ({ order }) => {
     totalCalculatedPrice,
     totalShipmentCost,
     totalCalculatedBill,
-  } = calculateCart(order)
+  } = calculateCart(businessOrder)
 
   return (
     <Stack
@@ -85,7 +94,7 @@ export const ShipmentSummaryContainer = ({ order }) => {
         Ringkasan belanja
       </Heading>
 
-      <Stack id="order-calculation" spacing={5}>
+      <Stack id="businessOrder-calculation" spacing={5}>
         <Stack>
           <HStack justify="space-between">
             <Text>Total Harga ({totalItems} barang)</Text>
@@ -112,7 +121,7 @@ export const ShipmentSummaryContainer = ({ order }) => {
   )
 }
 
-export const ShipmentContainer = ({ order }) => {
+export const ShipmentContainer = ({ businessOrder }) => {
   const myAddresses = [
     {
       id: 1,
@@ -193,7 +202,7 @@ export const ShipmentContainer = ({ order }) => {
           align="stretch"
           maxW="720px"
         >
-          {order?.businessOrderItems?.map((item, index) => {
+          {businessOrder?.businessOrderItems?.map((item, index) => {
             return (
               <BusinessOrderItem key={item.supplierProduct.id} item={item} />
             )
@@ -233,22 +242,32 @@ export const BusinessOrderItem = ({ item }) => {
           )}
 
           <Stack>
-            <Text fontSize="xs" fontWeight="bold">
-              {item.supplierProduct?.supplier?.name}
-              <chakra.span opacity={0.5}>
-                {' di '}
-                {item.supplierProduct?.supplier?.addresses?.length &&
-                  item.supplierProduct?.supplier?.addresses[0]?.city}
-              </chakra.span>
-            </Text>
-            <Box>
-              <Heading as="h2" size="md">
-                {item.supplierProduct?.name}
-              </Heading>
-              <Heading as="h3" size="sm">
-                {item.supplierProduct?.subname}
-              </Heading>
-            </Box>
+            {item.supplier?.name && (
+              <NextLink href={`/${item.supplier?.handle}`} passHref>
+                <Text as="a" fontSize="xs" fontWeight="bold">
+                  {item.supplier?.name}
+                  {item.supplier?.addresses?.length > 0 && (
+                    <chakra.span opacity={0.5}>
+                      {' di '}
+                      {item.supplier?.addresses[0]?.city}
+                    </chakra.span>
+                  )}
+                </Text>
+              </NextLink>
+            )}
+            <NextLink
+              passHref
+              href={`/${item.supplier?.handle}/${item.supplierProduct?.slug}`}
+            >
+              <Box as="a">
+                <Heading as="h2" size="md">
+                  {item.supplierProduct?.name}
+                </Heading>
+                <Heading as="h3" size="sm">
+                  {item.supplierProduct?.subname}
+                </Heading>
+              </Box>
+            </NextLink>
             <SupplierProductPrice product={item.supplierProduct} />
           </Stack>
         </Stack>
