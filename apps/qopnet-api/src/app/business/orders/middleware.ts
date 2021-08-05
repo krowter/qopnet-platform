@@ -119,7 +119,6 @@ export const getMyCart = async (req, res) => {
 export const createMyCart = async (req, res) => {
   const isCartExist = req.isCartExist
   const ownerId = req.profile.id
-  const formData = req.body
 
   // Only continue if cart exist is false
   if (!isCartExist) {
@@ -132,7 +131,6 @@ export const createMyCart = async (req, res) => {
       res.status(201).json({
         message: 'Create my cart or draft business order success',
         businessOrder: createdCart,
-        formData,
       })
     } catch (error) {
       if (error.code === 'P2011') {
@@ -153,7 +151,6 @@ export const createMyCart = async (req, res) => {
   } else {
     res.status(400).json({
       message: 'Create my cart or draft business order failed already exist',
-      formData,
     })
   }
 }

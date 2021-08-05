@@ -24,7 +24,8 @@ import {
 import { Layout, Icon, SupplierProductPrice } from '@qopnet/qopnet-ui'
 import { calculateEverything, formatRupiah } from '@qopnet/util-format'
 import { BreadcrumbCart } from '../../components'
-import { useSWRNext } from '../../utils'
+import { useSWR, postToAPI } from '../../utils'
+import { useEffect } from 'react'
 
 /**
  * /cart
@@ -36,8 +37,23 @@ import { useSWRNext } from '../../utils'
  * Because BusinessCart is just a draft BusinessOrder.
  */
 const CartPage = () => {
-  const { data, error } = useSWRNext('/api/orders/1')
+  const { data, error } = useSWR('/api/business/orders/my/cart')
   const { order } = data || {}
+
+  // Try to create my cart if my cart does not exist yet
+  // Or when there is an error
+  useEffect(() => {
+    const createMyCart = async () => {
+      const { businessOrder } = await postToAPI(
+        '/api/business/orders/my/cart',
+        {}
+      )
+      console.log({ businessOrder })
+    }
+    if (error) {
+      createMyCart()
+    }
+  }, [error])
 
   return (
     <Layout
@@ -50,6 +66,7 @@ const CartPage = () => {
       <BreadcrumbCart />
       <Stack spacing={10}>
         <Heading>Keranjang belanja</Heading>
+        <Text as="pre">{JSON.stringify(data, null, 2)}</Text>
         {error && <Text>Gagal memuat data keranjang untuk order</Text>}
         {!error && !data && <Text>Memuat data keranjang untuk order...</Text>}
         {!error && data && order && (
