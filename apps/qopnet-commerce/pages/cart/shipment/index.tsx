@@ -27,7 +27,7 @@ import {
 } from '@qopnet/util-format'
 import { BreadcrumbCart } from '../../../components'
 import { useSWR } from '../../../utils'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 /**
  * /cart/shipment
@@ -123,44 +123,20 @@ export const ShipmentSummaryContainer = ({ businessOrder }) => {
 }
 
 export const ShipmentContainer = ({ businessOrder }) => {
-  // Fetch multiple addresses from my profile
-  const { data, error } = useSWR('/api/profiles/my')
-  const { profile, suppliers } = data || {}
-
-  // Display addresses
-  const myAddresses = profile?.addresses || []
-  const [selectedAddressId, setSelectedAddressId] = useState(
-    myAddresses ? myAddresses[0]?.id : ''
-  )
-
-  // DIsplay couriers
+  // Display couriers
   const couriers = [
     { id: 1, name: 'Lalamove' },
     { id: 2, name: 'Deliveree' },
   ]
   const selectedCourierId = 2
 
+  // Only set couriers once data has been retrieved
+
+  // Handle select courier option with just courier id
+
   return (
     <Stack flex={1} minW="420px" spacing={10}>
-      <Stack>
-        <Heading as="h3" size="md">
-          Pilih alamat pengiriman:
-        </Heading>
-        <Stack>
-          {myAddresses.map((address) => {
-            return (
-              <OptionBox
-                key={address.id}
-                id={`address-${address.id}`}
-                selected={selectedAddressId === address.id}
-              >
-                <Text>{formatAddressComplete(address)}</Text>
-              </OptionBox>
-            )
-          })}
-          {/* <Text as="pre">{JSON.stringify({ data, myAddresses }, null, 2)}</Text> */}
-        </Stack>
-      </Stack>
+      <AddressesContainer />
 
       <Stack>
         <Heading as="h3" size="md">
@@ -199,6 +175,64 @@ export const ShipmentContainer = ({ businessOrder }) => {
           })}
         </Stack>
       </Stack>
+    </Stack>
+  )
+}
+
+export const AddressesContainer = () => {
+  // Fetch multiple addresses from my profile
+  const { data, error } = useSWR('/api/profiles/my')
+  const { profile, suppliers, wholesalers, merchants } = data || {}
+
+  // Display addresses
+  const [availableAddresses, setAvailableAddresses] = useState([])
+  const [selectedAddressId, setSelectedAddressId] = useState('')
+
+  // Only set addresses once data has been retrieved
+  useEffect(() => {
+    if (data) {
+      // Should concat multiple addresses
+      // const mySupplierAddresses = []
+      setAvailableAddresses(profile?.addresses || [])
+
+      // Default to set the first availableAddresses
+      setSelectedAddressId(availableAddresses[0]?.id || '')
+    }
+  }, [data, profile, availableAddresses])
+
+  // Handle select address option with just address id
+  const handleSelectAddressOption = (addressId) => {
+    setSelectedAddressId(addressId)
+  }
+
+  return (
+    <Stack>
+      <Heading as="h3" size="md">
+        Pilih alamat pengiriman:
+      </Heading>
+      {availableAddresses?.length > 0 ? (
+        <Stack>
+          {availableAddresses?.map((address) => {
+            return (
+              <OptionBox
+                key={address.id}
+                id={`address-${address.id}`}
+                selected={selectedAddressId === address.id}
+                onClick={() => handleSelectAddressOption(address.id)}
+              >
+                <Text>{formatAddressComplete(address)}</Text>
+              </OptionBox>
+            )
+          })}
+        </Stack>
+      ) : (
+        <Stack>
+          <Text>
+            Anda belum memiliki alamat di profil atau entitas manapun.
+          </Text>
+        </Stack>
+      )}
+      {/* <Text as="pre">{JSON.stringify({ data }, null, 2)}</Text> */}
     </Stack>
   )
 }
