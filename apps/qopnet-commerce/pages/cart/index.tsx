@@ -2,18 +2,14 @@ import NextLink from 'next/link'
 import NextImage from 'next/image'
 import {
   Box,
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbSeparator,
   Button,
   chakra,
-  Flex,
   Heading,
   HStack,
   IconButton,
   Link as ChakraLink,
   Stack,
+  Input,
   StackDivider,
   Divider,
   Tag,
@@ -70,7 +66,7 @@ const CartPage = () => {
         {!error && !data && <Text>Memuat data keranjang untuk order...</Text>}
         {!error && data && businessOrder && (
           <Box>
-            {businessOrder?.meta?.recordCount?.businessOrderItems > 0 ? (
+            {data?.meta?.recordCount?.businessOrderItems > 0 ? (
               <Stack direction={['column', 'column', 'row']}>
                 <CartContainer businessOrder={businessOrder} />
                 <CartSummaryContainer businessOrder={businessOrder} />
@@ -188,16 +184,21 @@ export const BusinessOrderItem = ({ item }) => {
           )}
 
           <Stack>
-            <NextLink href={item.supplierProduct?.supplier?.handle} passHref>
-              <Text as="a" fontSize="xs" fontWeight="bold">
-                {item.supplierProduct?.supplier?.name}
-                <chakra.span opacity={0.5}>
-                  {' di '}
-                  {item.supplierProduct?.supplier?.addresses?.length &&
-                    item.supplierProduct?.supplier?.addresses[0]?.city}
-                </chakra.span>
-              </Text>
-            </NextLink>
+            {item.supplierProduct?.supplier?.name && (
+              <NextLink
+                href={`/${item.supplierProduct?.supplier?.handle}`}
+                passHref
+              >
+                <Text as="a" fontSize="xs" fontWeight="bold">
+                  {item.supplierProduct?.supplier?.name}
+                  <chakra.span opacity={0.5}>
+                    {' di '}
+                    {item.supplierProduct?.supplier?.addresses?.length &&
+                      item.supplierProduct?.supplier?.addresses[0]?.city}
+                  </chakra.span>
+                </Text>
+              </NextLink>
+            )}
             <NextLink
               passHref
               href={`/${item.supplierProduct?.supplier?.handle}/${item.supplierProduct?.slug}`}
@@ -216,7 +217,7 @@ export const BusinessOrderItem = ({ item }) => {
         </Stack>
 
         <HStack>
-          <Box>{item.quantity}</Box>
+          <Input value={item.quantity} maxW="100px" />
           <IconButton
             aria-label="Hapus barang"
             size="sm"
