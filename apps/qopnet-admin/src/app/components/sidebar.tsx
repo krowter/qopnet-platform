@@ -187,15 +187,19 @@ export const SidebarLinks = () => {
         <SidebarLink to="/suppliers/invoices">Suppliers Invoices</SidebarLink> */}
       </Flex>
 
-      {/* <SidebarNestedLink>Merchants</SidebarNestedLink>
+      <SidebarNestedLink name="merchant" to="/merchants">
+        Merchant
+      </SidebarNestedLink>
       <Flex flexDirection="column" alignItems="flex-start" px={4}>
-        <SidebarLink to="/merchants">All Merchants</SidebarLink>
-        <SidebarLink to="/merchants/products">Merchant Products</SidebarLink>
+        <SidebarLink name="merchants" to="/merchants">
+          Semua Merchant
+        </SidebarLink>
+        {/* <SidebarLink to="/merchants/products">Merchant Products</SidebarLink>
         <SidebarLink to="/merchants/orders">Merchant Orders</SidebarLink>
-        <SidebarLink to="/merchants/invoices">Merchant Invoices</SidebarLink>
+        <SidebarLink to="/merchants/invoices">Merchant Invoices</SidebarLink> */}
       </Flex>
 
-      <SidebarLink to="/logistics">Logistics</SidebarLink>
+      {/* <SidebarLink to="/logistics">Logistics</SidebarLink>
       <SidebarLink to="/customers">Customers</SidebarLink> */}
     </Stack>
   )

@@ -24,7 +24,7 @@ import {
 } from '@chakra-ui/react'
 
 import { Icon } from '@qopnet/qopnet-ui'
-import { postToAPI } from '../utils/fetch'
+import { postToAPI } from '../utils'
 
 export type ProfileData = {
   // Profile

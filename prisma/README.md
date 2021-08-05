@@ -37,21 +37,29 @@ Generate Prisma Schema to be used in the app. Only used once.
 doppler run -- npm run prisma:generate
 ```
 
-## Run Migrate
+## Run Create Migration
 
 Create the SQL migration files.
 
 ```sh
-doppler run -- npm run prisma:migrate
+doppler run -- npm run prisma:create
+# prisma migrate dev --create-only
 ```
 
-## Run Push
+https://prisma.io/docs/reference/api-reference/command-reference#prisma-migrate
 
-Run and push the SQL migration files to the database.
+## Run Actual Migration to Apply the Migration Files
 
 ```sh
-doppler run -- npm run prisma:push
+doppler run -- npm run prisma:migrate
+# prisma migrate dev
 ```
+
+## DO NOT Run Push
+
+DO NOT run `prisma push` because it's actually not using migration process!
+
+https://prisma.io/docs/reference/api-reference/command-reference#db-push
 
 ## Run Studio
 

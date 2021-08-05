@@ -80,32 +80,36 @@ export const formatWeight = (weight: number, weightUnit: string) => {
 }
 
 export const formatAddressComplete = ({
-  street,
-  streetDetails,
-  city,
-  state,
-  zip,
-  countryCode,
+  street = '',
+  streetDetails = '',
+  city = '',
+  state = '',
+  zip = '',
+  countryCode = 'ID',
 }) => {
-  return `${street}, ${streetDetails}, ${city}, ${state} ${zip}, Indonesia`
+  const country = countryCode === 'ID' && 'Indonesia'
+  return `${street}, ${
+    streetDetails ?? ''
+  }, ${city}, ${state} ${zip}, ${country}`
 }
 
-export const calculateEverything = (order) => {
+export const calculateCart = (businessOrder) => {
   // Total Items
-  const totalItemArray = order?.businessOrderItems?.map(
+  const totalItemArray = businessOrder?.businessOrderItems?.map(
     (item) => item.quantity || 0
   )
-  const totalItems = order?.totalItems || totalItemArray.reduce((a, c) => a + c)
+  const totalItems =
+    businessOrder?.totalItems || totalItemArray.reduce((a, c) => a + c)
 
   // Total Price
-  const totalPriceArray = order?.businessOrderItems?.map(
+  const totalPriceArray = businessOrder?.businessOrderItems?.map(
     (item) => item.supplierProduct?.price * item.quantity || 0
   )
   const totalPrice =
-    order?.totalPrice || totalPriceArray.reduce((a, c) => a + c)
+    businessOrder?.totalPrice || totalPriceArray.reduce((a, c) => a + c)
 
   // Total Discount
-  const totalDiscountArray = order?.businessOrderItems?.map((item) => {
+  const totalDiscountArray = businessOrder?.businessOrderItems?.map((item) => {
     if (item.supplierProduct?.discount) {
       const totalDiscountedPrice =
         item.quantity *
@@ -115,13 +119,13 @@ export const calculateEverything = (order) => {
     } else return 0
   })
   const totalDiscount =
-    order?.totalDiscount || totalDiscountArray.reduce((a, c) => a + c)
+    businessOrder?.totalDiscount || totalDiscountArray.reduce((a, c) => a + c)
 
   // Total Calculated Price
   // Not including the Shipping Cost, before final payment
   const totalCalculatedPrice = totalPrice - totalDiscount || 0
 
-  const totalShipmentCost = 135000 || 0
+  const totalShipmentCost = 512000 || 0
   const totalCalculatedBill = totalCalculatedPrice + totalShipmentCost
 
   return {
@@ -143,5 +147,37 @@ export const calculateSupplierProductItem = (item) => {
   return {
     calculatedPrice,
     subTotalCalculatedPrice,
+  }
+}
+
+export const formatBusinessOrderStatus = (status: string) => {
+  switch (status) {
+    case 'DRAFT':
+      return 'Dalam Keranjang'
+    case 'WAITING_FOR_PAYMENT':
+      return 'Menunggu Pembayaran'
+    case 'PAID':
+      return 'Telah Dibayar'
+    case 'WAITING_FOR_CONFIRMATION':
+      return 'Menunggu Konfirmasi Toko'
+    case 'PROCESSED':
+      return 'Sedang Diproses'
+    case 'WAITING_FOR_PICKUP':
+      return 'Menunggu Diambil'
+    case 'ONDELIVERY':
+      return 'Sedang Dikirim'
+    case 'DELIVERED':
+      return 'Telah Sampai'
+    case 'CONFIRMED':
+      return 'Telah Dikonfirmasi'
+    case 'COMPLAINED':
+      return 'Terdapat Komplain'
+    case 'CANCELED':
+      return 'Dibatalkan'
+    case 'REFUNDED':
+      return 'Di-refund'
+    default:
+      return 'Tidak Jelas'
+      break
   }
 }

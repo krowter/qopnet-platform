@@ -1,10 +1,7 @@
 {
   "name": "qopnet-platform",
-  "version": "0.21.2",
+  "version": "0.22.0",
   "private": true,
-  "engines": {
-    "node": ">=12.2.0"
-  },
   "scripts": {
     "nx": "nx",
     "many": "nx run-many --target=serve --all --parallel",
@@ -41,8 +38,8 @@
     "help": "nx help",
     "prisma:reset": "prisma migrate reset",
     "prisma:init": "prisma migrate dev --create-only --name init",
-    "prisma:migrate": "prisma migrate dev --create-only",
-    "prisma:push": "prisma db push",
+    "prisma:create": "prisma migrate dev --create-only",
+    "prisma:migrate": "prisma migrate dev",
     "prisma:generate": "prisma generate",
     "prisma:studio": "prisma studio",
     "prisma:format": "prisma format",

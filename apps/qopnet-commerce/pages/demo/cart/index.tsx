@@ -9,7 +9,6 @@ import {
   IconButton,
   Link as ChakraLink,
   Stack,
-  Input,
   StackDivider,
   Divider,
   Tag,
@@ -18,14 +17,9 @@ import {
 } from '@chakra-ui/react'
 
 import { Layout, Icon, SupplierProductPrice } from '@qopnet/qopnet-ui'
-import {
-  formatBusinessOrderStatus,
-  formatRupiah,
-  calculateCart,
-} from '@qopnet/util-format'
-import { BreadcrumbCart } from '../../components'
-import { useSWR, postToAPI } from '../../utils'
-import { useEffect } from 'react'
+import { calculateCart, formatRupiah } from '@qopnet/util-format'
+import { BreadcrumbCart } from '../../../components'
+import { useSWRNext } from '../../../utils'
 
 /**
  * /cart
@@ -36,24 +30,9 @@ import { useEffect } from 'react'
  * the API is using /api/business/orders/:businessOrderId
  * Because BusinessCart is just a draft BusinessOrder.
  */
-export const CartPage = () => {
-  const { data, error } = useSWR('/api/business/orders/my/cart')
-  const { businessOrder } = data || {}
-
-  // Try to create my cart if my cart does not exist yet
-  // Or when there is an error
-  useEffect(() => {
-    const createMyCart = async () => {
-      const { businessOrder } = await postToAPI(
-        '/api/business/orders/my/cart',
-        {}
-      )
-      console.log({ businessOrder })
-    }
-    if (error) {
-      createMyCart()
-    }
-  }, [error])
+const CartPage = () => {
+  const { data, error } = useSWRNext('/api/orders/1')
+  const { order } = data || {}
 
   return (
     <Layout
@@ -68,26 +47,12 @@ export const CartPage = () => {
         <Heading>Keranjang belanja</Heading>
         {error && <Text>Gagal memuat data keranjang untuk order</Text>}
         {!error && !data && <Text>Memuat data keranjang untuk order...</Text>}
-        {!error && data && businessOrder && (
-          <Box>
-            {data?.meta?.recordCount?.businessOrderItems > 0 ? (
-              <Stack direction={['column', 'column', 'row']}>
-                <CartContainer businessOrder={businessOrder} />
-                <CartSummaryContainer businessOrder={businessOrder} />
-              </Stack>
-            ) : (
-              <Stack align="flex-start">
-                <Text>Maaf keranjang belanja Anda masih kosong.</Text>
-                <NextLink href="/shop" passHref>
-                  <Button as="a" colorScheme="orange">
-                    Lanjut belanja dahulu
-                  </Button>
-                </NextLink>
-              </Stack>
-            )}
-          </Box>
+        {!error && data && order && (
+          <Stack direction={['column', 'column', 'row']}>
+            <CartContainer order={order} />
+            <CartSummaryContainer order={order} />
+          </Stack>
         )}
-        {/* <Text as="pre">{JSON.stringify(data, null, 2)}</Text> */}
       </Stack>
     </Layout>
   )
@@ -96,9 +61,9 @@ export const CartPage = () => {
 /**
  * Most of them should be calculated in the backend/API
  */
-export const CartSummaryContainer = ({ businessOrder }) => {
+export const CartSummaryContainer = ({ order }) => {
   const { totalItems, totalPrice, totalDiscount, totalCalculatedPrice } =
-    calculateCart(businessOrder)
+    calculateCart(order)
 
   return (
     <Stack
@@ -114,18 +79,16 @@ export const CartSummaryContainer = ({ businessOrder }) => {
         Ringkasan belanja
       </Heading>
 
-      <Stack id="business-order-calculation" spacing={5}>
+      <Stack id="order-calculation" spacing={5}>
         <Stack>
           <HStack justify="space-between">
             <Text>Total Harga ({totalItems} barang)</Text>
             <Text>{formatRupiah(totalPrice)}</Text>
           </HStack>
-          {totalDiscount > 0 && (
-            <HStack justify="space-between">
-              <Text>Total Diskon Barang</Text>
-              <Text>-{formatRupiah(totalDiscount)}</Text>
-            </HStack>
-          )}
+          <HStack justify="space-between">
+            <Text>Total Diskon Barang</Text>
+            <Text>-{formatRupiah(totalDiscount)}</Text>
+          </HStack>
         </Stack>
         <Divider />
         <HStack justify="space-between">
@@ -143,14 +106,12 @@ export const CartSummaryContainer = ({ businessOrder }) => {
   )
 }
 
-export const CartContainer = ({ businessOrder }) => {
+export const CartContainer = ({ order }) => {
   return (
     <Stack flex={1} minW="420px">
       <HStack>
         <Text>Status Pesanan:</Text>
-        <Tag colorScheme="green">
-          {formatBusinessOrderStatus(businessOrder?.status)}
-        </Tag>
+        <Tag>{order.status}</Tag>
       </HStack>
 
       <Stack
@@ -160,7 +121,7 @@ export const CartContainer = ({ businessOrder }) => {
         align="stretch"
         maxW="720px"
       >
-        {businessOrder?.businessOrderItems?.map((item, index) => {
+        {order?.businessOrderItems?.map((item, index) => {
           return <BusinessOrderItem key={item.supplierProduct.id} item={item} />
         })}
       </Stack>
@@ -179,40 +140,32 @@ export const BusinessOrderItem = ({ item }) => {
       >
         <Stack spacing={5} direction="row">
           {item.supplierProduct?.images[0] && (
-            <NextLink
-              href={`/${item.supplier?.handle}/${item.supplierProduct?.slug}`}
-              passHref
-            >
-              <Box as="a" className="next-image-container">
-                <NextImage
-                  src={item.supplierProduct?.images[0]}
-                  key={item.supplierProduct?.slug}
-                  alt={item.supplierProduct?.name}
-                  layout="fixed"
-                  width={100}
-                  height={100}
-                />
-              </Box>
-            </NextLink>
+            <Box className="next-image-container">
+              <NextImage
+                src={item.supplierProduct?.images[0]}
+                key={item.supplierProduct?.slug}
+                alt={item.supplierProduct?.name}
+                layout="fixed"
+                width={100}
+                height={100}
+              />
+            </Box>
           )}
 
           <Stack>
-            {item.supplier?.name && (
-              <NextLink href={`/${item.supplier?.handle}`} passHref>
-                <Text as="a" fontSize="xs" fontWeight="bold">
-                  {item.supplier?.name}
-                  {item.supplier?.addresses?.length > 0 && (
-                    <chakra.span opacity={0.5}>
-                      {' di '}
-                      {item.supplier?.addresses[0]?.city}
-                    </chakra.span>
-                  )}
-                </Text>
-              </NextLink>
-            )}
+            <NextLink href={item.supplierProduct?.supplier?.handle} passHref>
+              <Text as="a" fontSize="xs" fontWeight="bold">
+                {item.supplierProduct?.supplier?.name}
+                <chakra.span opacity={0.5}>
+                  {' di '}
+                  {item.supplierProduct?.supplier?.addresses?.length &&
+                    item.supplierProduct?.supplier?.addresses[0]?.city}
+                </chakra.span>
+              </Text>
+            </NextLink>
             <NextLink
               passHref
-              href={`/${item.supplier?.handle}/${item.supplierProduct?.slug}`}
+              href={`/${item.supplierProduct?.supplier?.handle}/${item.supplierProduct?.slug}`}
             >
               <Box as="a">
                 <Heading as="h2" size="md">
@@ -228,7 +181,7 @@ export const BusinessOrderItem = ({ item }) => {
         </Stack>
 
         <HStack>
-          <Input value={item.quantity} maxW="100px" />
+          <Box>{item.quantity}</Box>
           <IconButton
             aria-label="Hapus barang"
             size="sm"

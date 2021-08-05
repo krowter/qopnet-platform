@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
+import { useState } from 'react'
 import NextLink from 'next/link'
 import NextImage from 'next/image'
 import { NextSeo } from 'next-seo'
@@ -80,6 +81,7 @@ export interface HomeProductSpecialProps {
 export interface SupplierProductsGridProps {
   supplierProducts: SupplierProduct[]
 }
+
 export interface SupplierProductCardProps {
   href?: string
   product: SupplierProduct
@@ -102,6 +104,7 @@ export interface SupplierProductDetailProps {
       length: number
     }
   }
+  putToAPI: any
 }
 
 export const HomeProductCategory = (props: HomeProductCategoryProps) => {
@@ -279,6 +282,7 @@ export const formatPrice = (price: number | Decimal) => {
  */
 export const SupplierProductDetail = ({
   product,
+  putToAPI,
 }: SupplierProductDetailProps) => {
   const productImages =
     (product?.images as string[]) || defaultSupplierProductImages
@@ -376,7 +380,7 @@ export const SupplierProductDetail = ({
 
           <Divider variant="dashed" />
 
-          <SupplierProductCartModifier product={product} />
+          <SupplierProductCartModifier product={product} putToAPI={putToAPI} />
 
           <Divider variant="dashed" />
 
@@ -482,12 +486,17 @@ export const SupplierCardForProductLink = ({
 
 export const SupplierProductCartModifier = ({
   product,
+  putToAPI,
 }: {
   product: SupplierProduct
+  putToAPI: any
 }) => {
   const toast = useToast()
   const productMinOrder = product?.minOrder || 1
   const productStock = product?.stock || 100
+
+  const [isLoading, setLoading] = useState(false)
+  const [isJustAddedToCart, setJustAddedToCart] = useState(false)
 
   // https://chakra-ui.com/docs/form/number-input#create-a-mobile-spinner
   const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
@@ -503,17 +512,40 @@ export const SupplierProductCartModifier = ({
   const input = getInputProps()
 
   // @ts-ignore
-  const productSubTotal = input.value
+  const productQuantity = Number(input.value)
   const formattedProductSubTotal = formatPrice(
-    Number(product?.price) * Number(productSubTotal)
+    Number(product?.price) * productQuantity
   )
 
-  const handleAddToCart = () => {
-    console.info({ productSubTotal })
-    toast({
-      title: `Berhasil menambah produk`,
-      description: `Subtotal: ${formattedProductSubTotal}`,
-    })
+  const handleAddToCart = async () => {
+    try {
+      setLoading(true)
+      const requestBodyData = {
+        id: product.id,
+        quantity: productQuantity,
+      }
+      const response = await putToAPI(
+        '/api/business/orders/my/cart',
+        requestBodyData
+      )
+      if (response) {
+        setJustAddedToCart(true)
+      } else {
+        throw new Error('Add to cart failed')
+      }
+      toast({
+        title: `Menambahkan produk ke keranjang`,
+        description: `${productQuantity} × ${product.name}`,
+      })
+    } catch (error) {
+      console.error({ message: 'Add to cart failed', error })
+      toast({
+        title: `Gagal menambah produk ke keranjang`,
+        status: 'error',
+      })
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -542,14 +574,30 @@ export const SupplierProductCartModifier = ({
       </Text>
 
       <Button
-        disabled={!productSubTotal}
-        colorScheme="green"
-        size="sm"
         leftIcon={<Icon name="plus" />}
+        colorScheme="orange"
+        size="sm"
+        w="200px"
         onClick={handleAddToCart}
+        disabled={!productQuantity || isLoading}
       >
-        Tambah Keranjang
+        {isLoading ? 'Menambahkan...' : 'Tambah Keranjang'}
       </Button>
+
+      {isJustAddedToCart && (
+        <Stack>
+          {!isLoading && (
+            <Text>
+              Telah ditambahkan,{' '}
+              <NextLink href="/cart" passHref>
+                <ChakraLink color="orange.500">
+                  cek keranjang belanja
+                </ChakraLink>
+              </NextLink>
+            </Text>
+          )}
+        </Stack>
+      )}
     </Stack>
   )
 }
