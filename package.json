@@ -1,10 +1,7 @@
 {
   "name": "qopnet-platform",
-  "version": "0.21.4",
+  "version": "0.22.0",
   "private": true,
-  "engines": {
-    "node": ">=12.2.0"
-  },
   "scripts": {
     "nx": "nx",
     "many": "nx run-many --target=serve --all --parallel",
