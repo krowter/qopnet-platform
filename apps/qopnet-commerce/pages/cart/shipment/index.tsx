@@ -42,8 +42,8 @@ export const CartShipmentPage = () => {
 
       <Stack spacing={10}>
         <Heading>Checkout dan pengiriman</Heading>
-        {error && <Text>Gagal memuat data order</Text>}
-        {!error && !data && <Text>Memuat data order...</Text>}
+        {error && <Text>Gagal memuat data order untuk pengiriman</Text>}
+        {!error && !data && <Text>Memuat data order untuk pengiriman...</Text>}
         {!error && data && businessOrder && (
           <Box>
             {data?.meta?.recordCount?.businessOrderItems > 0 ? (
@@ -231,11 +231,11 @@ export const CouriersContainer = () => {
         Pilih kurir pengiriman:
       </Heading>
       <Stack>
-        {error && <div>Gagal memuat daftar kurir</div>}
-        {!error && !data && <div>Memuat daftar kurir...</div>}
+        {/* {error && <div>Gagal memuat pilihan kurir pengiriman</div>} */}
+        {!error && !data && <div>Memuat pilihan kurir pengiriman...</div>}
         {!error && data && availableCouriers?.length < 1 && (
           <Stack>
-            <Text>Belum ada kurir yang tersedia.</Text>
+            <Text>Belum ada pilihan kurir pengiriman yang tersedia.</Text>
           </Stack>
         )}
         {availableCouriers?.length > 0 &&
