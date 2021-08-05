@@ -9,8 +9,9 @@ import {
   Code,
   HStack,
   Tag,
+  Link as ChakraLink,
   Heading,
-  SimpleGrid,
+  Divider,
   Spinner,
   Stack,
   Text,
@@ -85,26 +86,30 @@ export const BusinessOrdersList = ({ businessOrders }) => {
         return (
           <Stack
             key={businessOrder.id}
-            spacing={5}
             p={3}
             rounded="md"
             bg={orderCardBackground}
-            direction={['column', 'column', 'row']}
-            align={['flex-start', 'flex-start', 'flex-end']}
-            justify="space-between"
           >
-            <Box className="businessOrder-details">
-              <HStack mb={3}>
-                <Heading as="h2" size="sm">
-                  #{index + 1}
-                </Heading>
-                <Tag size="sm" colorScheme="green">
-                  {formatBusinessOrderStatus(businessOrder.status)}
-                </Tag>
-                <Text fontSize="sm">{formatDate(businessOrder.updatedAt)}</Text>
-                <Code fontSize="xs">{businessOrder.id}</Code>
-              </HStack>
-              <Stack>
+            <HStack>
+              <Heading as="h2" size="sm">
+                #{index + 1}
+              </Heading>
+              <Tag size="sm" colorScheme="green">
+                {formatBusinessOrderStatus(businessOrder.status)}
+              </Tag>
+              <Text fontSize="sm">{formatDate(businessOrder.updatedAt)}</Text>
+              <Code fontSize="xs">{businessOrder.id}</Code>
+            </HStack>
+            <Divider />
+
+            <Stack
+              pt={3}
+              className="business-order"
+              spacing={5}
+              direction={['column', 'column', 'row']}
+              justify="space-between"
+            >
+              <Stack className="business-order-items" spacing={3}>
                 {businessOrder.businessOrderItems.map((item, index) => {
                   const { calculatedPrice, subTotalCalculatedPrice } =
                     calculateSupplierProductItem(item)
@@ -112,15 +117,23 @@ export const BusinessOrdersList = ({ businessOrders }) => {
                   return (
                     <Box>
                       <HStack>
-                        <Heading as="h4" size="sm">
-                          {item.supplierProduct?.name}
-                        </Heading>
+                        <NextLink
+                          href={`/${item.supplier?.handle}/${item.supplierProduct?.slug}`}
+                          passHref
+                        >
+                          <ChakraLink size="sm" fontWeight="bold">
+                            {item.supplierProduct?.name}
+                          </ChakraLink>
+                        </NextLink>
                         {item.supplier?.name && (
                           <Text fontSize="sm">
                             <chakra.span> dari </chakra.span>
-                            <chakra.span fontWeight="bold">
-                              {item.supplier?.name}
-                            </chakra.span>
+                            <NextLink
+                              href={`/${item.supplier?.handle}`}
+                              passHref
+                            >
+                              <ChakraLink>{item.supplier?.name}</ChakraLink>
+                            </NextLink>
                           </Text>
                         )}
                         {/* {item.supplier?.addresses[0]?.city && (
@@ -140,17 +153,24 @@ export const BusinessOrdersList = ({ businessOrders }) => {
                   )
                 })}
               </Stack>
-            </Box>
 
-            <Box
-              className="businessOrder-total"
-              textAlign={['left', 'left', 'right']}
-            >
-              <Heading as="h4" size="sm">
-                Total Belanja
-              </Heading>
-              <Text fontSize="xl">{formatRupiah(totalCalculatedBill)}</Text>
-            </Box>
+              <Stack
+                className="businessOrder-total"
+                textAlign="right"
+                alignSelf="flex-end"
+              >
+                <Divider display={['block', 'block', 'none']} />
+                <Box>
+                  <Heading as="h4" size="sm">
+                    Total Belanja
+                  </Heading>
+                  <Text fontSize="xl">{formatRupiah(totalCalculatedBill)}</Text>
+                </Box>
+                <Button size="sm" colorScheme="orange">
+                  Detail Transaksi
+                </Button>
+              </Stack>
+            </Stack>
           </Stack>
         )
       })}
