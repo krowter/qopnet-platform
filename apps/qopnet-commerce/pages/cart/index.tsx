@@ -22,7 +22,7 @@ import {
 } from '@chakra-ui/react'
 
 import { Layout, Icon, SupplierProductPrice } from '@qopnet/qopnet-ui'
-import { calculateEverything, formatRupiah } from '@qopnet/util-format'
+import { calculateCart, formatRupiah } from '@qopnet/util-format'
 import { BreadcrumbCart } from '../../components'
 import { useSWR, postToAPI } from '../../utils'
 import { useEffect } from 'react'
@@ -38,7 +38,7 @@ import { useEffect } from 'react'
  */
 const CartPage = () => {
   const { data, error } = useSWR('/api/business/orders/my/cart')
-  const { order } = data || {}
+  const { businessOrder } = data || {}
 
   // Try to create my cart if my cart does not exist yet
   // Or when there is an error
@@ -66,15 +66,28 @@ const CartPage = () => {
       <BreadcrumbCart />
       <Stack spacing={10}>
         <Heading>Keranjang belanja</Heading>
-        <Text as="pre">{JSON.stringify(data, null, 2)}</Text>
         {error && <Text>Gagal memuat data keranjang untuk order</Text>}
         {!error && !data && <Text>Memuat data keranjang untuk order...</Text>}
-        {!error && data && order && (
-          <Stack direction={['column', 'column', 'row']}>
-            <CartContainer order={order} />
-            <CartSummaryContainer order={order} />
-          </Stack>
+        {!error && data && businessOrder && (
+          <Box>
+            {businessOrder?.meta?.recordCount?.businessOrderItems > 0 ? (
+              <Stack direction={['column', 'column', 'row']}>
+                <CartContainer businessOrder={businessOrder} />
+                <CartSummaryContainer businessOrder={businessOrder} />
+              </Stack>
+            ) : (
+              <Stack align="flex-start">
+                <Text>Maaf keranjang belanja Anda masih kosong.</Text>
+                <NextLink href="/shop" passHref>
+                  <Button as="a" colorScheme="orange">
+                    Lanjut belanja dahulu
+                  </Button>
+                </NextLink>
+              </Stack>
+            )}
+          </Box>
         )}
+        {/* <Text as="pre">{JSON.stringify(data, null, 2)}</Text> */}
       </Stack>
     </Layout>
   )
@@ -83,9 +96,9 @@ const CartPage = () => {
 /**
  * Most of them should be calculated in the backend/API
  */
-export const CartSummaryContainer = ({ order }) => {
+export const CartSummaryContainer = ({ businessOrder }) => {
   const { totalItems, totalPrice, totalDiscount, totalCalculatedPrice } =
-    calculateEverything(order)
+    calculateCart(businessOrder)
 
   return (
     <Stack
@@ -101,7 +114,7 @@ export const CartSummaryContainer = ({ order }) => {
         Ringkasan belanja
       </Heading>
 
-      <Stack id="order-calculation" spacing={5}>
+      <Stack id="business-order-calculation" spacing={5}>
         <Stack>
           <HStack justify="space-between">
             <Text>Total Harga ({totalItems} barang)</Text>
@@ -128,12 +141,12 @@ export const CartSummaryContainer = ({ order }) => {
   )
 }
 
-export const CartContainer = ({ order }) => {
+export const CartContainer = ({ businessOrder }) => {
   return (
     <Stack flex={1} minW="420px">
       <HStack>
         <Text>Status Pesanan:</Text>
-        <Tag>{order.status}</Tag>
+        <Tag>{businessOrder.status}</Tag>
       </HStack>
 
       <Stack
@@ -143,7 +156,7 @@ export const CartContainer = ({ order }) => {
         align="stretch"
         maxW="720px"
       >
-        {order?.businessOrderItems?.map((item, index) => {
+        {businessOrder?.businessOrderItems?.map((item, index) => {
           return <BusinessOrderItem key={item.supplierProduct.id} item={item} />
         })}
       </Stack>

@@ -17,7 +17,7 @@ import {
 } from '@chakra-ui/react'
 
 import { Layout, Icon, SupplierProductPrice } from '@qopnet/qopnet-ui'
-import { calculateEverything, formatRupiah } from '@qopnet/util-format'
+import { calculateCart, formatRupiah } from '@qopnet/util-format'
 import { BreadcrumbCart } from '../../../components'
 import { useSWRNext } from '../../../utils'
 
@@ -63,7 +63,7 @@ const CartPage = () => {
  */
 export const CartSummaryContainer = ({ order }) => {
   const { totalItems, totalPrice, totalDiscount, totalCalculatedPrice } =
-    calculateEverything(order)
+    calculateCart(order)
 
   return (
     <Stack

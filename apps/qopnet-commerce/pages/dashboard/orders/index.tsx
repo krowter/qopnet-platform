@@ -20,7 +20,7 @@ import { useUser } from 'use-supabase'
 
 import { Layout, Icon } from '@qopnet/qopnet-ui'
 import {
-  calculateEverything,
+  calculateCart,
   calculateSupplierProductItem,
   formatDate,
   formatRupiah,
@@ -78,7 +78,7 @@ export const OrdersList = ({ orders }) => {
   return (
     <Stack spacing={5}>
       {orders.map((order, index) => {
-        const { totalCalculatedBill } = calculateEverything(order)
+        const { totalCalculatedBill } = calculateCart(order)
 
         return (
           <Stack

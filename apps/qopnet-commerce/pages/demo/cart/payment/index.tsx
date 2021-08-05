@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/react'
 
 import { Layout, OptionBox } from '@qopnet/qopnet-ui'
-import { formatRupiah, calculateEverything } from '@qopnet/util-format'
+import { formatRupiah, calculateCart } from '@qopnet/util-format'
 import { BreadcrumbCart } from '../../../../components'
 import { useSWRNext } from '../../../../utils'
 
@@ -87,7 +87,7 @@ export const PaymentSummaryContainer = ({ order }) => {
     totalCalculatedPrice,
     totalShipmentCost,
     totalCalculatedBill,
-  } = calculateEverything(order)
+  } = calculateCart(order)
 
   const onClickPay = () => {
     router.push('/dashboard/orders')

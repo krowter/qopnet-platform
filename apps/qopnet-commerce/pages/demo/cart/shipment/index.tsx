@@ -16,7 +16,7 @@ import {
 
 import { Layout, SupplierProductPrice, OptionBox } from '@qopnet/qopnet-ui'
 import {
-  calculateEverything,
+  calculateCart,
   formatRupiah,
   formatAddressComplete,
 } from '@qopnet/util-format'
@@ -57,7 +57,7 @@ export const ShipmentSummaryContainer = ({ order }) => {
     totalCalculatedPrice,
     totalShipmentCost,
     totalCalculatedBill,
-  } = calculateEverything(order)
+  } = calculateCart(order)
 
   return (
     <Stack

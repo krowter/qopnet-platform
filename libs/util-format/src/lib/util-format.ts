@@ -87,25 +87,27 @@ export const formatAddressComplete = ({
   zip,
   countryCode,
 }) => {
-  return `${street}, ${streetDetails}, ${city}, ${state} ${zip}, Indonesia`
+  const country = countryCode === 'ID' && 'Indonesia'
+  return `${street}, ${streetDetails}, ${city}, ${state} ${zip}, ${country}`
 }
 
-export const calculateEverything = (order) => {
+export const calculateCart = (businessOrder) => {
   // Total Items
-  const totalItemArray = order?.businessOrderItems?.map(
+  const totalItemArray = businessOrder?.businessOrderItems?.map(
     (item) => item.quantity || 0
   )
-  const totalItems = order?.totalItems || totalItemArray.reduce((a, c) => a + c)
+  const totalItems =
+    businessOrder?.totalItems || totalItemArray.reduce((a, c) => a + c)
 
   // Total Price
-  const totalPriceArray = order?.businessOrderItems?.map(
+  const totalPriceArray = businessOrder?.businessOrderItems?.map(
     (item) => item.supplierProduct?.price * item.quantity || 0
   )
   const totalPrice =
-    order?.totalPrice || totalPriceArray.reduce((a, c) => a + c)
+    businessOrder?.totalPrice || totalPriceArray.reduce((a, c) => a + c)
 
   // Total Discount
-  const totalDiscountArray = order?.businessOrderItems?.map((item) => {
+  const totalDiscountArray = businessOrder?.businessOrderItems?.map((item) => {
     if (item.supplierProduct?.discount) {
       const totalDiscountedPrice =
         item.quantity *
@@ -115,7 +117,7 @@ export const calculateEverything = (order) => {
     } else return 0
   })
   const totalDiscount =
-    order?.totalDiscount || totalDiscountArray.reduce((a, c) => a + c)
+    businessOrder?.totalDiscount || totalDiscountArray.reduce((a, c) => a + c)
 
   // Total Calculated Price
   // Not including the Shipping Cost, before final payment
