@@ -19,6 +19,7 @@ import {
 import { useUser } from 'use-supabase'
 
 import { Layout, Icon } from '@qopnet/qopnet-ui'
+import { formatBusinessOrderStatus } from '@qopnet/util-format'
 import {
   calculateCart,
   calculateSupplierProductItem,
@@ -98,7 +99,7 @@ export const BusinessOrdersList = ({ businessOrders }) => {
                   #{index + 1}
                 </Heading>
                 <Tag size="sm" colorScheme="green">
-                  {businessOrder.status}
+                  {formatBusinessOrderStatus(businessOrder.status)}
                 </Tag>
                 <Text fontSize="sm">{formatDate(businessOrder.updatedAt)}</Text>
                 <Code fontSize="xs">{businessOrder.id}</Code>
@@ -153,7 +154,7 @@ export const BusinessOrdersList = ({ businessOrders }) => {
           </Stack>
         )
       })}
-      <Text as="pre">{JSON.stringify(businessOrders, null, 2)}</Text>
+      {/* <Text as="pre">{JSON.stringify(businessOrders, null, 2)}</Text> */}
     </Stack>
   )
 }

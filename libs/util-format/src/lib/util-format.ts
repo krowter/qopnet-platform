@@ -149,3 +149,35 @@ export const calculateSupplierProductItem = (item) => {
     subTotalCalculatedPrice,
   }
 }
+
+export const formatBusinessOrderStatus = (status: string) => {
+  switch (status) {
+    case 'DRAFT':
+      return 'Dalam Keranjang'
+    case 'WAITING_FOR_PAYMENT':
+      return 'Menunggu Pembayaran'
+    case 'PAID':
+      return 'Telah Dibayar'
+    case 'WAITING_FOR_CONFIRMATION':
+      return 'Menunggu Konfirmasi Toko'
+    case 'PROCESSED':
+      return 'Sedang Diproses'
+    case 'WAITING_FOR_PICKUP':
+      return 'Menunggu Diambil'
+    case 'ONDELIVERY':
+      return 'Sedang Dikirim'
+    case 'DELIVERED':
+      return 'Telah Sampai'
+    case 'CONFIRMED':
+      return 'Telah Dikonfirmasi'
+    case 'COMPLAINED':
+      return 'Terdapat Komplain'
+    case 'CANCELED':
+      return 'Dibatalkan'
+    case 'REFUNDED':
+      return 'Di-refund'
+    default:
+      return 'Tidak Jelas'
+      break
+  }
+}
