@@ -194,16 +194,31 @@ export const AddressesContainer = () => {
 }
 
 export const CouriersContainer = () => {
-  // Display couriers
-  const couriers = [
-    { id: 1, name: 'Lalamove' },
-    { id: 2, name: 'Deliveree' },
-  ]
-  const selectedCourierId = 2
+  // Fetch couriers
+  const { data, error } = useSWR('/api/couriers')
+  const { couriers } = data || {}
+
+  // Display addresses
+  const [availableCouriers, setAvailableCouriers] = useState([
+    { id: '1', name: 'Lalamove' },
+    { id: '2', name: 'Deliveree' },
+  ])
+  // Should be empty array if API Courier is available
+  const [selectedCourierId, setSelectedCourierId] = useState('')
 
   // Only set couriers once data has been retrieved
+  useEffect(() => {
+    if (data) {
+      setAvailableCouriers(couriers || [])
+      // Default to set the first available courier
+      setSelectedCourierId(availableCouriers[0]?.id || '')
+    }
+  }, [data, couriers, availableCouriers])
 
   // Handle select courier option with just courier id
+  const handleSelectCourierOption = (courierId) => {
+    setSelectedCourierId(courierId)
+  }
 
   return (
     <Stack>
@@ -211,17 +226,26 @@ export const CouriersContainer = () => {
         Pilih kurir pengiriman:
       </Heading>
       <Stack>
-        {couriers.map((courier) => {
-          return (
-            <OptionBox
-              key={courier.id}
-              id={`courier-${courier.id}`}
-              selected={selectedCourierId === courier.id}
-            >
-              <Text>{courier.name}</Text>
-            </OptionBox>
-          )
-        })}
+        {error && <div>Gagal memuat daftar kurir</div>}
+        {!error && !data && <div>Memuat daftar kurir...</div>}
+        {!error && data && availableCouriers?.length < 1 && (
+          <Stack>
+            <Text>Belum ada kurir yang tersedia.</Text>
+          </Stack>
+        )}
+        {availableCouriers?.length > 0 &&
+          availableCouriers?.map((courier) => {
+            return (
+              <OptionBox
+                key={courier.id}
+                id={`courier-${courier.id}`}
+                selected={selectedCourierId === courier.id}
+                onClick={() => handleSelectCourierOption(courier.id)}
+              >
+                <Text>{courier.name}</Text>
+              </OptionBox>
+            )
+          })}
       </Stack>
     </Stack>
   )
