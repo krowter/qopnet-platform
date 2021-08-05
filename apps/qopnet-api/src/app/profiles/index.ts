@@ -100,10 +100,16 @@ router.get('/my', checkUser, async (req, res) => {
     include: {
       user: true,
       addresses: true,
-      suppliers: true,
+      suppliers: {
+        include: { addresses: true },
+      },
       supplierProducts: true,
-      wholesalers: true,
-      merchants: true,
+      wholesalers: {
+        include: { addresses: true },
+      },
+      merchants: {
+        include: { addresses: true },
+      },
     },
   })
 
