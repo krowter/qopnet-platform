@@ -6,6 +6,7 @@
     "node": ">=12.2.0"
   },
   "scripts": {
+    "ts-node": "ts-node --compiler-options \"{\\\"module\\\":\\\"commonjs\\\",\\\"resolveJsonModule\\\":true}\"",
     "nx": "nx",
     "many": "nx run-many --target=serve --all --parallel",
     "serve": "prisma generate && nx serve",

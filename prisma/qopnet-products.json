@@ -12,7 +12,6 @@
     "category": "bintara,Branded",
     "discount": 8,
     "weightUnit": "KG",
-    "tags": [],
     "images": [
       "https://ik.imagekit.io/qopnetlabs/products/gula-pasir-rose-brand.webp?updatedAt=1628517795173"
     ]
@@ -29,7 +28,6 @@
     "category": "bintara,Branded",
     "discount": null,
     "weightUnit": "KG",
-    "tags": [],
     "images": []
   },
   {
@@ -37,14 +35,13 @@
     "description": "Air Mineral \"Pristine\" ukuran 1500 ml. 1 dus isi 24 botol air mineral.\n\nHarga tertera untuk 1 dus.\n\nPembelian minimal 2 dus.\n\nPengiriman dari Semarang",
     "sku": "",
     "price": 77000,
-    "weight": "",
+    "weight": 1,
     "stock": 1000,
     "status": "ACTIVE",
     "dimension": { "width": null, "length": null, "height": null },
     "category": "gudang semarang ronggolawe",
     "discount": null,
     "weightUnit": "KG",
-    "tags": ["Semarang"],
     "images": [
       "https://ik.imagekit.io/qopnetlabs/products/air-mineral-pristine-1500ml-dus-24x.webp?updatedAt=1628516766918"
     ]
@@ -54,14 +51,13 @@
     "description": "Kemasan Botol Plastik isi 300 ml @ harga Rp 16.500\n\nPemesanan minimal 1 karton isi 25 botol.\n\nKecap Manis Cap \"Banyak\" cocok untuk segala macam hidangan\n\nTerbuat dari bahan - bahan alami\n\nKualitas terjamin\n\nPengiriman dari Semarang",
     "sku": "",
     "price": 16500,
-    "weight": "",
+    "weight": 1,
     "stock": 1000,
     "status": "ACTIVE",
     "dimension": { "width": null, "length": null, "height": null },
     "category": "gudang semarang tengger",
     "discount": null,
     "weightUnit": "KG",
-    "tags": ["Semarang"],
     "images": []
   },
   {
@@ -76,7 +72,6 @@
     "category": "gudang semarang tengger",
     "discount": null,
     "weightUnit": "KG",
-    "tags": ["Semarang"],
     "images": []
   },
   {
@@ -91,7 +86,6 @@
     "category": "gudang semarang ronggolawe,gudang semarang tengger",
     "discount": null,
     "weightUnit": "KG",
-    "tags": ["Semarang"],
     "images": []
   },
   {
@@ -106,22 +100,20 @@
     "category": "gudang semarang ronggolawe,gudang semarang tengger",
     "discount": null,
     "weightUnit": "KG",
-    "tags": ["Semarang"],
     "images": []
   },
   {
     "name": "Gula pasir polos",
     "description": "Gula pasir asli dari tebu pilihan, tanpa pemutih. Kemasan 500g",
     "sku": "",
-    "price": "",
-    "weight": "",
+    "price": 100,
+    "weight": 1,
     "stock": 1000,
     "status": "ACTIVE",
     "dimension": { "width": null, "length": null, "height": null },
     "category": "cipinang",
     "discount": null,
     "weightUnit": "KG",
-    "tags": [],
     "images": []
   },
   {
@@ -136,7 +128,6 @@
     "category": "bintara",
     "discount": null,
     "weightUnit": "KG",
-    "tags": [],
     "images": []
   },
   {
@@ -151,7 +142,6 @@
     "category": "bintara,Branded",
     "discount": null,
     "weightUnit": "KG",
-    "tags": [],
     "images": []
   },
   {
@@ -166,7 +156,6 @@
     "category": "cipinang",
     "discount": null,
     "weightUnit": "KG",
-    "tags": [],
     "images": []
   },
   {
@@ -181,7 +170,6 @@
     "category": "cipinang",
     "discount": null,
     "weightUnit": "KG",
-    "tags": [],
     "images": []
   },
   {
@@ -196,7 +184,6 @@
     "category": "cipinang",
     "discount": null,
     "weightUnit": "KG",
-    "tags": [],
     "images": []
   },
   {
@@ -211,7 +198,6 @@
     "category": "cipinang",
     "discount": null,
     "weightUnit": "KG",
-    "tags": [],
     "images": []
   },
   {
@@ -226,7 +212,6 @@
     "category": "bintara,Branded",
     "discount": null,
     "weightUnit": "KG",
-    "tags": [],
     "images": []
   },
   {
@@ -241,7 +226,6 @@
     "category": "bintara,Branded",
     "discount": null,
     "weightUnit": "KG",
-    "tags": [],
     "images": []
   },
   {
@@ -256,7 +240,6 @@
     "category": "bintara,Non Brand",
     "discount": 28,
     "weightUnit": "KG",
-    "tags": [],
     "images": []
   },
   {
@@ -271,7 +254,6 @@
     "category": "bintara,Branded",
     "discount": 3,
     "weightUnit": "KG",
-    "tags": [],
     "images": []
   },
   {
@@ -286,7 +268,6 @@
     "category": "bintara,Branded",
     "discount": 3,
     "weightUnit": "KG",
-    "tags": [],
     "images": []
   },
   {
@@ -301,7 +282,6 @@
     "category": "bintara,Branded",
     "discount": 3,
     "weightUnit": "KG",
-    "tags": [],
     "images": []
   },
   {
@@ -316,7 +296,6 @@
     "category": "bintara,Branded",
     "discount": 3,
     "weightUnit": "KG",
-    "tags": [],
     "images": []
   },
   {
@@ -324,14 +303,13 @@
     "description": "Sardines \nKemasan Kaleng \nMerk Gaga Kemasan 155 gram \ndalam karton isi 60 pcs",
     "sku": 1,
     "price": 460135,
-    "weight": 9.3,
+    "weight": 10,
     "stock": 1000,
     "status": "ACTIVE",
     "dimension": { "width": null, "length": null, "height": null },
     "category": "bintara,Branded",
     "discount": 3,
     "weightUnit": "KG",
-    "tags": [],
     "images": []
   },
   {
@@ -346,7 +324,6 @@
     "category": "Non Brand,pasar minggu",
     "discount": 3,
     "weightUnit": "KG",
-    "tags": [],
     "images": []
   },
   {
@@ -361,7 +338,6 @@
     "category": "cipinang,Non Brand",
     "discount": 3,
     "weightUnit": "KG",
-    "tags": [],
     "images": []
   },
   {
@@ -376,7 +352,6 @@
     "category": "cipinang,Non Brand",
     "discount": 3,
     "weightUnit": "KG",
-    "tags": [],
     "images": []
   },
   {
@@ -391,7 +366,6 @@
     "category": "bintara,Branded",
     "discount": null,
     "weightUnit": "KG",
-    "tags": [],
     "images": []
   },
   {
@@ -399,14 +373,13 @@
     "description": "Sunlight\nSabun cuci piring\nKemasan pouch 755 ml\nIsi 6 pouch per karton\n\n\nCatatan\nDisarankan mencapai bobot minimum 300 kg sewaktu memesan.\nTiap nomor pesanan bisa terdiri dari satu produk atau lebih.\n\nContoh \nOrder No #1500 terdiri dari \n1. Minyak Goreng Sovia @2l sebanyak 2 dus (1 dus isi 6 pcs)\n2. Gula Rose Brand @1kg sebanyak 1 dus (1 dus isi 20 pcs)\n3. Beras Sari Padi @50kg sebanyak 5 karung",
     "sku": "",
     "price": 179230,
-    "weight": "",
+    "weight": 1,
     "stock": 1000,
     "status": "ACTIVE",
     "dimension": { "width": null, "length": null, "height": null },
     "category": "Branded,cipinang",
     "discount": 3,
     "weightUnit": "KG",
-    "tags": [],
     "images": []
   },
   {
@@ -421,7 +394,6 @@
     "category": "bintara,Branded",
     "discount": 3,
     "weightUnit": "KG",
-    "tags": [],
     "images": []
   },
   {
@@ -436,7 +408,6 @@
     "category": "bintara,Branded",
     "discount": 3,
     "weightUnit": "KG",
-    "tags": [],
     "images": []
   },
   {
@@ -451,7 +422,6 @@
     "category": "bintara,Branded",
     "discount": 3,
     "weightUnit": "KG",
-    "tags": [],
     "images": []
   },
   {
@@ -466,7 +436,6 @@
     "category": "bintara,Branded",
     "discount": 3,
     "weightUnit": "KG",
-    "tags": [],
     "images": []
   },
   {
@@ -481,7 +450,6 @@
     "category": "bintara,Branded",
     "discount": 3,
     "weightUnit": "KG",
-    "tags": [],
     "images": []
   },
   {
@@ -496,7 +464,6 @@
     "category": "bintara,Branded",
     "discount": 3,
     "weightUnit": "KG",
-    "tags": [],
     "images": []
   },
   {
@@ -511,7 +478,6 @@
     "category": "bintara,Branded",
     "discount": 3,
     "weightUnit": "KG",
-    "tags": [],
     "images": []
   },
   {
@@ -526,7 +492,6 @@
     "category": "bintara,Branded",
     "discount": 3,
     "weightUnit": "KG",
-    "tags": [],
     "images": []
   },
   {
@@ -541,7 +506,6 @@
     "category": "bintara,Branded",
     "discount": 3,
     "weightUnit": "KG",
-    "tags": [],
     "images": []
   },
   {
@@ -556,7 +520,6 @@
     "category": "bintara,Branded",
     "discount": 3,
     "weightUnit": "KG",
-    "tags": [],
     "images": []
   },
   {
@@ -571,7 +534,6 @@
     "category": "bintara,Branded",
     "discount": null,
     "weightUnit": "KG",
-    "tags": [],
     "images": []
   },
   {
@@ -586,7 +548,6 @@
     "category": "cipinang,Non Brand",
     "discount": 3,
     "weightUnit": "KG",
-    "tags": [],
     "images": []
   },
   {
@@ -601,7 +562,6 @@
     "category": "cipinang,Non Brand",
     "discount": 3,
     "weightUnit": "KG",
-    "tags": [],
     "images": []
   },
   {
@@ -616,7 +576,6 @@
     "category": "cipinang,Non Brand",
     "discount": null,
     "weightUnit": "KG",
-    "tags": [],
     "images": []
   },
   {
@@ -631,7 +590,6 @@
     "category": "Non Brand,pasar minggu",
     "discount": 4,
     "weightUnit": "KG",
-    "tags": [],
     "images": []
   },
   {
@@ -646,7 +604,6 @@
     "category": "cipinang,Non Brand",
     "discount": 8,
     "weightUnit": "KG",
-    "tags": [],
     "images": []
   },
   {
@@ -661,7 +618,6 @@
     "category": "cipinang,Non Brand",
     "discount": 3,
     "weightUnit": "KG",
-    "tags": [],
     "images": []
   },
   {
@@ -669,14 +625,13 @@
     "description": "Cucut Beku\n\nKemasan Vacuum 1 kg",
     "sku": "",
     "price": 34782,
-    "weight": "",
+    "weight": 1,
     "stock": 1000,
     "status": "ACTIVE",
     "dimension": { "width": null, "length": null, "height": null },
     "category": "Non Brand",
     "discount": null,
     "weightUnit": "KG",
-    "tags": [],
     "images": []
   }
 ]

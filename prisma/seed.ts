@@ -4,6 +4,8 @@ const prisma = new PrismaClient()
 
 import qopnetProductsData from './qopnet-products.json'
 
+// https://www.prisma.io/docs/guides/database/seed-database#seeding-your-database-with-typescript
+
 interface SupplierData {
   name: string
   handle: string

@@ -203,7 +203,7 @@ model SupplierProduct {
   discountMaxReduction Decimal? @db.Money
 
   // Weight and Size
-  weight        Int?
+  weight        Int? // Ceil to upper bound, not using Float
   weightUnit    SupplierProductWeightUnit?
   weightDetails String?
   dimension     Json?
