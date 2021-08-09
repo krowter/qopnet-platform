@@ -1,5 +1,6 @@
 [
   {
+    "slug": "gula-pasir-rose-brand",
     "name": "Gula Pasir Rose Brand",
     "subname": "Kemasan Pouch 1 kg dikemas dengan dus isi 20 pcs",
     "description": "Kemasan Pouch 1 kg\n\nDikemas dengan dus isi 20 pcs\n\nMerk Rose Brand.",
@@ -17,9 +18,10 @@
     ]
   },
   {
-    "name": "Minyak Goreng (900 ml)",
+    "slug": "minyak-goreng-vipco-900ml-12pcs",
+    "name": "Minyak Goreng Vipco 900 ml",
     "description": "Vipco\n\nUkuran 900 mili liter\n\nKemasan pouch (Refill)\n\n12 pcs/box\n\nCatatan\nDisarankan mencapai bobot minimum 300 kg sewaktu memesan.\nTiap nomor pesanan bisa terdiri dari satu produk atau lebih.\n\nContoh \nOrder No #1500 terdiri dari \n1. Minyak Goreng Sovia @2l sebanyak 2 dus (1 dus isi 6 pcs)\n2. Gula Rose Brand @1kg sebanyak 1 dus (1 dus isi 20 pcs)\n3. Beras Sari Padi @50kg sebanyak 5 karung",
-    "sku": "",
+    "sku": "Q-MGV-900-12",
     "price": 159000,
     "weight": 12,
     "stock": 1000,
@@ -28,7 +30,9 @@
     "category": "bintara,Branded",
     "discount": null,
     "weightUnit": "KG",
-    "images": []
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/minyak-goreng-vipco-900ml-12pcs.webp?updatedAt=1628523161125"
+    ]
   },
   {
     "name": "Air Mineral Pristine 1500 ml",
