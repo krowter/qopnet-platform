@@ -192,7 +192,7 @@ model SupplierProduct {
   description String?
   sku         String?
   category    String?
-  // tags        Json?
+  // tags     Json?
 
   // Price
   price                Decimal? @db.Money
