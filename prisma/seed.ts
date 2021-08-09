@@ -1,53 +1,85 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, Supplier, SupplierProduct } from '@prisma/client'
 import axios, { AxiosResponse } from 'axios'
 const prisma = new PrismaClient()
 
-async function main() {
-  // image url example
-  // https://rryitovbrajppywbpmit.supabase.co/storage/v1/object/public/images/anekabusa/AB-001.jpeg
+import qopnetProductsData from './qopnet-products.json'
+import qopnetOneProductsData from './qopnet-products-one.json'
 
-  // get storageUrl
-  const storageUrl = process.env.NX_SUPABASE_URL
-  const ownerId = 'ckr86vmxt005010pjeh4mqs6n' // qopnetlabs@gmail.com profile.id
-  const supplierHandle = 'anekabusa'
-  const supplierData = {
-    name: 'Aneka Busa (PT. Aneka Busa Indonesia)',
-    handle: supplierHandle,
-    ownerId: 'ckr86vmxt005010pjeh4mqs6n',
-  }
+// https://www.prisma.io/docs/guides/database/seed-database#seeding-your-database-with-typescript
 
-  // create supplier -- aneka busa
-  const supplier = await prisma.supplier.upsert({
+interface SupplierData {
+  name: string
+  handle: string
+  ownerId: string
+}
+
+// Image URL example
+// https://rryitovbrajppywbpmit.supabase.co/storage/v1/object/public/images/anekabusa/AB-001.jpeg
+
+// Get storageUrl from env
+const storageUrl = process.env.NX_SUPABASE_URL
+const ownerId = 'ckr86vmxt005010pjeh4mqs6n' // qopnetlabs@gmail.com profile.id
+
+async function createSupplier(supplierData: SupplierData) {
+  return await prisma.supplier.upsert({
     where: {
-      handle: supplierHandle,
+      handle: supplierData.handle,
     },
     update: supplierData,
     create: supplierData,
   })
+}
 
-  // remove existing products
-  await prisma.supplierProduct.deleteMany({
-    where: {
-      ownerId,
-      supplierId: supplier.id, // new supplier or existing supplier
-    },
+async function removeEverything() {
+  await prisma.businessOrderItem.deleteMany()
+  await prisma.businessOrder.deleteMany()
+  await prisma.supplierProduct.deleteMany()
+  return true
+}
+
+async function createSupplierProductsFromJSON({
+  data, // JSON data
+  supplier, // Supplier in JSON
+}: {
+  data: any
+  supplier: Supplier
+}) {
+  // Map to put the ownerId and supplierId per product
+  data = data.map((product: SupplierProduct) => {
+    product.ownerId = supplier.ownerId
+    product.supplierId = supplier.id
+    return product
   })
 
-  // start creating supplierData
+  // Create many supplier products
+  await prisma.supplierProduct.createMany({
+    data: data,
+    skipDuplicates: true,
+  })
+}
+
+async function createSupplierProductsFromURL({
+  productsUrl,
+  supplier,
+}: {
+  productsUrl: string
+  supplier: Supplier
+}) {
   // download data from gist
-  let { data: products }: AxiosResponse<any[]> = await axios.get(
-    'https://gist.github.com/qopnetlabs/414f0a5e3404e6555165ccc67ff79b60/raw'
-  )
+  let { data: products }: AxiosResponse<any[]> = await axios.get(productsUrl)
 
   // re-map
   // add ids and update storage url based on environment
   products = products.map((product) => {
-    product.ownerId = ownerId
+    product.ownerId = supplier.ownerId
     product.supplierId = supplier.id
-    product.images = product.images.map(
-      (image: string) =>
-        `${storageUrl}/storage/v1/object/public/images/${supplierHandle}/${image}`
-    )
+
+    if (product.images) {
+      product.images = product.images.map(
+        (image: string) =>
+          `${storageUrl}/storage/v1/object/public/images/${supplier.handle}/${image}`
+      )
+    }
 
     return product
   })
@@ -57,6 +89,56 @@ async function main() {
     data: products,
     skipDuplicates: true,
   })
+}
+
+async function seedQopnetProducts() {
+  const supplierData: SupplierData = {
+    name: 'Qopnet',
+    handle: 'qopnet',
+    ownerId: 'ckr86vmxt005010pjeh4mqs6n',
+  }
+
+  // create supplier
+  const supplier: Supplier = await createSupplier(supplierData)
+
+  // start creating supplierData
+  await createSupplierProductsFromJSON({
+    data: qopnetOneProductsData, // Will be qopnetProductsData
+    supplier,
+  })
+}
+
+async function seedAnekaBusaProducts() {
+  const productsUrl =
+    'https://gist.github.com/qopnetlabs/414f0a5e3404e6555165ccc67ff79b60/raw'
+
+  const supplierData = {
+    name: 'Aneka Busa (PT. Aneka Busa Indonesia)',
+    handle: 'anekabusa',
+    ownerId: 'ckr86vmxt005010pjeh4mqs6n',
+  }
+
+  // create supplier
+  const supplier: Supplier = await createSupplier(supplierData)
+
+  // start creating supplierData
+  await createSupplierProductsFromURL({
+    productsUrl,
+    supplier,
+  })
+}
+
+/**
+ * Main function to Prisma seed
+ */
+
+async function main() {
+  // Remove all
+  await removeEverything()
+
+  // Seed data
+  await seedQopnetProducts()
+  await seedAnekaBusaProducts()
 }
 
 main()
