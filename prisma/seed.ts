@@ -1,8 +1,9 @@
-import { PrismaClient, Supplier } from '@prisma/client'
+import { PrismaClient, Supplier, SupplierProduct } from '@prisma/client'
 import axios, { AxiosResponse } from 'axios'
 const prisma = new PrismaClient()
 
 import qopnetProductsData from './qopnet-products.json'
+import qopnetOneProductsData from './qopnet-products-one.json'
 
 // https://www.prisma.io/docs/guides/database/seed-database#seeding-your-database-with-typescript
 
@@ -29,12 +30,31 @@ async function createSupplier(supplierData: SupplierData) {
   })
 }
 
-async function removeExistingProducts(supplierId: string) {
-  return await prisma.supplierProduct.deleteMany({
-    where: {
-      ownerId,
-      supplierId: supplierId, // new supplier or existing supplier
-    },
+async function removeEverything() {
+  await prisma.businessOrderItem.deleteMany()
+  await prisma.businessOrder.deleteMany()
+  await prisma.supplierProduct.deleteMany()
+  return true
+}
+
+async function createSupplierProductsFromJSON({
+  data, // JSON data
+  supplier, // Supplier in JSON
+}: {
+  data: any
+  supplier: Supplier
+}) {
+  // Map to put the ownerId and supplierId per product
+  data = data.map((product: SupplierProduct) => {
+    product.ownerId = supplier.ownerId
+    product.supplierId = supplier.id
+    return product
+  })
+
+  // Create many supplier products
+  await prisma.supplierProduct.createMany({
+    data: data,
+    skipDuplicates: true,
   })
 }
 
@@ -53,6 +73,7 @@ async function createSupplierProductsFromURL({
   products = products.map((product) => {
     product.ownerId = supplier.ownerId
     product.supplierId = supplier.id
+
     if (product.images) {
       product.images = product.images.map(
         (image: string) =>
@@ -80,12 +101,9 @@ async function seedQopnetProducts() {
   // create supplier
   const supplier: Supplier = await createSupplier(supplierData)
 
-  // remove existing products
-  await removeExistingProducts(supplier.id)
-
   // start creating supplierData
   await createSupplierProductsFromJSON({
-    data: qopnetProductsData,
+    data: qopnetOneProductsData, // Will be qopnetProductsData
     supplier,
   })
 }
@@ -93,6 +111,7 @@ async function seedQopnetProducts() {
 async function seedAnekaBusaProducts() {
   const productsUrl =
     'https://gist.github.com/qopnetlabs/414f0a5e3404e6555165ccc67ff79b60/raw'
+
   const supplierData = {
     name: 'Aneka Busa (PT. Aneka Busa Indonesia)',
     handle: 'anekabusa',
@@ -102,27 +121,10 @@ async function seedAnekaBusaProducts() {
   // create supplier
   const supplier: Supplier = await createSupplier(supplierData)
 
-  // remove existing products
-  await removeExistingProducts(supplier.id)
-
   // start creating supplierData
   await createSupplierProductsFromURL({
     productsUrl,
     supplier,
-  })
-}
-
-async function createSupplierProductsFromJSON({
-  data, // JSON data
-  supplier, // Supplier in JSON
-}: {
-  data: any
-  supplier: Supplier
-}) {
-  // Create many supplier products
-  await prisma.supplierProduct.createMany({
-    data: data,
-    skipDuplicates: true,
   })
 }
 
@@ -131,7 +133,10 @@ async function createSupplierProductsFromJSON({
  */
 
 async function main() {
-  // Seeds
+  // Remove all
+  await removeEverything()
+
+  // Seed data
   await seedQopnetProducts()
   await seedAnekaBusaProducts()
 }
