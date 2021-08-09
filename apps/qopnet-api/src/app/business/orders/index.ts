@@ -11,13 +11,16 @@ const router = express.Router()
 
 // GET /api/business/orders/my
 router.get('/my', auth.checkUser, businessOrder.getMyAllBusinessOrders)
+
 // GET /api/business/orders/my/cart
 router.get(
   '/my/cart',
   auth.checkUser,
   businessOrder.checkMyCart,
+  businessOrder.autoCreateMyCart, // If isCartExist, just continue
   businessOrder.getMyCart
 )
+
 // POST /api/business/orders/my/cart
 router.post(
   '/my/cart',
@@ -25,6 +28,7 @@ router.post(
   businessOrder.checkMyCart,
   businessOrder.createMyCart
 )
+
 // PUT /api/business/orders/my/cart
 router.put(
   '/my/cart',
