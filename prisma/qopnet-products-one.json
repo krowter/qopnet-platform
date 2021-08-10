@@ -33,5 +33,23 @@
     "images": [
       "https://ik.imagekit.io/qopnetlabs/products/minyak-goreng-vipco-900ml-12pcs.webp?updatedAt=1628523161125"
     ]
+  },
+  {
+    "slug": "air-mineral-pristine-1500ml-dus-24x",
+    "name": "Air Mineral Pristine 1500 ml",
+    "description": "Air Mineral \"Pristine\" ukuran 1500 ml. 1 dus isi 24 botol air mineral.\n\nHarga tertera untuk 1 dus.\n\nPembelian minimal 2 dus.\n\nPengiriman dari Semarang",
+    "sku": "Q-AMP-1500-24",
+    "price": 77000,
+    "weight": 1,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "gudang semarang ronggolawe",
+    "discount": null,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/air-mineral-pristine-1500ml-dus-24x.webp?updatedAt=1628516766918"
+    ]
   }
+
 ]
