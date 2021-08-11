@@ -1,14 +1,11 @@
 [
   {
-    "name": "Deliveree",
-    "courierVehicles": []
+    "name": "Deliveree"
   },
   {
-    "name": "Lalamove",
-    "courierVehicles": []
+    "name": "Lalamove"
   },
   {
-    "name": "Mas Kargo",
-    "courierVehicles": []
+    "name": "Mas Kargo"
   }
 ]

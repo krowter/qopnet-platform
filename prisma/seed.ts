@@ -1,8 +1,16 @@
+/**
+ * https://prisma.io/docs/guides/database/seed-database#seeding-your-database-with-typescript
+ */
+
 import {
   PrismaClient,
   User,
   Profile,
   Address,
+  Courier,
+  CourierVehicle,
+  PaymentMethod,
+  PaymentRecord,
   Supplier,
   SupplierProduct,
 } from '@prisma/client'
@@ -13,33 +21,24 @@ import usersData from './data/users.json'
 import profilesData from './data/profiles.json'
 import addressesData from './data/addresses.json'
 
+import suppliersData from './data/suppliers.json'
+
 import qopnetProductsData from './qopnet-products.json'
 import qopnetOneProductsData from './qopnet-products-one.json'
 
-// https://www.prisma.io/docs/guides/database/seed-database#seeding-your-database-with-typescript
+import couriersData from './data/couriers.json'
+import courierVehiclesData from './data/courier-vehicles.json'
 
-interface SupplierData {
-  name: string
-  handle: string
-  ownerId: string
-}
+import paymentMethodsData from './data/payments-methods.json'
+import paymentRecordsData from './data/payments-records.json'
 
-// Image URL example
-// https://rryitovbrajppywbpmit.supabase.co/storage/v1/object/public/images/anekabusa/AB-001.jpeg
+// -----------------------------------------------------------------------------
 
 // Get storageUrl from env
 const storageUrl = process.env.NX_SUPABASE_URL
 const ownerId = 'ckr86vmxt005010pjeh4mqs6n' // qopnetlabs@gmail.com profile.id
 
-async function createSupplier(supplierData: SupplierData) {
-  return await prisma.supplier.upsert({
-    where: {
-      handle: supplierData.handle,
-    },
-    update: supplierData,
-    create: supplierData,
-  })
-}
+// -----------------------------------------------------------------------------
 
 async function deleteEverything() {
   console.log({
@@ -63,12 +62,14 @@ async function deleteEverything() {
   await prisma.paymentRecord.deleteMany()
 }
 
+// -----------------------------------------------------------------------------
+
 async function createSupplierProductsFromJSON({
   data, // JSON data
-  supplier, // Supplier in JSON
+  supplier,
 }: {
   data: any
-  supplier: Supplier
+  supplier: any
 }) {
   // Map to put the ownerId and supplierId per product
   data = data.map((product: SupplierProduct) => {
@@ -89,7 +90,7 @@ async function createSupplierProductsFromURL({
   supplier,
 }: {
   productsUrl: string
-  supplier: Supplier
+  supplier: any
 }) {
   // download data from gist
   let { data: products }: AxiosResponse<any[]> = await axios.get(productsUrl)
@@ -100,6 +101,8 @@ async function createSupplierProductsFromURL({
     product.ownerId = supplier.ownerId
     product.supplierId = supplier.id
 
+    // Image URL example
+    // https://rryitovbrajppywbpmit.supabase.co/storage/v1/object/public/images/anekabusa/AB-001.jpeg
     if (product.images) {
       product.images = product.images.map(
         (image: string) =>
@@ -140,15 +143,19 @@ const seedAddresses = async () => {
   console.log({ addresses })
 }
 
-async function seedQopnetProducts() {
-  const supplierData: SupplierData = {
-    name: 'Qopnet',
-    handle: 'qopnet',
-    ownerId: 'ckr86vmxt005010pjeh4mqs6n',
-  }
+const seedSuppliers = async () => {
+  const suppliers = await prisma.supplier.createMany({
+    data: suppliersData,
+  })
+  console.log({ suppliers })
+}
 
-  // create supplier
-  const supplier: Supplier = await createSupplier(supplierData)
+// -----------------------------------------------------------------------------
+
+async function seedQopnetProducts() {
+  const supplier = {
+    id: 'ckrqopnet0001swpjglh6i6nl',
+  }
 
   // start creating supplierData
   await createSupplierProductsFromJSON({
@@ -161,14 +168,9 @@ async function seedAnekaBusaProducts() {
   const productsUrl =
     'https://gist.github.com/qopnetlabs/414f0a5e3404e6555165ccc67ff79b60/raw'
 
-  const supplierData = {
-    name: 'Aneka Busa (PT. Aneka Busa Indonesia)',
-    handle: 'anekabusa',
-    ownerId: 'ckr86vmxt005010pjeh4mqs6n',
+  const supplier = {
+    id: 'ckrzfccqz0001swpjglh6i6nl',
   }
-
-  // create supplier
-  const supplier: Supplier = await createSupplier(supplierData)
 
   // start creating supplierData
   await createSupplierProductsFromURL({
@@ -189,6 +191,7 @@ async function main() {
   await seedUsers()
   await seedProfiles()
   await seedAddresses()
+  await seedSuppliers()
   // await seedQopnetProducts()
   // await seedAnekaBusaProducts()
 }
