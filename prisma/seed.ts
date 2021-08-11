@@ -30,11 +30,22 @@ async function createSupplier(supplierData: SupplierData) {
   })
 }
 
-async function removeEverything() {
+async function deleteEverything() {
+  await prisma.user.deleteMany()
+  await prisma.profile.deleteMany()
+  await prisma.address.deleteMany()
+
   await prisma.businessOrderItem.deleteMany()
   await prisma.businessOrder.deleteMany()
+
+  await prisma.supplier.deleteMany()
   await prisma.supplierProduct.deleteMany()
-  return true
+
+  await prisma.courier.deleteMany()
+  await prisma.courierVehicle.deleteMany()
+
+  await prisma.paymentMethod.deleteMany()
+  await prisma.paymentRecord.deleteMany()
 }
 
 async function createSupplierProductsFromJSON({
@@ -134,7 +145,7 @@ async function seedAnekaBusaProducts() {
 
 async function main() {
   // Remove all
-  await removeEverything()
+  await deleteEverything()
 
   // Seed data
   await seedQopnetProducts()
