@@ -523,11 +523,12 @@ model PromoSubmission {
   id String @id @default(cuid())
 
   // Bio
-  name       String?
-  phone      String?
-  email      String?
-  birthPlace String?
-  birthDate  DateTime?
+  name             String?
+  phone            String?
+  email            String?
+  birthPlace       String?
+  birthDate        DateTime?
+  nationalIdNumber String?
 
   // Address
   street        String? // Jl. Street Name
@@ -544,4 +545,29 @@ model PromoSubmission {
   provider   PromoProvider? @relation(fields: [providerId], references: [id])
 
   @@map(name: "promo_submissions")
+}
+
+model PromoEmployee {
+  id    String @id @default(cuid())
+  order Int // original order number on employer document
+
+  // Bio
+  employeeId       String
+  name             String?
+  phone            String? // required for financing
+  email            String? // required for financing
+  birthPlace       String?
+  birthDate        DateTime? // required for financing
+  nationalIdNumber String? // KTP
+
+  // Address
+  street        String?
+  streetDetails String?
+  city          String?
+  State         String?
+  zip           String?
+
+  employerParam String? // unique company param e.g. panarub
+
+  @@map(name: "promo_employees")
 }
