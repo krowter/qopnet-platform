@@ -110,7 +110,9 @@ export const getMyCart = async (req, res) => {
           },
         },
         shipmentAddress: true,
+        shipmentCourier: true,
         paymentMethod: true,
+        paymentRecord: true,
       },
     })
     if (!businessOrder) throw 'My cart or draft business order is not found'
@@ -782,6 +784,7 @@ export const checkMyCart = async (req, res, next) => {
         include: {
           shipmentAddress: true,
           shipmentCourier: true,
+          shipmentCourierVehicle: true,
           paymentMethod: true,
           paymentRecord: true,
           businessOrderItems: true,
