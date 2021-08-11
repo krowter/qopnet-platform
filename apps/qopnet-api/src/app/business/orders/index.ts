@@ -54,9 +54,9 @@ router.patch(
   businessOrder.patchMyCartCourier
 )
 
-// PATCH /api/business/orders/my/cart/payment
+// PATCH /api/business/orders/my/cart/payment/method
 router.patch(
-  '/my/cart/payment',
+  '/my/cart/payment/method',
   auth.checkUser,
   businessOrder.checkMyCart,
   businessOrder.patchMyCartPayment

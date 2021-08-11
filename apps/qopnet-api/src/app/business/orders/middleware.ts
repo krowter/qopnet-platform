@@ -439,19 +439,44 @@ export const patchMyCartPayment = async (req, res) => {
   const formData = req.body
 
   if (isCartExist) {
-    res.status(200).json({
-      message: 'Patch my cart payment success',
-      ownerId,
-      isCartExist,
-      businessOrder,
-      formData,
-    })
+    try {
+      const updatedCart = await prisma.businessOrder.update({
+        where: {
+          id: businessOrder.id,
+        },
+        include: {
+          shipmentAddress: true,
+          shipmentCourier: true,
+          paymentMethod: true,
+          paymentRecord: true,
+        },
+        data: {
+          paymentMethodId: formData.id, // Patch
+        },
+      })
+
+      res.status(200).json({
+        message: 'Patch my cart payment method success',
+        ownerId,
+        isCartExist,
+        formData,
+        businessOrder: updatedCart,
+      })
+    } catch (error) {
+      res.status(400).json({
+        message:
+          'Patch my cart payment method failed, might because payment method id is invalid',
+        error,
+        ownerId,
+        isCartExist,
+        formData,
+      })
+    }
   } else {
     res.status(400).json({
-      message: 'Patch my cart payment failed because cart is not exist',
+      message: 'Patch my cart payment method failed because cart is not exist',
       ownerId,
       isCartExist,
-      businessOrder,
       formData,
     })
   }
