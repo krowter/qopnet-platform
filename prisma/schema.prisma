@@ -377,16 +377,24 @@ model BusinessOrder {
   id     String       @id @default(cuid())
   status OrderStatus?
 
-  // Relations
+  // Relation: Profile
   ownerId String?
   owner   Profile? @relation(fields: [ownerId], references: [id])
 
-  // Business order items
+  // Relation: BusinessOrderItem
   businessOrderItems BusinessOrderItem[]
 
-  // Shipment address
+  // Relation: Shipment Address
   shipmentAddressId String?
   shipmentAddress   Address? @relation(fields: [shipmentAddressId], references: [id])
+
+  // Relation: Shipment Courier
+  shipmentCourierId String?
+  shipmentCourier   Courier? @relation(fields: [shipmentCourierId], references: [id])
+
+  // Relation: Shipment CourierVehicle
+  shipmentCourierVehicleId String?
+  shipmentCourierVehicle   CourierVehicle? @relation(fields: [shipmentCourierVehicleId], references: [id])
 
   // Payment
   paymentId String?
@@ -413,28 +421,58 @@ model BusinessOrderItem {
 
   quantity Int @default(1)
 
-  // Business order
+  // Relation: Business order
   businessOrderId String
   businessOrder   BusinessOrder @relation(fields: [businessOrderId], references: [id])
 
-  // Relations
-  // Supplier
-  supplierId String
-  supplier   Supplier @relation(fields: [supplierId], references: [id])
-
-  // Supplier product
+  // Relation: Supplier product
   supplierProductId String
   supplierProduct   SupplierProduct @relation(fields: [supplierProductId], references: [id])
 
-  // Courier and fleet
-  courierId String?
-  fleetId   String?
+  // Relation: Supplier
+  supplierId String
+  supplier   Supplier @relation(fields: [supplierId], references: [id])
 
   // Timestamp
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
   @@map(name: "business_order_items")
+}
+
+model Courier {
+  id String @id @default(cuid())
+
+  name String // Courier name: Lalamove, Deliveree, Mas Kargo
+
+  // Relations
+  businessOrders  BusinessOrder[]
+  courierVehicles CourierVehicle[]
+
+  // Timestamp
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@map(name: "couriers")
+}
+
+model CourierVehicle {
+  id String @id @default(cuid())
+
+  name String // Courier vehicle name or type: Car, Mobil Box, Tronton
+
+  // Relation: BusinessOrder
+  businessOrders BusinessOrder[]
+
+  // Relation: Courier
+  courierId String?
+  courier   Courier? @relation(fields: [courierId], references: [id])
+
+  // Timestamp
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@map(name: "courier_vehicles")
 }
 
 enum PaymentCategory {
