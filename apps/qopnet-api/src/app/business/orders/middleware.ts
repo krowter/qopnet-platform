@@ -332,6 +332,84 @@ export const updateMyCart = async (req, res) => {
   }
 }
 
+// Patch my cart address
+export const patchMyCartAddress = async (req, res) => {
+  const ownerId = req.profile.id
+  const isCartExist = req.isCartExist
+  const businessOrder = req.businessOrder
+  const formData = req.body
+
+  if (isCartExist) {
+    res.status(200).json({
+      message: 'Patch my cart address success',
+      ownerId,
+      isCartExist,
+      businessOrder,
+      formData,
+    })
+  } else {
+    res.status(400).json({
+      message: 'Patch my cart address failed because cart is not exist',
+      ownerId,
+      isCartExist,
+      businessOrder,
+      formData,
+    })
+  }
+}
+
+// Patch my cart courier
+export const patchMyCartCourier = async (req, res) => {
+  const ownerId = req.profile.id
+  const isCartExist = req.isCartExist
+  const businessOrder = req.businessOrder
+  const formData = req.body
+
+  if (isCartExist) {
+    res.status(200).json({
+      message: 'Patch my cart courier success',
+      ownerId,
+      isCartExist,
+      businessOrder,
+      formData,
+    })
+  } else {
+    res.status(400).json({
+      message: 'Patch my cart courier failed because cart is not exist',
+      ownerId,
+      isCartExist,
+      businessOrder,
+      formData,
+    })
+  }
+}
+
+// Patch my cart payment
+export const patchMyCartPayment = async (req, res) => {
+  const ownerId = req.profile.id
+  const isCartExist = req.isCartExist
+  const businessOrder = req.businessOrder
+  const formData = req.body
+
+  if (isCartExist) {
+    res.status(200).json({
+      message: 'Patch my cart payment success',
+      ownerId,
+      isCartExist,
+      businessOrder,
+      formData,
+    })
+  } else {
+    res.status(400).json({
+      message: 'Patch my cart payment failed because cart is not exist',
+      ownerId,
+      isCartExist,
+      businessOrder,
+      formData,
+    })
+  }
+}
+
 // -----------------------------------------------------------------------------
 // Admin Only
 // -----------------------------------------------------------------------------

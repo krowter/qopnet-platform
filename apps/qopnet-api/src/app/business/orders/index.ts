@@ -38,6 +38,30 @@ router.put(
   businessOrder.updateMyCart
 )
 
+// PATCH /api/business/orders/my/cart/address
+router.patch(
+  '/my/cart/address',
+  auth.checkUser,
+  businessOrder.checkMyCart,
+  businessOrder.patchMyCartAddress
+)
+
+// PATCH /api/business/orders/my/cart/courier
+router.patch(
+  '/my/cart/courier',
+  auth.checkUser,
+  businessOrder.checkMyCart,
+  businessOrder.patchMyCartCourier
+)
+
+// PATCH /api/business/orders/my/cart/payment
+router.patch(
+  '/my/cart/payment',
+  auth.checkUser,
+  businessOrder.checkMyCart,
+  businessOrder.patchMyCartPayment
+)
+
 // -----------------------------------------------------------------------------
 // Admin Only
 
