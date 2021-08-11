@@ -150,6 +150,7 @@ const seedSuppliers = async () => {
 
 const seedBusinessOrder = async () => {
   const businessOrders = await prisma.businessOrder.createMany({
+    // Ignore OrderStatus enumerable
     // @ts-ignore
     data: businessOrdersData,
   })
@@ -210,6 +211,8 @@ const seedCourierVehicles = async () => {
 
 const seedPaymentMethods = async () => {
   const paymentMethods = await prisma.paymentMethod.createMany({
+    // Ignore PaymentCategory enumerable
+    // @ts-ignore
     data: paymentMethodsData,
   })
   console.log({ paymentMethods })

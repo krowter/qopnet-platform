@@ -1,7 +1,7 @@
 [
   {
     "name": "COD (Cash on Deliveree",
-    "paymentCategory": "COD"
+    "paymentCategory": "CASH_ON_DELIVERY"
   },
   {
     "name": "Manual Tranfer Bank BCA",
