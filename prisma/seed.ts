@@ -32,9 +32,23 @@ import qopnetOneProductsData from './qopnet-products-one.json'
 
 // -----------------------------------------------------------------------------
 
+// Check env
+console.log({ env: process.env.NX_NODE_ENV })
+
 // Get storageUrl from env
 const storageUrl = process.env.NX_SUPABASE_URL
-const ownerId = 'ckr86vmxt005010pjeh4mqs6n' // qopnetlabs@gmail.com profile.id
+
+// qopnetlabs@gmail.com profile.id
+const qopnetlabsProfileId = 'ckr86vmxt005010pjeh4mqs6n'
+
+// Currently only for qopnetlabs@gmail.com
+// Assign id based on the environment
+const qopnetlabsUserId =
+  process.env.NX_NODE_ENV === 'production'
+    ? 'cb0a71e6-da95-4631-acc0-bbd3f0d39e5c' // production
+    : process.env.NX_NODE_ENV === 'staging'
+    ? '4f312b35-1554-4283-9d75-cd10d48cdfe7' // staging
+    : 'b09ea7f6-27aa-44ce-9354-68ed5bfdd195' // development
 
 // -----------------------------------------------------------------------------
 
@@ -121,15 +135,30 @@ async function createSupplierProductsFromURL({
 // -----------------------------------------------------------------------------
 
 const seedUsers = async () => {
+  // Should check existing users in Supabase auth.users
+  // To get their id
+
   const users = await prisma.user.createMany({
-    data: usersData,
+    data: usersData.map((user) => {
+      return {
+        id: qopnetlabsUserId,
+        email: user?.email,
+      }
+    }),
   })
   console.log({ users })
 }
 
 const seedProfiles = async () => {
   const profiles = await prisma.profile.createMany({
-    data: profilesData,
+    data: profilesData.map((user) => {
+      return {
+        id: qopnetlabsProfileId,
+        handle: 'qopnetlabs',
+        name: 'Qopnet Labs',
+        userId: qopnetlabsUserId,
+      }
+    }),
   })
   console.log({ profiles })
 }
