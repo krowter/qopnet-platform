@@ -342,9 +342,15 @@ export const patchMyCartAddress = async (req, res) => {
   if (isCartExist) {
     try {
       const updatedCart = await prisma.businessOrder.update({
-        where: { id: businessOrder.id },
-        include: { shipmentAddress: true },
-        data: { shipmentAddressId: formData.id },
+        where: {
+          id: businessOrder.id,
+        },
+        include: {
+          shipmentAddress: true,
+        },
+        data: {
+          shipmentAddressId: formData.id, // Patch
+        },
       })
 
       res.status(200).json({
@@ -361,7 +367,6 @@ export const patchMyCartAddress = async (req, res) => {
         error,
         ownerId,
         isCartExist,
-        businessOrder,
         formData,
       })
     }
@@ -370,7 +375,6 @@ export const patchMyCartAddress = async (req, res) => {
       message: 'Patch my cart address failed because cart is not exist',
       ownerId,
       isCartExist,
-      businessOrder,
       formData,
     })
   }
@@ -384,19 +388,44 @@ export const patchMyCartCourier = async (req, res) => {
   const formData = req.body
 
   if (isCartExist) {
-    res.status(200).json({
-      message: 'Patch my cart courier success',
-      ownerId,
-      isCartExist,
-      businessOrder,
-      formData,
-    })
+    try {
+      const updatedCart = await prisma.businessOrder.update({
+        where: {
+          id: businessOrder.id,
+        },
+        include: {
+          shipmentAddress: true,
+          shipmentCourier: true,
+          paymentMethod: true,
+          paymentRecord: true,
+        },
+        data: {
+          shipmentCourierId: formData.id, // Patch
+        },
+      })
+
+      res.status(200).json({
+        message: 'Patch my cart courier success',
+        ownerId,
+        isCartExist,
+        formData,
+        businessOrder: updatedCart,
+      })
+    } catch (error) {
+      res.status(400).json({
+        message:
+          'Patch my cart courier failed, might because courier id is invalid',
+        error,
+        ownerId,
+        isCartExist,
+        formData,
+      })
+    }
   } else {
     res.status(400).json({
       message: 'Patch my cart courier failed because cart is not exist',
       ownerId,
       isCartExist,
-      businessOrder,
       formData,
     })
   }
