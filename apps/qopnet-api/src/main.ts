@@ -59,9 +59,9 @@ app.use('/api/suppliers', suppliers)
 app.use('/api/merchants', merchants)
 app.use('/api/business/orders', businessOrders)
 app.use('/api/couriers', couriers)
-app.use('/api/courier/vehicles', courierVehicles)
-app.use('/api/payment/methods', paymentMethods)
-app.use('/api/payment/records', paymentRecords)
+app.use('/api/couriers/vehicles', courierVehicles)
+app.use('/api/payments/methods', paymentMethods)
+app.use('/api/payments/records', paymentRecords)
 
 // The error handler must be before any other error middleware
 // and after all controllers

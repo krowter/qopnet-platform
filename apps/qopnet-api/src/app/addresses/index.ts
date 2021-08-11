@@ -6,7 +6,7 @@ import * as address from './middleware'
 
 const router = express.Router()
 
-// GET /api/merchants
+// GET /api/addresses
 router.get('/', auth.checkUser, root.paginate, address.getAllAddresses)
 
 export default router
