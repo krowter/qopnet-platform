@@ -482,7 +482,7 @@ export const patchMyCartPayment = async (req, res) => {
   }
 }
 
-// Put my cart to process my order
+// Update my cart to process my order
 // The cart has become an order with default status of WAITING_FOR_PAYMENT
 export const processMyOrder = async (req, res) => {
   const ownerId = req.profile.id
@@ -531,6 +531,7 @@ export const processMyOrder = async (req, res) => {
             shipmentCourierId: businessOrder.shipmentCourierId,
             paymentMethodId: businessOrder.paymentMethodId,
           },
+          businessOrder,
         })
       }
     } catch (error) {
@@ -779,6 +780,10 @@ export const checkMyCart = async (req, res, next) => {
           status: 'DRAFT',
         },
         include: {
+          shipmentAddress: true,
+          shipmentCourier: true,
+          paymentMethod: true,
+          paymentRecord: true,
           businessOrderItems: true,
         },
       })
