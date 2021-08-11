@@ -20,17 +20,15 @@ const prisma = new PrismaClient()
 import usersData from './data/users.json'
 import profilesData from './data/profiles.json'
 import addressesData from './data/addresses.json'
-
 import suppliersData from './data/suppliers.json'
+import businessOrdersData from './data/business-orders.json'
+import couriersData from './data/couriers.json'
+import courierVehiclesData from './data/courier-vehicles.json'
+import paymentMethodsData from './data/payments-methods.json'
+import paymentRecordsData from './data/payments-records.json'
 
 import qopnetProductsData from './qopnet-products.json'
 import qopnetOneProductsData from './qopnet-products-one.json'
-
-import couriersData from './data/couriers.json'
-import courierVehiclesData from './data/courier-vehicles.json'
-
-import paymentMethodsData from './data/payments-methods.json'
-import paymentRecordsData from './data/payments-records.json'
 
 // -----------------------------------------------------------------------------
 
@@ -150,6 +148,80 @@ const seedSuppliers = async () => {
   console.log({ suppliers })
 }
 
+const seedBusinessOrder = async () => {
+  const businessOrders = await prisma.businessOrder.createMany({
+    // @ts-ignore
+    data: businessOrdersData,
+  })
+  console.log({ businessOrders })
+}
+
+const seedCouriers = async () => {
+  const couriers = await prisma.courier.createMany({
+    data: couriersData,
+  })
+  console.log({ couriers })
+}
+
+const seedCourierVehicles = async () => {
+  const courierDeliveree = await prisma.courier.findFirst({
+    where: { name: 'Deliveree' },
+  })
+  const courierLalamove = await prisma.courier.findFirst({
+    where: { name: 'Lalamove' },
+  })
+  const courierMasKargo = await prisma.courier.findFirst({
+    where: { name: 'Mas Kargo' },
+  })
+
+  const courierVehiclesDeliveree = await prisma.courierVehicle.createMany({
+    data: courierVehiclesData.map((vehicle) => {
+      return {
+        name: vehicle.name.concat(` ${courierDeliveree?.name}`),
+        courierId: `${courierDeliveree?.id}`,
+      }
+    }),
+  })
+
+  const courierVehiclesLalamove = await prisma.courierVehicle.createMany({
+    data: courierVehiclesData.map((vehicle) => {
+      return {
+        name: vehicle.name.concat(` ${courierLalamove?.name}`),
+        courierId: `${courierLalamove?.id}`,
+      }
+    }),
+  })
+
+  const courierVehiclesMasKargo = await prisma.courierVehicle.createMany({
+    data: courierVehiclesData.map((vehicle) => {
+      return {
+        name: vehicle.name.concat(` ${courierMasKargo?.name}`),
+        courierId: `${courierMasKargo?.id}`,
+      }
+    }),
+  })
+
+  console.log({
+    courierVehiclesDeliveree,
+    courierVehiclesLalamove,
+    courierVehiclesMasKargo,
+  })
+}
+
+const seedPaymentMethods = async () => {
+  const paymentMethods = await prisma.paymentMethod.createMany({
+    data: paymentMethodsData,
+  })
+  console.log({ paymentMethods })
+}
+
+const seedPaymentRecords = async () => {
+  const paymentRecords = await prisma.paymentRecord.createMany({
+    data: paymentRecordsData,
+  })
+  console.log({ paymentRecords })
+}
+
 // -----------------------------------------------------------------------------
 
 async function seedQopnetProducts() {
@@ -180,6 +252,7 @@ async function seedAnekaBusaProducts() {
 }
 
 /**
+ * -----------------------------------------------------------------------------
  * Main function to Prisma seed
  */
 
@@ -194,6 +267,11 @@ async function main() {
   await seedSuppliers()
   // await seedQopnetProducts()
   // await seedAnekaBusaProducts()
+  await seedBusinessOrder()
+  await seedCouriers()
+  await seedCourierVehicles()
+  await seedPaymentMethods()
+  await seedPaymentRecords()
 }
 
 main()
