@@ -1,12 +1,12 @@
 -- AlterTable
-ALTER TABLE "addresses" ALTER COLUMN "city" DROP NOT NULL,
-ALTER COLUMN "state" DROP NOT NULL,
-ALTER COLUMN "zip" DROP NOT NULL,
-ALTER COLUMN "countryCode" DROP NOT NULL;
-
+ALTER TABLE "addresses"
+ALTER COLUMN "city" DROP NOT NULL,
+    ALTER COLUMN "state" DROP NOT NULL,
+    ALTER COLUMN "zip" DROP NOT NULL,
+    ALTER COLUMN "countryCode" DROP NOT NULL;
 -- AlterTable
-ALTER TABLE "promo_submissions" ADD COLUMN     "nationalIdNumber" TEXT;
-
+ALTER TABLE "promo_submissions"
+ADD COLUMN "nationalIdNumber" TEXT;
 -- CreateTable
 CREATE TABLE "promo_employees" (
     "id" TEXT NOT NULL,
@@ -24,6 +24,5 @@ CREATE TABLE "promo_employees" (
     "State" TEXT,
     "zip" TEXT,
     "employerParam" TEXT,
-
     PRIMARY KEY ("id")
 );
