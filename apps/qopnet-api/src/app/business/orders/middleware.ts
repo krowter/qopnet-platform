@@ -595,6 +595,29 @@ export const updateOneBusinessOrder = async (req, res) => {
   }
 }
 
+// Patch one business order status by businessOrderParam (id)
+export const patchOneBusinessOrderStatus = async (req, res) => {
+  const { businessOrderParam } = req.params
+  const businessOrder = req.businessOrder
+  const isBusinessOrderExist = req.isBusinessOrderExist
+
+  if (isBusinessOrderExist) {
+    res.status(200).json({
+      message: 'Patch one business order status success',
+      businessOrderParam,
+      isBusinessOrderExist,
+      businessOrder,
+    })
+  } else {
+    res.status(404).json({
+      message:
+        'Patch one business order status failed, because it is not found',
+      businessOrderParam,
+      isBusinessOrderExist,
+    })
+  }
+}
+
 // Delete all business orders
 export const deleteAllBusinessOrders = async (req, res) => {
   try {
@@ -724,5 +747,34 @@ export const autoCreateMyCart = async (req, res, next) => {
   } else {
     // Continue just fine if cart is already exist
     next()
+  }
+}
+
+// Check one business order
+export const checkOneBusinessOrder = async (req, res, next) => {
+  const ownerId = req.profile.id
+
+  try {
+    const businessOrder: Partial<BusinessOrder> =
+      await prisma.businessOrder.findFirst({
+        include: {
+          businessOrderItems: true,
+        },
+      })
+
+    if (businessOrder) {
+      req.businessOrder = businessOrder
+      req.isBusinessOrderExist = true
+      next()
+    } else {
+      req.isBusinessOrderExist = false
+      next()
+    }
+  } catch (error) {
+    res.status(500).send({
+      message: 'Check one business order failed',
+      ownerId,
+      error,
+    })
   }
 }

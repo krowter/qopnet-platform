@@ -75,6 +75,14 @@ router.post('/', auth.checkUser, businessOrder.createOneBusinessOrder)
 // PUT /api/business/orders/:businessOrderId
 router.put('/', auth.checkUser, businessOrder.updateOneBusinessOrder)
 
+// PATCH /api/business/orders/:businessOrderParam/status
+router.patch(
+  '/:businessOrderParam/status',
+  auth.checkUser,
+  businessOrder.checkOneBusinessOrder,
+  businessOrder.patchOneBusinessOrderStatus
+)
+
 // DELETE /api/business/orders
 router.delete('/', auth.checkUser, businessOrder.deleteAllBusinessOrders)
 // DELETE /api/business/orders/:businessOrderParam
