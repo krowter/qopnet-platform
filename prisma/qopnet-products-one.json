@@ -50,6 +50,73 @@
     "images": [
       "https://ik.imagekit.io/qopnetlabs/products/air-mineral-pristine-1500ml-dus-24x.webp?updatedAt=1628516766918"
     ]
+  },
+  {
+    "slug": "kecap-manis-banyak-300ml",
+    "name": "Kecap Manis Cap “Banyak” botol 300 ml",
+    "description": "Kemasan Botol Plastik isi 300 ml @ harga Rp 16.500\n\nPemesanan minimal 1 karton isi 25 botol.\n\nKecap Manis Cap \"Banyak\" cocok untuk segala macam hidangan\n\nTerbuat dari bahan - bahan alami\n\nKualitas terjamin\n\nPengiriman dari Semarang",
+    "sku": "Q-KMB-300",
+    "price": 16500,
+    "weight": 1,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "gudang semarang tengger",
+    "discount": null,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/kecap-manis-banyak-300ml.jpeg?updatedAt=1628688596392"
+    ]
+  },
+  {
+    "slug": "beras-c4-premium-25kg",
+    "name": "Beras C4 Premium 25 kg",
+    "description": "Beras Premium C4\n\nTanpa Pemutih, alami dan pulen\n\nKemasan 25 kg\n\nkualitas terjamin\n\nDisarankan untuk mencapai bobot minimum 100 kg sewaktu memesan.\n\nBobot minimum per no pemesanan bisa terdiri dari 1 produk atau lebih.\n\nPengiriman dari Semarang\n\nHarga per kg 11.300",
+    "sku": "Q-BCP-25",
+    "price": 282500,
+    "weight": 50,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "gudang semarang tengger",
+    "discount": null,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/beras-c4-premium-25kg.jpeg?updatedAt=1628689113684"
+    ]
+  },
+  {
+    "slug": "beras-enak-pulen-manis-5kg",
+    "name": "Beras Enak Pulen “Manis” 5kg",
+    "description": "Beras Pulen, Kualitas Premium, Kemasan 5 Kg\n\nTanpa Pemutih, Tanpa Pengawet, & Tanpa Pewangi\n\nDisarankan untuk mencapai bobot minimum 100 kg sewaktu memesan.\n\nBobot minimum per no pemesanan bisa terdiri dari 1 produk atau lebih.\n\nPengiriman dari Semarang\n\nHarga per kg Rp 10.990",
+    "sku": "Q-BEPM-5",
+    "price": 54950,
+    "weight": 5,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "gudang semarang ronggolawe,gudang semarang tengger",
+    "discount": null,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/beras-enak-pulen-manis-5kg.webp?updatedAt=1628689308895"
+    ]
+  },
+  {
+    "slug": "beras-kristal-super-kepala-anak-raja-5kg",
+    "name": "Beras Kristal Super Kepala “Anak Raja” 5Kg",
+    "description": "Beras Putih Pulen, Alami dan higienis\n\nDisarankan untuk mencapai bobot minimum 100 kg sewaktu memesan.\n\nBobot minimum per no pemesanan bisa terdiri dari 1 produk atau lebih.\n\nPengiriman dari Semarang\n\nHarga per kg Rp 11.990",
+    "sku": "Q-BKSKAR-5",
+    "price": 59950,
+    "weight": 5,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "gudang semarang ronggolawe,gudang semarang tengger",
+    "discount": null,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/beras-kristal-super-kepala-anak-raja-5kg.webp?updatedAt=1628689457217"
+    ]
   }
-
 ]
