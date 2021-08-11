@@ -598,15 +598,28 @@ export const updateOneBusinessOrder = async (req, res) => {
 // Patch one business order status by businessOrderParam (id)
 export const patchOneBusinessOrderStatus = async (req, res) => {
   const { businessOrderParam } = req.params
-  const businessOrder = req.businessOrder
   const isBusinessOrderExist = req.isBusinessOrderExist
+  const formData = req.body
 
   if (isBusinessOrderExist) {
+    const updatedCart = await prisma.businessOrder.update({
+      where: {
+        id: businessOrderParam,
+      },
+      include: {
+        businessOrderItems: true,
+      },
+      data: {
+        status: formData?.status,
+      },
+    })
+
     res.status(200).json({
       message: 'Patch one business order status success',
       businessOrderParam,
       isBusinessOrderExist,
-      businessOrder,
+      businessOrder: updatedCart,
+      formData,
     })
   } else {
     res.status(404).json({
@@ -614,6 +627,7 @@ export const patchOneBusinessOrderStatus = async (req, res) => {
         'Patch one business order status failed, because it is not found',
       businessOrderParam,
       isBusinessOrderExist,
+      formData,
     })
   }
 }
@@ -692,7 +706,10 @@ export const checkMyCart = async (req, res, next) => {
   try {
     const businessOrder: Partial<BusinessOrder> =
       await prisma.businessOrder.findFirst({
-        where: { ownerId, status: 'DRAFT' },
+        where: {
+          ownerId,
+          status: 'DRAFT',
+        },
         include: {
           businessOrderItems: true,
         },
@@ -726,7 +743,10 @@ export const autoCreateMyCart = async (req, res, next) => {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const businessOrder: Partial<BusinessOrder> =
         await prisma.businessOrder.create({
-          data: { ownerId, status: 'DRAFT' },
+          data: {
+            ownerId,
+            status: 'DRAFT',
+          },
         })
 
       // Change the flags because auto create
@@ -752,13 +772,19 @@ export const autoCreateMyCart = async (req, res, next) => {
 
 // Check one business order
 export const checkOneBusinessOrder = async (req, res, next) => {
+  const { businessOrderParam } = req.params
   const ownerId = req.profile.id
 
   try {
     const businessOrder: Partial<BusinessOrder> =
-      await prisma.businessOrder.findFirst({
+      await prisma.businessOrder.findUnique({
+        where: {
+          id: businessOrderParam,
+        },
         include: {
           businessOrderItems: true,
+          paymentMethod: true,
+          paymentRecord: true,
         },
       })
 
