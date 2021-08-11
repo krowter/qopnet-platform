@@ -340,13 +340,31 @@ export const patchMyCartAddress = async (req, res) => {
   const formData = req.body
 
   if (isCartExist) {
-    res.status(200).json({
-      message: 'Patch my cart address success',
-      ownerId,
-      isCartExist,
-      businessOrder,
-      formData,
-    })
+    try {
+      const updatedCart = await prisma.businessOrder.update({
+        where: { id: businessOrder.id },
+        include: { shipmentAddress: true },
+        data: { shipmentAddressId: formData.id },
+      })
+
+      res.status(200).json({
+        message: 'Patch my cart address success',
+        ownerId,
+        isCartExist,
+        formData,
+        businessOrder: updatedCart,
+      })
+    } catch (error) {
+      res.status(400).json({
+        message:
+          'Patch my cart courier failed, might because address id is invalid',
+        error,
+        ownerId,
+        isCartExist,
+        businessOrder,
+        formData,
+      })
+    }
   } else {
     res.status(400).json({
       message: 'Patch my cart address failed because cart is not exist',
