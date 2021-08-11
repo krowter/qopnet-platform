@@ -502,9 +502,12 @@ model CourierVehicle {
 // PAYMENT
 
 enum PaymentCategory {
-  COD
-  TRANSFER
-  VIRTUALACCOUNT
+  CASH_ON_DELIVERY
+  TRANSFER_MANUAL
+  TRANSFER_VIRTUAL_ACCOUNT
+  INSTALMENT
+  CREDIT
+  LOAN
 }
 
 model PaymentMethod {
