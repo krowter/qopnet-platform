@@ -482,6 +482,74 @@ export const patchMyCartPayment = async (req, res) => {
   }
 }
 
+// Put my cart to process my order
+// The cart has become an order with default status of WAITING_FOR_PAYMENT
+export const processMyOrder = async (req, res) => {
+  const ownerId = req.profile.id
+  const isCartExist = req.isCartExist
+  const businessOrder = req.businessOrder
+
+  if (isCartExist) {
+    try {
+      /**
+       * This should not require any formData or req.body
+       * But still need to check if these fields are available:
+       * - shipmentAddress
+       * - shipmentCourier
+       * - paymentMethod
+       * Then finally:
+       * - Change the status to WAITING_FOR_PAYMENT
+       * - Create a payment record to be completed later
+       */
+      if (
+        businessOrder.shipmentAddressId &&
+        businessOrder.shipmentCourierId &&
+        businessOrder.paymentMethodId
+      ) {
+        const updatedCart = await prisma.businessOrder.update({
+          where: {
+            id: businessOrder.id,
+          },
+          data: {
+            status: 'WAITING_FOR_PAYMENT',
+          },
+        })
+
+        res.status(200).json({
+          message: 'Process my order success',
+          ownerId,
+          isCartExist,
+          businessOrder: updatedCart,
+        })
+      } else {
+        res.status(400).json({
+          message: 'Process my order failed because fields are missing',
+          ownerId,
+          isCartExist,
+          fields: {
+            shipmentAddressId: businessOrder.shipmentAddressId,
+            shipmentCourierId: businessOrder.shipmentCourierId,
+            paymentMethodId: businessOrder.paymentMethodId,
+          },
+        })
+      }
+    } catch (error) {
+      res.status(400).json({
+        message: 'Process my order failed',
+        error,
+        ownerId,
+        isCartExist,
+      })
+    }
+  } else {
+    res.status(400).json({
+      message: 'Process my order failed because cart is not exist',
+      ownerId,
+      isCartExist,
+    })
+  }
+}
+
 // -----------------------------------------------------------------------------
 // Admin Only
 // -----------------------------------------------------------------------------

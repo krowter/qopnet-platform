@@ -391,6 +391,7 @@ enum OrderStatus {
 
   // supplier product is on delivery by courier
   ONDELIVERY
+  // ON_DELIVERY
 
   // supplier product is delivered to shipment address
   DELIVERED

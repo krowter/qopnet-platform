@@ -62,6 +62,14 @@ router.patch(
   businessOrder.patchMyCartPayment
 )
 
+// PUT /api/business/orders/my/cart/process
+router.put(
+  '/my/cart/process',
+  auth.checkUser,
+  businessOrder.checkMyCart,
+  businessOrder.processMyOrder
+)
+
 // -----------------------------------------------------------------------------
 // Admin Only
 
