@@ -364,6 +364,9 @@ model FundBenefactor {
   @@map(name: "fund_benefactors")
 }
 
+// -----------------------------------------------------------------------------
+// BUSINESS ORDER
+
 enum OrderStatus {
   DRAFT // order is still a cart
   WAITING_FOR_PAYMENT // order is waiting to be paid by buyer
@@ -391,20 +394,24 @@ model BusinessOrder {
   businessOrderItems BusinessOrderItem[]
 
   // Relation: Shipment Address
-  shipmentAddressId String?
   shipmentAddress   Address? @relation(fields: [shipmentAddressId], references: [id])
+  shipmentAddressId String?
 
   // Relation: Shipment Courier
-  shipmentCourierId String?
   shipmentCourier   Courier? @relation(fields: [shipmentCourierId], references: [id])
+  shipmentCourierId String?
 
   // Relation: Shipment CourierVehicle
-  shipmentCourierVehicleId String?
   shipmentCourierVehicle   CourierVehicle? @relation(fields: [shipmentCourierVehicleId], references: [id])
+  shipmentCourierVehicleId String?
 
   // Relation: PaymentMethod
-  paymentMethodId String?
   paymentMethod   PaymentMethod? @relation(fields: [paymentMethodId], references: [id])
+  paymentMethodId String?
+
+  // Relation: PaymentRecord
+  paymentRecord   PaymentRecord? @relation(fields: [paymentRecordId], references: [id])
+  paymentRecordId String?
 
   // Calculation for business order items
   totalItems            Int?
@@ -445,6 +452,9 @@ model BusinessOrderItem {
 
   @@map(name: "business_order_items")
 }
+
+// -----------------------------------------------------------------------------
+// COURIER
 
 model Courier {
   id String @id @default(cuid())
@@ -488,6 +498,9 @@ model CourierVehicle {
   @@map(name: "courier_vehicles")
 }
 
+// -----------------------------------------------------------------------------
+// PAYMENT
+
 enum PaymentCategory {
   COD
   TRANSFER
@@ -500,17 +513,41 @@ model PaymentMethod {
   name            String
   paymentCategory PaymentCategory
 
-  // Relations
+  // Relation: BusinessOrder
   businessOrders BusinessOrder[]
+
+  // Relation: PaymentRecord
+  paymentRecords PaymentRecord[]
 
   // Timestamp
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
-  @@map(name: "payments")
+  @@map(name: "payment_methods")
 }
 
-// model PaymentRecord {}
+model PaymentRecord {
+  id String @id @default(cuid())
+
+  amount Decimal @db.Money
+  // status String?
+
+  // Relation: BusinessOrder
+  businessOrder BusinessOrder?
+
+  // Relation: PaymentMethod
+  paymentMethodId String?
+  paymentMethod   PaymentMethod? @relation(fields: [paymentMethodId], references: [id])
+
+  // Timestamp
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@map(name: "payment_records")
+}
+
+// -----------------------------------------------------------------------------
+// PROMO
 
 // PromoProvider
 // Example:
