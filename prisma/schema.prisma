@@ -29,8 +29,8 @@ model User {
   fundBeneficiary FundBeneficiary?
 
   // Timestamp
-  // createdAt DateTime @default(now())
-  // updatedAt DateTime @default(now()) @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@map(name: "users")
 }
@@ -81,11 +81,12 @@ model AdminProfile {
 // Address can be used for Profile, Wholesaler, Supplier, Merchant, Customer
 
 model Address {
-  id            String  @id @default(cuid())
+  id String @id @default(cuid())
+
   street        String // Jl. Street Name
   streetDetails String? // Optional details such as floor number
-  // ward          String? // Kelurahan
-  // subdistrict   String? // Kecamatan
+  ward          String? // Kelurahan
+  subdistrict   String? // Kecamatan
   city          String?
   state         String? // Province
   zip           String? // Postal code
@@ -192,7 +193,7 @@ model SupplierProduct {
   description String?
   sku         String?
   category    String?
-  // tags     Json?
+  tags        Json?
 
   // Price
   price                Decimal? @db.Money
@@ -202,11 +203,11 @@ model SupplierProduct {
   discount             Int?
   discountMaxReduction Decimal? @db.Money
 
-  // Weight and Size
+  // Weight and Dimension Size
   weight        Int? // Ceil to upper bound, not using Float
   weightUnit    SupplierProductWeightUnit?
   weightDetails String?
-  dimension     Json?
+  dimension     Json? // { width, height, length }
 
   // Manage
   status SupplierProductStatus?
@@ -218,7 +219,6 @@ model SupplierProduct {
   supplierId         String?
   supplier           Supplier?           @relation(fields: [supplierId], references: [id])
   businessOrderItems BusinessOrderItem[]
-
 
   // Timestamp
   createdAt DateTime @default(now())
@@ -396,18 +396,18 @@ model BusinessOrder {
   shipmentCourierVehicleId String?
   shipmentCourierVehicle   CourierVehicle? @relation(fields: [shipmentCourierVehicleId], references: [id])
 
-  // Payment
-  paymentId String?
-  payment   Payment? @relation(fields: [paymentId], references: [id])
+  // Relation: PaymentMethod
+  paymentMethodId String?
+  paymentMethod   PaymentMethod? @relation(fields: [paymentMethodId], references: [id])
 
   // Calculation for business order items
-  totalItems        Int?
-  totalPrice        Decimal?
-  totalWeight       Decimal?
-  totalShippingCost Decimal?
-  shippingDiscount  Decimal?
-  totalPayment      Decimal?
-  // totalBillPayment
+  totalItems            Int?
+  totalWeight           Int?
+  totalPrice            Decimal? @db.Money
+  totalShippingCost     Decimal? @db.Money
+  totalShippingDiscount Decimal? @db.Money
+  totalPayment          Decimal? @db.Money
+  totalBillPayment      Decimal? @db.Money
 
   // Timestamp
   createdAt DateTime @default(now())
@@ -461,6 +461,13 @@ model CourierVehicle {
 
   name String // Courier vehicle name or type: Car, Mobil Box, Tronton
 
+  // Check again in Deliveree/Lalamove
+  maxWeightCapacity           Int? // in kg
+  maxCargoDimensionLength     Int? // in cm
+  maxCargoDimensionHeight     Int? // in cm
+  maxCargoDimensionWidth      Int? // in cm
+  maxCargoDimensionCubicMeter Float? // in m^3
+
   // Relation: BusinessOrder
   businessOrders BusinessOrder[]
 
@@ -481,7 +488,7 @@ enum PaymentCategory {
   VIRTUALACCOUNT
 }
 
-model Payment {
+model PaymentMethod {
   id String @id @default(cuid())
 
   name            String
