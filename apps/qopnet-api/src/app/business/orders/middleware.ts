@@ -33,7 +33,7 @@ export const getMyAllBusinessOrders = async (req, res) => {
             },
           },
           shipmentAddress: true,
-          payment: true,
+          paymentMethod: true,
         },
       })
 
@@ -110,7 +110,7 @@ export const getMyCart = async (req, res) => {
           },
         },
         shipmentAddress: true,
-        payment: true,
+        paymentMethod: true,
       },
     })
     if (!businessOrder) throw 'My cart or draft business order is not found'
@@ -442,7 +442,7 @@ export const getAllBusinessOrders = async (req, res) => {
           owner: true,
           businessOrderItems: true,
           shipmentAddress: true,
-          payment: true,
+          paymentMethod: true,
         },
       })
 
@@ -470,7 +470,7 @@ export const getOneBusinessOrder = async (req, res) => {
           owner: true,
           businessOrderItems: true,
           shipmentAddress: true,
-          payment: true,
+          paymentMethod: true,
         },
       })
     if (!businessOrder) throw 'Business order by param is not found'
