@@ -46,3 +46,6 @@ Thumbs.db
 _exports
 _*.json
 .vercel
+
+# Custom javscript runners to process data
+runner

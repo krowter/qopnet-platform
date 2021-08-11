@@ -106,7 +106,7 @@ export const partners = [
   {
     name: 'Koinworks',
     imageUrl:
-      'https://ik.imagekit.io/qopnetlabs/logos/koinworks.png?updatedAt=1627850437885',
+      'https://ik.imagekit.io/qopnetlabs/logos/koinworks.png?updatedAt=1628412218053',
   },
   {
     name: 'Kredivo',
@@ -143,18 +143,31 @@ export const partners = [
     imageUrl:
       'https://ik.imagekit.io/qopnetlabs/logos/unileverfoodsolutions.png?updatedAt=1627850444203',
   },
-  { name: 'Penggerak Oke Oce' },
-  { name: 'Himpunan Pengusaha Muda Indonesia' },
-  { name: 'Berrill Jaya (Beras Anak Raja Group)' },
+  {
+    name: 'Penggerak Oke Oce',
+    imageUrl:
+      'https://ik.imagekit.io/qopnetlabs/logos/ok_oce.png?updatedAt=1628415077576',
+  },
+  {
+    name: 'Himpunan Pengusaha Muda Indonesia',
+    imageUrl:
+      'https://ik.imagekit.io/qopnetlabs/logos/hipmi.png?updatedAt=1628413168215',
+  },
+  {
+    name: 'Koperasi Karyawan PT Argha Karya Prima Tbk',
+    imageUrl:
+      'https://ik.imagekit.io/qopnetlabs/logos/argha.png?updatedAt=1628412586722',
+  },
+  {
+    name: 'Koperasi Karyawan PT Indah Jaya (Terry Palmer)',
+    imageUrl:
+      'https://ik.imagekit.io/qopnetlabs/logos/terry_palmer.png?updatedAt=1628414972309',
+  },
   { name: 'Koperasi Nelayan Cilincing' },
   { name: 'Koperasi Pedagang Pasar Cipinang' },
-  { name: 'Koperasi UNIKA Soegijapranata' },
-  { name: 'Koperasi Karyawan PT Panarub Industry' },
-  { name: 'Koperasi Karyawan PT Argha Karya Prima Tbk' },
-  { name: 'Koperasi Karyawan PT Indah Jaya (Terry Palmer)' },
-  {
-    name: 'Koperasi Karyawan PT Trio Putera Utama (Adira Semesta Industry Group)',
-  },
+  // { name: 'Berrill Jaya (Beras Anak Raja Group)' },
+  // { name: 'Koperasi UNIKA Soegijapranata', },
+  // { name: 'Koperasi Karyawan PT Trio Putera Utama (Adira Semesta Industry Group)' },
 ]
 
 export const HomeBannerCarousel = () => {
@@ -200,7 +213,8 @@ export const HomePartners = () => {
                     alt={partner?.name}
                     src={partner?.imageUrl}
                     h="50px"
-                    px={3}
+                    mx={3}
+                    rounded={'md'}
                     // layout="responsive"
                     // width={100}
                     // height={100}
