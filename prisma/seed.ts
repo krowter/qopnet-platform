@@ -1,8 +1,8 @@
 import {
   PrismaClient,
   User,
-  Address,
   Profile,
+  Address,
   Supplier,
   SupplierProduct,
 } from '@prisma/client'
@@ -10,6 +10,9 @@ import axios, { AxiosResponse } from 'axios'
 const prisma = new PrismaClient()
 
 import usersData from './data/users.json'
+import profilesData from './data/profiles.json'
+import addressesData from './data/addresses.json'
+
 import qopnetProductsData from './qopnet-products.json'
 import qopnetOneProductsData from './qopnet-products-one.json'
 
@@ -39,6 +42,10 @@ async function createSupplier(supplierData: SupplierData) {
 }
 
 async function deleteEverything() {
+  console.log({
+    message: 'Delete everything',
+  })
+
   await prisma.user.deleteMany()
   await prisma.profile.deleteMany()
   await prisma.address.deleteMany()
@@ -119,6 +126,20 @@ const seedUsers = async () => {
   console.log({ users })
 }
 
+const seedProfiles = async () => {
+  const profiles = await prisma.profile.createMany({
+    data: profilesData,
+  })
+  console.log({ profiles })
+}
+
+const seedAddresses = async () => {
+  const addresses = await prisma.address.createMany({
+    data: addressesData,
+  })
+  console.log({ addresses })
+}
+
 async function seedQopnetProducts() {
   const supplierData: SupplierData = {
     name: 'Qopnet',
@@ -166,7 +187,8 @@ async function main() {
 
   // Seed data
   await seedUsers()
-  // await seedProfiles()
+  await seedProfiles()
+  await seedAddresses()
   // await seedQopnetProducts()
   // await seedAnekaBusaProducts()
 }
