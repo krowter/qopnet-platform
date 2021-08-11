@@ -9,10 +9,15 @@ import images from './app/images'
 import auth from './app/auth'
 import users from './app/users'
 import profiles from './app/profiles'
+import addresses from './app/addresses'
 import suppliers from './app/suppliers'
 import supplierProducts from './app/suppliers/products'
 import merchants from './app/merchants'
 import businessOrders from './app/business/orders'
+import couriers from './app/couriers'
+import courierVehicles from './app/couriers/vehicles'
+import paymentMethods from './app/payments/methods'
+import paymentRecords from './app/payments/records'
 
 const app = express()
 
@@ -48,10 +53,15 @@ app.use('/images', images)
 app.use('/auth', auth)
 app.use('/api/users', users)
 app.use('/api/profiles', profiles)
+app.use('/api/addresses', addresses)
 app.use('/api/suppliers/products', supplierProducts)
 app.use('/api/suppliers', suppliers)
 app.use('/api/merchants', merchants)
 app.use('/api/business/orders', businessOrders)
+app.use('/api/couriers', couriers)
+app.use('/api/couriers/vehicles', courierVehicles)
+app.use('/api/payments/methods', paymentMethods)
+app.use('/api/payments/records', paymentRecords)
 
 // The error handler must be before any other error middleware
 // and after all controllers

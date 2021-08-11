@@ -1,0 +1,10 @@
+[
+  {
+    "name": "COD (Cash on Delivery)",
+    "paymentCategory": "CASH_ON_DELIVERY"
+  },
+  {
+    "name": "Manual Tranfer Bank BCA",
+    "paymentCategory": "TRANSFER_MANUAL"
+  }
+]
