@@ -1,7 +1,15 @@
-import { PrismaClient, Supplier, SupplierProduct } from '@prisma/client'
+import {
+  PrismaClient,
+  User,
+  Address,
+  Profile,
+  Supplier,
+  SupplierProduct,
+} from '@prisma/client'
 import axios, { AxiosResponse } from 'axios'
 const prisma = new PrismaClient()
 
+import usersData from './data/users.json'
 import qopnetProductsData from './qopnet-products.json'
 import qopnetOneProductsData from './qopnet-products-one.json'
 
@@ -102,6 +110,15 @@ async function createSupplierProductsFromURL({
   })
 }
 
+// -----------------------------------------------------------------------------
+
+const seedUsers = async () => {
+  const users = await prisma.user.createMany({
+    data: usersData,
+  })
+  console.log({ users })
+}
+
 async function seedQopnetProducts() {
   const supplierData: SupplierData = {
     name: 'Qopnet',
@@ -148,8 +165,10 @@ async function main() {
   await deleteEverything()
 
   // Seed data
-  await seedQopnetProducts()
-  await seedAnekaBusaProducts()
+  await seedUsers()
+  // await seedProfiles()
+  // await seedQopnetProducts()
+  // await seedAnekaBusaProducts()
 }
 
 main()
