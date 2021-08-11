@@ -11,7 +11,8 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialActions"]
 }
 
 // -----------------------------------------------------------------------------
@@ -42,19 +43,24 @@ model Profile {
   avatarUrl String?
   phone     String?
 
-  // User Relations
+  // Relation: User
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
-  user   User   @relation(fields: [userId], references: [id])
 
-  // Data Relations
+  // Relation: Address
   addresses         Address[]
+  // Relation: Wholesaler
   wholesalers       Wholesaler[]
+  // Relation: Supplier
   suppliers         Supplier[]
   supplierProducts  SupplierProduct[]
-  merchants         Merchant[]
-  fundBeneficiaries FundBeneficiary?
+  // Relation: BusinessOrder
   businessOrders    BusinessOrder[]
-  MerchantProduct   MerchantProduct[]
+  // Relation: Merchant
+  merchants         Merchant[]
+  merchantProducts  MerchantProduct[]
+  // Relation: FundBeneficiary
+  fundBeneficiaries FundBeneficiary?
 
   // Timestamp
   createdAt DateTime @default(now())
