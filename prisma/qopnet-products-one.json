@@ -184,5 +184,90 @@
     "images": [
       "https://ik.imagekit.io/qopnetlabs/products/gula-aren-murni-1kg.jpeg?updatedAt=1628753055679"
     ]
+  },
+  {
+    "slug": "gula-merah-sari-kelapa-10kg",
+    "name": "Gula Merah Sari Kelapa 10 kg",
+    "description": "Gula Merah Sari Kelapa\n\nGula Merah 10 kg per ball\n\nCatatan\nDisarankan mencapai bobot minimum 300 kg sewaktu memesan.\nTiap nomor pesanan bisa terdiri dari satu produk atau lebih.\n\nContoh\nOrder No #1500 terdiri dari\n1. Minyak Goreng Sovia @2l sebanyak 2 dus (1 dus isi 6 pcs)\n2. Gula Rose Brand @1kg sebanyak 1 dus (1 dus isi 20 pcs)\n3. Beras Sari Padi @50kg sebanyak 5 karung",
+    "sku": "Q-GMSK-10",
+    "price": 151800,
+    "weight": 10,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "cipinang",
+    "discount": null,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/gula-merah-sari-kelapa-10kg.jpeg?updatedAt=1628769792673"
+    ]
+  },
+  {
+    "slug": "sunlight-sabun-cuci-piring-210ml",
+    "name": "Sunlight Sabun cuci piring (Kemasan Kecil) 210 ml",
+    "description": "Sunlight\nSabun cuci piring\nKemasan pouch 210 ml\nIsi 24 pouch per karton\n\n\nCatatan\nDisarankan mencapai bobot minimum 300 kg sewaktu memesan.\nTiap nomor pesanan bisa terdiri dari satu produk atau lebih.\n\nContoh \nOrder No #1500 terdiri dari \n1. Minyak Goreng Sovia @2l sebanyak 2 dus (1 dus isi 6 pcs)\n2. Gula Rose Brand @1kg sebanyak 1 dus (1 dus isi 20 pcs)\n3. Beras Sari Padi @50kg sebanyak 5 karung",
+    "sku": "Q-SSCP-210",
+    "price": 110000,
+    "weight": 6,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "bintara,Branded",
+    "discount": null,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/sunlight-sabun-cuci-piring-210ml.webp?updatedAt=1628769993985"
+    ]
+  },
+  {
+    "slug": "indomie-mi-goreng-instan-75gr-40pcs",
+    "name": "INDOMIE Mi Goreng Instan 75 gram",
+    "description": "Mi Instan \nMerk Indomie \nMi Goreng \nkemasan 75 gram \nDalam Karton 40 pcs",
+    "sku": "36892",
+    "price": 103000,
+    "weight": 3,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "bintara,Branded",
+    "discount": null,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/indomie-mi-goreng-instan-75gr-40pcs.jpeg?updatedAt=1628770182244"
+    ]
+  },
+  {
+    "slug": "garam-yodium-cap-kapal",
+    "name": "Garam Yodium Cap Kapal",
+    "description": "Garam Yodium\nCap Kapal\nDikemas per 250 gram/500 gram\nDalam satuan 5 kg",
+    "sku": "Q-GYCK",
+    "price": 47825,
+    "weight": 5,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "bintara,Non Brand",
+    "discount": 28,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/garam-yodium-cap-kapal.jpeg?updatedAt=1628770372079"
+    ]
+  },
+  {
+    "slug": "kornetku-corned-sapi-200gr",
+    "name": "KORNETKU Corned Sapi 200 gram",
+    "description": "Kornet Sapi \nKemasan Kaleng 200 gram \nMerk Kornetku \ndalam kemasan karton 24 pcs",
+    "sku": "1",
+    "price": 769705,
+    "weight": 5,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "bintara,Branded",
+    "discount": 3,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/kornetku-corned-sapi-200gr.jpeg?updatedAt=1628770525667"
+    ]
   }
 ]
