@@ -662,7 +662,7 @@ model PromoEmployer {
   phone String?
 
   // relations
-  PromoEmployee PromoEmployee[]
+  promoEmployees PromoEmployee[]
 
   @@map(name: "promo_employer")
 }
