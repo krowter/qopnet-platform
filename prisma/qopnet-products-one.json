@@ -118,5 +118,71 @@
     "images": [
       "https://ik.imagekit.io/qopnetlabs/products/beras-kristal-super-kepala-anak-raja-5kg.webp?updatedAt=1628689457217"
     ]
+  },
+  {
+    "slug": "kopi-arabica-1kg",
+    "name": "Kopi Arabica 1 kg",
+    "description": "Arabica Toraja\nBlended Grade (A & B)\nKemasan 1 kg Bubuk/Roasted Bean\n\nCatatan\nDisarankan mencapai bobot minimum 300 kg sewaktu memesan.\nTiap nomor pesanan bisa terdiri dari satu produk atau lebih.\n\nContoh\nOrder No #1500 terdiri dari\n1. Minyak Goreng Sovia @2l sebanyak 2 dus (1 dus isi 6 pcs)\n2. Gula Rose Brand @1kg sebanyak 1 dus (1 dus isi 20 pcs)\n3. Beras Sari Padi @50kg sebanyak 5 karung",
+    "sku": "Q-KA-1",
+    "price": 85000,
+    "weight": 1,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "bintara",
+    "discount": null,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/kopi-arabica-1kg.jpeg?updatedAt=1628751228361"
+    ]
+  },
+  {
+    "slug": "minyak-goreng-fortune-1lt",
+    "name": "Minyak Goreng Fortune 1 liter",
+    "description": "Fortune\n\nUkuran 1 liter\n\nKemasan Bantal (Refill)\n\n12 pcs/box\n\nCatatan\nDisarankan mencapai bobot minimum 300 kg sewaktu memesan.\nTiap nomor pesanan bisa terdiri dari satu produk atau lebih.\n\nContoh \nOrder No #1500 terdiri dari \n1. Minyak Goreng Sovia @2l sebanyak 2 dus (1 dus isi 6 pcs)\n2. Gula Rose Brand @1kg sebanyak 1 dus (1 dus isi 20 pcs)\n3. Beras Sari Padi @50kg sebanyak 5 karung",
+    "sku": "Q-MGF-1",
+    "price": 154000,
+    "weight": 12,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "bintara,Branded",
+    "discount": null,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/minyak-goreng-fortune-1lt.webp?updatedAt=1628752136345"
+    ]
+  },
+  {
+    "slug": "daging-sapi-topside-import-1kg",
+    "name": "Daging Sapi Topside Import 1 kg",
+    "description": "Daging sapi topside import dari Brazil ukuran 1 kg",
+    "sku": "Q-DSTI-1",
+    "price": 96000,
+    "weight": 1,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "cipinang",
+    "discount": null,
+    "weightUnit": "KG",
+    "images": []
+  },
+  {
+    "slug": "gula-aren-murni-1kg",
+    "name": "Gula Aren Murni 1 kg",
+    "description": "Gula aren organik tanpa campuran\n\nukuran 1 kg\n\nCatatan\nDisarankan mencapai bobot minimum 300 kg sewaktu memesan.\nTiap nomor pesanan bisa terdiri dari satu produk atau lebih.\n\nContoh\nOrder No #1500 terdiri dari\n1. Minyak Goreng Sovia @2l sebanyak 2 dus (1 dus isi 6 pcs)\n2. Gula Rose Brand @1kg sebanyak 1 dus (1 dus isi 20 pcs)\n3. Beras Sari Padi @50kg sebanyak 5 karung",
+    "sku": "Q-GAM-1",
+    "price": 27500,
+    "weight": 1,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "cipinang",
+    "discount": null,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/gula-aren-murni-1kg.jpeg?updatedAt=1628753055679"
+    ]
   }
 ]
