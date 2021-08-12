@@ -30,6 +30,9 @@ import paymentRecordsData from './data/payments-records.json'
 import qopnetProductsData from './qopnet-products.json'
 import qopnetOneProductsData from './qopnet-products-one.json'
 
+import promoEmployerData from './data/qopnet-promo-employer.json'
+import promoEmployeeData from './data/qopnet-promo-employee.json'
+
 // -----------------------------------------------------------------------------
 
 // Check env
@@ -72,6 +75,9 @@ async function deleteEverything() {
 
   await prisma.paymentMethod.deleteMany()
   await prisma.paymentRecord.deleteMany()
+
+  await prisma.promoEmployee.deleteMany()
+  await prisma.promoEmployer.deleteMany()
 }
 
 // -----------------------------------------------------------------------------
@@ -283,6 +289,25 @@ async function seedAnekaBusaProducts() {
   })
 }
 
+async function seedPromoEmployee() {
+  const employer = await prisma.promoEmployer.create({
+    data: promoEmployerData[0],
+  })
+  
+
+  const employees = await prisma.promoEmployee.createMany({
+    // @ts-ignore
+    data: promoEmployeeData.map((employee) => {
+      employee.employerId = employer.id
+      // @ts-ignore
+      employee.birthDate = new Date(employee.birthDate)
+      return employee
+    }),
+  })
+
+  console.log({ employees })
+}
+
 /**
  * -----------------------------------------------------------------------------
  * Main function to Prisma seed
@@ -304,6 +329,8 @@ async function main() {
   await seedCourierVehicles()
   await seedPaymentMethods()
   await seedPaymentRecords()
+
+  await seedPromoEmployee()
 }
 
 main()
