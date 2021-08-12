@@ -648,8 +648,8 @@ model PromoEmployee {
   zip           String?
 
   // relations
-  promoEmployerId String?
-  promoEmployer   PromoEmployer? @relation(fields: [promoEmployerId], references: [id])
+  employerId String?
+  employer   PromoEmployer? @relation(fields: [employerId], references: [id])
 
   @@map(name: "promo_employees")
 }
@@ -662,7 +662,7 @@ model PromoEmployer {
   phone String?
 
   // relations
-  promoEmployees PromoEmployee[]
+  employees PromoEmployee[]
 
-  @@map(name: "promo_employer")
+  @@map(name: "promo_employers")
 }
