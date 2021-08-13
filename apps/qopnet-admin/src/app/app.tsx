@@ -15,6 +15,7 @@ import {
   SupplierProductAddPage,
   SupplierProductEditPage,
   MerchantsPage,
+  BusinessOrdersPage,
   SignInPage,
   NotFoundPage,
 } from './pages'
@@ -83,6 +84,7 @@ export const App = () => {
           component={SupplierProductEditPage}
         />
         <Route exact path="/merchants" component={MerchantsPage} />
+        <Route exact path="/businessOrders" component={BusinessOrdersPage} />
         <Route exact path="/about" component={AboutPage} />
         <Route exact path="/profiles" component={Profiles} />
 
