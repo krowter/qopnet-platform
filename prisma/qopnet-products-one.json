@@ -269,5 +269,90 @@
     "images": [
       "https://ik.imagekit.io/qopnetlabs/products/kornetku-corned-sapi-200gr.jpeg?updatedAt=1628770525667"
     ]
+  },
+  {
+    "slug": "minyak-goreng-harumas-1lt",
+    "name": "Minyak Goreng HARUMAS 1 liter",
+    "description": "Minyak Goreng \nKemasan 1 liter \nMerk Harumas \ndalam kemasan karton isi 12 pcs",
+    "sku": "Q-MGH-1",
+    "price": 151916,
+    "weight": 2,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "bintara,Branded",
+    "discount": 3,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/minyak-goreng-harumas-1lt.jpeg?updatedAt=1628838275873"
+    ]
+  },
+  {
+    "slug": "mi-instan-indomie-75gr",
+    "name": "Mi Instan INDOMIE 75 gram",
+    "description": "Mi Instan \nMerk Indomie Rasa Kaldu Ayam \nkemasan 75 gram \nDalam Karton 40 pcs",
+    "sku": "Q-MII-75",
+    "price": 90024,
+    "weight": 3,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "bintara,Branded",
+    "discount": 3,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/mi-instan-indomie-75gr.jpeg?updatedAt=1628838518706"
+    ]
+  },
+  {
+    "slug": "sardines-gaga-kemasan-besar-425gr",
+    "name": "Sardines GAGA kemasan besar 425 gram",
+    "description": "Sardines \nKemasan Kaleng \nMerk Gaga Kemasan 425 gram \ndalam karton isi 24 pcs",
+    "sku": "Q-SG-425",
+    "price": 437517,
+    "weight": 11,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "bintara,Branded",
+    "discount": 3,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/sardines-gaga-kemasan-besar-425gr.jpeg?updatedAt=1628838678991"
+    ]
+  },
+  {
+    "slug": "sardines-kemasan-kecil-gaga-155gr",
+    "name": "Sardines Kemasan Kecil GAGA 155 gram",
+    "description": "Sardines \nKemasan Kaleng \nMerk Gaga Kemasan 155 gram \ndalam karton isi 60 pcs",
+    "sku": "Q-SG-155",
+    "price": 460135,
+    "weight": 10,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "bintara,Branded",
+    "discount": 3,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/sardines-kemasan-kecil-gaga-155gr.jpeg?updatedAt=1628838789865"
+    ]
+  },
+  {
+    "slug": "daging-ayam-kemasan-palet-100pcs",
+    "name": "Daging Ayam (Kemasan Palet) isi 100 pcs",
+    "description": "Daging Ayam Beku\n\nPotongan 0,9 kg sd 1 kg\nDalam ukuran 1 koli isi 100 pcs\n\nKarkas kosong\nNon parting",
+    "sku": "Q-DAKP-100",
+    "price": 3069000,
+    "weight": 100,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "Non Brand,pasar minggu",
+    "discount": 3,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/daging-ayam-kemasan-palet-100pcs.jpeg?updatedAt=1628838999329"
+    ]
   }
 ]
