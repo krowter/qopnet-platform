@@ -607,7 +607,7 @@ model PromoSubmission {
   phone      String?
   email      String?
   birthPlace String?
-  birthDate  DateTime?
+  birthDate  DateTime? @db.Date
   nationalId String?
 
   // Address
@@ -637,7 +637,7 @@ model PromoEmployee {
   phone      String? // required for financing
   email      String? // required for financing
   birthPlace String?
-  birthDate  DateTime? // required for financing
+  birthDate  DateTime? @db.Date // required for financing
   nationalId String? // KTP
 
   // Address
