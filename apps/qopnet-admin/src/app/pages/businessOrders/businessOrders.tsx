@@ -3,7 +3,6 @@ import {
   Box,
   Flex,
   Heading,
-  Link,
   SimpleGrid,
   Spinner,
   Table,
@@ -20,43 +19,48 @@ import {
 } from '@chakra-ui/react'
 
 import { Merchant } from '@qopnet/shared-types'
-import { Header } from '../components'
-import { DefaultLayout } from '../layouts'
-import { useSWR } from '../utils/swr'
+import { Header } from '../../components'
+import { DefaultLayout } from '../../layouts'
+import { useSWR } from '../../utils/swr'
+import { Link } from 'react-router-dom'
 
-export const MerchantsPage = () => {
-  const { data, error } = useSWR('/api/merchants')
-  const { merchants } = data || {}
+export const BusinessOrdersPage = () => {
+  const { data, error } = useSWR('/api/business/orders')
+  const { businessOrders } = data || {}
 
   return (
     <DefaultLayout>
       <Flex alignItems="center">
         <Header width="100%">
           <Heading as="h1" size="md">
-            Semua Merchant
+            Semua Pesanan
           </Heading>
 
           <Text ml={5} fontWeight={500}>
-            {merchants.length} merchant
+            {businessOrders?.length ?? 0} pesanan
           </Text>
         </Header>
       </Flex>
       {error && (
         <Box px={5} py={3}>
-          Gagal memuat supplier
+          Gagal memuat semua pesanan bisnis
         </Box>
       )}
-      {!merchants && !error && (
+      {!businessOrders && !error && (
         <Box px={5} py={3}>
           <Spinner color="orange.500" />
         </Box>
       )}
-      {merchants?.length && <MerchantRows merchants={merchants} />}
+      {businessOrders && <BusinessOrdersRows businessOrders={businessOrders} />}
     </DefaultLayout>
   )
 }
 
-export const MerchantRows = ({ merchants }: { merchants: Merchant[] }) => {
+export const BusinessOrdersRows = ({
+  businessOrders,
+}: {
+  businessOrders: any
+}) => {
   const bg = useColorModeValue('gray.50', 'gray.900')
   const border = useColorModeValue('gray.200', 'gray.700')
 
@@ -71,34 +75,36 @@ export const MerchantRows = ({ merchants }: { merchants: Merchant[] }) => {
         bg={bg}
         borderBottom="1px solid gray"
         borderColor={border}
-        gridTemplateColumns="50px 100px 100px 1fr"
+        gridTemplateColumns="50px 100px 100px 100px 1fr"
       >
         <Text fontWeight={700}>No</Text>
         <Text fontWeight={700}>Avatar</Text>
         <Text fontWeight={700}>Handle</Text>
         <Text fontWeight={700}>Nama</Text>
+        <Text fontWeight={700}>Status</Text>
       </SimpleGrid>
-      {merchants?.length &&
-        merchants.map((merchant: Merchant, index: number) => {
+      {businessOrders?.length &&
+        businessOrders.map((businessOrder: any, index: number) => {
           return (
             <SimpleGrid
               spacingX={3}
               columns={{ base: 1, md: 3 }}
               as={Link}
-              key={`${merchant.id}`}
-              to={`/merchants/${merchant.handle}`}
+              key={`${businessOrder.id}`}
+              to={`/business/orders/${businessOrder.id}`}
               w="100%"
               px={5}
               py={3}
               bg={bg}
               borderBottom="1px solid gray"
               borderColor={border}
-              gridTemplateColumns="50px 100px 100px 1fr"
+              gridTemplateColumns="50px 100px 100px 100px 1fr"
             >
               <Text>#{index}</Text>
-              <Avatar size="xs" name={merchant.name as string} />
-              <Text>{merchant.handle}</Text>
-              <Text>{merchant.name}</Text>
+              <Avatar size="xs" name={businessOrder.owner.name as string} />
+              <Text>{businessOrder.owner.handle}</Text>
+              <Text>{businessOrder.owner.name}</Text>
+              <Text>{businessOrder.status}</Text>
             </SimpleGrid>
           )
         })}

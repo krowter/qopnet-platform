@@ -33,8 +33,9 @@ import { useEffect } from 'react'
  * Shopping Cart
  *
  * Even though this is the Cart page,
- * the API is using /api/business/orders/:businessOrderId
- * Because BusinessCart is just a draft BusinessOrder.
+ * the API is using /api/business/orders/mycart
+ * or similar with /api/business/orders/:businessOrderId
+ * because BusinessCart is just a draft BusinessOrder
  */
 export const CartPage = () => {
   const { data, error } = useSWR('/api/business/orders/my/cart')

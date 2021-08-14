@@ -4,9 +4,12 @@
 import { useState } from 'react'
 import NextLink from 'next/link'
 import NextImage from 'next/image'
+import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
 import { SupplierProduct, Supplier, Profile, Address } from '@prisma/client'
 import { Decimal } from '@prisma/client/runtime'
+import { useUser } from 'use-supabase'
+import { mutate } from 'swr'
 import {
   Box,
   Button,
@@ -491,7 +494,10 @@ export const SupplierProductCartModifier = ({
   product: SupplierProduct
   putToAPI: any
 }) => {
+  const router = useRouter()
+  const user = useUser()
   const toast = useToast()
+
   const productMinOrder = product?.minOrder || 1
   const productStock = product?.stock || 100
 
@@ -518,33 +524,43 @@ export const SupplierProductCartModifier = ({
   )
 
   const handleAddToCart = async () => {
-    try {
-      setLoading(true)
-      const requestBodyData = {
-        id: product.id,
-        quantity: productQuantity,
+    if (user) {
+      // If logged in
+      try {
+        setLoading(true)
+        const requestBodyData = {
+          id: product.id,
+          quantity: productQuantity,
+        }
+        const response = await putToAPI(
+          '/api/business/orders/my/cart',
+          requestBodyData
+        )
+        if (response) {
+          setJustAddedToCart(true)
+          // Revalidate my cart data so it won't be too long to load
+          // By telling all SWRs with this key to revalidate
+          mutate('/api/business/orders/my/cart')
+          toast({
+            title: `Menambahkan produk ke keranjang`,
+            description: `${productQuantity} × ${product.name}`,
+          })
+        } else {
+          throw new Error('Add to cart failed')
+        }
+      } catch (error) {
+        console.error({ message: 'Add to cart failed', error })
+        toast({
+          title: `Gagal menambah produk ke keranjang`,
+          status: 'error',
+        })
+      } finally {
+        setLoading(false)
       }
-      const response = await putToAPI(
-        '/api/business/orders/my/cart',
-        requestBodyData
-      )
-      if (response) {
-        setJustAddedToCart(true)
-      } else {
-        throw new Error('Add to cart failed')
-      }
-      toast({
-        title: `Menambahkan produk ke keranjang`,
-        description: `${productQuantity} × ${product.name}`,
-      })
-    } catch (error) {
-      console.error({ message: 'Add to cart failed', error })
-      toast({
-        title: `Gagal menambah produk ke keranjang`,
-        status: 'error',
-      })
-    } finally {
-      setLoading(false)
+    } else {
+      // If not logged in
+      router.push(`/signin`)
+      toast({ title: `Silakan masuk akun dahulu` })
     }
   }
 
