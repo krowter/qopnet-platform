@@ -592,10 +592,20 @@ export const getOneBusinessOrder = async (req, res) => {
       await prisma.businessOrder.findFirst({
         where: { id: businessOrderParam },
         include: {
-          owner: true,
-          businessOrderItems: true,
-          shipmentAddress: true,
-          paymentMethod: true,
+          owner: {
+            include: {
+              user: true,
+              addresses: true,
+            },
+          },
+          businessOrderItems: {
+            include: {
+              supplier: true,
+            },
+          },
+          shipmentAddress: true, // One address
+          paymentMethod: true, // BCA / COD
+          paymentRecord: true, // Detail transfer
         },
       })
     if (!businessOrder) throw 'Business order by param is not found'
