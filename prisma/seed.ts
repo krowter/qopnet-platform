@@ -90,11 +90,13 @@ async function createSupplierProductsFromJSON({
     return product
   })
 
-  // Create many supplier products
-  await prisma.supplierProduct.createMany({
+  // Create Qopnet supplier products
+  const qopnetSupplierProducts = await prisma.supplierProduct.createMany({
     data: data,
     skipDuplicates: true,
   })
+
+  console.log({ qopnetSupplierProducts })
 }
 
 async function createSupplierProductsFromURL({
@@ -126,10 +128,12 @@ async function createSupplierProductsFromURL({
   })
 
   // create supplierProduct -- aneka busa
-  await prisma.supplierProduct.createMany({
+  const anekaBusaSupplierProducts = await prisma.supplierProduct.createMany({
     data: products,
     skipDuplicates: true,
   })
+
+  console.log({ anekaBusaSupplierProducts })
 }
 
 // -----------------------------------------------------------------------------
@@ -269,17 +273,13 @@ async function seedQopnetProducts() {
 }
 
 async function seedAnekaBusaProducts() {
-  const productsUrl =
-    'https://gist.github.com/qopnetlabs/414f0a5e3404e6555165ccc67ff79b60/raw'
-
-  const supplier = {
-    id: 'ckrzfccqz0001swpjglh6i6nl',
-  }
-
-  // start creating supplierData
   await createSupplierProductsFromURL({
-    productsUrl,
-    supplier,
+    productsUrl:
+      'https://gist.github.com/qopnetlabs/414f0a5e3404e6555165ccc67ff79b60/raw',
+    supplier: {
+      id: 'ckrzfccqz0001swpjglh6i6nl',
+      handle: 'anekabusa',
+    },
   })
 }
 
