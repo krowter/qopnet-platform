@@ -199,11 +199,11 @@ export const SidebarLinks = () => {
         <SidebarLink to="/merchants/invoices">Merchant Invoices</SidebarLink> */}
       </Flex>
 
-      <SidebarNestedLink name="businessOrders" to="/businessOrders">
+      <SidebarNestedLink name="business-orders" to="/business/orders">
         Pesanan Bisnis
       </SidebarNestedLink>
       <Flex flexDirection="column" alignItems="flex-start" px={4}>
-        <SidebarLink name="businessOrders" to="/businessOrders">
+        <SidebarLink name="business-orders" to="/business/orders">
           Semua Pesanan
         </SidebarLink>
         {/* <SidebarLink to="/merchants/products">Merchant Products</SidebarLink>

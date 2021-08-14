@@ -3,7 +3,6 @@ import {
   Box,
   Flex,
   Heading,
-  Link,
   SimpleGrid,
   Spinner,
   Table,
@@ -23,6 +22,7 @@ import { Merchant } from '@qopnet/shared-types'
 import { Header } from '../../components'
 import { DefaultLayout } from '../../layouts'
 import { useSWR } from '../../utils/swr'
+import { Link } from 'react-router-dom'
 
 export const BusinessOrdersPage = () => {
   const { data, error } = useSWR('/api/business/orders')
@@ -92,7 +92,7 @@ export const BusinessOrdersRows = ({
             columns={{ base: 1, md: 3 }}
             as={Link}
             key={`${businessOrder.id}`}
-            to={`/business/order/${businessOrder.owner.handle}`}
+            to={`/business/orders/${businessOrder.id}`}
             w="100%"
             px={5}
             py={3}
