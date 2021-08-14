@@ -20,9 +20,9 @@ import {
 } from '@chakra-ui/react'
 
 import { Merchant } from '@qopnet/shared-types'
-import { Header } from '../components'
-import { DefaultLayout } from '../layouts'
-import { useSWR } from '../utils/swr'
+import { Header } from '../../components'
+import { DefaultLayout } from '../../layouts'
+import { useSWR } from '../../utils/swr'
 
 export const BusinessOrdersPage = () => {
   const { data, error } = useSWR('/api/business/orders')
