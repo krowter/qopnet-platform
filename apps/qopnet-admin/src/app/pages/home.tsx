@@ -26,7 +26,7 @@ export const HomePage = () => {
         </Stack>
 
         <Stack id="home-business" spacing={5}>
-          <Heading as="h2" size="lg">
+          {/* <Heading as="h2" size="lg">
             Bisnis
           </Heading>
           <SimpleGrid columns={2} spacing={5} minChildWidth="350px">
@@ -43,18 +43,18 @@ export const HomePage = () => {
               amount={320500000}
               to="/balance"
             />
-          </SimpleGrid>
+          </SimpleGrid> */}
         </Stack>
 
         <Stack id="home-database">
-          <Heading as="h2" size="lg">
+          {/* <Heading as="h2" size="lg">
             Database
           </Heading>
           <SimpleGrid columns={2} spacing={5} minChildWidth="300px">
             <DashboardCard name="Nama" amount={123} to="/" />
             <DashboardCard name="Nama" amount={123} to="/" />
-            <DashboardCard name="Nama" amount={123} to="/" />
-          </SimpleGrid>
+            <DashboardCard name="Nama" amount={123} to="/" /> 
+          </SimpleGrid>*/}
         </Stack>
       </HomeLayout>
     </DefaultLayout>
