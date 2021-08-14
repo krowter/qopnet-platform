@@ -27,8 +27,8 @@ import {
 import cuid from 'cuid'
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import { Link } from 'react-router-dom'
-
 import { useParams, useHistory } from 'react-router'
+import { formatDateTime } from '@qopnet/util-format'
 
 import { DefaultLayout } from '../../layouts'
 import { useSWR } from '../../utils/swr'
@@ -38,9 +38,8 @@ import { Icon, formatPrice } from '@qopnet/qopnet-ui'
 export const BusinessOrdersParamPage = () => {
   const sidebar = useDisclosure()
   const { businessOrdersParam }: { businessOrdersParam: string } = useParams()
-  const { data: { businessOrders = [], message } = [], error } = useSWR(
-    `/api/business/orders/${businessOrdersParam}`
-  )
+  const { data, error } = useSWR(`/api/business/orders/${businessOrdersParam}`)
+  const { businessOrderParam, businessOrder, message } = data || {}
 
   return (
     <DefaultLayout>
@@ -87,22 +86,13 @@ export const BusinessOrdersParamPage = () => {
             >
               <BreadcrumbItem>
                 <BreadcrumbLink as={Link} to="/suppliers">
-                  Supplier
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-
-              <BreadcrumbItem>
-                <BreadcrumbLink
-                  as={Link}
-                  to={`/business/orders/${businessOrdersParam}`}
-                >
-                  {/* {supplierProduct?.supplier?.handle} */}
+                  Pesanan Bisnis
                 </BreadcrumbLink>
               </BreadcrumbItem>
 
               <BreadcrumbItem>
                 <BreadcrumbLink as={Link} to="/suppliers/products">
-                  Semua Produk
+                  Daftar Pesanan
                 </BreadcrumbLink>
               </BreadcrumbItem>
 
@@ -211,7 +201,7 @@ export const BusinessOrdersParamPage = () => {
                 {' '}
                 {message ? message : 'Gagal memuat item pesanan'}
               </Box>
-            ) : businessOrders.length === 0 ? (
+            ) : !businessOrder ? (
               <Box px={5} py={3}>
                 <Spinner color="orange.500" />
               </Box>
@@ -254,36 +244,56 @@ export const BusinessOrdersParamPage = () => {
                       )}
                     </Flex>
                   )} */}
-                  {/* <Text> Kode SKU: {businessOrders?.sku}</Text>
-                  <Text>Nama Produk: {businessOrders?.name}</Text>
-                  <Text> Harga: Rp. {formatPrice(businessOrders?.price)}</Text> */}
-                  {/* <Text>
+                  <Text> Param: {businessOrderParam}</Text>
+                  <Text> Id: {businessOrder?.id}</Text>
+                  <Text>Pemilik: {businessOrder?.ownerId}</Text>
+                  <Text>
                     {' '}
-                    Harga Minimum: Rp. {supplierProduct?.priceMin ?? '-'}
+                    Alamat Pengiriman: {businessOrder?.shipmentAddressId}
                   </Text>
                   <Text>
                     {' '}
-                    Harga Maximum: Rp. {supplierProduct?.priceMax ?? '-'}
-                  </Text> */}
-                  {/* <Text>
-                    {' '}
-                    Minimum Order: {supplierProduct?.minOrder ?? '-'}
-                  </Text>
-                  <Text> Berat: {supplierProduct?.weight ?? '-'} Kg</Text>
-                  <Text>
-                    {' '}
-                    Satuan Berat: {supplierProduct?.weightUnit ?? 'Kg'}
+                    Kurir Pengiriman: {businessOrder?.shipmentCourierId}
                   </Text>
                   <Text>
                     {' '}
-                    Detail Berat: {supplierProduct?.weightDetails ?? ''}
+                    Kendaraan Kurir Pengiriman:{' '}
+                    {businessOrder?.shipmentCourierVehicleId}
                   </Text>
                   <Text>
                     {' '}
-                    Dimensi: {supplierProduct?.dimension?.width ?? ''}
+                    Metode Pembayaran: {businessOrder?.paymentMethodId}
                   </Text>
-                  <Text> Stok: {supplierProduct.stock ?? ''} pcs</Text>
-                  <Text>Deskripsi: {supplierProduct?.description ?? ''}</Text> */}
+                  <Text>
+                    {' '}
+                    Catatan Pembayaran: {businessOrder?.paymentRecordId}
+                  </Text>
+                  <Text> Total Barang: {businessOrder?.totalItems}</Text>
+                  <Text> Total Berat: {businessOrder?.totalWeight}</Text>
+                  <Text>
+                    {' '}
+                    Total Harga Pesanan:{' '}
+                    {formatPrice(businessOrder?.totalWeight)}
+                  </Text>
+                  <Text>
+                    {' '}
+                    Total Harga Pengiriman:{' '}
+                    {formatPrice(businessOrder?.totalShippingCost)}
+                  </Text>
+                  <Text>
+                    {' '}
+                    Total Potongan Harga Pengiriman:{' '}
+                    {formatPrice(businessOrder?.totalShippingDiscount)}
+                  </Text>
+                  <Text>
+                    {' '}
+                    Total Pembayaran: {formatPrice(businessOrder?.totalPayment)}
+                  </Text>
+                  <Text>
+                    {' '}
+                    Total Tagihan Pembayaran:{' '}
+                    {formatPrice(businessOrder?.totalBillPayment)}
+                  </Text>
                 </Stack>
               </VStack>
             )}
@@ -298,19 +308,19 @@ export const BusinessOrdersParamPage = () => {
             display={{ base: 'none', lg: 'unset' }}
           >
             <Box pb={3} justifyContent="center">
-              {businessOrders?.id}
+              {businessOrder?.id}
             </Box>
 
             <Divider />
 
             <Flex pt={5} justifyContent="space-between" alignItems="center">
               <Box>Toko Supplier </Box>
-              <Box>{businessOrders?.supplierId ?? ''}</Box>
+              <Box>{businessOrder?.supplierId ?? ''}</Box>
             </Flex>
 
             <Flex pt={5} justifyContent="space-between" alignItems="center">
               <Box>Pemilik </Box>
-              <Box>{businessOrders?.ownerId ?? ''}</Box>
+              <Box>{businessOrder?.ownerId ?? ''}</Box>
             </Flex>
 
             <Flex pt={3} justifyContent="space-between" alignItems="center">
@@ -332,12 +342,12 @@ export const BusinessOrdersParamPage = () => {
 
             <Flex pt={5} justifyContent="space-between" alignItems="center">
               <Box>Dijual mulai </Box>
-              <Box>{businessOrders.createdAt}</Box>
+              <Box>{formatDateTime(businessOrder?.createdAt)}</Box>
             </Flex>
 
             <Flex pt={5} justifyContent="space-between" alignItems="center">
               <Box>Terakhir diubah</Box>
-              <Box>{businessOrders.updatedAt}</Box>
+              <Box>{formatDateTime(businessOrder?.updatedAt)}</Box>
             </Flex>
           </Box>
         </Grid>
