@@ -28,8 +28,6 @@ export const BusinessOrdersPage = () => {
   const { data, error } = useSWR('/api/business/orders')
   const { businessOrders } = data || {}
 
-  if (error) return <div>Gagal memuat daftar pesanan</div>
-  if (!businessOrders) return <div>Memuat daftar pesanan...</div>
   return (
     <DefaultLayout>
       <Flex alignItems="center">
@@ -39,13 +37,13 @@ export const BusinessOrdersPage = () => {
           </Heading>
 
           <Text ml={5} fontWeight={500}>
-            {businessOrders.length} pesanan
+            {businessOrders?.length ?? 0} pesanan
           </Text>
         </Header>
       </Flex>
       {error && (
         <Box px={5} py={3}>
-          Gagal memuat supplier
+          Gagal memuat semua pesanan bisnis
         </Box>
       )}
       {!businessOrders && !error && (
@@ -85,30 +83,31 @@ export const BusinessOrdersRows = ({
         <Text fontWeight={700}>Nama</Text>
         <Text fontWeight={700}>Status</Text>
       </SimpleGrid>
-      {businessOrders.map((businessOrder: any, index: number) => {
-        return (
-          <SimpleGrid
-            spacingX={3}
-            columns={{ base: 1, md: 3 }}
-            as={Link}
-            key={`${businessOrder.id}`}
-            to={`/business/orders/${businessOrder.id}`}
-            w="100%"
-            px={5}
-            py={3}
-            bg={bg}
-            borderBottom="1px solid gray"
-            borderColor={border}
-            gridTemplateColumns="50px 100px 100px 100px 1fr"
-          >
-            <Text>#{index}</Text>
-            <Avatar size="xs" name={businessOrder.owner.name as string} />
-            <Text>{businessOrder.owner.handle}</Text>
-            <Text>{businessOrder.owner.name}</Text>
-            <Text>{businessOrder.status}</Text>
-          </SimpleGrid>
-        )
-      })}
+      {businessOrders?.length &&
+        businessOrders.map((businessOrder: any, index: number) => {
+          return (
+            <SimpleGrid
+              spacingX={3}
+              columns={{ base: 1, md: 3 }}
+              as={Link}
+              key={`${businessOrder.id}`}
+              to={`/business/orders/${businessOrder.id}`}
+              w="100%"
+              px={5}
+              py={3}
+              bg={bg}
+              borderBottom="1px solid gray"
+              borderColor={border}
+              gridTemplateColumns="50px 100px 100px 100px 1fr"
+            >
+              <Text>#{index}</Text>
+              <Avatar size="xs" name={businessOrder.owner.name as string} />
+              <Text>{businessOrder.owner.handle}</Text>
+              <Text>{businessOrder.owner.name}</Text>
+              <Text>{businessOrder.status}</Text>
+            </SimpleGrid>
+          )
+        })}
     </Box>
   )
 }
