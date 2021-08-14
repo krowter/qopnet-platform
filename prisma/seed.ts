@@ -33,7 +33,7 @@ import qopnetOneProductsData from './qopnet-products-one.json'
 // -----------------------------------------------------------------------------
 
 // Check env
-console.log({ env: process.env.NX_NODE_ENV })
+console.info({ env: process.env.NX_NODE_ENV })
 
 // Get storageUrl from env
 const storageUrl = process.env.NX_SUPABASE_URL
@@ -53,7 +53,7 @@ const qopnetlabsUserId =
 // -----------------------------------------------------------------------------
 
 async function deleteEverything() {
-  console.log({
+  console.info({
     message: 'Delete everything',
   })
 
@@ -96,7 +96,7 @@ async function createSupplierProductsFromJSON({
     skipDuplicates: true,
   })
 
-  console.log({ qopnetSupplierProducts })
+  console.info({ qopnetSupplierProducts })
 }
 
 async function createSupplierProductsFromURL({
@@ -133,7 +133,7 @@ async function createSupplierProductsFromURL({
     skipDuplicates: true,
   })
 
-  console.log({ anekaBusaSupplierProducts })
+  console.info({ anekaBusaSupplierProducts })
 }
 
 // -----------------------------------------------------------------------------
@@ -150,7 +150,7 @@ const seedUsers = async () => {
       }
     }),
   })
-  console.log({ users })
+  console.info({ users })
 }
 
 const seedProfiles = async () => {
@@ -164,21 +164,21 @@ const seedProfiles = async () => {
       }
     }),
   })
-  console.log({ profiles })
+  console.info({ profiles })
 }
 
 const seedAddresses = async () => {
   const addresses = await prisma.address.createMany({
     data: addressesData,
   })
-  console.log({ addresses })
+  console.info({ addresses })
 }
 
 const seedSuppliers = async () => {
   const suppliers = await prisma.supplier.createMany({
     data: suppliersData,
   })
-  console.log({ suppliers })
+  console.info({ suppliers })
 }
 
 const seedBusinessOrder = async () => {
@@ -187,14 +187,14 @@ const seedBusinessOrder = async () => {
     // @ts-ignore
     data: businessOrdersData,
   })
-  console.log({ businessOrders })
+  console.info({ businessOrders })
 }
 
 const seedCouriers = async () => {
   const couriers = await prisma.courier.createMany({
     data: couriersData,
   })
-  console.log({ couriers })
+  console.info({ couriers })
 }
 
 const seedCourierVehicles = async () => {
@@ -235,7 +235,7 @@ const seedCourierVehicles = async () => {
     }),
   })
 
-  console.log({
+  console.info({
     courierVehiclesDeliveree,
     courierVehiclesLalamove,
     courierVehiclesMasKargo,
@@ -248,14 +248,14 @@ const seedPaymentMethods = async () => {
     // @ts-ignore
     data: paymentMethodsData,
   })
-  console.log({ paymentMethods })
+  console.info({ paymentMethods })
 }
 
 const seedPaymentRecords = async () => {
   const paymentRecords = await prisma.paymentRecord.createMany({
     data: paymentRecordsData,
   })
-  console.log({ paymentRecords })
+  console.info({ paymentRecords })
 }
 
 // -----------------------------------------------------------------------------
