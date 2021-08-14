@@ -28,8 +28,6 @@ export const MerchantsPage = () => {
   const { data, error } = useSWR('/api/merchants')
   const { merchants } = data || {}
 
-  if (error) return <div>Gagal memuat para merchant</div>
-  if (!merchants) return <div>Memuat para merchant...</div>
   return (
     <DefaultLayout>
       <Flex alignItems="center">
@@ -53,7 +51,7 @@ export const MerchantsPage = () => {
           <Spinner color="orange.500" />
         </Box>
       )}
-      {merchants && <MerchantRows merchants={merchants} />}
+      {merchants?.length && <MerchantRows merchants={merchants} />}
     </DefaultLayout>
   )
 }
@@ -80,29 +78,30 @@ export const MerchantRows = ({ merchants }: { merchants: Merchant[] }) => {
         <Text fontWeight={700}>Handle</Text>
         <Text fontWeight={700}>Nama</Text>
       </SimpleGrid>
-      {merchants.map((merchant: Merchant, index: number) => {
-        return (
-          <SimpleGrid
-            spacingX={3}
-            columns={{ base: 1, md: 3 }}
-            as={Link}
-            key={`${merchant.id}`}
-            to={`/merchants/${merchant.handle}`}
-            w="100%"
-            px={5}
-            py={3}
-            bg={bg}
-            borderBottom="1px solid gray"
-            borderColor={border}
-            gridTemplateColumns="50px 100px 100px 1fr"
-          >
-            <Text>#{index}</Text>
-            <Avatar size="xs" name={merchant.name as string} />
-            <Text>{merchant.handle}</Text>
-            <Text>{merchant.name}</Text>
-          </SimpleGrid>
-        )
-      })}
+      {merchants?.length &&
+        merchants.map((merchant: Merchant, index: number) => {
+          return (
+            <SimpleGrid
+              spacingX={3}
+              columns={{ base: 1, md: 3 }}
+              as={Link}
+              key={`${merchant.id}`}
+              to={`/merchants/${merchant.handle}`}
+              w="100%"
+              px={5}
+              py={3}
+              bg={bg}
+              borderBottom="1px solid gray"
+              borderColor={border}
+              gridTemplateColumns="50px 100px 100px 1fr"
+            >
+              <Text>#{index}</Text>
+              <Avatar size="xs" name={merchant.name as string} />
+              <Text>{merchant.handle}</Text>
+              <Text>{merchant.name}</Text>
+            </SimpleGrid>
+          )
+        })}
     </Box>
   )
 }

@@ -187,28 +187,25 @@ export const SidebarLinks = () => {
         <SidebarLink to="/suppliers/invoices">Suppliers Invoices</SidebarLink> */}
       </Flex>
 
-      <SidebarNestedLink name="merchant" to="/merchants">
+      {/* <SidebarNestedLink name="merchant" to="/merchants">
         Merchant
       </SidebarNestedLink>
       <Flex flexDirection="column" alignItems="flex-start" px={4}>
         <SidebarLink name="merchants" to="/merchants">
           Semua Merchant
         </SidebarLink>
-        {/* <SidebarLink to="/merchants/products">Merchant Products</SidebarLink>
+        <SidebarLink to="/merchants/products">Merchant Products</SidebarLink>
         <SidebarLink to="/merchants/orders">Merchant Orders</SidebarLink>
-        <SidebarLink to="/merchants/invoices">Merchant Invoices</SidebarLink> */}
-      </Flex>
+        <SidebarLink to="/merchants/invoices">Merchant Invoices</SidebarLink>
+      </Flex> */}
 
       <SidebarNestedLink name="business-orders" to="/business/orders">
         Pesanan Bisnis
       </SidebarNestedLink>
       <Flex flexDirection="column" alignItems="flex-start" px={4}>
         <SidebarLink name="business-orders" to="/business/orders">
-          Semua Pesanan
+          Semua Pesanan Bisnis
         </SidebarLink>
-        {/* <SidebarLink to="/merchants/products">Merchant Products</SidebarLink>
-        <SidebarLink to="/merchants/orders">Merchant Orders</SidebarLink>
-        <SidebarLink to="/merchants/invoices">Merchant Invoices</SidebarLink> */}
       </Flex>
 
       {/* <SidebarLink to="/logistics">Logistics</SidebarLink>
