@@ -39,7 +39,7 @@ export const BusinessOrdersParamPage = () => {
   const sidebar = useDisclosure()
   const { businessOrdersParam }: { businessOrdersParam: string } = useParams()
   const { data: { businessOrders = [], message } = [], error } = useSWR(
-    `/api/business/order/${businessOrdersParam}`
+    `/api/business/orders/${businessOrdersParam}`
   )
 
   return (
