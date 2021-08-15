@@ -204,38 +204,31 @@ export const BusinessOrderItem = ({ item }) => {
 
   // Optimistic UI when INCREMENT
   const handleIncrementBusinessOrderItem = async (itemId) => {
-    try {
-      mutate(
-        '/api/business/orders/my/cart',
-        async (data) => {
-          return {
-            ...data,
-            businessOrder: {
-              ...data.businessOrder,
-              businessOrderItems: data?.businessOrder?.businessOrderItems?.map(
-                (item) => {
-                  if (item.id === itemId) {
-                    item.quantity += 1
-                    return item
-                  } else {
-                    return item
-                  }
-                }
-              ),
-            },
+    mutate(
+      '/api/business/orders/my/cart',
+      (data) => {
+        const filtered = data?.businessOrder?.businessOrderItems?.map(
+          (item) => {
+            item.quantity = 100
+            return item
           }
-        },
-        false
-      )
-      await requestToAPI('PATCH', '/api/business/orders/my/cart/item', {
-        action: 'INCREMENT',
-        id: itemId,
-        quantity: 1,
-      })
-      mutate('/api/business/orders/my/cart')
-    } catch (error) {
-      console.error({ error })
-    }
+        )
+        return {
+          ...data,
+          businessOrder: {
+            ...data.businessOrder,
+            businessOrderItems: [...filtered],
+          },
+        }
+      },
+      false
+    )
+    // await requestToAPI('PATCH', '/api/business/orders/my/cart/item', {
+    //   action: 'INCREMENT',
+    //   id: itemId,
+    //   quantity: 1,
+    // })
+    // mutate('/api/business/orders/my/cart')
   }
 
   // Optimistic UI when DECREMENT
@@ -247,9 +240,11 @@ export const BusinessOrderItem = ({ item }) => {
           const filtered = data?.businessOrder?.businessOrderItems?.map(
             (item) => {
               if (item.id === itemId) {
-                item.quantity -= 1
+                item.quantity = item.quantity - 1
+                return item
+              } else {
+                return item
               }
-              return item
             }
           )
           return {
