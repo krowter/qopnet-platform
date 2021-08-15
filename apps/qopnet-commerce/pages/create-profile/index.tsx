@@ -21,8 +21,8 @@ export const CreateProfilePage = () => {
 
   return (
     <Layout pt={10}>
-      {error && <Text>Gagal memuat formulir profil</Text>}
-      {!error && user && <CreateProfileForm profile={profile} />}
+      {/* {error && <Text>Gagal memuat formulir profil</Text>} */}
+      {user && <CreateProfileForm user={user} profile={profile} />}
     </Layout>
   )
 }

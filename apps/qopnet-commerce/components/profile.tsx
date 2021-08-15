@@ -43,11 +43,9 @@ export type ProfileData = {
   }
 }
 
-export const CreateProfileForm = ({ profile }) => {
+export const CreateProfileForm = ({ user, profile }) => {
   const router = useRouter()
   const toast = useToast()
-  const user = useUser()
-  const supabase = useSupabase()
   const [loading, setLoading] = useState(false)
 
   // React Hook Form
@@ -95,7 +93,8 @@ export const CreateProfileForm = ({ profile }) => {
             Profil dan Alamat
           </Heading>
           <Text>
-            Silakan lengkapi profil dan informasi alamat pribadi Anda.
+            Silakan lengkapi profil dan informasi alamat pribadi Anda, untuk
+            akun dengan email {user.email}.
           </Text>
         </Stack>
       </VStack>
