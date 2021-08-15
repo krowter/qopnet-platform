@@ -603,12 +603,12 @@ model PromoSubmission {
   id String @id @default(cuid())
 
   // Bio
-  name             String?
-  phone            String?
-  email            String?
-  birthPlace       String?
-  birthDate        DateTime?
-  nationalIdNumber String?
+  name       String?
+  phone      String?
+  email      String?
+  birthPlace String?
+  birthDate  DateTime? @db.Date
+  nationalId String?
 
   // Address
   street        String? // Jl. Street Name
@@ -632,13 +632,13 @@ model PromoEmployee {
   order Int // original order number on employer document
 
   // Bio
-  employeeId       String
-  name             String?
-  phone            String? // required for financing
-  email            String? // required for financing
-  birthPlace       String?
-  birthDate        DateTime? // required for financing
-  nationalIdNumber String? // KTP
+  employeeId String?
+  name       String?
+  phone      String? // required for financing
+  email      String? // required for financing
+  birthPlace String?
+  birthDate  DateTime? @db.Date // required for financing
+  nationalId String? // KTP
 
   // Address
   street        String?
@@ -647,7 +647,22 @@ model PromoEmployee {
   State         String?
   zip           String?
 
-  employerParam String? // unique company param e.g. panarub
+  // relations
+  employerId String?
+  employer   PromoEmployer? @relation(fields: [employerId], references: [id])
 
   @@map(name: "promo_employees")
+}
+
+model PromoEmployer {
+  id String @id @default(cuid())
+
+  name  String?
+  email String?
+  phone String?
+
+  // relations
+  employees PromoEmployee[]
+
+  @@map(name: "promo_employers")
 }
