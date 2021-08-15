@@ -13,6 +13,7 @@ import {
   Text,
   useColorModeValue,
 } from '@chakra-ui/react'
+import { mutate } from 'swr'
 
 import {
   Layout,
@@ -26,7 +27,7 @@ import {
   formatAddressComplete,
 } from '@qopnet/util-format'
 import { BreadcrumbCart } from '../../../components'
-import { useSWR } from '../../../utils'
+import { useSWR, requestToAPI } from '../../../utils'
 import { useEffect, useState } from 'react'
 
 /**
@@ -107,14 +108,14 @@ export const ShipmentSummaryContainer = ({ businessOrder }) => {
 
           <Stack justify="space-between">
             <Text>Alamat dipilih</Text>
-            <Text color="gray.500">
+            <Text fontSize="xs">
               {formatAddressComplete(businessOrder?.shipmentAddress)}
             </Text>
           </Stack>
-          <Stack justify="space-between">
+          <HStack justify="space-between">
             <Text>Kurir dipilih</Text>
-            <Text color="gray.500">{businessOrder?.courier?.name}</Text>
-          </Stack>
+            <Text>{businessOrder?.shipmentCourier?.name}</Text>
+          </HStack>
           <HStack justify="space-between">
             <Text>Total Ongkos Kirim</Text>
             <Text>{formatRupiah(totalShipmentCost)}</Text>
@@ -227,10 +228,21 @@ export const CouriersContainer = () => {
   }, [error, data, couriers, availableCouriers])
 
   // Handle select courier option with just courier id
-  const handleSelectCourierOption = (courierId) => {
-    console.log({ message: 'handleSelectCourierOption' })
-
+  const handleSelectCourierOption = async (courierId) => {
     setSelectedCourierId(courierId)
+
+    mutate('/api/business/orders/my/cart', async (data) => {
+      const response = await requestToAPI(
+        'PATCH',
+        '/api/business/orders/my/cart/courier',
+        { id: courierId }
+      )
+      // console.log({ data, response })
+      return {
+        ...data,
+        shipmentCourier: response?.businessOrder?.shipmentCourier,
+      }
+    })
   }
 
   return (
