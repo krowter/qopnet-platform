@@ -332,6 +332,7 @@ export const updateMyCart = async (req, res) => {
 // DELETE
 // INCREMENT
 // DECREMENT
+//   If <1 then DELETE
 export const patchMyCartItem = async (req, res) => {
   const ownerId = req.profile.id
   const isCartExist = req.isCartExist
@@ -340,25 +341,50 @@ export const patchMyCartItem = async (req, res) => {
   if (isCartExist && formData.action) {
     try {
       if (formData.action === 'DELETE') {
-        const updatedBusinessOrderItem = await prisma.businessOrderItem.delete({
-          where: {
-            id: formData.id,
-          },
+        // DELETE only
+        const deletedBusinessOrderItem = await prisma.businessOrderItem.delete({
+          where: { id: formData.id },
         })
         res.status(200).json({
           message: 'Patch my cart DELETE item success',
           formData,
-          businessOrderItem: updatedBusinessOrderItem,
+          businessOrderItem: deletedBusinessOrderItem,
         })
       } else if (formData.action === 'INCREMENT') {
+        // INCREMENT with quantity
+        const incrementedBusinessOrderItem =
+          await prisma.businessOrderItem.update({
+            where: { id: formData.id },
+            data: { quantity: { increment: formData.quantity || 0 } },
+          })
         res.status(200).json({
           message: 'Patch my cart INCREMENT item success',
           formData,
+          businessOrderItem: incrementedBusinessOrderItem,
         })
       } else if (formData.action === 'DECREMENT') {
+        const decrementedBusinessOrderItem =
+          await prisma.businessOrderItem.update({
+            where: { id: formData.id },
+            data: { quantity: { decrement: formData.quantity || 0 } },
+          })
+        // Delete if the quantity is already 0 or less than 1
+        if (decrementedBusinessOrderItem.quantity < 1) {
+          const deletedBusinessOrderItem =
+            await prisma.businessOrderItem.delete({
+              where: { id: formData.id },
+            })
+          res.status(200).json({
+            message:
+              'Patch my cart DECREMENT item success, quantity is less than 1, just DELETE',
+            formData,
+            businessOrderItem: deletedBusinessOrderItem,
+          })
+        }
         res.status(200).json({
           message: 'Patch my cart DECREMENT item success',
           formData,
+          businessOrderItem: decrementedBusinessOrderItem,
         })
       } else {
         res.status(400).json({
