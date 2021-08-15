@@ -1,6 +1,6 @@
 [
   {
-    "slug": "gula-pasir-rose-brand-1kg-20pcs-a1b3c2",
+    "slug": "gula-pasir-rose-brand-1kg-20pcs",
     "name": "Gula Pasir Rose Brand 1 kg",
     "subname": "Kemasan Pouch 1 kg dikemas dengan dus isi 20 pcs",
     "description": "Kemasan Pouch 1 kg\n\nDikemas dengan dus isi 20 pcs\n\nMerk Rose Brand.",
@@ -10,7 +10,7 @@
     "stock": 1000,
     "status": "ACTIVE",
     "dimension": { "width": null, "length": null, "height": null },
-    "category": "bintara,Branded",
+    "category": "bintara, branded",
     "discount": 8,
     "weightUnit": "KG",
     "images": [
@@ -20,14 +20,14 @@
   {
     "slug": "minyak-goreng-vipco-900ml-12pcs",
     "name": "Minyak Goreng Vipco 900 ml",
-    "description": "Vipco\n\nUkuran 900 ml\n\nKemasan pouch (Refill)\n\n12 pcs/box\n\nCatatan\nDisarankan mencapai bobot minimum 300 kg sewaktu memesan.\nTiap nomor pesanan bisa terdiri dari satu produk atau lebih.\n\nContoh \nOrder No #1500 terdiri dari \n1. Minyak Goreng Sovia @2l sebanyak 2 dus (1 dus isi 6 pcs)\n2. Gula Rose Brand @1kg sebanyak 1 dus (1 dus isi 20 pcs)\n3. Beras Sari Padi @50kg sebanyak 5 karung",
+    "description": "Merek Vipco\n\nUkuran 900 ml\n\nKemasan pouch (Refill)\n\n12 pcs/box\n\nCatatan\nDisarankan mencapai bobot minimum 300 kg sewaktu memesan.\nTiap nomor pesanan bisa terdiri dari satu produk atau lebih.\n\nContoh \nOrder No #1500 terdiri dari \n1. Minyak Goreng Sovia @2l sebanyak 2 dus (1 dus isi 6 pcs)\n2. Gula Rose Brand @1kg sebanyak 1 dus (1 dus isi 20 pcs)\n3. Beras Sari Padi @50kg sebanyak 5 karung",
     "sku": "Q-MGV-900-12",
     "price": 159000,
     "weight": 12,
     "stock": 1000,
     "status": "ACTIVE",
     "dimension": { "width": null, "length": null, "height": null },
-    "category": "bintara,Branded",
+    "category": "bintara, branded",
     "discount": null,
     "weightUnit": "KG",
     "images": [
@@ -54,7 +54,7 @@
   {
     "slug": "kecap-manis-banyak-300ml",
     "name": "Kecap Manis Cap “Banyak” botol 300 ml",
-    "description": "Kemasan Botol Plastik isi 300 ml @ harga Rp 16.500\n\nPemesanan minimal 1 karton isi 25 botol.\n\nKecap Manis Cap \"Banyak\" cocok untuk segala macam hidangan\n\nTerbuat dari bahan - bahan alami\n\nKualitas terjamin\n\nPengiriman dari Semarang",
+    "description": "Kemasan Botol Plastik isi 300 ml @ harga Rp 16.500\n\nPemesanan minimal 1 karton isi 25 botol.\n\nKecap Manis Cap \"Banyak\" cocok untuk segala macam hidangan\n\nTerbuat dari bahan-bahan alami\n\nKualitas terjamin\n\nPengiriman dari Semarang",
     "sku": "Q-KMB-300",
     "price": 16500,
     "weight": 1,
@@ -95,7 +95,7 @@
     "stock": 1000,
     "status": "ACTIVE",
     "dimension": { "width": null, "length": null, "height": null },
-    "category": "gudang semarang ronggolawe,gudang semarang tengger",
+    "category": "gudang semarang ronggolawe, gudang semarang tengger",
     "discount": null,
     "weightUnit": "KG",
     "images": [
@@ -112,7 +112,7 @@
     "stock": 1000,
     "status": "ACTIVE",
     "dimension": { "width": null, "length": null, "height": null },
-    "category": "gudang semarang ronggolawe,gudang semarang tengger",
+    "category": "gudang semarang ronggolawe, gudang semarang tengger",
     "discount": null,
     "weightUnit": "KG",
     "images": [
@@ -146,7 +146,7 @@
     "stock": 1000,
     "status": "ACTIVE",
     "dimension": { "width": null, "length": null, "height": null },
-    "category": "bintara,Branded",
+    "category": "bintara, branded",
     "discount": null,
     "weightUnit": "KG",
     "images": [
@@ -166,7 +166,9 @@
     "category": "cipinang",
     "discount": null,
     "weightUnit": "KG",
-    "images": []
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/daging-sapi-topside-import-1kg.jpeg?updatedAt=1629026566291"
+    ]
   },
   {
     "slug": "gula-aren-murni-1kg",
@@ -212,7 +214,7 @@
     "stock": 1000,
     "status": "ACTIVE",
     "dimension": { "width": null, "length": null, "height": null },
-    "category": "bintara,Branded",
+    "category": "bintara, branded",
     "discount": null,
     "weightUnit": "KG",
     "images": [
@@ -221,15 +223,15 @@
   },
   {
     "slug": "indomie-mi-goreng-instan-75gr-40pcs",
-    "name": "INDOMIE Mi Goreng Instan 75 gram",
-    "description": "Mi Instan \nMerk Indomie \nMi Goreng \nkemasan 75 gram \nDalam Karton 40 pcs",
+    "name": "Indomie Mi Goreng Instan 75 gr",
+    "description": "Mi Instan \nMerk Indomie \nMi Goreng \nkemasan 75 gr \nDalam dus karton 40 pcs",
     "sku": "36892",
     "price": 103000,
     "weight": 3,
     "stock": 1000,
     "status": "ACTIVE",
     "dimension": { "width": null, "length": null, "height": null },
-    "category": "bintara,Branded",
+    "category": "bintara, branded",
     "discount": null,
     "weightUnit": "KG",
     "images": [
@@ -263,7 +265,7 @@
     "stock": 1000,
     "status": "ACTIVE",
     "dimension": { "width": null, "length": null, "height": null },
-    "category": "bintara,Branded",
+    "category": "bintara, branded",
     "discount": 3,
     "weightUnit": "KG",
     "images": [
@@ -280,7 +282,7 @@
     "stock": 1000,
     "status": "ACTIVE",
     "dimension": { "width": null, "length": null, "height": null },
-    "category": "bintara,Branded",
+    "category": "bintara, branded",
     "discount": 3,
     "weightUnit": "KG",
     "images": [
@@ -297,7 +299,7 @@
     "stock": 1000,
     "status": "ACTIVE",
     "dimension": { "width": null, "length": null, "height": null },
-    "category": "bintara,Branded",
+    "category": "bintara, branded",
     "discount": 3,
     "weightUnit": "KG",
     "images": [
@@ -314,7 +316,7 @@
     "stock": 1000,
     "status": "ACTIVE",
     "dimension": { "width": null, "length": null, "height": null },
-    "category": "bintara,Branded",
+    "category": "bintara, branded",
     "discount": 3,
     "weightUnit": "KG",
     "images": [
@@ -331,7 +333,7 @@
     "stock": 1000,
     "status": "ACTIVE",
     "dimension": { "width": null, "length": null, "height": null },
-    "category": "bintara,Branded",
+    "category": "bintara, branded",
     "discount": 3,
     "weightUnit": "KG",
     "images": [
