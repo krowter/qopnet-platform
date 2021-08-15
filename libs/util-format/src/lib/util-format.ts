@@ -79,14 +79,16 @@ export const formatWeight = (weight: number, weightUnit: string) => {
   }
 }
 
-export const formatAddressComplete = ({
-  street = '',
-  streetDetails = '',
-  city = '',
-  state = '',
-  zip = '',
-  countryCode = 'ID',
-}) => {
+export const formatAddressComplete = (address) => {
+  const {
+    street = '',
+    streetDetails = '',
+    city = '',
+    state = '',
+    zip = '',
+    countryCode = 'ID',
+  } = address || {}
+
   const country = countryCode === 'ID' && 'Indonesia'
   return `${street}, ${
     streetDetails ?? ''

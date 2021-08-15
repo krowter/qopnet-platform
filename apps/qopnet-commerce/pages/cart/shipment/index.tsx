@@ -213,21 +213,23 @@ export const CouriersContainer = () => {
   const { couriers } = data || {}
 
   // Display addresses
-  const [availableCouriers, setAvailableCouriers] = useState(couriers)
+  const [availableCouriers, setAvailableCouriers] = useState([])
   // Should be empty array if API Courier is available
   const [selectedCourierId, setSelectedCourierId] = useState('')
 
   // Only set couriers once data has been retrieved
   useEffect(() => {
-    if (data) {
-      setAvailableCouriers(couriers || [])
+    if (!error && data && couriers && availableCouriers) {
+      setAvailableCouriers(couriers)
       // Default to set the first available courier
-      setSelectedCourierId(availableCouriers[0]?.id || '')
+      setSelectedCourierId(availableCouriers[0]?.id)
     }
-  }, [data, couriers, availableCouriers])
+  }, [error, data, couriers, availableCouriers])
 
   // Handle select courier option with just courier id
   const handleSelectCourierOption = (courierId) => {
+    console.log({ message: 'handleSelectCourierOption' })
+
     setSelectedCourierId(courierId)
   }
 
