@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Mobil MPV",
+    "courierId": "ckr"
+  },
+  {
+    "name": "Mobil Van",
+    "courierId": "ckr"
+  },
+  {
+    "name": "Mobil Box",
+    "courierId": "ckr"
+  },
+  {
+    "name": "Truk Bak",
+    "courierId": "ckr"
+  },
+  {
+    "name": "Truk Tronton",
+    "courierId": "ckr"
+  }
+]

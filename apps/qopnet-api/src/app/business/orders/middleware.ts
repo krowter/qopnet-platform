@@ -33,7 +33,7 @@ export const getMyAllBusinessOrders = async (req, res) => {
             },
           },
           shipmentAddress: true,
-          payment: true,
+          paymentMethod: true,
         },
       })
 
@@ -110,7 +110,9 @@ export const getMyCart = async (req, res) => {
           },
         },
         shipmentAddress: true,
-        payment: true,
+        shipmentCourier: true,
+        paymentMethod: true,
+        paymentRecord: true,
       },
     })
     if (!businessOrder) throw 'My cart or draft business order is not found'
@@ -332,6 +334,225 @@ export const updateMyCart = async (req, res) => {
   }
 }
 
+// Patch my cart address
+export const patchMyCartAddress = async (req, res) => {
+  const ownerId = req.profile.id
+  const isCartExist = req.isCartExist
+  const businessOrder = req.businessOrder
+  const formData = req.body
+
+  if (isCartExist) {
+    try {
+      const updatedCart = await prisma.businessOrder.update({
+        where: {
+          id: businessOrder.id,
+        },
+        include: {
+          shipmentAddress: true,
+        },
+        data: {
+          shipmentAddressId: formData.id, // Patch
+        },
+      })
+
+      res.status(200).json({
+        message: 'Patch my cart address success',
+        ownerId,
+        isCartExist,
+        formData,
+        businessOrder: updatedCart,
+      })
+    } catch (error) {
+      res.status(400).json({
+        message:
+          'Patch my cart courier failed, might because address id is invalid',
+        error,
+        ownerId,
+        isCartExist,
+        formData,
+      })
+    }
+  } else {
+    res.status(400).json({
+      message: 'Patch my cart address failed because cart is not exist',
+      ownerId,
+      isCartExist,
+      formData,
+    })
+  }
+}
+
+// Patch my cart courier
+export const patchMyCartCourier = async (req, res) => {
+  const ownerId = req.profile.id
+  const isCartExist = req.isCartExist
+  const businessOrder = req.businessOrder
+  const formData = req.body
+
+  if (isCartExist) {
+    try {
+      const updatedCart = await prisma.businessOrder.update({
+        where: {
+          id: businessOrder.id,
+        },
+        include: {
+          shipmentAddress: true,
+          shipmentCourier: true,
+          paymentMethod: true,
+          paymentRecord: true,
+        },
+        data: {
+          shipmentCourierId: formData.id, // Patch
+        },
+      })
+
+      res.status(200).json({
+        message: 'Patch my cart courier success',
+        ownerId,
+        isCartExist,
+        formData,
+        businessOrder: updatedCart,
+      })
+    } catch (error) {
+      res.status(400).json({
+        message:
+          'Patch my cart courier failed, might because courier id is invalid',
+        error,
+        ownerId,
+        isCartExist,
+        formData,
+      })
+    }
+  } else {
+    res.status(400).json({
+      message: 'Patch my cart courier failed because cart is not exist',
+      ownerId,
+      isCartExist,
+      formData,
+    })
+  }
+}
+
+// Patch my cart payment
+export const patchMyCartPayment = async (req, res) => {
+  const ownerId = req.profile.id
+  const isCartExist = req.isCartExist
+  const businessOrder = req.businessOrder
+  const formData = req.body
+
+  if (isCartExist) {
+    try {
+      const updatedCart = await prisma.businessOrder.update({
+        where: {
+          id: businessOrder.id,
+        },
+        include: {
+          shipmentAddress: true,
+          shipmentCourier: true,
+          paymentMethod: true,
+          paymentRecord: true,
+        },
+        data: {
+          paymentMethodId: formData.id, // Patch
+        },
+      })
+
+      res.status(200).json({
+        message: 'Patch my cart payment method success',
+        ownerId,
+        isCartExist,
+        formData,
+        businessOrder: updatedCart,
+      })
+    } catch (error) {
+      res.status(400).json({
+        message:
+          'Patch my cart payment method failed, might because payment method id is invalid',
+        error,
+        ownerId,
+        isCartExist,
+        formData,
+      })
+    }
+  } else {
+    res.status(400).json({
+      message: 'Patch my cart payment method failed because cart is not exist',
+      ownerId,
+      isCartExist,
+      formData,
+    })
+  }
+}
+
+// Update my cart to process my order
+// The cart has become an order with default status of WAITING_FOR_PAYMENT
+export const processMyOrder = async (req, res) => {
+  const ownerId = req.profile.id
+  const isCartExist = req.isCartExist
+  const businessOrder = req.businessOrder
+
+  if (isCartExist) {
+    try {
+      /**
+       * This should not require any formData or req.body
+       * But still need to check if these fields are available:
+       * - shipmentAddress
+       * - shipmentCourier
+       * - paymentMethod
+       * Then finally:
+       * - Change the status to WAITING_FOR_PAYMENT
+       * - Create a payment record to be completed later
+       */
+      if (
+        businessOrder.shipmentAddressId &&
+        businessOrder.shipmentCourierId &&
+        businessOrder.paymentMethodId
+      ) {
+        const updatedCart = await prisma.businessOrder.update({
+          where: {
+            id: businessOrder.id,
+          },
+          data: {
+            status: 'WAITING_FOR_PAYMENT',
+          },
+        })
+
+        res.status(200).json({
+          message: 'Process my order success',
+          ownerId,
+          isCartExist,
+          businessOrder: updatedCart,
+        })
+      } else {
+        res.status(400).json({
+          message: 'Process my order failed because fields are missing',
+          ownerId,
+          isCartExist,
+          fields: {
+            shipmentAddressId: businessOrder.shipmentAddressId,
+            shipmentCourierId: businessOrder.shipmentCourierId,
+            paymentMethodId: businessOrder.paymentMethodId,
+          },
+          businessOrder,
+        })
+      }
+    } catch (error) {
+      res.status(400).json({
+        message: 'Process my order failed',
+        error,
+        ownerId,
+        isCartExist,
+      })
+    }
+  } else {
+    res.status(400).json({
+      message: 'Process my order failed because cart is not exist',
+      ownerId,
+      isCartExist,
+    })
+  }
+}
+
 // -----------------------------------------------------------------------------
 // Admin Only
 // -----------------------------------------------------------------------------
@@ -346,7 +567,7 @@ export const getAllBusinessOrders = async (req, res) => {
           owner: true,
           businessOrderItems: true,
           shipmentAddress: true,
-          payment: true,
+          paymentMethod: true,
         },
       })
 
@@ -371,10 +592,20 @@ export const getOneBusinessOrder = async (req, res) => {
       await prisma.businessOrder.findFirst({
         where: { id: businessOrderParam },
         include: {
-          owner: true,
-          businessOrderItems: true,
-          shipmentAddress: true,
-          payment: true,
+          owner: {
+            include: {
+              user: true,
+              addresses: true,
+            },
+          },
+          businessOrderItems: {
+            include: {
+              supplier: true,
+            },
+          },
+          shipmentAddress: true, // One address
+          paymentMethod: true, // BCA / COD
+          paymentRecord: true, // Detail transfer
         },
       })
     if (!businessOrder) throw 'Business order by param is not found'
@@ -441,6 +672,43 @@ export const updateOneBusinessOrder = async (req, res) => {
     res.status(500).send({
       message: 'Update one business order failed',
       error,
+    })
+  }
+}
+
+// Patch one business order status by businessOrderParam (id)
+export const patchOneBusinessOrderStatus = async (req, res) => {
+  const { businessOrderParam } = req.params
+  const isBusinessOrderExist = req.isBusinessOrderExist
+  const formData = req.body
+
+  if (isBusinessOrderExist) {
+    const updatedCart = await prisma.businessOrder.update({
+      where: {
+        id: businessOrderParam,
+      },
+      include: {
+        businessOrderItems: true,
+      },
+      data: {
+        status: formData?.status,
+      },
+    })
+
+    res.status(200).json({
+      message: 'Patch one business order status success',
+      businessOrderParam,
+      isBusinessOrderExist,
+      businessOrder: updatedCart,
+      formData,
+    })
+  } else {
+    res.status(404).json({
+      message:
+        'Patch one business order status failed, because it is not found',
+      businessOrderParam,
+      isBusinessOrderExist,
+      formData,
     })
   }
 }
@@ -519,8 +787,16 @@ export const checkMyCart = async (req, res, next) => {
   try {
     const businessOrder: Partial<BusinessOrder> =
       await prisma.businessOrder.findFirst({
-        where: { ownerId, status: 'DRAFT' },
+        where: {
+          ownerId,
+          status: 'DRAFT',
+        },
         include: {
+          shipmentAddress: true,
+          shipmentCourier: true,
+          shipmentCourierVehicle: true,
+          paymentMethod: true,
+          paymentRecord: true,
           businessOrderItems: true,
         },
       })
@@ -553,7 +829,10 @@ export const autoCreateMyCart = async (req, res, next) => {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const businessOrder: Partial<BusinessOrder> =
         await prisma.businessOrder.create({
-          data: { ownerId, status: 'DRAFT' },
+          data: {
+            ownerId,
+            status: 'DRAFT',
+          },
         })
 
       // Change the flags because auto create
@@ -574,5 +853,40 @@ export const autoCreateMyCart = async (req, res, next) => {
   } else {
     // Continue just fine if cart is already exist
     next()
+  }
+}
+
+// Check one business order
+export const checkOneBusinessOrder = async (req, res, next) => {
+  const { businessOrderParam } = req.params
+  const ownerId = req.profile.id
+
+  try {
+    const businessOrder: Partial<BusinessOrder> =
+      await prisma.businessOrder.findUnique({
+        where: {
+          id: businessOrderParam,
+        },
+        include: {
+          businessOrderItems: true,
+          paymentMethod: true,
+          paymentRecord: true,
+        },
+      })
+
+    if (businessOrder) {
+      req.businessOrder = businessOrder
+      req.isBusinessOrderExist = true
+      next()
+    } else {
+      req.isBusinessOrderExist = false
+      next()
+    }
+  } catch (error) {
+    res.status(500).send({
+      message: 'Check one business order failed',
+      ownerId,
+      error,
+    })
   }
 }

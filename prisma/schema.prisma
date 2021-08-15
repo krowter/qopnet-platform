@@ -11,7 +11,8 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialActions"]
 }
 
 // -----------------------------------------------------------------------------
@@ -29,8 +30,8 @@ model User {
   fundBeneficiary FundBeneficiary?
 
   // Timestamp
-  // createdAt DateTime @default(now())
-  // updatedAt DateTime @default(now()) @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   @@map(name: "users")
 }
@@ -42,19 +43,24 @@ model Profile {
   avatarUrl String?
   phone     String?
 
-  // User Relations
+  // Relation: User
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
-  user   User   @relation(fields: [userId], references: [id])
 
-  // Data Relations
+  // Relation: Address
   addresses         Address[]
+  // Relation: Wholesaler
   wholesalers       Wholesaler[]
+  // Relation: Supplier
   suppliers         Supplier[]
   supplierProducts  SupplierProduct[]
-  merchants         Merchant[]
-  fundBeneficiaries FundBeneficiary?
+  // Relation: BusinessOrder
   businessOrders    BusinessOrder[]
-  MerchantProduct   MerchantProduct[]
+  // Relation: Merchant
+  merchants         Merchant[]
+  merchantProducts  MerchantProduct[]
+  // Relation: FundBeneficiary
+  fundBeneficiaries FundBeneficiary?
 
   // Timestamp
   createdAt DateTime @default(now())
@@ -81,11 +87,12 @@ model AdminProfile {
 // Address can be used for Profile, Wholesaler, Supplier, Merchant, Customer
 
 model Address {
-  id            String  @id @default(cuid())
+  id String @id @default(cuid())
+
   street        String // Jl. Street Name
   streetDetails String? // Optional details such as floor number
-  // ward          String? // Kelurahan
-  // subdistrict   String? // Kecamatan
+  ward          String? // Kelurahan
+  subdistrict   String? // Kecamatan
   city          String?
   state         String? // Province
   zip           String? // Postal code
@@ -192,7 +199,7 @@ model SupplierProduct {
   description String?
   sku         String?
   category    String?
-  // tags     Json?
+  tags        Json?
 
   // Price
   price                Decimal? @db.Money
@@ -202,11 +209,11 @@ model SupplierProduct {
   discount             Int?
   discountMaxReduction Decimal? @db.Money
 
-  // Weight and Size
+  // Weight and Dimension Size
   weight        Int? // Ceil to upper bound, not using Float
   weightUnit    SupplierProductWeightUnit?
   weightDetails String?
-  dimension     Json?
+  dimension     Json? // { width, height, length }
 
   // Manage
   status SupplierProductStatus?
@@ -218,7 +225,6 @@ model SupplierProduct {
   supplierId         String?
   supplier           Supplier?           @relation(fields: [supplierId], references: [id])
   businessOrderItems BusinessOrderItem[]
-
 
   // Timestamp
   createdAt DateTime @default(now())
@@ -358,48 +364,90 @@ model FundBenefactor {
   @@map(name: "fund_benefactors")
 }
 
+// -----------------------------------------------------------------------------
+// BUSINESS ORDER
+
 enum OrderStatus {
-  DRAFT // order is still a cart
-  WAITING_FOR_PAYMENT // order is waiting to be paid by buyer
-  PAID // order has been paid
-  WAITING_FOR_CONFIRMATION // waiting confirmation from supplier 
-  PROCESSED // supplier processed order internally
-  WAITING_FOR_PICKUP // supplier waiting for pickup by courier
-  ONDELIVERY // supplier product is on delivery by courier
-  DELIVERED // supplier product is delivered to shipment address
-  CONFIRMED // confirmed by recipient
-  COMPLAINED // confirmed, product arrived but something wrong, include lost
-  CANCELED // before PAID | PROCESSED | ONDELIVERY
-  REFUNDED // somewhere after PAID
+  // order is still a cart
+  DRAFT
+
+  // order is waiting to be paid by buyer
+  WAITING_FOR_PAYMENT
+
+  // payment has been made, but still in process
+  // PAYMENT_IN_PROCESS
+
+  // order has been paid, confirmed by wholesaler/supplier
+  PAID
+
+  // waiting confirmation from wholesaler/supplier
+  WAITING_FOR_CONFIRMATION
+
+  // supplier processed order internally
+  PROCESSED
+
+  // supplier waiting for pickup by courier
+  WAITING_FOR_PICKUP
+
+  // supplier product is on delivery by courier
+  ONDELIVERY
+  // ON_DELIVERY
+
+  // supplier product is delivered to shipment address
+  DELIVERED
+
+  // confirmed by recipient
+  CONFIRMED
+
+  // confirmed, product arrived but something wrong, include lost
+  COMPLAINED
+
+  // before PAID | PROCESSED | ONDELIVERY
+  CANCELED
+
+  // somewhere after PAID
+  REFUNDED
 }
 
 model BusinessOrder {
   id     String       @id @default(cuid())
   status OrderStatus?
 
-  // Relations
+  // Relation: Profile
   ownerId String?
   owner   Profile? @relation(fields: [ownerId], references: [id])
 
-  // Business order items
+  // Relation: BusinessOrderItem
   businessOrderItems BusinessOrderItem[]
 
-  // Shipment address
-  shipmentAddressId String?
+  // Relation: Shipment Address
   shipmentAddress   Address? @relation(fields: [shipmentAddressId], references: [id])
+  shipmentAddressId String?
 
-  // Payment
-  paymentId String?
-  payment   Payment? @relation(fields: [paymentId], references: [id])
+  // Relation: Shipment Courier
+  shipmentCourier   Courier? @relation(fields: [shipmentCourierId], references: [id])
+  shipmentCourierId String?
+
+  // Relation: Shipment CourierVehicle
+  shipmentCourierVehicle   CourierVehicle? @relation(fields: [shipmentCourierVehicleId], references: [id])
+  shipmentCourierVehicleId String?
+
+  // Relation: PaymentMethod
+  paymentMethod   PaymentMethod? @relation(fields: [paymentMethodId], references: [id])
+  paymentMethodId String?
+
+  // Relation: PaymentRecord
+  paymentRecord   PaymentRecord? @relation(fields: [paymentRecordId], references: [id])
+  paymentRecordId String?
 
   // Calculation for business order items
-  totalItems        Int?
-  totalPrice        Decimal?
-  totalWeight       Decimal?
-  totalShippingCost Decimal?
-  shippingDiscount  Decimal?
-  totalPayment      Decimal?
-  // totalBillPayment
+  totalItems            Int?
+  totalWeight           Int?
+  totalPrice            Decimal? @db.Money
+  totalShippingCost     Decimal? @db.Money
+  totalShippingDiscount Decimal? @db.Money
+  totalPayment          Decimal? @db.Money
+  totalBillPayment      Decimal? @db.Money
 
   // Timestamp
   createdAt DateTime @default(now())
@@ -413,22 +461,17 @@ model BusinessOrderItem {
 
   quantity Int @default(1)
 
-  // Business order
+  // Relation: Business order
   businessOrderId String
   businessOrder   BusinessOrder @relation(fields: [businessOrderId], references: [id])
 
-  // Relations
-  // Supplier
-  supplierId String
-  supplier   Supplier @relation(fields: [supplierId], references: [id])
-
-  // Supplier product
+  // Relation: Supplier product
   supplierProductId String
   supplierProduct   SupplierProduct @relation(fields: [supplierProductId], references: [id])
 
-  // Courier and fleet
-  courierId String?
-  fleetId   String?
+  // Relation: Supplier
+  supplierId String
+  supplier   Supplier @relation(fields: [supplierId], references: [id])
 
   // Timestamp
   createdAt DateTime @default(now())
@@ -437,29 +480,104 @@ model BusinessOrderItem {
   @@map(name: "business_order_items")
 }
 
-enum PaymentCategory {
-  COD
-  TRANSFER
-  VIRTUALACCOUNT
-}
+// -----------------------------------------------------------------------------
+// COURIER
 
-model Payment {
+model Courier {
   id String @id @default(cuid())
 
-  name            String
-  paymentCategory PaymentCategory
+  name String // Courier name: Lalamove, Deliveree, Mas Kargo
 
   // Relations
-  businessOrders BusinessOrder[]
+  businessOrders  BusinessOrder[]
+  courierVehicles CourierVehicle[]
 
   // Timestamp
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
-  @@map(name: "payments")
+  @@map(name: "couriers")
 }
 
-// model PaymentRecord {}
+model CourierVehicle {
+  id String @id @default(cuid())
+
+  name String // Courier vehicle name or type: Car, Mobil Box, Tronton
+
+  // Check again in Deliveree/Lalamove
+  maxWeightCapacity           Int? // in kg
+  maxCargoDimensionLength     Int? // in cm
+  maxCargoDimensionHeight     Int? // in cm
+  maxCargoDimensionWidth      Int? // in cm
+  maxCargoDimensionCubicMeter Float? // in m^3
+
+  // Relation: BusinessOrder
+  businessOrders BusinessOrder[]
+
+  // Relation: Courier
+  courierId String?
+  courier   Courier? @relation(fields: [courierId], references: [id])
+
+  // Timestamp
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@map(name: "courier_vehicles")
+}
+
+// -----------------------------------------------------------------------------
+// PAYMENT
+
+enum PaymentCategory {
+  CASH_ON_DELIVERY
+  TRANSFER_MANUAL
+  TRANSFER_VIRTUAL_ACCOUNT
+  INSTALMENT
+  CREDIT
+  LOAN
+}
+
+model PaymentMethod {
+  id String @id @default(cuid())
+
+  name            String
+  paymentCategory PaymentCategory
+
+  // Relation: BusinessOrder
+  businessOrders BusinessOrder[]
+
+  // Relation: PaymentRecord
+  paymentRecords PaymentRecord[]
+
+  // Timestamp
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@map(name: "payment_methods")
+}
+
+model PaymentRecord {
+  id String @id @default(cuid())
+
+  amount Decimal @db.Money
+  // status String?
+
+  // Relation: BusinessOrder
+  businessOrder BusinessOrder?
+
+  // Relation: PaymentMethod
+  paymentMethodId String?
+  paymentMethod   PaymentMethod? @relation(fields: [paymentMethodId], references: [id])
+
+  // Timestamp
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@map(name: "payment_records")
+}
+
+// -----------------------------------------------------------------------------
+// PROMO
 
 // PromoProvider
 // Example:
@@ -489,7 +607,8 @@ model PromoSubmission {
   phone      String?
   email      String?
   birthPlace String?
-  birthDate  DateTime?
+  birthDate  DateTime? @db.Date
+  nationalId String?
 
   // Address
   street        String? // Jl. Street Name
@@ -506,4 +625,44 @@ model PromoSubmission {
   provider   PromoProvider? @relation(fields: [providerId], references: [id])
 
   @@map(name: "promo_submissions")
+}
+
+model PromoEmployee {
+  id    String @id @default(cuid())
+  order Int // original order number on employer document
+
+  // Bio
+  employeeId String?
+  name       String?
+  phone      String? // required for financing
+  email      String? // required for financing
+  birthPlace String?
+  birthDate  DateTime? @db.Date // required for financing
+  nationalId String? // KTP
+
+  // Address
+  street        String?
+  streetDetails String?
+  city          String?
+  State         String?
+  zip           String?
+
+  // relations
+  employerId String?
+  employer   PromoEmployer? @relation(fields: [employerId], references: [id])
+
+  @@map(name: "promo_employees")
+}
+
+model PromoEmployer {
+  id String @id @default(cuid())
+
+  name  String?
+  email String?
+  phone String?
+
+  // relations
+  employees PromoEmployee[]
+
+  @@map(name: "promo_employers")
 }

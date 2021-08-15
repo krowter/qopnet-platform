@@ -11,13 +11,16 @@ const router = express.Router()
 
 // GET /api/business/orders/my
 router.get('/my', auth.checkUser, businessOrder.getMyAllBusinessOrders)
+
 // GET /api/business/orders/my/cart
 router.get(
   '/my/cart',
   auth.checkUser,
   businessOrder.checkMyCart,
+  businessOrder.autoCreateMyCart, // If isCartExist, just continue
   businessOrder.getMyCart
 )
+
 // POST /api/business/orders/my/cart
 router.post(
   '/my/cart',
@@ -25,6 +28,7 @@ router.post(
   businessOrder.checkMyCart,
   businessOrder.createMyCart
 )
+
 // PUT /api/business/orders/my/cart
 router.put(
   '/my/cart',
@@ -32,6 +36,38 @@ router.put(
   businessOrder.checkMyCart,
   businessOrder.autoCreateMyCart, // If isCartExist, just continue
   businessOrder.updateMyCart
+)
+
+// PATCH /api/business/orders/my/cart/address
+router.patch(
+  '/my/cart/address',
+  auth.checkUser,
+  businessOrder.checkMyCart,
+  businessOrder.patchMyCartAddress
+)
+
+// PATCH /api/business/orders/my/cart/courier
+router.patch(
+  '/my/cart/courier',
+  auth.checkUser,
+  businessOrder.checkMyCart,
+  businessOrder.patchMyCartCourier
+)
+
+// PATCH /api/business/orders/my/cart/payment/method
+router.patch(
+  '/my/cart/payment/method',
+  auth.checkUser,
+  businessOrder.checkMyCart,
+  businessOrder.patchMyCartPayment
+)
+
+// PUT /api/business/orders/my/cart/process
+router.put(
+  '/my/cart/process',
+  auth.checkUser,
+  businessOrder.checkMyCart,
+  businessOrder.processMyOrder
 )
 
 // -----------------------------------------------------------------------------
@@ -46,6 +82,14 @@ router.post('/', auth.checkUser, businessOrder.createOneBusinessOrder)
 
 // PUT /api/business/orders/:businessOrderId
 router.put('/', auth.checkUser, businessOrder.updateOneBusinessOrder)
+
+// PATCH /api/business/orders/:businessOrderParam/status
+router.patch(
+  '/:businessOrderParam/status',
+  auth.checkUser,
+  businessOrder.checkOneBusinessOrder,
+  businessOrder.patchOneBusinessOrderStatus
+)
 
 // DELETE /api/business/orders
 router.delete('/', auth.checkUser, businessOrder.deleteAllBusinessOrders)
