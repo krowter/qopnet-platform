@@ -18,6 +18,7 @@ export const checkUser = async (req, res, next) => {
           message: 'Check user is failed because there is no user in JWT',
         })
       } else {
+        // console.log({ userInJWT })
         try {
           // Get user id, but not checked yet
           req.user = userInJWT // { sub: "a1b2c3-d4e5f6" }
@@ -27,7 +28,8 @@ export const checkUser = async (req, res, next) => {
             where: { id: req.user.sub },
             include: { profile: true },
           })
-          if (!user) throw 'Failed to findUnique user'
+          // console.log({ user })
+          if (!user) throw 'Failed to findFirst user'
 
           // Assign profile once get the user
           req.profile = user.profile
@@ -35,6 +37,7 @@ export const checkUser = async (req, res, next) => {
         } catch (error) {
           res.status(400).json({
             message: 'Check user is failed because profile not found',
+            error,
           })
         }
       }

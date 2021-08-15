@@ -28,11 +28,11 @@ import { useSWR } from '../../utils/swr'
 const DashboardPage = () => {
   const user = useUser()
   const router = useRouter()
-  useEffect(() => {
-    if (!user) {
-      router.replace('/signin')
-    }
-  }, [user, router])
+  // useEffect(() => {
+  //   if (!user) {
+  //     router.replace('/signin')
+  //   }
+  // }, [user, router])
 
   return <Layout pt={10}>{user && <DashboardContainer user={user} />}</Layout>
 }
@@ -44,7 +44,15 @@ export const DashboardContainer = ({ user }) => {
   return (
     <Stack>
       {/* <Text as="pre">{JSON.stringify(data, null, 2)}</Text> */}
-      {error && !data && <Text>Gagal memuat profil Anda</Text>}
+      {error && !data && (
+        <Stack align="flex-start">
+          <Text>Gagal memuat profil Anda</Text>
+          <Text>Silakan buat profil terlebih dahulu sebelum melanjutkan</Text>
+          <DashboardActionLink name="profile" href="/create-profile">
+            Buat profil saya
+          </DashboardActionLink>
+        </Stack>
+      )}
       {!error && !data && (
         <HStack>
           <Spinner />

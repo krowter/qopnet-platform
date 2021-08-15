@@ -24,7 +24,7 @@ import {
 } from '@chakra-ui/react'
 
 import { Icon } from '@qopnet/qopnet-ui'
-import { postToAPI } from '../utils'
+import { requestToAPI } from '../utils'
 
 export type ProfileData = {
   // Profile
@@ -43,11 +43,9 @@ export type ProfileData = {
   }
 }
 
-export const CreateProfileForm = ({ profile }) => {
+export const CreateProfileForm = ({ user, profile }) => {
   const router = useRouter()
   const toast = useToast()
-  const user = useUser()
-  const supabase = useSupabase()
   const [loading, setLoading] = useState(false)
 
   // React Hook Form
@@ -70,7 +68,7 @@ export const CreateProfileForm = ({ profile }) => {
       setLoading(true)
       // This will use PUT instead of POST
       // Adaptive create or update
-      const data = await postToAPI('/api/profiles', {
+      const data = await requestToAPI('POST', '/api/profiles', {
         ...profileFormData,
       })
       if (!data) throw new Error('Update profile response error')
@@ -95,7 +93,8 @@ export const CreateProfileForm = ({ profile }) => {
             Profil dan Alamat
           </Heading>
           <Text>
-            Silakan lengkapi profil dan informasi alamat pribadi Anda.
+            Silakan lengkapi profil dan informasi alamat pribadi Anda, untuk
+            akun dengan email {user.email}.
           </Text>
         </Stack>
       </VStack>

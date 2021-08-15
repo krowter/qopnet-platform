@@ -32,6 +32,8 @@ export type AuthData = {
 }
 
 /**
+ * Sign up form
+ *
  * /signup
  */
 export const SignUpForm = () => {
@@ -64,6 +66,7 @@ export const SignUpForm = () => {
     try {
       setLoading(true)
       const { user, error } = await supabase.auth.signUp({ email, password })
+
       if (user) {
         toast({ title: 'Berhasil daftar akun', status: 'success' })
       } else if (error) {
