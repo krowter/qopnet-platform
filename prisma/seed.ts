@@ -289,23 +289,22 @@ async function seedAnekaBusaProducts() {
   })
 }
 
-async function seedPromoEmployee() {
-  const employer = await prisma.promoEmployer.create({
+async function seedPromoEmployees() {
+  const promoEmployer = await prisma.promoEmployer.create({
     data: promoEmployerData[0],
   })
-  
 
-  const employees = await prisma.promoEmployee.createMany({
+  const promoEmployees = await prisma.promoEmployee.createMany({
     // @ts-ignore
     data: promoEmployeeData.map((employee) => {
-      employee.employerId = employer.id
+      employee.employerId = promoEmployer.id
       // @ts-ignore
       employee.birthDate = new Date(employee.birthDate)
       return employee
     }),
   })
 
-  console.log({ employees })
+  console.log({ promoEmployees })
 }
 
 /**
@@ -330,7 +329,7 @@ async function main() {
   await seedPaymentMethods()
   await seedPaymentRecords()
 
-  await seedPromoEmployee()
+  await seedPromoEmployees()
 }
 
 main()
