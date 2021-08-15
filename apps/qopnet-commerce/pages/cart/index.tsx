@@ -204,31 +204,37 @@ export const BusinessOrderItem = ({ item }) => {
 
   // Optimistic UI when INCREMENT
   const handleIncrementBusinessOrderItem = async (itemId) => {
-    mutate(
-      '/api/business/orders/my/cart',
-      (data) => {
-        const filtered = data?.businessOrder?.businessOrderItems?.map(
-          (item) => {
-            item.quantity = 100
-            return item
+    try {
+      mutate(
+        '/api/business/orders/my/cart',
+        (data) => {
+          const filtered = data?.businessOrder?.businessOrderItems?.map(
+            (item) => {
+              if (item.id === itemId) {
+                item.quantity = item.quantity + 1
+              }
+              return item
+            }
+          )
+          return {
+            ...data,
+            businessOrder: {
+              ...data.businessOrder,
+              businessOrderItems: [...filtered],
+            },
           }
-        )
-        return {
-          ...data,
-          businessOrder: {
-            ...data.businessOrder,
-            businessOrderItems: [...filtered],
-          },
-        }
-      },
-      false
-    )
-    // await requestToAPI('PATCH', '/api/business/orders/my/cart/item', {
-    //   action: 'INCREMENT',
-    //   id: itemId,
-    //   quantity: 1,
-    // })
-    // mutate('/api/business/orders/my/cart')
+        },
+        false
+      )
+      await requestToAPI('PATCH', '/api/business/orders/my/cart/item', {
+        action: 'INCREMENT',
+        id: itemId,
+        quantity: 1,
+      })
+      mutate('/api/business/orders/my/cart')
+    } catch (error) {
+      console.error({ error })
+    }
   }
 
   // Optimistic UI when DECREMENT
@@ -236,15 +242,13 @@ export const BusinessOrderItem = ({ item }) => {
     try {
       mutate(
         '/api/business/orders/my/cart',
-        async (data) => {
+        (data) => {
           const filtered = data?.businessOrder?.businessOrderItems?.map(
             (item) => {
               if (item.id === itemId) {
                 item.quantity = item.quantity - 1
-                return item
-              } else {
-                return item
               }
+              return item
             }
           )
           return {
