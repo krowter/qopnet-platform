@@ -16,6 +16,7 @@ import {
   Text,
   useColorModeValue,
 } from '@chakra-ui/react'
+import { mutate } from 'swr'
 
 import { Layout, Icon, SupplierProductPrice } from '@qopnet/qopnet-ui'
 import {
@@ -24,7 +25,7 @@ import {
   calculateCart,
 } from '@qopnet/util-format'
 import { BreadcrumbCart } from '../../components'
-import { useSWR, postToAPI } from '../../utils'
+import { useSWR, postToAPI, requestToAPI } from '../../utils'
 import { useEffect } from 'react'
 
 /**
@@ -170,6 +171,32 @@ export const CartContainer = ({ businessOrder }) => {
 }
 
 export const BusinessOrderItem = ({ item }) => {
+  // Optimistic UI when DELETE
+  const handleDeleteBusinessOrderItem = async (itemId) => {
+    mutate('/api/business/orders/my/cart', async (data) => {
+      try {
+        const filteredBusinessOrderItems =
+          data?.businessOrder?.businessOrderItems?.filter(
+            (item) => item.id !== itemId
+          )
+        return {
+          ...data,
+          businessOrder: {
+            ...data.businessOrder,
+            businessOrderItems: [...filteredBusinessOrderItems],
+          },
+        }
+      } catch (error) {
+        console.log({ error })
+      }
+    })
+    await requestToAPI('PATCH', '/api/business/orders/my/cart/item', {
+      action: 'DELETE',
+      id: itemId,
+    })
+    mutate('/api/business/orders/my/cart')
+  }
+
   return (
     <Stack spacing={5}>
       <Stack
@@ -231,11 +258,12 @@ export const BusinessOrderItem = ({ item }) => {
         <HStack>
           <Input value={item.quantity} maxW="100px" />
           <IconButton
+            className="delete-item"
             aria-label="Hapus barang"
-            size="sm"
             variant="ghost"
             colorScheme="red"
             icon={<Icon name="delete" />}
+            onClick={() => handleDeleteBusinessOrderItem(item.id)}
           >
             Hapus
           </IconButton>
