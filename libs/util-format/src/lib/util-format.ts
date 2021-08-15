@@ -79,14 +79,16 @@ export const formatWeight = (weight: number, weightUnit: string) => {
   }
 }
 
-export const formatAddressComplete = ({
-  street = '',
-  streetDetails = '',
-  city = '',
-  state = '',
-  zip = '',
-  countryCode = 'ID',
-}) => {
+export const formatAddressComplete = (address) => {
+  const {
+    street = '',
+    streetDetails = '',
+    city = '',
+    state = '',
+    zip = '',
+    countryCode = 'ID',
+  } = address || {}
+
   const country = countryCode === 'ID' && 'Indonesia'
   return `${street}, ${
     streetDetails ?? ''
@@ -94,47 +96,61 @@ export const formatAddressComplete = ({
 }
 
 export const calculateCart = (businessOrder) => {
-  // Total Items
-  const totalItemArray = businessOrder?.businessOrderItems?.map(
-    (item) => item.quantity || 0
-  )
-  const totalItems =
-    businessOrder?.totalItems || totalItemArray.reduce((a, c) => a + c)
+  // Only process if there is at least one business order item
+  if (businessOrder?.businessOrderItems?.length > 0) {
+    // Total Items
+    const totalItemArray = businessOrder?.businessOrderItems?.map(
+      (item) => item.quantity || 0
+    )
+    const totalItems =
+      businessOrder?.totalItems || totalItemArray.reduce((a, c) => a + c)
 
-  // Total Price
-  const totalPriceArray = businessOrder?.businessOrderItems?.map(
-    (item) => item.supplierProduct?.price * item.quantity || 0
-  )
-  const totalPrice =
-    businessOrder?.totalPrice || totalPriceArray.reduce((a, c) => a + c)
+    // Total Price
+    const totalPriceArray = businessOrder?.businessOrderItems?.map(
+      (item) => item.supplierProduct?.price * item.quantity || 0
+    )
+    const totalPrice =
+      businessOrder?.totalPrice || totalPriceArray.reduce((a, c) => a + c)
 
-  // Total Discount
-  const totalDiscountArray = businessOrder?.businessOrderItems?.map((item) => {
-    if (item.supplierProduct?.discount) {
-      const totalDiscountedPrice =
-        item.quantity *
-        item.supplierProduct?.price *
-        (item.supplierProduct?.discount / 100)
-      return totalDiscountedPrice
-    } else return 0
-  })
-  const totalDiscount =
-    businessOrder?.totalDiscount || totalDiscountArray.reduce((a, c) => a + c)
+    // Total Discount
+    const totalDiscountArray = businessOrder?.businessOrderItems?.map(
+      (item) => {
+        if (item.supplierProduct?.discount) {
+          const totalDiscountedPrice =
+            item.quantity *
+            item.supplierProduct?.price *
+            (item.supplierProduct?.discount / 100)
+          return totalDiscountedPrice
+        } else return 0
+      }
+    )
+    const totalDiscount =
+      businessOrder?.totalDiscount || totalDiscountArray.reduce((a, c) => a + c)
 
-  // Total Calculated Price
-  // Not including the Shipping Cost, before final payment
-  const totalCalculatedPrice = totalPrice - totalDiscount || 0
+    // Total Calculated Price
+    // Not including the Shipping Cost, before final payment
+    const totalCalculatedPrice = totalPrice - totalDiscount || 0
 
-  const totalShipmentCost = 512000 || 0
-  const totalCalculatedBill = totalCalculatedPrice + totalShipmentCost
+    const totalShipmentCost = 512000 || 0
+    const totalCalculatedBill = totalCalculatedPrice + totalShipmentCost
 
-  return {
-    totalItems,
-    totalPrice,
-    totalDiscount,
-    totalCalculatedPrice,
-    totalShipmentCost,
-    totalCalculatedBill,
+    return {
+      totalItems,
+      totalPrice,
+      totalDiscount,
+      totalCalculatedPrice,
+      totalShipmentCost,
+      totalCalculatedBill,
+    }
+  } else {
+    return {
+      totalItems: 0,
+      totalPrice: 0,
+      totalDiscount: 0,
+      totalCalculatedPrice: 0,
+      totalShipmentCost: 0,
+      totalCalculatedBill: 0,
+    }
   }
 }
 

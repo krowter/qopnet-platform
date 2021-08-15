@@ -27,8 +27,12 @@ import courierVehiclesData from './data/courier-vehicles.json'
 import paymentMethodsData from './data/payments-methods.json'
 import paymentRecordsData from './data/payments-records.json'
 
-import qopnetProductsData from './qopnet-products.json'
-import qopnetOneProductsData from './qopnet-products-one.json'
+import supplierProductsQopnetData from './data/supplier-products-qopnet.json'
+import supplierProductsAnekaBusaData from './data/supplier-products-anekabusa.json'
+import rawProductsData from './raw-products.json'
+
+import promoEmployerData from './data/qopnet-promo-employer.json'
+import promoEmployeeData from './data/qopnet-promo-employee.json'
 
 // -----------------------------------------------------------------------------
 
@@ -59,24 +63,41 @@ async function deleteEverything() {
 
   await prisma.user.deleteMany()
   await prisma.profile.deleteMany()
+  await prisma.adminProfile.deleteMany()
   await prisma.address.deleteMany()
 
+  await prisma.wholesaler.deleteMany()
+
+  // Before supplier and supplierProduct
+  // Unless have cascade delete
   await prisma.businessOrderItem.deleteMany()
   await prisma.businessOrder.deleteMany()
 
   await prisma.supplier.deleteMany()
   await prisma.supplierProduct.deleteMany()
 
+  await prisma.merchant.deleteMany()
+  await prisma.merchantProduct.deleteMany()
+
+  await prisma.financingService.deleteMany()
+  await prisma.fundBeneficiary.deleteMany()
+  await prisma.fundBenefactor.deleteMany()
+
   await prisma.courier.deleteMany()
   await prisma.courierVehicle.deleteMany()
 
   await prisma.paymentMethod.deleteMany()
   await prisma.paymentRecord.deleteMany()
+
+  await prisma.promoProvider.deleteMany()
+  await prisma.promoSubmission.deleteMany()
+  await prisma.promoEmployer.deleteMany()
+  await prisma.promoEmployee.deleteMany()
 }
 
 // -----------------------------------------------------------------------------
 
-async function createSupplierProductsFromJSON({
+async function createSupplierProducts({
   data, // JSON data
   supplier,
 }: {
@@ -99,19 +120,15 @@ async function createSupplierProductsFromJSON({
   console.info({ qopnetSupplierProducts })
 }
 
-async function createSupplierProductsFromURL({
-  productsUrl,
+async function createSupplierProductsDynamic({
+  data,
   supplier,
 }: {
-  productsUrl: string
+  data: any
   supplier: any
 }) {
-  // download data from gist
-  let { data: products }: AxiosResponse<any[]> = await axios.get(productsUrl)
-
-  // re-map
-  // add ids and update storage url based on environment
-  products = products.map((product) => {
+  // Add id and update storage url based on environment
+  const products = data.map((product: any) => {
     product.ownerId = supplier.ownerId
     product.supplierId = supplier.id
 
@@ -261,26 +278,41 @@ const seedPaymentRecords = async () => {
 // -----------------------------------------------------------------------------
 
 async function seedQopnetProducts() {
-  const supplier = {
-    id: 'ckrqopnet0001swpjglh6i6nl',
-  }
-
-  // start creating supplierData
-  await createSupplierProductsFromJSON({
-    data: qopnetOneProductsData, // Will be qopnetProductsData
-    supplier,
+  await createSupplierProducts({
+    data: supplierProductsQopnetData,
+    supplier: {
+      id: 'ckrqopnet0001swpjglh6i6nl',
+      handle: 'qopnet',
+    },
   })
 }
 
 async function seedAnekaBusaProducts() {
-  await createSupplierProductsFromURL({
-    productsUrl:
-      'https://gist.github.com/qopnetlabs/414f0a5e3404e6555165ccc67ff79b60/raw',
+  await createSupplierProductsDynamic({
+    data: supplierProductsAnekaBusaData,
     supplier: {
       id: 'ckrzfccqz0001swpjglh6i6nl',
       handle: 'anekabusa',
     },
   })
+}
+
+async function seedPromoEmployees() {
+  const promoEmployer = await prisma.promoEmployer.create({
+    data: promoEmployerData[0],
+  })
+
+  const promoEmployees = await prisma.promoEmployee.createMany({
+    // @ts-ignore
+    data: promoEmployeeData.map((employee) => {
+      employee.employerId = promoEmployer.id
+      // @ts-ignore
+      employee.birthDate = new Date(employee.birthDate)
+      return employee
+    }),
+  })
+
+  console.log({ promoEmployees })
 }
 
 /**
@@ -296,14 +328,20 @@ async function main() {
   await seedUsers()
   await seedProfiles()
   await seedAddresses()
+
   await seedSuppliers()
   await seedQopnetProducts()
   await seedAnekaBusaProducts()
+
   await seedBusinessOrder()
+
   await seedCouriers()
   await seedCourierVehicles()
+
   await seedPaymentMethods()
   await seedPaymentRecords()
+
+  await seedPromoEmployees()
 }
 
 main()

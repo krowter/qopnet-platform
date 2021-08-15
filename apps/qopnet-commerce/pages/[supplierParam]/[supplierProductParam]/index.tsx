@@ -41,7 +41,11 @@ export const SupplierProductContainer = ({
         </HStack>
       )}
       {!error && data && (
-        <SupplierProductDetail product={supplierProduct} putToAPI={putToAPI} />
+        <SupplierProductDetail
+          product={supplierProduct}
+          useSWR={useSWR}
+          putToAPI={putToAPI}
+        />
       )}
     </>
   )

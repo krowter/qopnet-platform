@@ -75,12 +75,14 @@ export const BusinessOrdersRows = ({
         bg={bg}
         borderBottom="1px solid gray"
         borderColor={border}
-        gridTemplateColumns="50px 100px 100px 100px 1fr"
+        gridTemplateColumns="50px 100px 100px 100px 200px 1fr 1fr"
       >
         <Text fontWeight={700}>No</Text>
         <Text fontWeight={700}>Avatar</Text>
         <Text fontWeight={700}>Handle</Text>
         <Text fontWeight={700}>Nama</Text>
+        <Text fontWeight={700}>Metode Pembayaran</Text>
+        <Text fontWeight={700}>Alamat Pengiriman</Text>
         <Text fontWeight={700}>Status</Text>
       </SimpleGrid>
       {businessOrders?.length &&
@@ -90,21 +92,23 @@ export const BusinessOrdersRows = ({
               spacingX={3}
               columns={{ base: 1, md: 3 }}
               as={Link}
-              key={`${businessOrder.id}`}
-              to={`/business/orders/${businessOrder.id}`}
+              key={`${businessOrder?.id}`}
+              to={`/business/orders/${businessOrder?.id}`}
               w="100%"
               px={5}
               py={3}
               bg={bg}
               borderBottom="1px solid gray"
               borderColor={border}
-              gridTemplateColumns="50px 100px 100px 100px 1fr"
+              gridTemplateColumns="50px 100px 100px 100px 200px 1fr 1fr"
             >
               <Text>#{index}</Text>
               <Avatar size="xs" name={businessOrder.owner.name as string} />
-              <Text>{businessOrder.owner.handle}</Text>
-              <Text>{businessOrder.owner.name}</Text>
-              <Text>{businessOrder.status}</Text>
+              <Text>{businessOrder?.owner.handle}</Text>
+              <Text>{businessOrder?.owner.name}</Text>
+              <Text>{businessOrder?.paymentMethod}</Text>
+              <Text>{businessOrder?.shipmentAddress?.streetDetails}</Text>
+              <Text>{businessOrder?.status}</Text>
             </SimpleGrid>
           )
         })}

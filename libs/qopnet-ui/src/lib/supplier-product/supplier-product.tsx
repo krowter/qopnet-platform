@@ -107,6 +107,7 @@ export interface SupplierProductDetailProps {
       length: number
     }
   }
+  useSWR: any
   putToAPI: any
 }
 
@@ -285,6 +286,7 @@ export const formatPrice = (price: number | Decimal) => {
  */
 export const SupplierProductDetail = ({
   product,
+  useSWR,
   putToAPI,
 }: SupplierProductDetailProps) => {
   const productImages =
@@ -383,7 +385,11 @@ export const SupplierProductDetail = ({
 
           <Divider variant="dashed" />
 
-          <SupplierProductCartModifier product={product} putToAPI={putToAPI} />
+          <SupplierProductCartModifier
+            product={product}
+            useSWR={useSWR}
+            putToAPI={putToAPI}
+          />
 
           <Divider variant="dashed" />
 
@@ -489,11 +495,15 @@ export const SupplierCardForProductLink = ({
 
 export const SupplierProductCartModifier = ({
   product,
+  useSWR,
   putToAPI,
 }: {
   product: SupplierProduct
+  useSWR: any
   putToAPI: any
 }) => {
+  const { data, error } = useSWR('/api/business/orders/my/cart')
+
   const router = useRouter()
   const user = useUser()
   const toast = useToast()
@@ -537,10 +547,19 @@ export const SupplierProductCartModifier = ({
           requestBodyData
         )
         if (response) {
-          setJustAddedToCart(true)
-          // Revalidate my cart data so it won't be too long to load
+          // Mutate and revalidate my cart data so it won't be too long to load
           // By telling all SWRs with this key to revalidate
+          // const newMutatedData = {
+          //   ...data,
+          //   businessOrder: response.businessOrder,
+          // }
+          // console.log({ newMutatedData })
           mutate('/api/business/orders/my/cart')
+
+          // Say via text
+          setJustAddedToCart(true)
+
+          // Say via toast
           toast({
             title: `Menambahkan produk ke keranjang`,
             description: `${productQuantity} × ${product.name}`,
