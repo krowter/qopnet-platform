@@ -75,31 +75,12 @@ export const getMyCart = async (req, res) => {
     } = await prisma.businessOrder.findFirst({
       where: { ownerId, status: 'DRAFT' },
       include: {
+        owner: true,
         businessOrderItems: {
           include: {
-            supplierProduct: {
-              // The most sophisticated select that necessary to view in
-              // Commerce /cart/* pages
-              select: {
-                id: true,
-                slug: true,
-                name: true,
-                images: true,
-                price: true,
-                discount: true,
-                weight: true,
-                weightUnit: true,
-                weightDetails: true,
-                minOrder: true,
-                stock: true,
-                status: true,
-              },
-            },
+            supplierProduct: true,
             supplier: {
-              select: {
-                id: true,
-                handle: true,
-                name: true,
+              include: {
                 addresses: {
                   select: {
                     city: true,
@@ -224,7 +205,20 @@ export const updateMyCart = async (req, res) => {
             id: businessOrder.id,
           },
           include: {
-            businessOrderItems: true,
+            businessOrderItems: {
+              include: {
+                supplierProduct: true,
+                supplier: {
+                  include: {
+                    addresses: {
+                      select: {
+                        city: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
           },
           data: {
             // Only focus on businessOrderItems, not other fields

@@ -13,6 +13,7 @@ import {
   Text,
   useColorModeValue,
 } from '@chakra-ui/react'
+import { mutate } from 'swr'
 
 import {
   Layout,
@@ -26,10 +27,12 @@ import {
   formatAddressComplete,
 } from '@qopnet/util-format'
 import { BreadcrumbCart } from '../../../components'
-import { useSWR } from '../../../utils'
+import { useSWR, requestToAPI } from '../../../utils'
 import { useEffect, useState } from 'react'
 
 /**
+ * Cart select Shipment Address and Courier
+ *
  * /cart/shipment
  */
 export const CartShipmentPage = () => {
@@ -50,6 +53,7 @@ export const CartShipmentPage = () => {
               <Stack direction={['column', 'column', 'row']} spacing={5}>
                 <ShipmentContainer businessOrder={businessOrder} />
                 <ShipmentSummaryContainer businessOrder={businessOrder} />
+                {/* <Text as="pre">{JSON.stringify(data, null, 2)}</Text> */}
               </Stack>
             ) : (
               <Stack align="flex-start">
@@ -102,14 +106,21 @@ export const ShipmentSummaryContainer = ({ businessOrder }) => {
             <Text>Total Harga ({totalItems} barang)</Text>
             <Text>{formatRupiah(totalCalculatedPrice)}</Text>
           </HStack>
+
+          <Stack justify="space-between">
+            <Text>Alamat dipilih</Text>
+            <Text fontSize="xs">
+              {formatAddressComplete(businessOrder?.shipmentAddress)}
+            </Text>
+          </Stack>
+          <HStack justify="space-between">
+            <Text>Kurir dipilih</Text>
+            <Text>{businessOrder?.shipmentCourier?.name}</Text>
+          </HStack>
           <HStack justify="space-between">
             <Text>Total Ongkos Kirim</Text>
             <Text>{formatRupiah(totalShipmentCost)}</Text>
           </HStack>
-          <Stack justify="space-between">
-            <Text>Alamat dipilih</Text>
-            <Text>{businessOrder?.shipmentAddress}</Text>
-          </Stack>
         </Stack>
         <Divider />
         <HStack justify="space-between">
@@ -130,14 +141,14 @@ export const ShipmentSummaryContainer = ({ businessOrder }) => {
 export const ShipmentContainer = ({ businessOrder }) => {
   return (
     <Stack flex={1} minW="420px" spacing={10}>
-      <AddressesContainer />
-      <CouriersContainer />
+      <AddressesContainer businessOrder={businessOrder} />
+      <CouriersContainer businessOrder={businessOrder} />
       <BusinessOrderItemsContainer businessOrder={businessOrder} />
     </Stack>
   )
 }
 
-export const AddressesContainer = () => {
+export const AddressesContainer = ({ businessOrder }) => {
   // Fetch multiple addresses from my profile
   const { data, error } = useSWR('/api/profiles/my')
   const { profile, suppliers, wholesalers, merchants } = data || {}
@@ -148,19 +159,40 @@ export const AddressesContainer = () => {
 
   // Only set addresses once data has been retrieved
   useEffect(() => {
-    if (data) {
+    if (!error && data && profile) {
       // Should concat multiple addresses
       // const mySupplierAddresses = []
-      setAvailableAddresses(profile?.addresses || [])
+      setAvailableAddresses(profile?.addresses)
 
       // Default to set the first availableAddresses
-      setSelectedAddressId(availableAddresses[0]?.id || '')
+      setSelectedAddressId(
+        businessOrder?.shipmentAddress?.id || availableAddresses[0]?.id
+      )
+      // When no address selected yet, select the first one automatically
+      if (!businessOrder?.shipmentAddress?.id) {
+        patchCartWithAddress(availableAddresses[0]?.id)
+      }
     }
-  }, [data, profile, availableAddresses])
+  }, [businessOrder, error, data, profile, availableAddresses])
 
   // Handle select address option with just address id
   const handleSelectAddressOption = (addressId) => {
     setSelectedAddressId(addressId)
+    patchCartWithAddress(addressId)
+  }
+
+  const patchCartWithAddress = (addressId) => {
+    mutate('/api/business/orders/my/cart', async (data) => {
+      const response = await requestToAPI(
+        'PATCH',
+        '/api/business/orders/my/cart/address',
+        { id: addressId }
+      )
+      return {
+        ...data,
+        shipmentAddress: response?.businessOrder?.shipmentAddress,
+      }
+    })
   }
 
   return (
@@ -198,31 +230,47 @@ export const AddressesContainer = () => {
   )
 }
 
-export const CouriersContainer = () => {
+export const CouriersContainer = ({ businessOrder }) => {
   // Fetch couriers
   const { data, error } = useSWR('/api/couriers')
   const { couriers } = data || {}
 
-  // Display addresses
-  const [availableCouriers, setAvailableCouriers] = useState([
-    { id: '1', name: 'Lalamove' },
-    { id: '2', name: 'Deliveree' },
-  ])
-  // Should be empty array if API Courier is available
+  // Display couriers
+  const [availableCouriers, setAvailableCouriers] = useState([])
   const [selectedCourierId, setSelectedCourierId] = useState('')
 
   // Only set couriers once data has been retrieved
   useEffect(() => {
-    if (data) {
-      setAvailableCouriers(couriers || [])
-      // Default to set the first available courier
-      setSelectedCourierId(availableCouriers[0]?.id || '')
+    if (!error && data && couriers) {
+      setAvailableCouriers(couriers)
+      // When no courier selected yet, select the first one automatically
+      setSelectedCourierId(
+        businessOrder?.shipmentCourier?.id || availableCouriers[0]?.id
+      )
+      if (!businessOrder?.shipmentCourier?.id) {
+        patchCartWithCourier(availableCouriers[0]?.id)
+      }
     }
-  }, [data, couriers, availableCouriers])
+  }, [businessOrder, error, data, couriers, availableCouriers])
 
   // Handle select courier option with just courier id
-  const handleSelectCourierOption = (courierId) => {
+  const handleSelectCourierOption = async (courierId) => {
     setSelectedCourierId(courierId)
+    patchCartWithCourier(courierId)
+  }
+
+  const patchCartWithCourier = (courierId) => {
+    mutate('/api/business/orders/my/cart', async (data) => {
+      const response = await requestToAPI(
+        'PATCH',
+        '/api/business/orders/my/cart/courier',
+        { id: courierId }
+      )
+      return {
+        ...data,
+        shipmentCourier: response?.businessOrder?.shipmentCourier,
+      }
+    })
   }
 
   return (

@@ -11,7 +11,7 @@ import { convertImageNameToURL } from '../utils/supabase'
  */
 export const UploadImageForm = ({
   appendImageUrl = (newUrl) => {
-    console.log({ newUrl })
+    // console.info({ newUrl })
   },
 }) => {
   const [loading, setLoading] = useState(false)
@@ -27,7 +27,7 @@ export const UploadImageForm = ({
       try {
         setLoading(true)
         const singleImage = data.images[0] // event.target.files[0]
-        // console.log(`Uploading ${singleImage.name}`)
+        // console.info(`Uploading ${singleImage.name}`)
 
         const { data: response, error } = await supabase.storage
           .from('images')
@@ -35,7 +35,7 @@ export const UploadImageForm = ({
             cacheControl: '3600',
             upsert: true,
           })
-        // console.log({ response, error })
+        // console.info({ response, error })
 
         const formattedURL = convertImageNameToURL(response.Key)
         appendImageUrl(formattedURL)
