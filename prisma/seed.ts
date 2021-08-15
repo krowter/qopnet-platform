@@ -62,13 +62,23 @@ async function deleteEverything() {
 
   await prisma.user.deleteMany()
   await prisma.profile.deleteMany()
+  await prisma.adminProfile.deleteMany()
   await prisma.address.deleteMany()
 
-  await prisma.businessOrderItem.deleteMany()
-  await prisma.businessOrder.deleteMany()
+  await prisma.wholesaler.deleteMany()
 
   await prisma.supplier.deleteMany()
   await prisma.supplierProduct.deleteMany()
+
+  await prisma.merchant.deleteMany()
+  await prisma.merchantProduct.deleteMany()
+
+  await prisma.financingService.deleteMany()
+  await prisma.fundBeneficiary.deleteMany()
+  await prisma.fundBenefactor.deleteMany()
+
+  await prisma.businessOrderItem.deleteMany()
+  await prisma.businessOrder.deleteMany()
 
   await prisma.courier.deleteMany()
   await prisma.courierVehicle.deleteMany()
@@ -76,8 +86,10 @@ async function deleteEverything() {
   await prisma.paymentMethod.deleteMany()
   await prisma.paymentRecord.deleteMany()
 
-  await prisma.promoEmployee.deleteMany()
+  await prisma.promoProvider.deleteMany()
+  await prisma.promoSubmission.deleteMany()
   await prisma.promoEmployer.deleteMany()
+  await prisma.promoEmployee.deleteMany()
 }
 
 // -----------------------------------------------------------------------------
@@ -320,12 +332,16 @@ async function main() {
   await seedUsers()
   await seedProfiles()
   await seedAddresses()
+
   await seedSuppliers()
   await seedQopnetProducts()
   await seedAnekaBusaProducts()
+
   await seedBusinessOrder()
+
   await seedCouriers()
   await seedCourierVehicles()
+
   await seedPaymentMethods()
   await seedPaymentRecords()
 
