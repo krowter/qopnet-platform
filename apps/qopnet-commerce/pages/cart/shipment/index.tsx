@@ -30,6 +30,8 @@ import { useSWR } from '../../../utils'
 import { useEffect, useState } from 'react'
 
 /**
+ * Cart select Shipment Address and Courier
+ *
  * /cart/shipment
  */
 export const CartShipmentPage = () => {
@@ -108,7 +110,9 @@ export const ShipmentSummaryContainer = ({ businessOrder }) => {
           </HStack>
           <Stack justify="space-between">
             <Text>Alamat dipilih</Text>
-            <Text>{businessOrder?.shipmentAddress}</Text>
+            <Text color="gray.500">
+              {formatAddressComplete(businessOrder?.shipmentAddress)}
+            </Text>
           </Stack>
         </Stack>
         <Divider />

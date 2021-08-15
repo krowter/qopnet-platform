@@ -75,6 +75,7 @@ export const getMyCart = async (req, res) => {
     } = await prisma.businessOrder.findFirst({
       where: { ownerId, status: 'DRAFT' },
       include: {
+        owner: true,
         businessOrderItems: {
           include: {
             supplierProduct: true,
