@@ -163,7 +163,9 @@ export const CartContainer = ({ businessOrder }) => {
         maxW="720px"
       >
         {businessOrder?.businessOrderItems?.map((item, index) => {
-          return <BusinessOrderItem key={item.supplierProduct.id} item={item} />
+          return (
+            <BusinessOrderItem key={item?.supplierProduct?.id} item={item} />
+          )
         })}
       </Stack>
     </Stack>
@@ -220,6 +222,35 @@ export const BusinessOrderItem = ({ item }) => {
       )
       await requestToAPI('PATCH', '/api/business/orders/my/cart/item', {
         action: 'INCREMENT',
+        id: itemId,
+        quantity: 1,
+      })
+      mutate('/api/business/orders/my/cart')
+    } catch (error) {
+      console.error({ error })
+    }
+  }
+
+  // Optimistic UI when DECREMENT
+  const handleDecrementBusinessOrderItem = async (itemId) => {
+    try {
+      mutate(
+        '/api/business/orders/my/cart',
+        async (data) => {
+          return {
+            ...data,
+            businessOrder: {
+              ...data.businessOrder,
+              businessOrderItems: data?.businessOrder?.businessOrderItems?.map(
+                (item) => (item.quantity = item.quantity - 1)
+              ),
+            },
+          }
+        },
+        false
+      )
+      await requestToAPI('PATCH', '/api/business/orders/my/cart/item', {
+        action: 'DECREMENT',
         id: itemId,
         quantity: 1,
       })
@@ -288,7 +319,23 @@ export const BusinessOrderItem = ({ item }) => {
         </Stack>
 
         <HStack>
-          <Input value={item.quantity} maxW="100px" />
+          <IconButton
+            className="increment-item"
+            aria-label="Tambah jumlah barang"
+            colorScheme="green"
+            icon={<Icon name="increment" />}
+            onClick={() => handleIncrementBusinessOrderItem(item.id)}
+          />
+          <Text textAlign="center" w="70px" fontSize="lg">
+            {item.quantity}
+          </Text>
+          <IconButton
+            className="decrement-item"
+            aria-label="Kurangi jumlah barang"
+            colorScheme="blue"
+            icon={<Icon name="decrement" />}
+            onClick={() => handleDecrementBusinessOrderItem(item.id)}
+          />
           <IconButton
             className="delete-item"
             aria-label="Hapus barang"
@@ -296,9 +343,7 @@ export const BusinessOrderItem = ({ item }) => {
             colorScheme="red"
             icon={<Icon name="delete" />}
             onClick={() => handleDeleteBusinessOrderItem(item.id)}
-          >
-            Hapus
-          </IconButton>
+          />
         </HStack>
       </Stack>
     </Stack>

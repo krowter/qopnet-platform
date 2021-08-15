@@ -40,6 +40,8 @@ import {
   FaTrash as Delete,
   FaChevronRight as ChevronRight,
   FaChevronLeft as ChevronLeft,
+  FaPlus as Increment,
+  FaMinus as Decrement,
 } from 'react-icons/fa'
 import { FiMenu as Menu } from 'react-icons/fi'
 import { MdFreeBreakfast as Breakfast } from 'react-icons/md'
@@ -159,6 +161,10 @@ export const Icon = (props: IconProps) => {
       return <ChevronRight />
     case 'chevron-left':
       return <ChevronLeft />
+    case 'increment':
+      return <Increment />
+    case 'decrement':
+      return <Decrement />
 
     /**
      * When nothing found
