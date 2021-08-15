@@ -24,7 +24,7 @@ import {
 } from '@chakra-ui/react'
 
 import { Icon } from '@qopnet/qopnet-ui'
-import { postToAPI } from '../utils'
+import { requestToAPI } from '../utils'
 
 export type ProfileData = {
   // Profile
@@ -68,7 +68,7 @@ export const CreateProfileForm = ({ user, profile }) => {
       setLoading(true)
       // This will use PUT instead of POST
       // Adaptive create or update
-      const data = await postToAPI('/api/profiles', {
+      const data = await requestToAPI('POST', '/api/profiles', {
         ...profileFormData,
       })
       if (!data) throw new Error('Update profile response error')

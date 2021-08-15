@@ -28,11 +28,11 @@ import { useSWR } from '../../utils/swr'
 const DashboardPage = () => {
   const user = useUser()
   const router = useRouter()
-  useEffect(() => {
-    if (!user) {
-      router.replace('/signin')
-    }
-  }, [user, router])
+  // useEffect(() => {
+  //   if (!user) {
+  //     router.replace('/signin')
+  //   }
+  // }, [user, router])
 
   return <Layout pt={10}>{user && <DashboardContainer user={user} />}</Layout>
 }
