@@ -1,7 +1,7 @@
 [
   {
-    "slug": "gula-pasir-rose-brand-a1b3c2",
-    "name": "Gula Pasir Rose Brand",
+    "slug": "gula-pasir-rose-brand-1kg-20pcs",
+    "name": "Gula Pasir Rose Brand 1 kg",
     "subname": "Kemasan Pouch 1 kg dikemas dengan dus isi 20 pcs",
     "description": "Kemasan Pouch 1 kg\n\nDikemas dengan dus isi 20 pcs\n\nMerk Rose Brand.",
     "sku": "Q-GPRB-1-20",
@@ -10,11 +10,351 @@
     "stock": 1000,
     "status": "ACTIVE",
     "dimension": { "width": null, "length": null, "height": null },
-    "category": "bintara,Branded",
+    "category": "bintara, branded",
     "discount": 8,
     "weightUnit": "KG",
     "images": [
       "https://ik.imagekit.io/qopnetlabs/products/gula-pasir-rose-brand.webp?updatedAt=1628517795173"
+    ]
+  },
+  {
+    "slug": "minyak-goreng-vipco-900ml-12pcs",
+    "name": "Minyak Goreng Vipco 900 ml",
+    "description": "Merek Vipco\n\nUkuran 900 ml\n\nKemasan pouch (Refill)\n\n12 pcs/box\n\nCatatan\nDisarankan mencapai bobot minimum 300 kg sewaktu memesan.\nTiap nomor pesanan bisa terdiri dari satu produk atau lebih.\n\nContoh \nOrder No #1500 terdiri dari \n1. Minyak Goreng Sovia @2l sebanyak 2 dus (1 dus isi 6 pcs)\n2. Gula Rose Brand @1kg sebanyak 1 dus (1 dus isi 20 pcs)\n3. Beras Sari Padi @50kg sebanyak 5 karung",
+    "sku": "Q-MGV-900-12",
+    "price": 159000,
+    "weight": 12,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "bintara, branded",
+    "discount": null,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/minyak-goreng-vipco-900ml-12pcs.webp?updatedAt=1628523161125"
+    ]
+  },
+  {
+    "slug": "air-mineral-pristine-1500ml-dus-24x",
+    "name": "Air Mineral Pristine 1500 ml",
+    "description": "Air Mineral \"Pristine\" ukuran 1500 ml. 1 dus isi 24 botol air mineral.\n\nHarga tertera untuk 1 dus.\n\nPembelian minimal 2 dus.\n\nPengiriman dari Semarang",
+    "sku": "Q-AMP-1500-24",
+    "price": 77000,
+    "weight": 1,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "gudang semarang ronggolawe",
+    "discount": null,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/air-mineral-pristine-1500ml-dus-24x.webp?updatedAt=1628516766918"
+    ]
+  },
+  {
+    "slug": "kecap-manis-banyak-300ml",
+    "name": "Kecap Manis Cap “Banyak” botol 300 ml",
+    "description": "Kemasan Botol Plastik isi 300 ml @ harga Rp 16.500\n\nPemesanan minimal 1 karton isi 25 botol.\n\nKecap Manis Cap \"Banyak\" cocok untuk segala macam hidangan\n\nTerbuat dari bahan-bahan alami\n\nKualitas terjamin\n\nPengiriman dari Semarang",
+    "sku": "Q-KMB-300",
+    "price": 16500,
+    "weight": 1,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "gudang semarang tengger",
+    "discount": null,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/kecap-manis-banyak-300ml.jpeg?updatedAt=1628688596392"
+    ]
+  },
+  {
+    "slug": "beras-c4-premium-25kg",
+    "name": "Beras C4 Premium 25 kg",
+    "description": "Beras Premium C4\n\nTanpa Pemutih, alami dan pulen\n\nKemasan 25 kg\n\nkualitas terjamin\n\nDisarankan untuk mencapai bobot minimum 100 kg sewaktu memesan.\n\nBobot minimum per no pemesanan bisa terdiri dari 1 produk atau lebih.\n\nPengiriman dari Semarang\n\nHarga per kg 11.300",
+    "sku": "Q-BCP-25",
+    "price": 282500,
+    "weight": 50,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "gudang semarang tengger",
+    "discount": null,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/beras-c4-premium-25kg.jpeg?updatedAt=1628689113684"
+    ]
+  },
+  {
+    "slug": "beras-enak-pulen-manis-5kg",
+    "name": "Beras Enak Pulen “Manis” 5kg",
+    "description": "Beras Pulen, Kualitas Premium, Kemasan 5 Kg\n\nTanpa Pemutih, Tanpa Pengawet, & Tanpa Pewangi\n\nDisarankan untuk mencapai bobot minimum 100 kg sewaktu memesan.\n\nBobot minimum per no pemesanan bisa terdiri dari 1 produk atau lebih.\n\nPengiriman dari Semarang\n\nHarga per kg Rp 10.990",
+    "sku": "Q-BEPM-5",
+    "price": 54950,
+    "weight": 5,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "gudang semarang ronggolawe, gudang semarang tengger",
+    "discount": null,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/beras-enak-pulen-manis-5kg.webp?updatedAt=1628689308895"
+    ]
+  },
+  {
+    "slug": "beras-kristal-super-kepala-anak-raja-5kg",
+    "name": "Beras Kristal Super Kepala “Anak Raja” 5Kg",
+    "description": "Beras Putih Pulen, Alami dan higienis\n\nDisarankan untuk mencapai bobot minimum 100 kg sewaktu memesan.\n\nBobot minimum per no pemesanan bisa terdiri dari 1 produk atau lebih.\n\nPengiriman dari Semarang\n\nHarga per kg Rp 11.990",
+    "sku": "Q-BKSKAR-5",
+    "price": 59950,
+    "weight": 5,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "gudang semarang ronggolawe, gudang semarang tengger",
+    "discount": null,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/beras-kristal-super-kepala-anak-raja-5kg.webp?updatedAt=1628689457217"
+    ]
+  },
+  {
+    "slug": "kopi-arabica-1kg",
+    "name": "Kopi Arabica 1 kg",
+    "description": "Arabica Toraja\nBlended Grade (A & B)\nKemasan 1 kg Bubuk/Roasted Bean\n\nCatatan\nDisarankan mencapai bobot minimum 300 kg sewaktu memesan.\nTiap nomor pesanan bisa terdiri dari satu produk atau lebih.\n\nContoh\nOrder No #1500 terdiri dari\n1. Minyak Goreng Sovia @2l sebanyak 2 dus (1 dus isi 6 pcs)\n2. Gula Rose Brand @1kg sebanyak 1 dus (1 dus isi 20 pcs)\n3. Beras Sari Padi @50kg sebanyak 5 karung",
+    "sku": "Q-KA-1",
+    "price": 85000,
+    "weight": 1,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "bintara",
+    "discount": null,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/kopi-arabica-1kg.jpeg?updatedAt=1628751228361"
+    ]
+  },
+  {
+    "slug": "minyak-goreng-fortune-1lt",
+    "name": "Minyak Goreng Fortune 1 liter",
+    "description": "Fortune\n\nUkuran 1 liter\n\nKemasan Bantal (Refill)\n\n12 pcs/box\n\nCatatan\nDisarankan mencapai bobot minimum 300 kg sewaktu memesan.\nTiap nomor pesanan bisa terdiri dari satu produk atau lebih.\n\nContoh \nOrder No #1500 terdiri dari \n1. Minyak Goreng Sovia @2l sebanyak 2 dus (1 dus isi 6 pcs)\n2. Gula Rose Brand @1kg sebanyak 1 dus (1 dus isi 20 pcs)\n3. Beras Sari Padi @50kg sebanyak 5 karung",
+    "sku": "Q-MGF-1",
+    "price": 154000,
+    "weight": 12,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "bintara, branded",
+    "discount": null,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/minyak-goreng-fortune-1lt.webp?updatedAt=1628752136345"
+    ]
+  },
+  {
+    "slug": "daging-sapi-topside-import-1kg",
+    "name": "Daging Sapi Topside Import 1 kg",
+    "description": "Daging sapi topside import dari Brazil ukuran 1 kg",
+    "sku": "Q-DSTI-1",
+    "price": 96000,
+    "weight": 1,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "cipinang",
+    "discount": null,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/daging-sapi-topside-import-1kg.jpeg?updatedAt=1629026566291"
+    ]
+  },
+  {
+    "slug": "gula-aren-murni-1kg",
+    "name": "Gula Aren Murni 1 kg",
+    "description": "Gula aren organik tanpa campuran\n\nukuran 1 kg\n\nCatatan\nDisarankan mencapai bobot minimum 300 kg sewaktu memesan.\nTiap nomor pesanan bisa terdiri dari satu produk atau lebih.\n\nContoh\nOrder No #1500 terdiri dari\n1. Minyak Goreng Sovia @2l sebanyak 2 dus (1 dus isi 6 pcs)\n2. Gula Rose Brand @1kg sebanyak 1 dus (1 dus isi 20 pcs)\n3. Beras Sari Padi @50kg sebanyak 5 karung",
+    "sku": "Q-GAM-1",
+    "price": 27500,
+    "weight": 1,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "cipinang",
+    "discount": null,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/gula-aren-murni-1kg.jpeg?updatedAt=1628753055679"
+    ]
+  },
+  {
+    "slug": "gula-merah-sari-kelapa-10kg",
+    "name": "Gula Merah Sari Kelapa 10 kg",
+    "description": "Gula Merah Sari Kelapa\n\nGula Merah 10 kg per ball\n\nCatatan\nDisarankan mencapai bobot minimum 300 kg sewaktu memesan.\nTiap nomor pesanan bisa terdiri dari satu produk atau lebih.\n\nContoh\nOrder No #1500 terdiri dari\n1. Minyak Goreng Sovia @2l sebanyak 2 dus (1 dus isi 6 pcs)\n2. Gula Rose Brand @1kg sebanyak 1 dus (1 dus isi 20 pcs)\n3. Beras Sari Padi @50kg sebanyak 5 karung",
+    "sku": "Q-GMSK-10",
+    "price": 151800,
+    "weight": 10,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "cipinang",
+    "discount": null,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/gula-merah-sari-kelapa-10kg.jpeg?updatedAt=1628769792673"
+    ]
+  },
+  {
+    "slug": "sunlight-sabun-cuci-piring-210ml",
+    "name": "Sunlight Sabun cuci piring (Kemasan Kecil) 210 ml",
+    "description": "Sunlight\nSabun cuci piring\nKemasan pouch 210 ml\nIsi 24 pouch per karton\n\n\nCatatan\nDisarankan mencapai bobot minimum 300 kg sewaktu memesan.\nTiap nomor pesanan bisa terdiri dari satu produk atau lebih.\n\nContoh \nOrder No #1500 terdiri dari \n1. Minyak Goreng Sovia @2l sebanyak 2 dus (1 dus isi 6 pcs)\n2. Gula Rose Brand @1kg sebanyak 1 dus (1 dus isi 20 pcs)\n3. Beras Sari Padi @50kg sebanyak 5 karung",
+    "sku": "Q-SSCP-210",
+    "price": 110000,
+    "weight": 6,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "bintara, branded",
+    "discount": null,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/sunlight-sabun-cuci-piring-210ml.webp?updatedAt=1628769993985"
+    ]
+  },
+  {
+    "slug": "indomie-mi-goreng-instan-75gr-40pcs",
+    "name": "Indomie Mi Goreng Instan 75 gr",
+    "description": "Mi Instan \nMerk Indomie \nMi Goreng \nkemasan 75 gr \nDalam dus karton 40 pcs",
+    "sku": "36892",
+    "price": 103000,
+    "weight": 3,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "bintara, branded",
+    "discount": null,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/indomie-mi-goreng-instan-75gr-40pcs.jpeg?updatedAt=1628770182244"
+    ]
+  },
+  {
+    "slug": "garam-yodium-cap-kapal",
+    "name": "Garam Yodium Cap Kapal",
+    "description": "Garam Yodium\nCap Kapal\nDikemas per 250 gram/500 gram\nDalam satuan 5 kg",
+    "sku": "Q-GYCK",
+    "price": 47825,
+    "weight": 5,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "bintara,Non Brand",
+    "discount": 28,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/garam-yodium-cap-kapal.jpeg?updatedAt=1628770372079"
+    ]
+  },
+  {
+    "slug": "kornetku-corned-sapi-200gr",
+    "name": "KORNETKU Corned Sapi 200 gram",
+    "description": "Kornet Sapi \nKemasan Kaleng 200 gram \nMerk Kornetku \ndalam kemasan karton 24 pcs",
+    "sku": "1",
+    "price": 769705,
+    "weight": 5,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "bintara, branded",
+    "discount": 3,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/kornetku-corned-sapi-200gr.jpeg?updatedAt=1628770525667"
+    ]
+  },
+  {
+    "slug": "minyak-goreng-harumas-1lt",
+    "name": "Minyak Goreng HARUMAS 1 liter",
+    "description": "Minyak Goreng \nKemasan 1 liter \nMerk Harumas \ndalam kemasan karton isi 12 pcs",
+    "sku": "Q-MGH-1",
+    "price": 151916,
+    "weight": 2,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "bintara, branded",
+    "discount": 3,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/minyak-goreng-harumas-1lt.jpeg?updatedAt=1628838275873"
+    ]
+  },
+  {
+    "slug": "mi-instan-indomie-75gr",
+    "name": "Mi Instan INDOMIE 75 gram",
+    "description": "Mi Instan \nMerk Indomie Rasa Kaldu Ayam \nkemasan 75 gram \nDalam Karton 40 pcs",
+    "sku": "Q-MII-75",
+    "price": 90024,
+    "weight": 3,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "bintara, branded",
+    "discount": 3,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/mi-instan-indomie-75gr.jpeg?updatedAt=1628838518706"
+    ]
+  },
+  {
+    "slug": "sardines-gaga-kemasan-besar-425gr",
+    "name": "Sardines GAGA kemasan besar 425 gram",
+    "description": "Sardines \nKemasan Kaleng \nMerk Gaga Kemasan 425 gram \ndalam karton isi 24 pcs",
+    "sku": "Q-SG-425",
+    "price": 437517,
+    "weight": 11,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "bintara, branded",
+    "discount": 3,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/sardines-gaga-kemasan-besar-425gr.jpeg?updatedAt=1628838678991"
+    ]
+  },
+  {
+    "slug": "sardines-kemasan-kecil-gaga-155gr",
+    "name": "Sardines Kemasan Kecil GAGA 155 gram",
+    "description": "Sardines \nKemasan Kaleng \nMerk Gaga Kemasan 155 gram \ndalam karton isi 60 pcs",
+    "sku": "Q-SG-155",
+    "price": 460135,
+    "weight": 10,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "bintara, branded",
+    "discount": 3,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/sardines-kemasan-kecil-gaga-155gr.jpeg?updatedAt=1628838789865"
+    ]
+  },
+  {
+    "slug": "daging-ayam-kemasan-palet-100pcs",
+    "name": "Daging Ayam (Kemasan Palet) isi 100 pcs",
+    "description": "Daging Ayam Beku\n\nPotongan 0,9 kg sd 1 kg\nDalam ukuran 1 koli isi 100 pcs\n\nKarkas kosong\nNon parting",
+    "sku": "Q-DAKP-100",
+    "price": 3069000,
+    "weight": 100,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "Non Brand,pasar minggu",
+    "discount": 3,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/daging-ayam-kemasan-palet-100pcs.jpeg?updatedAt=1628838999329"
     ]
   }
 ]

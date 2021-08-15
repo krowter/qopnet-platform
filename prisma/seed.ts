@@ -62,13 +62,25 @@ async function deleteEverything() {
 
   await prisma.user.deleteMany()
   await prisma.profile.deleteMany()
+  await prisma.adminProfile.deleteMany()
   await prisma.address.deleteMany()
 
+  await prisma.wholesaler.deleteMany()
+
+  // Before supplier and supplierProduct
+  // Unless have cascade delete
   await prisma.businessOrderItem.deleteMany()
   await prisma.businessOrder.deleteMany()
 
   await prisma.supplier.deleteMany()
   await prisma.supplierProduct.deleteMany()
+
+  await prisma.merchant.deleteMany()
+  await prisma.merchantProduct.deleteMany()
+
+  await prisma.financingService.deleteMany()
+  await prisma.fundBeneficiary.deleteMany()
+  await prisma.fundBenefactor.deleteMany()
 
   await prisma.courier.deleteMany()
   await prisma.courierVehicle.deleteMany()
@@ -76,8 +88,10 @@ async function deleteEverything() {
   await prisma.paymentMethod.deleteMany()
   await prisma.paymentRecord.deleteMany()
 
-  await prisma.promoEmployee.deleteMany()
+  await prisma.promoProvider.deleteMany()
+  await prisma.promoSubmission.deleteMany()
   await prisma.promoEmployer.deleteMany()
+  await prisma.promoEmployee.deleteMany()
 }
 
 // -----------------------------------------------------------------------------
@@ -289,23 +303,22 @@ async function seedAnekaBusaProducts() {
   })
 }
 
-async function seedPromoEmployee() {
-  const employer = await prisma.promoEmployer.create({
+async function seedPromoEmployees() {
+  const promoEmployer = await prisma.promoEmployer.create({
     data: promoEmployerData[0],
   })
-  
 
-  const employees = await prisma.promoEmployee.createMany({
+  const promoEmployees = await prisma.promoEmployee.createMany({
     // @ts-ignore
     data: promoEmployeeData.map((employee) => {
-      employee.employerId = employer.id
+      employee.employerId = promoEmployer.id
       // @ts-ignore
       employee.birthDate = new Date(employee.birthDate)
       return employee
     }),
   })
 
-  console.log({ employees })
+  console.log({ promoEmployees })
 }
 
 /**
@@ -321,16 +334,20 @@ async function main() {
   await seedUsers()
   await seedProfiles()
   await seedAddresses()
+
   await seedSuppliers()
   await seedQopnetProducts()
   await seedAnekaBusaProducts()
+
   await seedBusinessOrder()
+
   await seedCouriers()
   await seedCourierVehicles()
+
   await seedPaymentMethods()
   await seedPaymentRecords()
 
-  await seedPromoEmployee()
+  await seedPromoEmployees()
 }
 
 main()
