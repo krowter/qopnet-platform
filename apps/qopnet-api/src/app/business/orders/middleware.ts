@@ -328,6 +328,90 @@ export const updateMyCart = async (req, res) => {
   }
 }
 
+// Patch my cart item based on action:
+// DELETE
+// INCREMENT
+// DECREMENT
+//   If <1 then DELETE
+export const patchMyCartItem = async (req, res) => {
+  const ownerId = req.profile.id
+  const isCartExist = req.isCartExist
+  const formData = req.body
+
+  if (isCartExist && formData.action) {
+    try {
+      if (formData.action === 'DELETE') {
+        // DELETE only
+        const deletedBusinessOrderItem = await prisma.businessOrderItem.delete({
+          where: { id: formData.id },
+        })
+        res.status(200).json({
+          message: 'Patch my cart DELETE item success',
+          formData,
+          businessOrderItem: deletedBusinessOrderItem,
+        })
+      } else if (formData.action === 'INCREMENT') {
+        // INCREMENT with quantity
+        const incrementedBusinessOrderItem =
+          await prisma.businessOrderItem.update({
+            where: { id: formData.id },
+            data: { quantity: { increment: formData.quantity || 0 } },
+          })
+        res.status(200).json({
+          message: 'Patch my cart INCREMENT item success',
+          formData,
+          businessOrderItem: incrementedBusinessOrderItem,
+        })
+      } else if (formData.action === 'DECREMENT') {
+        const decrementedBusinessOrderItem =
+          await prisma.businessOrderItem.update({
+            where: { id: formData.id },
+            data: { quantity: { decrement: formData.quantity || 0 } },
+          })
+        // Delete if the quantity is already 0 or less than 1
+        if (decrementedBusinessOrderItem.quantity < 1) {
+          const deletedBusinessOrderItem =
+            await prisma.businessOrderItem.delete({
+              where: { id: formData.id },
+            })
+          res.status(200).json({
+            message:
+              'Patch my cart DECREMENT item success, quantity is less than 1, just DELETE',
+            formData,
+            businessOrderItem: deletedBusinessOrderItem,
+          })
+        }
+        res.status(200).json({
+          message: 'Patch my cart DECREMENT item success',
+          formData,
+          businessOrderItem: decrementedBusinessOrderItem,
+        })
+      } else {
+        res.status(400).json({
+          message: 'Patch my cart action is not available',
+          formData,
+        })
+      }
+    } catch (error) {
+      res.status(400).json({
+        message: 'Patch my cart item failed, might because something wrong',
+        error,
+        ownerId,
+        isCartExist,
+        formData,
+      })
+    }
+  } else {
+    res.status(400).json({
+      message:
+        'Patch my cart item failed because cart is not exist or action is unavailable',
+      ownerId,
+      isCartExist,
+      formData,
+    })
+  }
+}
+
 // Patch my cart address
 export const patchMyCartAddress = async (req, res) => {
   const ownerId = req.profile.id
@@ -359,7 +443,7 @@ export const patchMyCartAddress = async (req, res) => {
     } catch (error) {
       res.status(400).json({
         message:
-          'Patch my cart courier failed, might because address id is invalid',
+          'Patch my cart address failed, might because address id is invalid',
         error,
         ownerId,
         isCartExist,

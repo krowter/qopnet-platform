@@ -318,7 +318,9 @@ export const BusinessOrderItemsContainer = ({ businessOrder }) => {
         maxW="720px"
       >
         {businessOrder?.businessOrderItems?.map((item, index) => {
-          return <BusinessOrderItem key={item.supplierProduct.id} item={item} />
+          return (
+            <BusinessOrderItem key={item?.supplierProduct?.id} item={item} />
+          )
         })}
       </Stack>
     </Stack>
