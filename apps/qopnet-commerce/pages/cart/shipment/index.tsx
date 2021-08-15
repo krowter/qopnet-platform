@@ -168,6 +168,7 @@ export const AddressesContainer = ({ businessOrder }) => {
       setSelectedAddressId(
         businessOrder?.shipmentAddress?.id || availableAddresses[0]?.id
       )
+      // When no address selected yet, select the first one automatically
       if (!businessOrder?.shipmentAddress?.id) {
         patchCartWithAddress(availableAddresses[0]?.id)
       }
@@ -234,24 +235,31 @@ export const CouriersContainer = ({ businessOrder }) => {
   const { data, error } = useSWR('/api/couriers')
   const { couriers } = data || {}
 
-  // Display addresses
+  // Display couriers
   const [availableCouriers, setAvailableCouriers] = useState([])
-  // Should be empty array if API Courier is available
   const [selectedCourierId, setSelectedCourierId] = useState('')
 
   // Only set couriers once data has been retrieved
   useEffect(() => {
     if (!error && data && couriers) {
       setAvailableCouriers(couriers)
-      // Default to set the first available courier
-      setSelectedCourierId(availableCouriers[0]?.id)
+      // When no courier selected yet, select the first one automatically
+      setSelectedCourierId(
+        businessOrder?.shipmentCourier?.id || availableCouriers[0]?.id
+      )
+      if (!businessOrder?.shipmentCourier?.id) {
+        patchCartWithCourier(availableCouriers[0]?.id)
+      }
     }
-  }, [error, data, couriers, availableCouriers])
+  }, [businessOrder, error, data, couriers, availableCouriers])
 
   // Handle select courier option with just courier id
   const handleSelectCourierOption = async (courierId) => {
     setSelectedCourierId(courierId)
+    patchCartWithCourier(courierId)
+  }
 
+  const patchCartWithCourier = (courierId) => {
     mutate('/api/business/orders/my/cart', async (data) => {
       const response = await requestToAPI(
         'PATCH',
