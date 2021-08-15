@@ -179,14 +179,14 @@ export const BusinessOrderItem = ({ item }) => {
       mutate(
         '/api/business/orders/my/cart',
         async (data) => {
+          const filtered = data?.businessOrder?.businessOrderItems?.filter(
+            (item) => item.id !== itemId
+          )
           return {
             ...data,
             businessOrder: {
               ...data.businessOrder,
-              businessOrderItems:
-                data?.businessOrder?.businessOrderItems?.filter(
-                  (item) => item.id !== itemId
-                ),
+              businessOrderItems: [...filtered],
             },
           }
         },
@@ -213,7 +213,14 @@ export const BusinessOrderItem = ({ item }) => {
             businessOrder: {
               ...data.businessOrder,
               businessOrderItems: data?.businessOrder?.businessOrderItems?.map(
-                (item) => (item.quantity = item.quantity + 1)
+                (item) => {
+                  if (item.id === itemId) {
+                    item.quantity += 1
+                    return item
+                  } else {
+                    return item
+                  }
+                }
               ),
             },
           }
@@ -237,13 +244,19 @@ export const BusinessOrderItem = ({ item }) => {
       mutate(
         '/api/business/orders/my/cart',
         async (data) => {
+          const filtered = data?.businessOrder?.businessOrderItems?.map(
+            (item) => {
+              if (item.id === itemId) {
+                item.quantity -= 1
+              }
+              return item
+            }
+          )
           return {
             ...data,
             businessOrder: {
               ...data.businessOrder,
-              businessOrderItems: data?.businessOrder?.businessOrderItems?.map(
-                (item) => (item.quantity = item.quantity - 1)
-              ),
+              businessOrderItems: [...filtered],
             },
           }
         },
@@ -335,6 +348,7 @@ export const BusinessOrderItem = ({ item }) => {
             colorScheme="blue"
             icon={<Icon name="decrement" />}
             onClick={() => handleDecrementBusinessOrderItem(item.id)}
+            disabled={item.quantity <= 1}
           />
           <IconButton
             className="delete-item"
