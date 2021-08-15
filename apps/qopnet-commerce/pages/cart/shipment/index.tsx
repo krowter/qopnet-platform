@@ -104,16 +104,21 @@ export const ShipmentSummaryContainer = ({ businessOrder }) => {
             <Text>Total Harga ({totalItems} barang)</Text>
             <Text>{formatRupiah(totalCalculatedPrice)}</Text>
           </HStack>
-          <HStack justify="space-between">
-            <Text>Total Ongkos Kirim</Text>
-            <Text>{formatRupiah(totalShipmentCost)}</Text>
-          </HStack>
+
           <Stack justify="space-between">
             <Text>Alamat dipilih</Text>
             <Text color="gray.500">
               {formatAddressComplete(businessOrder?.shipmentAddress)}
             </Text>
           </Stack>
+          <Stack justify="space-between">
+            <Text>Kurir dipilih</Text>
+            <Text color="gray.500">{businessOrder?.courier?.name}</Text>
+          </Stack>
+          <HStack justify="space-between">
+            <Text>Total Ongkos Kirim</Text>
+            <Text>{formatRupiah(totalShipmentCost)}</Text>
+          </HStack>
         </Stack>
         <Divider />
         <HStack justify="space-between">
@@ -208,10 +213,7 @@ export const CouriersContainer = () => {
   const { couriers } = data || {}
 
   // Display addresses
-  const [availableCouriers, setAvailableCouriers] = useState([
-    { id: '1', name: 'Lalamove' },
-    { id: '2', name: 'Deliveree' },
-  ])
+  const [availableCouriers, setAvailableCouriers] = useState(couriers)
   // Should be empty array if API Courier is available
   const [selectedCourierId, setSelectedCourierId] = useState('')
 
