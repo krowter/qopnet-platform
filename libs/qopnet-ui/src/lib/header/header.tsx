@@ -91,13 +91,13 @@ export const Header = (props: HeaderProps) => {
           {colorMode === 'light' ? <Icon name="moon" /> : <Icon name="sun" />}
         </IconButton>
 
-        <Heading as="h1" size="md">
-          {isDesktop && (
+        {isDesktop && (
+          <Heading as="h1" size="md">
             <NextLink href="/shop">
               <Link>Belanja</Link>
             </NextLink>
-          )}
-        </Heading>
+          </Heading>
+        )}
       </HStack>
 
       <SearchBar />
@@ -162,6 +162,8 @@ export type SearchData = {
 
 export const SearchBar = () => {
   const router = useRouter()
+  const [isDesktop] = useMediaQuery('(min-width: 768px)')
+  const iconColor = useColorModeValue('black', 'white')
 
   // React Hook Form for search
   const {
@@ -181,9 +183,11 @@ export const SearchBar = () => {
   return (
     <Box as="form" w="100%" onSubmit={handleSubmit(handleSubmitSearch)}>
       <InputGroup>
-        <InputLeftElement color={useColorModeValue('black', 'white')}>
-          <Icon name="search" />
-        </InputLeftElement>
+        {isDesktop && (
+          <InputLeftElement color={iconColor}>
+            <Icon name="search" />
+          </InputLeftElement>
+        )}
         <Input
           type="text"
           placeholder="Cari produk..."
