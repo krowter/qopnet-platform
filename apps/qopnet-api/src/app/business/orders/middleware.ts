@@ -328,6 +328,64 @@ export const updateMyCart = async (req, res) => {
   }
 }
 
+// Patch my cart item based on action:
+// DELETE
+// INCREMENT
+// DECREMENT
+export const patchMyCartItem = async (req, res) => {
+  const ownerId = req.profile.id
+  const isCartExist = req.isCartExist
+  const formData = req.body
+
+  if (isCartExist && formData.action) {
+    try {
+      if (formData.action === 'DELETE') {
+        const updatedBusinessOrderItem = await prisma.businessOrderItem.delete({
+          where: {
+            id: formData.id,
+          },
+        })
+        res.status(200).json({
+          message: 'Patch my cart DELETE item success',
+          formData,
+          businessOrderItem: updatedBusinessOrderItem,
+        })
+      } else if (formData.action === 'INCREMENT') {
+        res.status(200).json({
+          message: 'Patch my cart INCREMENT item success',
+          formData,
+        })
+      } else if (formData.action === 'DECREMENT') {
+        res.status(200).json({
+          message: 'Patch my cart DECREMENT item success',
+          formData,
+        })
+      } else {
+        res.status(400).json({
+          message: 'Patch my cart action is not available',
+          formData,
+        })
+      }
+    } catch (error) {
+      res.status(400).json({
+        message: 'Patch my cart item failed, might because something wrong',
+        error,
+        ownerId,
+        isCartExist,
+        formData,
+      })
+    }
+  } else {
+    res.status(400).json({
+      message:
+        'Patch my cart item failed because cart is not exist or action is unavailable',
+      ownerId,
+      isCartExist,
+      formData,
+    })
+  }
+}
+
 // Patch my cart address
 export const patchMyCartAddress = async (req, res) => {
   const ownerId = req.profile.id
@@ -359,7 +417,7 @@ export const patchMyCartAddress = async (req, res) => {
     } catch (error) {
       res.status(400).json({
         message:
-          'Patch my cart courier failed, might because address id is invalid',
+          'Patch my cart address failed, might because address id is invalid',
         error,
         ownerId,
         isCartExist,

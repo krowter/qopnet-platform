@@ -38,6 +38,14 @@ router.put(
   businessOrder.updateMyCart
 )
 
+// PATCH /api/business/orders/my/cart/item
+router.patch(
+  '/my/cart/item',
+  auth.checkUser,
+  businessOrder.checkMyCart,
+  businessOrder.patchMyCartItem
+)
+
 // PATCH /api/business/orders/my/cart/address
 router.patch(
   '/my/cart/address',
