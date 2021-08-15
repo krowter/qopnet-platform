@@ -49,7 +49,7 @@ export const CartPage = () => {
         '/api/business/orders/my/cart',
         {}
       )
-      console.log({ businessOrder })
+      // console.info({ businessOrder })
     }
     if (error) {
       createMyCart()

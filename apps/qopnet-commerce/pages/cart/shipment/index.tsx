@@ -53,6 +53,7 @@ export const CartShipmentPage = () => {
               <Stack direction={['column', 'column', 'row']} spacing={5}>
                 <ShipmentContainer businessOrder={businessOrder} />
                 <ShipmentSummaryContainer businessOrder={businessOrder} />
+                {/* <Text as="pre">{JSON.stringify(data, null, 2)}</Text> */}
               </Stack>
             ) : (
               <Stack align="flex-start">
@@ -140,14 +141,14 @@ export const ShipmentSummaryContainer = ({ businessOrder }) => {
 export const ShipmentContainer = ({ businessOrder }) => {
   return (
     <Stack flex={1} minW="420px" spacing={10}>
-      <AddressesContainer />
-      <CouriersContainer />
+      <AddressesContainer businessOrder={businessOrder} />
+      <CouriersContainer businessOrder={businessOrder} />
       <BusinessOrderItemsContainer businessOrder={businessOrder} />
     </Stack>
   )
 }
 
-export const AddressesContainer = () => {
+export const AddressesContainer = ({ businessOrder }) => {
   // Fetch multiple addresses from my profile
   const { data, error } = useSWR('/api/profiles/my')
   const { profile, suppliers, wholesalers, merchants } = data || {}
@@ -158,19 +159,39 @@ export const AddressesContainer = () => {
 
   // Only set addresses once data has been retrieved
   useEffect(() => {
-    if (data) {
+    if (!error && data && profile) {
       // Should concat multiple addresses
       // const mySupplierAddresses = []
-      setAvailableAddresses(profile?.addresses || [])
+      setAvailableAddresses(profile?.addresses)
 
       // Default to set the first availableAddresses
-      setSelectedAddressId(availableAddresses[0]?.id || '')
+      setSelectedAddressId(
+        businessOrder?.shipmentAddress?.id || availableAddresses[0]?.id
+      )
+      if (!businessOrder?.shipmentAddress?.id) {
+        patchCartWithAddress(availableAddresses[0]?.id)
+      }
     }
-  }, [data, profile, availableAddresses])
+  }, [businessOrder, error, data, profile, availableAddresses])
 
   // Handle select address option with just address id
   const handleSelectAddressOption = (addressId) => {
     setSelectedAddressId(addressId)
+    patchCartWithAddress(addressId)
+  }
+
+  const patchCartWithAddress = (addressId) => {
+    mutate('/api/business/orders/my/cart', async (data) => {
+      const response = await requestToAPI(
+        'PATCH',
+        '/api/business/orders/my/cart/address',
+        { id: addressId }
+      )
+      return {
+        ...data,
+        shipmentAddress: response?.businessOrder?.shipmentAddress,
+      }
+    })
   }
 
   return (
@@ -208,7 +229,7 @@ export const AddressesContainer = () => {
   )
 }
 
-export const CouriersContainer = () => {
+export const CouriersContainer = ({ businessOrder }) => {
   // Fetch couriers
   const { data, error } = useSWR('/api/couriers')
   const { couriers } = data || {}
@@ -220,7 +241,7 @@ export const CouriersContainer = () => {
 
   // Only set couriers once data has been retrieved
   useEffect(() => {
-    if (!error && data && couriers && availableCouriers) {
+    if (!error && data && couriers) {
       setAvailableCouriers(couriers)
       // Default to set the first available courier
       setSelectedCourierId(availableCouriers[0]?.id)
@@ -237,7 +258,6 @@ export const CouriersContainer = () => {
         '/api/business/orders/my/cart/courier',
         { id: courierId }
       )
-      // console.log({ data, response })
       return {
         ...data,
         shipmentCourier: response?.businessOrder?.shipmentCourier,

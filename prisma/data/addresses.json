@@ -1,11 +1,21 @@
 [
   {
     "id": "ckrza5tad012306mk71ps5wtl",
-    "street": "Jl. Contoh No. 100",
-    "streetDetails": "RT02/RW05, Kelurahan, Kecamatan",
+    "street": "The Manhattan Squre, Jl. TB Simatupang",
+    "streetDetails": "RT.3/RW.3, Cilandak Timur, Pasar Minggu",
     "city": "Jakarta Selatan",
     "state": "DKI Jakarta",
     "zip": "12560",
+    "countryCode": "ID",
+    "profileId": "ckr86vmxt005010pjeh4mqs6n"
+  },
+  {
+    "id": "ckrza5tad04560mk71ps5wtl",
+    "street": "Jl. BSD Raya Utama No. 1",
+    "streetDetails": "RT10/RW03, Pagedangan, Pagedangan",
+    "city": "Tangerang",
+    "state": "Banten",
+    "zip": "15345",
     "countryCode": "ID",
     "profileId": "ckr86vmxt005010pjeh4mqs6n"
   }

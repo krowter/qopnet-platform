@@ -139,11 +139,9 @@ export const SupplierProductForm = ({ supplierParam }) => {
 
   // Append image URL from Image Form into React Hook Form field.images
   const appendImageUrl = (newUrl) => {
-    console.log({ newUrl })
-
+    // console.info({ newUrl })
     const existingImages = getValues('images')
-    console.log({ existingImages })
-
+    // console.info({ existingImages })
     if (existingImages) {
       setValue('images', [...existingImages, newUrl]) // ✅ performant
     } else {
