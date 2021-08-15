@@ -173,28 +173,60 @@ export const CartContainer = ({ businessOrder }) => {
 export const BusinessOrderItem = ({ item }) => {
   // Optimistic UI when DELETE
   const handleDeleteBusinessOrderItem = async (itemId) => {
-    mutate('/api/business/orders/my/cart', async (data) => {
-      try {
-        const filteredBusinessOrderItems =
-          data?.businessOrder?.businessOrderItems?.filter(
-            (item) => item.id !== itemId
-          )
-        return {
-          ...data,
-          businessOrder: {
-            ...data.businessOrder,
-            businessOrderItems: [...filteredBusinessOrderItems],
-          },
-        }
-      } catch (error) {
-        console.log({ error })
-      }
-    })
-    await requestToAPI('PATCH', '/api/business/orders/my/cart/item', {
-      action: 'DELETE',
-      id: itemId,
-    })
-    mutate('/api/business/orders/my/cart')
+    try {
+      mutate(
+        '/api/business/orders/my/cart',
+        async (data) => {
+          return {
+            ...data,
+            businessOrder: {
+              ...data.businessOrder,
+              businessOrderItems:
+                data?.businessOrder?.businessOrderItems?.filter(
+                  (item) => item.id !== itemId
+                ),
+            },
+          }
+        },
+        false
+      )
+      await requestToAPI('PATCH', '/api/business/orders/my/cart/item', {
+        action: 'DELETE',
+        id: itemId,
+      })
+      mutate('/api/business/orders/my/cart')
+    } catch (error) {
+      console.error({ error })
+    }
+  }
+
+  // Optimistic UI when INCREMENT
+  const handleIncrementBusinessOrderItem = async (itemId) => {
+    try {
+      mutate(
+        '/api/business/orders/my/cart',
+        async (data) => {
+          return {
+            ...data,
+            businessOrder: {
+              ...data.businessOrder,
+              businessOrderItems: data?.businessOrder?.businessOrderItems?.map(
+                (item) => (item.quantity = item.quantity + 1)
+              ),
+            },
+          }
+        },
+        false
+      )
+      await requestToAPI('PATCH', '/api/business/orders/my/cart/item', {
+        action: 'INCREMENT',
+        id: itemId,
+        quantity: 1,
+      })
+      mutate('/api/business/orders/my/cart')
+    } catch (error) {
+      console.error({ error })
+    }
   }
 
   return (
