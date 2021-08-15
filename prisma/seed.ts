@@ -27,8 +27,9 @@ import courierVehiclesData from './data/courier-vehicles.json'
 import paymentMethodsData from './data/payments-methods.json'
 import paymentRecordsData from './data/payments-records.json'
 
-import qopnetProductsData from './qopnet-products.json'
-import qopnetOneProductsData from './qopnet-products-one.json'
+import supplierProductsQopnetData from './data/supplier-products-qopnet.json'
+import supplierProductsAnekaBusaData from './data/supplier-products-anekabusa.json'
+import rawProductsData from './raw-products.json'
 
 import promoEmployerData from './data/qopnet-promo-employer.json'
 import promoEmployeeData from './data/qopnet-promo-employee.json'
@@ -96,7 +97,7 @@ async function deleteEverything() {
 
 // -----------------------------------------------------------------------------
 
-async function createSupplierProductsFromJSON({
+async function createSupplierProducts({
   data, // JSON data
   supplier,
 }: {
@@ -119,19 +120,15 @@ async function createSupplierProductsFromJSON({
   console.info({ qopnetSupplierProducts })
 }
 
-async function createSupplierProductsFromURL({
-  productsUrl,
+async function createSupplierProductsDynamic({
+  data,
   supplier,
 }: {
-  productsUrl: string
+  data: any
   supplier: any
 }) {
-  // download data from gist
-  let { data: products }: AxiosResponse<any[]> = await axios.get(productsUrl)
-
-  // re-map
-  // add ids and update storage url based on environment
-  products = products.map((product) => {
+  // Add id and update storage url based on environment
+  const products = data.map((product: any) => {
     product.ownerId = supplier.ownerId
     product.supplierId = supplier.id
 
@@ -281,21 +278,18 @@ const seedPaymentRecords = async () => {
 // -----------------------------------------------------------------------------
 
 async function seedQopnetProducts() {
-  const supplier = {
-    id: 'ckrqopnet0001swpjglh6i6nl',
-  }
-
-  // start creating supplierData
-  await createSupplierProductsFromJSON({
-    data: qopnetOneProductsData, // Will be qopnetProductsData
-    supplier,
+  await createSupplierProducts({
+    data: supplierProductsQopnetData,
+    supplier: {
+      id: 'ckrqopnet0001swpjglh6i6nl',
+      handle: 'qopnet',
+    },
   })
 }
 
 async function seedAnekaBusaProducts() {
-  await createSupplierProductsFromURL({
-    productsUrl:
-      'https://gist.github.com/qopnetlabs/414f0a5e3404e6555165ccc67ff79b60/raw',
+  await createSupplierProductsDynamic({
+    data: supplierProductsAnekaBusaData,
     supplier: {
       id: 'ckrzfccqz0001swpjglh6i6nl',
       handle: 'anekabusa',
