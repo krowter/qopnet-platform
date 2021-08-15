@@ -67,6 +67,11 @@ async function deleteEverything() {
 
   await prisma.wholesaler.deleteMany()
 
+  // Before supplier and supplierProduct
+  // Unless have cascade delete
+  await prisma.businessOrderItem.deleteMany()
+  await prisma.businessOrder.deleteMany()
+
   await prisma.supplier.deleteMany()
   await prisma.supplierProduct.deleteMany()
 
@@ -76,9 +81,6 @@ async function deleteEverything() {
   await prisma.financingService.deleteMany()
   await prisma.fundBeneficiary.deleteMany()
   await prisma.fundBenefactor.deleteMany()
-
-  await prisma.businessOrderItem.deleteMany()
-  await prisma.businessOrder.deleteMany()
 
   await prisma.courier.deleteMany()
   await prisma.courierVehicle.deleteMany()
