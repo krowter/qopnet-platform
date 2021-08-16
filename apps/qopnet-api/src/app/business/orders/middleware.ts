@@ -1,6 +1,6 @@
 import { prisma } from '@qopnet/util-prisma'
 import { BusinessOrder, BusinessOrderItem } from '@prisma/client'
-import randomInteger from 'random-int'
+import random from 'random'
 
 // -----------------------------------------------------------------------------
 // User Only
@@ -587,7 +587,7 @@ export const processMyOrder = async (req, res) => {
         businessOrder.paymentMethodId
       ) {
         // Generate unique digits based on new value + random digits
-        const randomDigits = randomInteger(100, 999)
+        const randomDigits = random.int(100, 999)
         const amountDue = Number(formData.totalCalculatedBill) + randomDigits
         const amountString = amountDue.toString()
         const uniqueString = amountString.substring(amountString.length - 3)
