@@ -570,6 +570,7 @@ export const processMyOrder = async (req, res) => {
 
   if (isCartExist) {
     try {
+      console.log({ formData })
       /**
        * This should not require any formData or req.body
        * But still need to check if these fields are available:
@@ -612,7 +613,7 @@ export const processMyOrder = async (req, res) => {
           data: {
             status: 'WAITING_FOR_PAYMENT',
             paymentRecord: {
-              update: {
+              create: {
                 status: 'PENDING',
                 accountNumber: formData.accountNumber,
                 accountHolderName: formData.accountHolderName,
@@ -624,7 +625,7 @@ export const processMyOrder = async (req, res) => {
             },
           },
         })
-        // console.info({ updatedCart })
+        console.log({ updatedCart })
 
         res.status(200).json({
           message:
