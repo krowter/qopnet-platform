@@ -236,7 +236,7 @@ export const ManualTransferPaymentModalGroup = ({ totalCalculatedBill }) => {
         '/api/business/orders/my/cart/process',
         formData
       )
-      console.log({ response, formData })
+      // console.info({ response, formData })
 
       router.push(`/dashboard/orders`)
       toast({

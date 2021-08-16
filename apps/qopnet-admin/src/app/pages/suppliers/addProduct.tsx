@@ -36,16 +36,16 @@ export const SupplierProductAddPage = () => {
     formState: { errors },
   } = useForm()
   const onSubmit = async (data: any) => {
-    console.log('data: ', data)
-    console.log('suppliers', suppliers)
+    // console.info('data: ', data)
+    // console.info('suppliers', suppliers)
     const filteredSupplier = await suppliers.filter((supplier: any) => {
       if (supplierParam) {
         return supplier.id === supplierParam
       } else return supplier.id === data.supplierId
     })
-    console.log(filteredSupplier)
+    // console.info(filteredSupplier)
     const { ownerId, handle } = filteredSupplier[0]
-    console.log({ ownerId })
+    // console.info({ ownerId })
     const finalFormData = {
       ...data,
       minOrder: parseInt(data.minOrder),
@@ -74,8 +74,8 @@ export const SupplierProductAddPage = () => {
   const { data: { suppliers = [] } = {}, error } = useSWR('/api/suppliers')
   const leftElementColor = useColorModeValue('black', 'white')
 
-  console.log('suppliers', suppliers)
-  console.log('supplierParam', supplierParam)
+  // console.info('suppliers', suppliers)
+  // console.info('supplierParam', supplierParam)
   return (
     <DefaultLayout>
       <Box

@@ -570,7 +570,7 @@ export const processMyOrder = async (req, res) => {
 
   if (isCartExist) {
     try {
-      console.log({ formData })
+      // console.info({ formData })
       /**
        * This should not require any formData or req.body
        * But still need to check if these fields are available:
@@ -586,14 +586,14 @@ export const processMyOrder = async (req, res) => {
         businessOrder.shipmentCourierId &&
         businessOrder.paymentMethodId
       ) {
-        console.log({ message: 'Generating digits' })
+        // console.info({ message: 'Generating digits' })
         // Generate unique digits based on new value + random digits
         const randomDigits = Math.floor(Math.random() * (999 - 100) + 100)
         const amountDue = Number(formData.totalCalculatedBill) + randomDigits
         const amountString = amountDue.toString()
         const uniqueString = amountString.substring(amountString.length - 3)
         const uniqueDigits = Number(uniqueString)
-        console.log({
+        // console.info({
           randomDigits,
           amountDue,
           amountString,
@@ -601,7 +601,7 @@ export const processMyOrder = async (req, res) => {
           uniqueDigits,
         })
 
-        console.log({ message: 'Processing cart into business order' })
+        // console.info({ message: 'Processing cart into business order' })
         const updatedCart = await prisma.businessOrder.update({
           where: {
             id: businessOrder.id,
@@ -625,7 +625,7 @@ export const processMyOrder = async (req, res) => {
             },
           },
         })
-        console.log({ updatedCart })
+        // console.info({ updatedCart })
 
         res.status(200).json({
           message:

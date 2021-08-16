@@ -35,7 +35,9 @@ export const SupplierProductEditPage = () => {
     watch,
     formState: { errors },
   } = useForm()
-  const onSubmit = (data: any) => console.log(data)
+  const onSubmit = (data: any) => {
+    console.info({ data })
+  }
   const history = useHistory()
   const {
     supplierParam,
