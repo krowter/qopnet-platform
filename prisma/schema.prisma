@@ -74,7 +74,7 @@ model AdminProfile {
 
   // Relations
   userId String
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   // Timestamp
   createdAt DateTime @default(now())
@@ -556,11 +556,26 @@ model PaymentMethod {
   @@map(name: "payment_methods")
 }
 
+enum PaymentRecordStatus {
+  PENDING
+  PAID
+  CANCELLED
+  OUTDATED
+  INVALID
+}
+
 model PaymentRecord {
   id String @id @default(cuid())
 
-  amount Decimal @db.Money
-  // status String?
+  status PaymentRecordStatus?
+
+  accountNumber     String? // Example: 123456789
+  accountHolderName String? // Example: Soekarno Hatta
+  uniqueDigits      Decimal? // Generate and get the final change after added with the totalBill
+
+  amountDue   Decimal? @db.Money // Can be different with totalBill
+  amountPaid  Decimal? @db.Money // Can be partially fulfilled
+  proofImages Json[] // https://storage.co/image.jpg
 
   // Relation: BusinessOrder
   businessOrder BusinessOrder?
