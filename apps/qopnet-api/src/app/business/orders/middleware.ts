@@ -572,6 +572,19 @@ export const processMyOrder = async (req, res) => {
   if (isCartExist) {
     try {
       console.log({ businessOrder })
+      const randomDigits = random.int(100, 999)
+      const amountDue = Number(formData.totalCalculatedBill) + randomDigits
+      const amountString = amountDue.toString()
+      const uniqueString = amountString.substring(amountString.length - 3)
+      const uniqueDigits = Number(uniqueString)
+
+      console.log({
+        randomDigits,
+        amountDue,
+        amountString,
+        uniqueString,
+        uniqueDigits,
+      })
 
       /**
        * This should not require any formData or req.body

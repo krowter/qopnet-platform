@@ -223,7 +223,7 @@ export const ManualTransferPaymentModalGroup = ({ totalCalculatedBill }) => {
   const inputAccountNumber = watch('accountNumber')
   const inputAccountHolderName = watch('accountHolderName')
 
-  const handleProcessMyOrder = (data) => {
+  const handleProcessMyOrder = async (data) => {
     try {
       const formData = {
         accountNumber: data?.accountNumber || '123',
@@ -231,14 +231,13 @@ export const ManualTransferPaymentModalGroup = ({ totalCalculatedBill }) => {
         totalCalculatedBill: totalCalculatedBill || 1230000,
       }
       // console.info({ formData })
-      const response = requestToAPI(
+      const response = await requestToAPI(
         'PUT',
         '/api/business/orders/my/cart/process',
         formData
       )
       console.log({ response, formData })
 
-      if (!response) throw new Error('Update my cart to process order failed')
       router.push(`/dashboard/orders`)
       toast({
         status: 'success',
