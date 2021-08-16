@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import NextLink from 'next/link'
 import NextImage from 'next/image'
 import { useRouter } from 'next/router'
@@ -49,39 +49,52 @@ export const CartPaymentPage = () => {
 }
 
 export const PaymentContainer = ({ businessOrder }) => {
-  // Fetch paymentMethods
   const { data, error } = useSWR('/api/payments/methods')
   const { paymentMethods } = data || {}
+  const [paymentMethodId, setPaymentMethodId] = useState('')
 
-  // Should be empty array if API Payment is available
-  const [selectedPaymentMethodId, setSelectedPaymentMethodId] = useState('')
-
-  // Only set default payment once data has been retrieved
-  useEffect(() => {
-    if (!error && data && paymentMethods?.length) {
-      setSelectedPaymentMethodId(paymentMethods[0]?.id)
-    }
-  }, [error, data, paymentMethods])
-
-  // Handle select payment option with just payment id
   const handleSelectPaymentOption = (paymentMethodId) => {
-    setSelectedPaymentMethodId(paymentMethodId)
+    setPaymentMethodId(paymentMethodId)
     patchCartWithPaymentMethod(paymentMethodId)
   }
 
-  const patchCartWithPaymentMethod = (paymentMethodId) => {
-    mutate('/api/business/orders/my/cart', async (data) => {
-      const response = await requestToAPI(
-        'PATCH',
-        '/api/business/orders/my/cart/payment/method',
-        { id: paymentMethodId }
-      )
-      return {
-        ...data,
-        paymentMethod: response?.businessOrder?.paymentMethod,
-      }
+  const patchCartWithPaymentMethod = async (paymentMethodId) => {
+    const index = paymentMethods.findIndex(
+      (item) => item.id === paymentMethodId
+    )
+    mutate(
+      '/api/business/orders/my/cart',
+      (data) => {
+        return {
+          ...data,
+          businessOrder: {
+            ...data.businessOrder,
+            paymentMethod: {
+              id: paymentMethodId,
+              name: paymentMethods[index]?.name,
+            },
+          },
+        }
+      },
+      false
+    )
+    await requestToAPI('PATCH', '/api/business/orders/my/cart/payment/method', {
+      id: paymentMethodId,
     })
+    mutate('/api/business/orders/my/cart')
   }
+
+  useEffect(() => {
+    if (!error && data && paymentMethods) {
+      setPaymentMethodId(
+        businessOrder?.paymentMethodId || paymentMethods[0]?.id
+      )
+    }
+    if (!businessOrder?.paymentMethodId) {
+      patchCartWithPaymentMethod(paymentMethods[0]?.id)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <Stack flex={1} spacing={10} maxW="420px">
@@ -105,7 +118,7 @@ export const PaymentContainer = ({ businessOrder }) => {
                 <OptionBox
                   key={payment.id}
                   id={`payment-${payment.id}`}
-                  selected={selectedPaymentMethodId === payment.id}
+                  selected={paymentMethodId === payment.id}
                   onClick={() => handleSelectPaymentOption(payment.id)}
                 >
                   <Text>{payment.name}</Text>
@@ -122,11 +135,11 @@ export const PaymentSummaryContainer = ({ businessOrder }) => {
   const router = useRouter()
 
   const {
-    totalItems,
-    totalPrice,
-    totalDiscount,
-    totalCalculatedPrice,
-    totalShipmentCost,
+    // totalItems,
+    // totalPrice,
+    // totalDiscount,
+    // totalCalculatedPrice,
+    // totalShipmentCost,
     totalCalculatedBill,
   } = calculateCart(businessOrder)
 
