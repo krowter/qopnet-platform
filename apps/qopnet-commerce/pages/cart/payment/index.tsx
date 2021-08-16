@@ -236,6 +236,8 @@ export const ManualTransferPaymentModalGroup = ({ totalCalculatedBill }) => {
         '/api/business/orders/my/cart/process',
         formData
       )
+      console.log({ response, formData })
+
       if (!response) throw new Error('Update my cart to process order failed')
       router.push(`/dashboard/orders`)
       toast({
