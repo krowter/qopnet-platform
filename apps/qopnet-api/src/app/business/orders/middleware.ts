@@ -1,6 +1,5 @@
 import { prisma } from '@qopnet/util-prisma'
 import { BusinessOrder, BusinessOrderItem } from '@prisma/client'
-import random from 'random'
 
 // -----------------------------------------------------------------------------
 // User Only
@@ -571,21 +570,6 @@ export const processMyOrder = async (req, res) => {
 
   if (isCartExist) {
     try {
-      console.log({ businessOrder })
-      const randomDigits = random.int(100, 999)
-      const amountDue = Number(formData.totalCalculatedBill) + randomDigits
-      const amountString = amountDue.toString()
-      const uniqueString = amountString.substring(amountString.length - 3)
-      const uniqueDigits = Number(uniqueString)
-
-      console.log({
-        randomDigits,
-        amountDue,
-        amountString,
-        uniqueString,
-        uniqueDigits,
-      })
-
       /**
        * This should not require any formData or req.body
        * But still need to check if these fields are available:
@@ -603,11 +587,18 @@ export const processMyOrder = async (req, res) => {
       ) {
         console.log({ message: 'Generating digits' })
         // Generate unique digits based on new value + random digits
-        const randomDigits = random.int(100, 999)
+        const randomDigits = Math.floor(Math.random() * (999 - 100) + 100)
         const amountDue = Number(formData.totalCalculatedBill) + randomDigits
         const amountString = amountDue.toString()
         const uniqueString = amountString.substring(amountString.length - 3)
         const uniqueDigits = Number(uniqueString)
+        console.log({
+          randomDigits,
+          amountDue,
+          amountString,
+          uniqueString,
+          uniqueDigits,
+        })
 
         console.log({ message: 'Processing cart into business order' })
         const updatedCart = await prisma.businessOrder.update({
