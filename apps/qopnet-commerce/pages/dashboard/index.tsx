@@ -134,14 +134,14 @@ export const DashboardContent = ({ profile }) => {
                   Buat toko supplier
                 </DashboardActionLink>
               </Stack>
-              <Stack>
+              {/* <Stack>
                 <Heading as="h4" size="sm">
                   Fitur merchant
                 </Heading>
                 <DashboardActionLink name="merchant" href="/create-merchant">
                   Buat toko merchant
                 </DashboardActionLink>
-              </Stack>
+              </Stack> */}
             </>
           )}
         </Stack>
