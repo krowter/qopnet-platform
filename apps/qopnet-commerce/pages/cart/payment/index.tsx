@@ -228,7 +228,7 @@ export const ManualTransferPaymentModalGroup = ({ totalCalculatedBill }) => {
       const formData = {
         accountNumber: data?.accountNumber,
         accountHolderName: data?.accountHolderName,
-        amountDue: totalCalculatedBill,
+        totalCalculatedBill: totalCalculatedBill,
       }
       // console.info({ formData })
       const response = requestToAPI(

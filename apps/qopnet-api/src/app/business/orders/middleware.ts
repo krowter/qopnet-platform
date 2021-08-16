@@ -588,9 +588,9 @@ export const processMyOrder = async (req, res) => {
       ) {
         // Generate unique digits based on new value + random digits
         const randomDigits = randomInteger(100, 999)
-        const preparedDigits = Number(formData.amountDue) + randomDigits
-        const preparedString = preparedDigits.toString()
-        const uniqueString = preparedString.substring(preparedString.length - 3)
+        const amountDue = Number(formData.totalCalculatedBill) + randomDigits
+        const amountString = amountDue.toString()
+        const uniqueString = amountString.substring(amountString.length - 3)
         const uniqueDigits = Number(uniqueString)
 
         const updatedCart = await prisma.businessOrder.update({
@@ -608,7 +608,7 @@ export const processMyOrder = async (req, res) => {
                 status: 'PENDING',
                 accountNumber: formData.accountNumber,
                 accountHolderName: formData.accountHolderName,
-                amountDue: formData.amountDue,
+                amountDue: amountDue,
                 uniqueDigits: uniqueDigits,
                 amountPaid: 0,
                 proofImages: [],
