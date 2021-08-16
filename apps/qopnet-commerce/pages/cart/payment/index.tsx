@@ -138,8 +138,8 @@ export const PaymentSummaryContainer = ({ businessOrder }) => {
     // totalItems,
     // totalPrice,
     // totalDiscount,
-    // totalCalculatedPrice,
-    // totalShipmentCost,
+    totalCalculatedPrice,
+    totalShipmentCost,
     totalCalculatedBill,
   } = calculateCart(businessOrder)
 
@@ -166,6 +166,15 @@ export const PaymentSummaryContainer = ({ businessOrder }) => {
           <Text>{businessOrder?.paymentMethod?.name}</Text>
         </HStack>
         <HStack justify="space-between">
+          <Text>Total Harga ({1} produk)</Text>
+          <Text>{formatRupiah(totalCalculatedPrice)}</Text>
+        </HStack>
+        <HStack justify="space-between">
+          <Text>Total Ongkos Kirim</Text>
+          <Text>{formatRupiah(totalShipmentCost)}</Text>
+        </HStack>
+        <hr />
+        <HStack justify="space-between" fontSize="lg" fontWeight="bold">
           <Text>Total Tagihan</Text>
           <Text>{formatRupiah(totalCalculatedBill)}</Text>
         </HStack>
