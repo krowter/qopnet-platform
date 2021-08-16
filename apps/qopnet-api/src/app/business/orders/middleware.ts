@@ -1,5 +1,6 @@
 import { prisma } from '@qopnet/util-prisma'
 import { BusinessOrder, BusinessOrderItem } from '@prisma/client'
+import randomInteger from 'random-int'
 
 // -----------------------------------------------------------------------------
 // User Only
@@ -565,6 +566,7 @@ export const processMyOrder = async (req, res) => {
   const ownerId = req.profile.id
   const isCartExist = req.isCartExist
   const businessOrder = req.businessOrder
+  const formData = req.body
 
   if (isCartExist) {
     try {
@@ -583,17 +585,41 @@ export const processMyOrder = async (req, res) => {
         businessOrder.shipmentCourierId &&
         businessOrder.paymentMethodId
       ) {
+        // Generate unique digits based on new value + random digits
+        const randomDigits = randomInteger(100, 999)
+        const preparedDigits = Number(formData.amountDue) + randomDigits
+        const preparedString = preparedDigits.toString()
+        const uniqueString = preparedString.substring(preparedString.length - 3)
+        const uniqueDigits = Number(uniqueString)
+
         const updatedCart = await prisma.businessOrder.update({
           where: {
             id: businessOrder.id,
           },
+          include: {
+            paymentMethod: true,
+            paymentRecord: true,
+          },
           data: {
             status: 'WAITING_FOR_PAYMENT',
+            paymentRecord: {
+              update: {
+                status: 'PENDING',
+                accountNumber: formData.accountNumber,
+                accountHolderName: formData.accountHolderName,
+                amountDue: formData.amountDue,
+                uniqueDigits: uniqueDigits,
+                amountPaid: 0,
+                proofImages: [],
+              },
+            },
           },
         })
+        // console.info({ updatedCart })
 
         res.status(200).json({
-          message: 'Process my order success',
+          message:
+            'Process my order success, order is waiting for payment, payment record is pending',
           ownerId,
           isCartExist,
           businessOrder: updatedCart,

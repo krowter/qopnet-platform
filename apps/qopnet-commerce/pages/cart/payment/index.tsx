@@ -100,13 +100,13 @@ export const PaymentContainer = ({ businessOrder }) => {
   }
 
   useEffect(() => {
-    if (!error && data && businessOrder && paymentMethods) {
+    if (!error && data && businessOrder && paymentMethods.length) {
+      if (!businessOrder?.paymentMethodId) {
+        patchCartWithPaymentMethod(paymentMethods[0]?.id)
+      }
       setPaymentMethodId(
         businessOrder?.paymentMethodId || paymentMethods[0]?.id
       )
-    }
-    if (!businessOrder?.paymentMethodId) {
-      patchCartWithPaymentMethod(paymentMethods[0]?.id)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [!error && data && businessOrder && paymentMethods])
