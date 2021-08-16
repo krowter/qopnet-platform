@@ -1,6 +1,8 @@
 [
   {
     "name": "Manual Transfer Bank BCA",
+    "accountNumber": "006 059 9173",
+    "accountHolderName": "PT Anugerah Berkah Samudera",
     "paymentCategory": "TRANSFER_MANUAL"
   },
   {
