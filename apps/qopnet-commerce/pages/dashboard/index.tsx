@@ -46,10 +46,10 @@ export const DashboardContainer = ({ user }) => {
       {/* <Text as="pre">{JSON.stringify(data, null, 2)}</Text> */}
       {error && !data && (
         <Stack align="flex-start">
-          <Text>Gagal memuat profil Anda</Text>
+          <Text>Gagal memuat profil</Text>
           <Text>Silakan buat profil terlebih dahulu sebelum melanjutkan</Text>
           <DashboardActionLink name="profile" href="/create-profile">
-            Buat profil saya
+            Buat profil
           </DashboardActionLink>
         </Stack>
       )}
@@ -70,10 +70,10 @@ export const DashboardContainer = ({ user }) => {
 export const DashboardContent = ({ profile }) => {
   return (
     <Stack spacing={10}>
-      <NextSeo title="Dasbor saya - Qopnet" />
+      <NextSeo title="Dasbor - Qopnet" />
 
       <Stack id="dashboard-title">
-        <Heading as="h1">Dasbor Saya</Heading>
+        <Heading as="h1">Dasbor</Heading>
         {profile && (
           <Stack>
             <Text>
@@ -106,7 +106,7 @@ export const DashboardContent = ({ profile }) => {
                 Lanjut belanja
               </DashboardActionLink>
               <DashboardActionLink name="profile" href="/create-profile">
-                Buat profil saya
+                Buat profil
               </DashboardActionLink>
             </Stack>
           )}
@@ -120,11 +120,14 @@ export const DashboardContent = ({ profile }) => {
                   Lanjut belanja
                 </DashboardActionLink>
                 <DashboardActionLink name="profile" href="/create-profile">
-                  Ubah profil saya
+                  Ubah profil
                 </DashboardActionLink>
                 <DashboardActionLink name="order" href="/dashboard/orders">
-                  Cek pesanan saya
+                  Cek pesanan
                 </DashboardActionLink>
+                {/* <DashboardActionLink name="order" href="/dashboard/paymnents">
+                  Cek pembayaran
+                </DashboardActionLink> */}
               </Stack>
               <Stack>
                 <Heading as="h4" size="sm">
@@ -134,14 +137,14 @@ export const DashboardContent = ({ profile }) => {
                   Buat toko supplier
                 </DashboardActionLink>
               </Stack>
-              <Stack>
+              {/* <Stack>
                 <Heading as="h4" size="sm">
                   Fitur merchant
                 </Heading>
                 <DashboardActionLink name="merchant" href="/create-merchant">
                   Buat toko merchant
                 </DashboardActionLink>
-              </Stack>
+              </Stack> */}
             </>
           )}
         </Stack>
@@ -151,7 +154,7 @@ export const DashboardContent = ({ profile }) => {
           <HStack>
             <Icon name="supplier" />
             <Heading as="h3" size="md">
-              List toko supplier milik saya
+              List toko supplier
             </Heading>
           </HStack>
 
@@ -162,8 +165,8 @@ export const DashboardContent = ({ profile }) => {
             {profile?.name && !profile?.suppliers?.length && (
               <>
                 <Text>
-                  Saya bukan supplier atau belum memiliki supplier. Silakan buat
-                  supplier dahulu jika ingin menambahkan produk.
+                  Anda bukan atau belum memiliki toko supplier. Silakan buat
+                  supplier dahulu jika ingin menjual produk.
                 </Text>
                 <DashboardActionLink
                   name="plus"
@@ -171,7 +174,7 @@ export const DashboardContent = ({ profile }) => {
                   size="xs"
                   variant="outline"
                 >
-                  Buat supplier pertama saya
+                  Buat supplier pertama
                 </DashboardActionLink>
               </>
             )}

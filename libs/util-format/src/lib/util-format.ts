@@ -39,7 +39,7 @@ export const formatImageUrl = (env: string, text: string) => {
         : 'https://rryitovbrajppywbpmit.supabase.co'
 
     const url = `${SUPABASE_DB_URL}/storage/v1/object/public/images/${IMAGE_NAME}`
-    console.log({ url })
+    // console.info({ url })
 
     return url
   }

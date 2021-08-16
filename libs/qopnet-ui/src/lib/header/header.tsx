@@ -183,11 +183,9 @@ export const SearchBar = () => {
   return (
     <Box as="form" w="100%" onSubmit={handleSubmit(handleSubmitSearch)}>
       <InputGroup>
-        {isDesktop && (
-          <InputLeftElement color={iconColor}>
-            <Icon name="search" />
-          </InputLeftElement>
-        )}
+        <InputLeftElement color={iconColor}>
+          <Icon name="search" />
+        </InputLeftElement>
         <Input
           type="text"
           placeholder="Cari produk..."
