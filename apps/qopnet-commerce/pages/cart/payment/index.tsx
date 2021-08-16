@@ -20,6 +20,7 @@ import {
   ModalOverlay,
   Stack,
   Text,
+  useToast,
   useDisclosure,
   useColorModeValue,
 } from '@chakra-ui/react'
@@ -203,7 +204,11 @@ export const PaymentSummaryContainer = ({ businessOrder }) => {
 }
 
 export const ManualTransferPaymentModalGroup = ({ totalCalculatedBill }) => {
+  // Next.js
+  const router = useRouter()
+
   // Chakra UI
+  const toast = useToast()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const initialRef = useRef()
   const finalRef = useRef()
@@ -218,9 +223,34 @@ export const ManualTransferPaymentModalGroup = ({ totalCalculatedBill }) => {
   const inputAccountNumber = watch('accountNumber')
   const inputAccountHolderName = watch('accountHolderName')
 
-  const onSubmit = (data) => {
-    console.log(data)
-    // POST PaymentRecord
+  const handleSubmitPaymentRecord = (data) => {
+    try {
+      const formData = {
+        accountNumber: data?.accountNumber,
+        accountHolderName: data?.accountHolderName,
+        amountDue: totalCalculatedBill,
+      }
+      // console.info({ formData })
+      const response = requestToAPI(
+        'PUT',
+        '/api/business/orders/my/cart/process',
+        formData
+      )
+      if (!response) throw new Error('Update my cart to process order failed')
+      // router.push(`/dashboard/orders`)
+      toast({
+        status: 'success',
+        title: 'Proses pengaturan pembayaran berhasil',
+        description: 'Silakan mengikuti petunjuk untuk melunasi pembayaran',
+      })
+    } catch (error) {
+      console.error(error)
+      toast({
+        status: 'error',
+        title: 'Proses pengaturan pembayaran gagal',
+        description: 'Silakan coba lagi',
+      })
+    }
   }
 
   return (
@@ -238,7 +268,7 @@ export const ManualTransferPaymentModalGroup = ({ totalCalculatedBill }) => {
       >
         <ModalOverlay />
         <ModalContent>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(handleSubmitPaymentRecord)}>
             <ModalCloseButton />
             <ModalHeader>Detail transfer manual</ModalHeader>
 
