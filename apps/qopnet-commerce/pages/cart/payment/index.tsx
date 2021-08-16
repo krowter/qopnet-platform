@@ -6,6 +6,7 @@ import {
   Button,
   ButtonGroup,
   FormControl,
+  FormErrorMessage,
   FormLabel,
   Heading,
   HStack,
@@ -23,6 +24,7 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react'
 import { mutate } from 'swr'
+import { useForm } from 'react-hook-form'
 
 import { Layout, OptionBox } from '@qopnet/qopnet-ui'
 import { formatRupiah, calculateCart } from '@qopnet/util-format'
@@ -201,10 +203,22 @@ export const PaymentSummaryContainer = ({ businessOrder }) => {
 }
 
 export const ManualTransferPaymentModalGroup = ({ totalCalculatedBill }) => {
+  // Chakra UI
   const { isOpen, onOpen, onClose } = useDisclosure()
-
   const initialRef = useRef()
   const finalRef = useRef()
+
+  // React Hook Form
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm()
+  const onSubmit = (data) => {
+    console.log(data)
+    // POST PaymentRecord
+  }
 
   return (
     <>
@@ -221,30 +235,49 @@ export const ManualTransferPaymentModalGroup = ({ totalCalculatedBill }) => {
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalCloseButton />
-          <ModalHeader>Detail transfer manual</ModalHeader>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <ModalCloseButton />
+            <ModalHeader>Detail transfer manual</ModalHeader>
 
-          <ModalBody as={Stack}>
-            <HStack justify="space-between" fontSize="lg" fontWeight="bold">
-              <Text>Total Tagihan</Text>
-              <Text>{formatRupiah(totalCalculatedBill)}</Text>
-            </HStack>
+            <ModalBody as={Stack}>
+              <HStack justify="space-between" fontSize="lg" fontWeight="bold">
+                <Text>Total Tagihan</Text>
+                <Text>{formatRupiah(totalCalculatedBill)}</Text>
+              </HStack>
 
-            <FormControl>
-              <FormLabel>No. rekening</FormLabel>
-              <Input ref={initialRef} placeholder="Contoh: 123456789" />
-            </FormControl>
+              <FormControl>
+                <FormLabel>No. rekening</FormLabel>
+                <Input
+                  ref={initialRef}
+                  placeholder="Contoh: 123456789"
+                  {...register('accountNumber', { required: true })}
+                />
+                {errors.accountNumber && (
+                  <FormErrorMessage>Nomor rekening diperlukan</FormErrorMessage>
+                )}
+              </FormControl>
 
-            <FormControl>
-              <FormLabel>Nama pemilik rekening</FormLabel>
-              <Input placeholder="Contoh: Arya Aditiara" />
-            </FormControl>
-          </ModalBody>
+              <FormControl>
+                <FormLabel>Nama pemilik rekening</FormLabel>
+                <Input
+                  placeholder="Contoh: Soekarno Hatta"
+                  {...register('accountHolderName', { required: true })}
+                />
+                {errors.accountHolderName && (
+                  <FormErrorMessage>
+                    Nama pemilik rekening diperlukan
+                  </FormErrorMessage>
+                )}
+              </FormControl>
+            </ModalBody>
 
-          <ModalFooter as={ButtonGroup}>
-            <Button colorScheme="green">Proses Bayar</Button>
-            {/* <Button onClick={onClose}>Batal</Button> */}
-          </ModalFooter>
+            <ModalFooter as={ButtonGroup}>
+              <Button type="submit" colorScheme="green">
+                Proses Bayar
+              </Button>
+              {/* <Button onClick={onClose}>Batal</Button> */}
+            </ModalFooter>
+          </form>
         </ModalContent>
       </Modal>
     </>
