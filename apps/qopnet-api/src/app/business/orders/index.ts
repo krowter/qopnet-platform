@@ -63,6 +63,7 @@ router.patch(
 )
 
 // PATCH /api/business/orders/my/cart/payment/method
+// Only add PaymentMethod
 router.patch(
   '/my/cart/payment/method',
   auth.checkUser,
@@ -71,6 +72,7 @@ router.patch(
 )
 
 // PUT /api/business/orders/my/cart/process
+// Can add PaymentRecord
 router.put(
   '/my/cart/process',
   auth.checkUser,

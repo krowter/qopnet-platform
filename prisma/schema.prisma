@@ -540,8 +540,10 @@ enum PaymentCategory {
 model PaymentMethod {
   id String @id @default(cuid())
 
-  name            String
-  paymentCategory PaymentCategory
+  name              String
+  paymentCategory   PaymentCategory
+  accountNumber     String? // Example: 123456789
+  accountHolderName String? // Example: Soekarno Hatta
 
   // Relation: BusinessOrder
   businessOrders BusinessOrder[]
