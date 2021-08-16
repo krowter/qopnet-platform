@@ -223,12 +223,12 @@ export const ManualTransferPaymentModalGroup = ({ totalCalculatedBill }) => {
   const inputAccountNumber = watch('accountNumber')
   const inputAccountHolderName = watch('accountHolderName')
 
-  const handleSubmitPaymentRecord = (data) => {
+  const handleProcessMyOrder = (data) => {
     try {
       const formData = {
-        accountNumber: data?.accountNumber,
-        accountHolderName: data?.accountHolderName,
-        totalCalculatedBill: totalCalculatedBill,
+        accountNumber: data?.accountNumber || '123',
+        accountHolderName: data?.accountHolderName || 'Nama',
+        totalCalculatedBill: totalCalculatedBill || 1230000,
       }
       // console.info({ formData })
       const response = requestToAPI(
@@ -268,7 +268,7 @@ export const ManualTransferPaymentModalGroup = ({ totalCalculatedBill }) => {
       >
         <ModalOverlay />
         <ModalContent>
-          <form onSubmit={handleSubmit(handleSubmitPaymentRecord)}>
+          <form onSubmit={handleSubmit(handleProcessMyOrder)}>
             <ModalCloseButton />
             <ModalHeader>Detail transfer manual</ModalHeader>
 

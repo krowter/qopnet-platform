@@ -571,6 +571,8 @@ export const processMyOrder = async (req, res) => {
 
   if (isCartExist) {
     try {
+      console.log({ businessOrder })
+
       /**
        * This should not require any formData or req.body
        * But still need to check if these fields are available:
