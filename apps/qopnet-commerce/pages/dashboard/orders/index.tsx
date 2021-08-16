@@ -6,8 +6,13 @@ import { NextSeo } from 'next-seo'
 import {
   Box,
   chakra,
-  Button,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
   Code,
+  OrderedList,
+  ListItem,
   HStack,
   Tag,
   Link as ChakraLink,
@@ -129,7 +134,10 @@ export const BusinessOrdersList = ({ businessOrders }) => {
                     calculateSupplierProductItem(item)
 
                   return (
-                    <Stack direction={['column', 'column', 'row']}>
+                    <Stack
+                      key={item?.id || index}
+                      direction={['column', 'column', 'row']}
+                    >
                       {item.supplierProduct?.images[0] && (
                         <NextLink
                           href={`/${item.supplier?.handle}/${item.supplierProduct?.slug}`}
@@ -205,10 +213,40 @@ export const BusinessOrdersList = ({ businessOrders }) => {
                   </Heading>
                   <Text fontSize="xl">{formatRupiah(totalCalculatedBill)}</Text>
                 </Box>
-                <Button size="sm" colorScheme="orange">
+                {/* <Button size="sm" colorScheme="orange">
                   Detail Transaksi
-                </Button>
+                </Button> */}
               </Stack>
+            </Stack>
+            <Stack>
+              <Alert status="info">
+                <AlertIcon />
+                Selesaikan pembayaran dengan mentransfer ke detail berikut:
+              </Alert>
+              <Box>
+                <Text>Nomor dan nama pemilik rekening:</Text>
+                <Text fontSize="lg" fontWeight="bold">
+                  {businessOrder?.paymentMethod?.accountNumber}
+                </Text>
+                <Text>{businessOrder?.paymentMethod?.accountHolderName}</Text>
+              </Box>
+              <Box>
+                <Text>Total pembayaran:</Text>
+                <Text fontSize="lg" fontWeight="bold">
+                  {formatRupiah(businessOrder?.paymentRecord?.amountDue)}
+                </Text>
+              </Box>
+              <Box fontSize="xs">
+                <Text>Penting untuk:</Text>
+                <OrderedList>
+                  <ListItem>
+                    Transfer tepat hingga <b>3 digit terakhir</b>
+                  </ListItem>
+                  <ListItem>
+                    Hanya disarankan untuk transfer melalui rekening langsung
+                  </ListItem>
+                </OrderedList>
+              </Box>
             </Stack>
           </Stack>
         )

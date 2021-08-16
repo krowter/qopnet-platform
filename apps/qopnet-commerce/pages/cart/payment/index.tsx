@@ -237,7 +237,7 @@ export const ManualTransferPaymentModalGroup = ({ totalCalculatedBill }) => {
         formData
       )
       if (!response) throw new Error('Update my cart to process order failed')
-      // router.push(`/dashboard/orders`)
+      router.push(`/dashboard/orders`)
       toast({
         status: 'success',
         title: 'Proses pengaturan pembayaran berhasil',

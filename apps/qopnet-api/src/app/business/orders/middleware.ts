@@ -35,6 +35,7 @@ export const getMyAllBusinessOrders = async (req, res) => {
           },
           shipmentAddress: true,
           paymentMethod: true,
+          paymentRecord: true,
         },
       })
 
@@ -669,6 +670,7 @@ export const getAllBusinessOrders = async (req, res) => {
           businessOrderItems: true,
           shipmentAddress: true,
           paymentMethod: true,
+          paymentRecord: true,
         },
       })
 
