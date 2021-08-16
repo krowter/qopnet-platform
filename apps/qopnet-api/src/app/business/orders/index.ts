@@ -67,7 +67,7 @@ router.patch(
   '/my/cart/payment/method',
   auth.checkUser,
   businessOrder.checkMyCart,
-  businessOrder.patchMyCartPayment
+  businessOrder.patchMyCartPaymentMethod
 )
 
 // PUT /api/business/orders/my/cart/process

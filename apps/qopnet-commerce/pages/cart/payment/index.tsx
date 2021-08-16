@@ -10,13 +10,16 @@ import {
   Text,
   useColorModeValue,
 } from '@chakra-ui/react'
+import { mutate } from 'swr'
 
 import { Layout, OptionBox } from '@qopnet/qopnet-ui'
 import { formatRupiah, calculateCart } from '@qopnet/util-format'
 import { BreadcrumbCart } from '../../../components'
-import { useSWR } from '../../../utils'
+import { useSWR, requestToAPI } from '../../../utils'
 
 /**
+ * Cart select Payment Method
+ *
  * /cart/payment
  */
 export const CartPaymentPage = () => {
@@ -51,20 +54,33 @@ export const PaymentContainer = ({ businessOrder }) => {
   const { paymentMethods } = data || {}
 
   // Should be empty array if API Payment is available
-  const [selectedPaymentId, setSelectedPaymentId] = useState('')
+  const [selectedPaymentMethodId, setSelectedPaymentMethodId] = useState('')
 
   // Only set default payment once data has been retrieved
   useEffect(() => {
     if (!error && data && paymentMethods?.length) {
-      setSelectedPaymentId(paymentMethods[0]?.id)
+      setSelectedPaymentMethodId(paymentMethods[0]?.id)
     }
   }, [error, data, paymentMethods])
 
   // Handle select payment option with just payment id
-  const handleSelectPaymentOption = (paymentId) => {
-    setSelectedPaymentId(paymentId)
+  const handleSelectPaymentOption = (paymentMethodId) => {
+    setSelectedPaymentMethodId(paymentMethodId)
+    patchCartWithPaymentMethod(paymentMethodId)
+  }
 
-    // Request here
+  const patchCartWithPaymentMethod = (paymentMethodId) => {
+    mutate('/api/business/orders/my/cart', async (data) => {
+      const response = await requestToAPI(
+        'PATCH',
+        '/api/business/orders/my/cart/payment/method',
+        { id: paymentMethodId }
+      )
+      return {
+        ...data,
+        paymentMethod: response?.businessOrder?.paymentMethod,
+      }
+    })
   }
 
   return (
@@ -74,7 +90,7 @@ export const PaymentContainer = ({ businessOrder }) => {
           Pilih metode pembayaran:
         </Heading>
         <Stack>
-          {/* {error && <div>Gagal memuat metode pembayaran</div>} */}
+          {error && !data && <div>Gagal memuat metode pembayaran</div>}
           {!error && !data && <div>Memuat metode pembayaran...</div>}
           {!error && data && paymentMethods?.length < 1 && (
             <Stack>
@@ -89,7 +105,7 @@ export const PaymentContainer = ({ businessOrder }) => {
                 <OptionBox
                   key={payment.id}
                   id={`payment-${payment.id}`}
-                  selected={selectedPaymentId === payment.id}
+                  selected={selectedPaymentMethodId === payment.id}
                   onClick={() => handleSelectPaymentOption(payment.id)}
                 >
                   <Text>{payment.name}</Text>
@@ -104,9 +120,6 @@ export const PaymentContainer = ({ businessOrder }) => {
 
 export const PaymentSummaryContainer = ({ businessOrder }) => {
   const router = useRouter()
-  const [payment, setPaymentOption] = useState(
-    businessOrder?.payment || { id: '2', name: 'Transfer Manual Bank BCA' }
-  )
 
   const {
     totalItems,
@@ -137,7 +150,7 @@ export const PaymentSummaryContainer = ({ businessOrder }) => {
       <Stack id="businessOrder-calculation">
         <HStack justify="space-between">
           <Text>Metode Pembayaran</Text>
-          <Text>{payment?.name}</Text>
+          <Text>{businessOrder?.paymentMethod?.name}</Text>
         </HStack>
         <HStack justify="space-between">
           <Text>Total Tagihan</Text>

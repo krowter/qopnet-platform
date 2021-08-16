@@ -511,8 +511,8 @@ export const patchMyCartCourier = async (req, res) => {
   }
 }
 
-// Patch my cart payment
-export const patchMyCartPayment = async (req, res) => {
+// Patch my cart payment method
+export const patchMyCartPaymentMethod = async (req, res) => {
   const ownerId = req.profile.id
   const isCartExist = req.isCartExist
   const businessOrder = req.businessOrder
@@ -525,10 +525,7 @@ export const patchMyCartPayment = async (req, res) => {
           id: businessOrder.id,
         },
         include: {
-          shipmentAddress: true,
-          shipmentCourier: true,
           paymentMethod: true,
-          paymentRecord: true,
         },
         data: {
           paymentMethodId: formData.id, // Patch
