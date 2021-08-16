@@ -46,31 +46,25 @@ export const CartPaymentPage = () => {
 }
 
 export const PaymentContainer = ({ businessOrder }) => {
-  // Fetch payments
-  const { data, error } = useSWR('/api/payments')
-  const { payments } = data || {}
+  // Fetch paymentMethods
+  const { data, error } = useSWR('/api/payments/methods')
+  const { paymentMethods } = data || {}
 
-  // Display addresses
-  const [availablePayments, setAvailablePayments] = useState([
-    { id: '1', name: 'COD (Cash on Delivery)' },
-    { id: '2', name: 'Transfer Manual Bank BCA' },
-    { id: '3', name: 'Transfer Manual Bank Permata' },
-  ])
   // Should be empty array if API Payment is available
   const [selectedPaymentId, setSelectedPaymentId] = useState('')
 
-  // Only set payments once data has been retrieved
+  // Only set default payment once data has been retrieved
   useEffect(() => {
-    if (data) {
-      setAvailablePayments(payments || [])
-      // Default to set the first available payment
-      setSelectedPaymentId(availablePayments[0]?.id || '')
+    if (!error && data && paymentMethods?.length) {
+      setSelectedPaymentId(paymentMethods[0]?.id)
     }
-  }, [data, payments, availablePayments])
+  }, [error, data, paymentMethods])
 
   // Handle select payment option with just payment id
   const handleSelectPaymentOption = (paymentId) => {
     setSelectedPaymentId(paymentId)
+
+    // Request here
   }
 
   return (
@@ -80,15 +74,17 @@ export const PaymentContainer = ({ businessOrder }) => {
           Pilih metode pembayaran:
         </Heading>
         <Stack>
-          {/* {error && <div>Gagal memuat pilihan pembayaran</div>} */}
-          {!error && !data && <div>Memuat pilihan pembayaran...</div>}
-          {!error && data && availablePayments?.length < 1 && (
+          {/* {error && <div>Gagal memuat metode pembayaran</div>} */}
+          {!error && !data && <div>Memuat metode pembayaran...</div>}
+          {!error && data && paymentMethods?.length < 1 && (
             <Stack>
-              <Text>Belum ada pilihan pembayaran yang tersedia.</Text>
+              <Text>Belum ada metode pembayaran yang tersedia.</Text>
             </Stack>
           )}
-          {availablePayments?.length > 0 &&
-            availablePayments?.map((payment) => {
+          {!error &&
+            data &&
+            paymentMethods?.length > 0 &&
+            paymentMethods?.map((payment) => {
               return (
                 <OptionBox
                   key={payment.id}
@@ -140,7 +136,7 @@ export const PaymentSummaryContainer = ({ businessOrder }) => {
       </Heading>
       <Stack id="businessOrder-calculation">
         <HStack justify="space-between">
-          <Text>Pilihan Pembayaran</Text>
+          <Text>Metode Pembayaran</Text>
           <Text>{payment?.name}</Text>
         </HStack>
         <HStack justify="space-between">
