@@ -10,7 +10,7 @@
     "serve:api": "prisma generate && nx serve",
     "serve:admin": "nx serve qopnet-admin --port=4200",
     "serve:commerce": "nx serve qopnet-commerce --port=3000",
-    "build": "prisma generate && nx build",
+    "build": "prisma generate && prisma migrate dev && nx build",
     "build:api": "prisma generate && nx build qopnet-api",
     "build:admin": "prisma generate && nx build qopnet-admin",
     "build:commerce": "prisma generate && nx build qopnet-commerce --prod",
