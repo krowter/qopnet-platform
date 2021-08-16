@@ -1,22 +1,40 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import NextLink from 'next/link'
 import NextImage from 'next/image'
 import { useRouter } from 'next/router'
 import {
   Button,
+  ButtonGroup,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
   Heading,
   HStack,
+  Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Stack,
   Text,
+  useToast,
+  useDisclosure,
   useColorModeValue,
 } from '@chakra-ui/react'
+import { mutate } from 'swr'
+import { useForm } from 'react-hook-form'
 
 import { Layout, OptionBox } from '@qopnet/qopnet-ui'
 import { formatRupiah, calculateCart } from '@qopnet/util-format'
 import { BreadcrumbCart } from '../../../components'
-import { useSWR } from '../../../utils'
+import { useSWR, requestToAPI } from '../../../utils'
 
 /**
+ * Cart select Payment Method
+ *
  * /cart/payment
  */
 export const CartPaymentPage = () => {
@@ -46,32 +64,53 @@ export const CartPaymentPage = () => {
 }
 
 export const PaymentContainer = ({ businessOrder }) => {
-  // Fetch payments
-  const { data, error } = useSWR('/api/payments')
-  const { payments } = data || {}
+  const { data, error } = useSWR('/api/payments/methods')
+  const { paymentMethods } = data || {}
+  const [paymentMethodId, setPaymentMethodId] = useState('')
 
-  // Display addresses
-  const [availablePayments, setAvailablePayments] = useState([
-    { id: '1', name: 'COD (Cash on Delivery)' },
-    { id: '2', name: 'Transfer Manual Bank BCA' },
-    { id: '3', name: 'Transfer Manual Bank Permata' },
-  ])
-  // Should be empty array if API Payment is available
-  const [selectedPaymentId, setSelectedPaymentId] = useState('')
-
-  // Only set payments once data has been retrieved
-  useEffect(() => {
-    if (data) {
-      setAvailablePayments(payments || [])
-      // Default to set the first available payment
-      setSelectedPaymentId(availablePayments[0]?.id || '')
-    }
-  }, [data, payments, availablePayments])
-
-  // Handle select payment option with just payment id
-  const handleSelectPaymentOption = (paymentId) => {
-    setSelectedPaymentId(paymentId)
+  const handleSelectPaymentOption = (paymentMethodId) => {
+    setPaymentMethodId(paymentMethodId)
+    patchCartWithPaymentMethod(paymentMethodId)
   }
+
+  const patchCartWithPaymentMethod = async (paymentMethodId) => {
+    const index = paymentMethods.findIndex(
+      (item) => item.id === paymentMethodId
+    )
+    mutate(
+      '/api/business/orders/my/cart',
+      (data) => {
+        return {
+          ...data,
+          businessOrder: {
+            ...data.businessOrder,
+            paymentMethod: {
+              id: paymentMethods[index]?.id,
+              name: paymentMethods[index]?.name,
+              paymentCategory: paymentMethods[index]?.category,
+            },
+          },
+        }
+      },
+      false
+    )
+    await requestToAPI('PATCH', '/api/business/orders/my/cart/payment/method', {
+      id: paymentMethodId,
+    })
+    mutate('/api/business/orders/my/cart')
+  }
+
+  useEffect(() => {
+    if (!error && data && businessOrder && paymentMethods.length) {
+      if (!businessOrder?.paymentMethodId) {
+        patchCartWithPaymentMethod(paymentMethods[0]?.id)
+      }
+      setPaymentMethodId(
+        businessOrder?.paymentMethodId || paymentMethods[0]?.id
+      )
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [!error && data && businessOrder && paymentMethods])
 
   return (
     <Stack flex={1} spacing={10} maxW="420px">
@@ -80,20 +119,22 @@ export const PaymentContainer = ({ businessOrder }) => {
           Pilih metode pembayaran:
         </Heading>
         <Stack>
-          {/* {error && <div>Gagal memuat pilihan pembayaran</div>} */}
-          {!error && !data && <div>Memuat pilihan pembayaran...</div>}
-          {!error && data && availablePayments?.length < 1 && (
+          {error && !data && <div>Gagal memuat metode pembayaran</div>}
+          {!error && !data && <div>Memuat metode pembayaran...</div>}
+          {!error && data && paymentMethods?.length < 1 && (
             <Stack>
-              <Text>Belum ada pilihan pembayaran yang tersedia.</Text>
+              <Text>Belum ada metode pembayaran yang tersedia.</Text>
             </Stack>
           )}
-          {availablePayments?.length > 0 &&
-            availablePayments?.map((payment) => {
+          {!error &&
+            data &&
+            paymentMethods?.length > 0 &&
+            paymentMethods?.map((payment) => {
               return (
                 <OptionBox
                   key={payment.id}
                   id={`payment-${payment.id}`}
-                  selected={selectedPaymentId === payment.id}
+                  selected={paymentMethodId === payment.id}
                   onClick={() => handleSelectPaymentOption(payment.id)}
                 >
                   <Text>{payment.name}</Text>
@@ -108,14 +149,11 @@ export const PaymentContainer = ({ businessOrder }) => {
 
 export const PaymentSummaryContainer = ({ businessOrder }) => {
   const router = useRouter()
-  const [payment, setPaymentOption] = useState(
-    businessOrder?.payment || { id: '2', name: 'Transfer Manual Bank BCA' }
-  )
 
   const {
-    totalItems,
-    totalPrice,
-    totalDiscount,
+    // totalItems,
+    // totalPrice,
+    // totalDiscount,
     totalCalculatedPrice,
     totalShipmentCost,
     totalCalculatedBill,
@@ -140,19 +178,146 @@ export const PaymentSummaryContainer = ({ businessOrder }) => {
       </Heading>
       <Stack id="businessOrder-calculation">
         <HStack justify="space-between">
-          <Text>Pilihan Pembayaran</Text>
-          <Text>{payment?.name}</Text>
+          <Text>Metode Pembayaran</Text>
+          <Text>{businessOrder?.paymentMethod?.name}</Text>
         </HStack>
         <HStack justify="space-between">
+          <Text>Total Harga ({1} produk)</Text>
+          <Text>{formatRupiah(totalCalculatedPrice)}</Text>
+        </HStack>
+        <HStack justify="space-between">
+          <Text>Total Ongkos Kirim</Text>
+          <Text>{formatRupiah(totalShipmentCost)}</Text>
+        </HStack>
+        <hr />
+        <HStack justify="space-between" fontSize="lg" fontWeight="bold">
           <Text>Total Tagihan</Text>
           <Text>{formatRupiah(totalCalculatedBill)}</Text>
         </HStack>
       </Stack>
 
-      <Button colorScheme="orange" onClick={handleClickPay}>
-        Lanjut Bayar
-      </Button>
+      <ManualTransferPaymentModalGroup
+        totalCalculatedBill={totalCalculatedBill}
+      />
     </Stack>
+  )
+}
+
+export const ManualTransferPaymentModalGroup = ({ totalCalculatedBill }) => {
+  // Next.js
+  const router = useRouter()
+
+  // Chakra UI
+  const toast = useToast()
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const initialRef = useRef()
+  const finalRef = useRef()
+
+  // React Hook Form
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm()
+  const inputAccountNumber = watch('accountNumber')
+  const inputAccountHolderName = watch('accountHolderName')
+
+  const handleSubmitPaymentRecord = (data) => {
+    try {
+      const formData = {
+        accountNumber: data?.accountNumber,
+        accountHolderName: data?.accountHolderName,
+        totalCalculatedBill: totalCalculatedBill,
+      }
+      // console.info({ formData })
+      const response = requestToAPI(
+        'PUT',
+        '/api/business/orders/my/cart/process',
+        formData
+      )
+      if (!response) throw new Error('Update my cart to process order failed')
+      router.push(`/dashboard/orders`)
+      toast({
+        status: 'success',
+        title: 'Proses pengaturan pembayaran berhasil',
+        description: 'Silakan mengikuti petunjuk untuk melunasi pembayaran',
+      })
+    } catch (error) {
+      console.error(error)
+      toast({
+        status: 'error',
+        title: 'Proses pengaturan pembayaran gagal',
+        description: 'Silakan coba lagi',
+      })
+    }
+  }
+
+  return (
+    <>
+      <Button colorScheme="orange" onClick={onOpen} ref={finalRef}>
+        Pembayaran
+      </Button>
+
+      <Modal
+        isCentered
+        initialFocusRef={initialRef}
+        finalFocusRef={finalRef}
+        isOpen={isOpen}
+        onClose={onClose}
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <form onSubmit={handleSubmit(handleSubmitPaymentRecord)}>
+            <ModalCloseButton />
+            <ModalHeader>Detail transfer manual</ModalHeader>
+
+            <ModalBody as={Stack}>
+              <HStack justify="space-between" fontSize="lg" fontWeight="bold">
+                <Text>Total Tagihan</Text>
+                <Text>{formatRupiah(totalCalculatedBill)}</Text>
+              </HStack>
+
+              <FormControl>
+                <FormLabel>No. rekening pembayar</FormLabel>
+                <Input
+                  ref={initialRef}
+                  placeholder="Contoh: 123456789"
+                  {...register('accountNumber', { required: true })}
+                />
+                {errors.accountNumber && (
+                  <FormErrorMessage>Nomor rekening diperlukan</FormErrorMessage>
+                )}
+              </FormControl>
+
+              <FormControl>
+                <FormLabel>Nama pemilik rekening pembayar</FormLabel>
+                <Input
+                  placeholder="Contoh: Soekarno Hatta"
+                  {...register('accountHolderName', { required: true })}
+                />
+                {errors.accountHolderName && (
+                  <FormErrorMessage>
+                    Nama pemilik rekening diperlukan
+                  </FormErrorMessage>
+                )}
+              </FormControl>
+            </ModalBody>
+
+            <ModalFooter as={ButtonGroup}>
+              <Button
+                type="submit"
+                colorScheme="green"
+                disabled={!inputAccountNumber || !inputAccountHolderName}
+              >
+                Proses Bayar
+              </Button>
+              {/* <Button onClick={onClose}>Batal</Button> */}
+            </ModalFooter>
+          </form>
+        </ModalContent>
+      </Modal>
+    </>
   )
 }
 

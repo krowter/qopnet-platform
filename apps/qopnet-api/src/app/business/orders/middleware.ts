@@ -1,5 +1,6 @@
 import { prisma } from '@qopnet/util-prisma'
 import { BusinessOrder, BusinessOrderItem } from '@prisma/client'
+import randomInteger from 'random-int'
 
 // -----------------------------------------------------------------------------
 // User Only
@@ -34,6 +35,7 @@ export const getMyAllBusinessOrders = async (req, res) => {
           },
           shipmentAddress: true,
           paymentMethod: true,
+          paymentRecord: true,
         },
       })
 
@@ -511,8 +513,8 @@ export const patchMyCartCourier = async (req, res) => {
   }
 }
 
-// Patch my cart payment
-export const patchMyCartPayment = async (req, res) => {
+// Patch my cart payment method
+export const patchMyCartPaymentMethod = async (req, res) => {
   const ownerId = req.profile.id
   const isCartExist = req.isCartExist
   const businessOrder = req.businessOrder
@@ -525,10 +527,7 @@ export const patchMyCartPayment = async (req, res) => {
           id: businessOrder.id,
         },
         include: {
-          shipmentAddress: true,
-          shipmentCourier: true,
           paymentMethod: true,
-          paymentRecord: true,
         },
         data: {
           paymentMethodId: formData.id, // Patch
@@ -568,6 +567,7 @@ export const processMyOrder = async (req, res) => {
   const ownerId = req.profile.id
   const isCartExist = req.isCartExist
   const businessOrder = req.businessOrder
+  const formData = req.body
 
   if (isCartExist) {
     try {
@@ -586,17 +586,41 @@ export const processMyOrder = async (req, res) => {
         businessOrder.shipmentCourierId &&
         businessOrder.paymentMethodId
       ) {
+        // Generate unique digits based on new value + random digits
+        const randomDigits = randomInteger(100, 999)
+        const amountDue = Number(formData.totalCalculatedBill) + randomDigits
+        const amountString = amountDue.toString()
+        const uniqueString = amountString.substring(amountString.length - 3)
+        const uniqueDigits = Number(uniqueString)
+
         const updatedCart = await prisma.businessOrder.update({
           where: {
             id: businessOrder.id,
           },
+          include: {
+            paymentMethod: true,
+            paymentRecord: true,
+          },
           data: {
             status: 'WAITING_FOR_PAYMENT',
+            paymentRecord: {
+              update: {
+                status: 'PENDING',
+                accountNumber: formData.accountNumber,
+                accountHolderName: formData.accountHolderName,
+                amountDue: amountDue,
+                uniqueDigits: uniqueDigits,
+                amountPaid: 0,
+                proofImages: [],
+              },
+            },
           },
         })
+        // console.info({ updatedCart })
 
         res.status(200).json({
-          message: 'Process my order success',
+          message:
+            'Process my order success, order is waiting for payment, payment record is pending',
           ownerId,
           isCartExist,
           businessOrder: updatedCart,
@@ -646,6 +670,7 @@ export const getAllBusinessOrders = async (req, res) => {
           businessOrderItems: true,
           shipmentAddress: true,
           paymentMethod: true,
+          paymentRecord: true,
         },
       })
 

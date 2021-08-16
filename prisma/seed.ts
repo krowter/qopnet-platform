@@ -312,7 +312,7 @@ async function seedPromoEmployees() {
     }),
   })
 
-  console.log({ promoEmployees })
+  console.info({ promoEmployees })
 }
 
 /**
