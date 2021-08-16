@@ -594,12 +594,12 @@ export const processMyOrder = async (req, res) => {
         const uniqueString = amountString.substring(amountString.length - 3)
         const uniqueDigits = Number(uniqueString)
         // console.info({
-          randomDigits,
-          amountDue,
-          amountString,
-          uniqueString,
-          uniqueDigits,
-        })
+        //   randomDigits,
+        //   amountDue,
+        //   amountString,
+        //   uniqueString,
+        //   uniqueDigits,
+        // })
 
         // console.info({ message: 'Processing cart into business order' })
         const updatedCart = await prisma.businessOrder.update({
