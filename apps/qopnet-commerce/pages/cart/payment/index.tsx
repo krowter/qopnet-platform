@@ -215,6 +215,9 @@ export const ManualTransferPaymentModalGroup = ({ totalCalculatedBill }) => {
     watch,
     formState: { errors },
   } = useForm()
+  const inputAccountNumber = watch('accountNumber')
+  const inputAccountHolderName = watch('accountHolderName')
+
   const onSubmit = (data) => {
     console.log(data)
     // POST PaymentRecord
@@ -246,7 +249,7 @@ export const ManualTransferPaymentModalGroup = ({ totalCalculatedBill }) => {
               </HStack>
 
               <FormControl>
-                <FormLabel>No. rekening</FormLabel>
+                <FormLabel>No. rekening pembayar</FormLabel>
                 <Input
                   ref={initialRef}
                   placeholder="Contoh: 123456789"
@@ -258,7 +261,7 @@ export const ManualTransferPaymentModalGroup = ({ totalCalculatedBill }) => {
               </FormControl>
 
               <FormControl>
-                <FormLabel>Nama pemilik rekening</FormLabel>
+                <FormLabel>Nama pemilik rekening pembayar</FormLabel>
                 <Input
                   placeholder="Contoh: Soekarno Hatta"
                   {...register('accountHolderName', { required: true })}
@@ -272,7 +275,11 @@ export const ManualTransferPaymentModalGroup = ({ totalCalculatedBill }) => {
             </ModalBody>
 
             <ModalFooter as={ButtonGroup}>
-              <Button type="submit" colorScheme="green">
+              <Button
+                type="submit"
+                colorScheme="green"
+                disabled={!inputAccountNumber || !inputAccountHolderName}
+              >
                 Proses Bayar
               </Button>
               {/* <Button onClick={onClose}>Batal</Button> */}
