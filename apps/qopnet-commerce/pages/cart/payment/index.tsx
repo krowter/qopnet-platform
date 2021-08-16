@@ -1,13 +1,25 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import NextLink from 'next/link'
 import NextImage from 'next/image'
 import { useRouter } from 'next/router'
 import {
   Button,
+  ButtonGroup,
+  FormControl,
+  FormLabel,
   Heading,
   HStack,
+  Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Stack,
   Text,
+  useDisclosure,
   useColorModeValue,
 } from '@chakra-ui/react'
 import { mutate } from 'swr'
@@ -70,8 +82,9 @@ export const PaymentContainer = ({ businessOrder }) => {
           businessOrder: {
             ...data.businessOrder,
             paymentMethod: {
-              id: paymentMethodId,
+              id: paymentMethods[index]?.id,
               name: paymentMethods[index]?.name,
+              paymentCategory: paymentMethods[index]?.category,
             },
           },
         }
@@ -85,7 +98,7 @@ export const PaymentContainer = ({ businessOrder }) => {
   }
 
   useEffect(() => {
-    if (!error && data && paymentMethods) {
+    if (!error && data && businessOrder && paymentMethods) {
       setPaymentMethodId(
         businessOrder?.paymentMethodId || paymentMethods[0]?.id
       )
@@ -94,7 +107,7 @@ export const PaymentContainer = ({ businessOrder }) => {
       patchCartWithPaymentMethod(paymentMethods[0]?.id)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [!error && data && businessOrder && paymentMethods])
 
   return (
     <Stack flex={1} spacing={10} maxW="420px">
@@ -180,10 +193,61 @@ export const PaymentSummaryContainer = ({ businessOrder }) => {
         </HStack>
       </Stack>
 
-      <Button colorScheme="orange" onClick={handleClickPay}>
-        Lanjut Bayar
-      </Button>
+      <ManualTransferPaymentModalGroup
+        totalCalculatedBill={totalCalculatedBill}
+      />
     </Stack>
+  )
+}
+
+export const ManualTransferPaymentModalGroup = ({ totalCalculatedBill }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
+  const initialRef = useRef()
+  const finalRef = useRef()
+
+  return (
+    <>
+      <Button colorScheme="orange" onClick={onOpen} ref={finalRef}>
+        Pembayaran
+      </Button>
+
+      <Modal
+        isCentered
+        initialFocusRef={initialRef}
+        finalFocusRef={finalRef}
+        isOpen={isOpen}
+        onClose={onClose}
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalCloseButton />
+          <ModalHeader>Detail transfer manual</ModalHeader>
+
+          <ModalBody as={Stack}>
+            <HStack justify="space-between" fontSize="lg" fontWeight="bold">
+              <Text>Total Tagihan</Text>
+              <Text>{formatRupiah(totalCalculatedBill)}</Text>
+            </HStack>
+
+            <FormControl>
+              <FormLabel>No. rekening</FormLabel>
+              <Input ref={initialRef} placeholder="Contoh: 123456789" />
+            </FormControl>
+
+            <FormControl>
+              <FormLabel>Nama pemilik rekening</FormLabel>
+              <Input placeholder="Contoh: Arya Aditiara" />
+            </FormControl>
+          </ModalBody>
+
+          <ModalFooter as={ButtonGroup}>
+            <Button colorScheme="green">Proses Bayar</Button>
+            {/* <Button onClick={onClose}>Batal</Button> */}
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
   )
 }
 
