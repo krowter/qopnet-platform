@@ -103,10 +103,10 @@ export const BusinessOrdersRows = ({
               gridTemplateColumns="50px 100px 100px 100px 200px 1fr 1fr"
             >
               <Text>#{index}</Text>
-              <Avatar size="xs" name={businessOrder.owner.name as string} />
+              <Avatar size="xs" name={businessOrder?.owner.name as string} />
               <Text>{businessOrder?.owner.handle}</Text>
               <Text>{businessOrder?.owner.name}</Text>
-              <Text>{businessOrder?.paymentMethod}</Text>
+              <Text>{businessOrder?.paymentMethod?.name}</Text>
               <Text>{businessOrder?.shipmentAddress?.streetDetails}</Text>
               <Text>{businessOrder?.status}</Text>
             </SimpleGrid>
