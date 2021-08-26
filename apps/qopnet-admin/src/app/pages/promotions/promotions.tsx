@@ -16,6 +16,16 @@ import {
   Tr,
   useColorModeValue,
   VStack,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+  Button,
+  Select,
 } from '@chakra-ui/react'
 
 import { Merchant } from '@qopnet/shared-types'
@@ -23,6 +33,9 @@ import { Header } from '../../components'
 import { DefaultLayout } from '../../layouts'
 import { useSWR } from '../../utils/swr'
 import { Link } from 'react-router-dom'
+import { useState } from 'react'
+import { PromoSubmission } from '.prisma/client'
+import { useForm } from 'react-hook-form'
 
 export const PromotionsPage = () => {
   const { data, error } = useSWR('/api/promos/submissions')
@@ -65,7 +78,49 @@ export const PromoSubmissionsRows = ({
 }) => {
   const bg = useColorModeValue('gray.50', 'gray.900')
   const border = useColorModeValue('gray.200', 'gray.700')
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const [state, setState] = useState({
+    id: '',
+    name: '',
+    phone: '',
+    email: '',
+    birthPlace: '',
+    birthDate: '',
+    nationalId: '',
+    street: '',
+    streetDetails: '',
+    city: '',
+    state: '',
+    zip: '',
+    status: '',
+    providerId: '',
+  })
 
+  const setModalContent = async (data) => {
+    await setState(data)
+    console.log({ state })
+    onOpen()
+  }
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm()
+  const onSubmit = async (data: any) => {
+    // console.info({ data })
+    try {
+      // const submitData = await postToAPI(`/api/suppliers`, data)
+      // if (!submitData) throw new Error('Create supplier response error')
+
+      // history.push('/suppliers')
+      alert(`${data.status}`)
+      onClose()
+      // console.log('submit data: ', data)
+    } catch (error) {
+      alert('Gagal memperbarui promo')
+    }
+  }
   return (
     <Box>
       <SimpleGrid
@@ -85,8 +140,8 @@ export const PromoSubmissionsRows = ({
         <Text fontWeight={700}>Nama</Text>
         <Text fontWeight={700}>No HP</Text>
         <Text fontWeight={700}>Email</Text>
-        <Text fontWeight={700}>Tempat Lahir</Text>
-        <Text fontWeight={700}>Tanggal Lahir</Text>
+        <Text fontWeight={700}>NIK</Text>
+        <Text fontWeight={700}>Kota</Text>
         <Text fontWeight={700}>Status</Text>
       </SimpleGrid>
       {promoSubmissions?.length &&
@@ -95,9 +150,11 @@ export const PromoSubmissionsRows = ({
             <SimpleGrid
               spacingX={3}
               columns={{ base: 1, md: 3 }}
-              as={Link}
+              // as={Link}
+              // as={Button}
               key={`${promoSubmission?.id}`}
-              to={`/promos/submissions/${promoSubmission?.id}`}
+              // to={`/promos/submissions/${promoSubmission?.id}`}
+              onClick={() => setModalContent(promoSubmission)}
               w="100%"
               px={5}
               py={3}
@@ -111,12 +168,52 @@ export const PromoSubmissionsRows = ({
               <Text>{promoSubmission?.name}</Text>
               <Text>{promoSubmission?.phone}</Text>
               <Text>{promoSubmission?.email}</Text>
-              <Text>{promoSubmission?.birthPlace}</Text>
-              <Text>{promoSubmission?.birthDate}</Text>
+              <Text>{promoSubmission?.nationalId}</Text>
+              <Text>{promoSubmission?.city}</Text>
               <Text>{promoSubmission?.status}</Text>
             </SimpleGrid>
           )
         })}
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Update Status</ModalHeader>
+          <ModalCloseButton />
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <ModalBody>
+              <Text>Nama: {state?.name}</Text>
+              <Text>No HP: {state?.phone}</Text>
+              <Text>Email: {state?.email}</Text>
+              <Text>NIK: {state?.nationalId}</Text>
+              <Text>Jalan: {state?.street}</Text>
+              <Text>Detail Jalan: {state?.streetDetails}</Text>
+              <Text>Kota: {state?.city}</Text>
+              <Text>Provinsi: {state?.state}</Text>
+              <Text>Kode Pos: {state?.zip}</Text>
+              <Text>Tempat Lahir: {state?.birthPlace}</Text>
+              <Text>Tanggal Lahir: {state?.birthDate}</Text>
+              <Text>Status: {state?.status}</Text>
+              <Select
+                defaultValue={'PENDING'}
+                variant="filled"
+                {...register('status')}
+              >
+                <option value="PENDING">PENDING</option>
+                <option value="APPROVED">APPROVED</option>
+              </Select>
+            </ModalBody>
+
+            <ModalFooter>
+              <Button colorScheme="blue" mr={3} onClick={onClose}>
+                Close
+              </Button>
+              <Button variant="ghost" type="submit">
+                Update
+              </Button>
+            </ModalFooter>
+          </form>
+        </ModalContent>
+      </Modal>
     </Box>
   )
 }
