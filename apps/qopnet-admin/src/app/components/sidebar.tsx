@@ -208,11 +208,11 @@ export const SidebarLinks = () => {
         </SidebarLink>
       </Flex>
 
-      <SidebarNestedLink name="promotions" to="/promotions">
+      <SidebarNestedLink name="promotions" to="/promos/submissions">
         Promo
       </SidebarNestedLink>
       <Flex flexDirection="column" alignItems="flex-start" px={4}>
-        <SidebarLink name="promotions" to="/promotions">
+        <SidebarLink name="promotions" to="/promos/submissions">
           Semua Promo
         </SidebarLink>
       </Flex>

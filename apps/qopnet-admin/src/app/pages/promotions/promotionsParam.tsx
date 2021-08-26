@@ -35,12 +35,12 @@ import { useSWR } from '../../utils/swr'
 import { ModifierButtons } from '../../components'
 import { Icon, formatPrice } from '@qopnet/qopnet-ui'
 
-export const BusinessOrdersParamPage = () => {
+export const PromotionsParamPage = () => {
   const sidebar = useDisclosure()
   const { submissionsParam }: { submissionsParam: string } = useParams()
   const { data, error } = useSWR(`/api/promos/submissions/${submissionsParam}`)
   // to be decided from api return value
-  const { businessOrder, message } = data || {}
+  const { promoSubmission, message } = data || {}
 
   return (
     <DefaultLayout>
@@ -86,14 +86,14 @@ export const BusinessOrdersParamPage = () => {
               separator={<ChevronRightIcon color="gray.500" />}
             >
               <BreadcrumbItem>
-                <BreadcrumbLink as={Link} to="/suppliers">
-                  Pesanan Bisnis
+                <BreadcrumbLink as={Link} to="/promos/submissions">
+                  Promo
                 </BreadcrumbLink>
               </BreadcrumbItem>
 
               <BreadcrumbItem>
-                <BreadcrumbLink as={Link} to="/suppliers/products">
-                  Daftar Pesanan
+                <BreadcrumbLink as={Link} to="/promos/submissions">
+                  Daftar Promo
                 </BreadcrumbLink>
               </BreadcrumbItem>
 
@@ -127,8 +127,8 @@ export const BusinessOrdersParamPage = () => {
                       pt={5}
                       borderLeft=" 1px solid gray"
                     >
-                      <Box pb={3} justifyContent="center">
-                        {/* {supplierProduct?.supplierId} */}
+                      {/* <Box pb={3} justifyContent="center">
+                        {supplierProduct?.supplierId}
                       </Box>
 
                       <Divider />
@@ -139,7 +139,7 @@ export const BusinessOrdersParamPage = () => {
                         alignItems="center"
                       >
                         <Box>Toko Supplier </Box>
-                        {/* <Box>{supplierProduct?.supplierId}</Box> */}
+                        <Box>{supplierProduct?.supplierId}</Box>
                       </Flex>
 
                       <Flex
@@ -148,7 +148,7 @@ export const BusinessOrdersParamPage = () => {
                         alignItems="center"
                       >
                         <Box>Pemilik </Box>
-                        {/* <Box>{supplierProduct.ownerId}</Box> */}
+                        <Box>{supplierProduct.ownerId}</Box>
                       </Flex>
 
                       <Flex
@@ -178,7 +178,7 @@ export const BusinessOrdersParamPage = () => {
                         alignItems="center"
                       >
                         <Box>Dijual mulai </Box>
-                        {/* <Box>{supplierProduct.createdAt}</Box> */}
+                        <Box>{supplierProduct.createdAt}</Box>
                       </Flex>
 
                       <Flex
@@ -187,8 +187,8 @@ export const BusinessOrdersParamPage = () => {
                         alignItems="center"
                       >
                         <Box>Terakhir diubah</Box>
-                        {/* <Box>{supplierProduct.updatedAt}</Box> */}
-                      </Flex>
+                        <Box>{supplierProduct.updatedAt}</Box>
+                      </Flex> */}
                     </Box>
                   </Stack>
                   <HStack px={5}>
@@ -200,21 +200,21 @@ export const BusinessOrdersParamPage = () => {
             {error ? (
               <Box px={5} py={3}>
                 {' '}
-                {message ? message : 'Gagal memuat item pesanan'}
+                {message ? message : 'Gagal memuat daftar promo'}
               </Box>
-            ) : !businessOrder ? (
+            ) : !promoSubmission ? (
               <Box px={5} py={3}>
                 <Spinner color="orange.500" />
               </Box>
             ) : (
               <VStack
-                id="suppliers-products-all"
+                id="promos-all"
                 mt={5}
                 pl={14}
                 spacing={5}
                 alignItems="flex-start"
               >
-                <Stack id="product-detail">
+                <Stack id="promos-detail">
                   {/* {supplierProduct?.images?.length && (
                     <Flex>
                       {supplierProduct.images.map(
@@ -245,11 +245,10 @@ export const BusinessOrdersParamPage = () => {
                       )}
                     </Flex>
                   )} */}
-                  {businessOrder?.businessOrderItems?.length &&
-                    businessOrder?.businessOrderItems?.map((item, index) => {
+                  {/* {promoSubmission?.businessOrderItems?.length &&
+                    promoSubmission?.businessOrderItems?.map((item, index) => {
                       return (
                         <>
-                          {/* to be decided from api return value  */}
                           <Text> No: {index}</Text>
                           <Text> Id: {item?.id}</Text>
                           <Text> Jumlah: {item?.quantity}</Text>
@@ -265,7 +264,7 @@ export const BusinessOrdersParamPage = () => {
                           <Divider />
                         </>
                       )
-                    })}
+                    })} */}
                 </Stack>
               </VStack>
             )}
@@ -279,99 +278,99 @@ export const BusinessOrdersParamPage = () => {
             // h="92vh"
             display={{ base: 'none', lg: 'unset' }}
           >
-            <Box pb={3} justifyContent="center">
-              {businessOrder?.id}
+            {/* <Box pb={3} justifyContent="center">
+              {promoSubmission?.id}
             </Box>
 
             <Divider />
 
             <Flex pt={5} justifyContent="space-between" alignItems="center">
               <Box>Id</Box>
-              <Box>{businessOrder?.id}</Box>
+              <Box>{promoSubmission?.id}</Box>
             </Flex>
 
             <Flex pt={5} justifyContent="space-between" alignItems="center">
               <Box>Pemilik </Box>
-              <Box>{businessOrder?.owner?.name}</Box>
+              <Box>{promoSubmission?.owner?.name}</Box>
             </Flex>
 
             <Divider />
 
             <Flex pt={5} justifyContent="space-between" alignItems="center">
               <Box>Dibuat mulai </Box>
-              <Box>{formatDateTime(businessOrder?.createdAt)}</Box>
+              <Box>{formatDateTime(promoSubmission?.createdAt)}</Box>
             </Flex>
 
             <Flex pt={5} justifyContent="space-between" alignItems="center">
               <Box>Terakhir diubah</Box>
-              <Box>{formatDateTime(businessOrder?.updatedAt)}</Box>
+              <Box>{formatDateTime(promoSubmission?.updatedAt)}</Box>
             </Flex>
             <Flex pt={5} justifyContent="space-between" alignItems="center">
               <Box>Alamat Pengiriman:</Box>
-              <Box>{businessOrder?.shipmentAddressId}</Box>
+              <Box>{promoSubmission?.shipmentAddressId}</Box>
             </Flex>
             <Flex pt={5} justifyContent="space-between" alignItems="center">
               <Box>Jalan:</Box>
-              <Box>{businessOrder?.shipmentAddress?.street}</Box>
+              <Box>{promoSubmission?.shipmentAddress?.street}</Box>
             </Flex>
             <Flex pt={5} justifyContent="space-between" alignItems="center">
               <Box>Detail Jalan:</Box>
-              <Box>{businessOrder?.shipmentAddress?.streetDetails}</Box>
+              <Box>{promoSubmission?.shipmentAddress?.streetDetails}</Box>
             </Flex>
             <Flex pt={5} justifyContent="space-between" alignItems="center">
               <Box>Kecamatan:</Box>
-              <Box>{businessOrder?.shipmentAddress?.subdistrict}</Box>
+              <Box>{promoSubmission?.shipmentAddress?.subdistrict}</Box>
             </Flex>
             <Flex pt={5} justifyContent="space-between" alignItems="center">
               <Box>Kode Pos:</Box>
-              <Box>{businessOrder?.shipmentAddress?.zip}</Box>
+              <Box>{promoSubmission?.shipmentAddress?.zip}</Box>
             </Flex>
             <Flex pt={5} justifyContent="space-between" alignItems="center">
               <Box>Kota:</Box>
-              <Box>{businessOrder?.shipmentAddress?.city}</Box>
+              <Box>{promoSubmission?.shipmentAddress?.city}</Box>
             </Flex>
             <Flex pt={5} justifyContent="space-between" alignItems="center">
               <Box>Provinsi:</Box>
-              <Box>{businessOrder?.shipmentAddress?.state}</Box>
+              <Box>{promoSubmission?.shipmentAddress?.state}</Box>
             </Flex>
             <Flex pt={5} justifyContent="space-between" alignItems="center">
-              <Box> Kurir Pengiriman: {businessOrder?.shipmentCourierId}</Box>
+              <Box> Kurir Pengiriman: {promoSubmission?.shipmentCourierId}</Box>
             </Flex>
             <Flex pt={5} justifyContent="space-between" alignItems="center">
               <Box> Kendaraan Kurir Pengiriman:</Box>
-              <Box>{businessOrder?.shipmentCourierVehicleId}</Box>
+              <Box>{promoSubmission?.shipmentCourierVehicleId}</Box>
             </Flex>
             <Flex pt={5} justifyContent="space-between" alignItems="center">
               <Box>Metode Pembayaran:</Box>
-              <Box>{businessOrder?.paymentMethodId}</Box>
+              <Box>{promoSubmission?.paymentMethodId}</Box>
             </Flex>
             <Flex pt={5} justifyContent="space-between" alignItems="center">
               <Box>Catatan Pembayaran:</Box>
-              <Box>{businessOrder?.paymentRecordId}</Box>
+              <Box>{promoSubmission?.paymentRecordId}</Box>
             </Flex>
             <Flex pt={5} justifyContent="space-between" alignItems="center">
               <Box>Total Barang:</Box>
-              <Box> {businessOrder?.totalItems}</Box>
+              <Box> {promoSubmission?.totalItems}</Box>
             </Flex>
             <Flex pt={5} justifyContent="space-between" alignItems="center">
               <Box>Total Berat:</Box>
-              <Box> {businessOrder?.totalWeight}</Box>
+              <Box> {promoSubmission?.totalWeight}</Box>
             </Flex>
             <Flex pt={5} justifyContent="space-between" alignItems="center">
               <Box>Total Harga Pesanan:</Box>
-              <Box> {formatPrice(businessOrder?.totalWeight)}</Box>
+              <Box> {formatPrice(promoSubmission?.totalWeight)}</Box>
             </Flex>
             <Flex pt={5} justifyContent="space-between" alignItems="center">
               <Box>Total Harga Pengiriman:</Box>
-              <Box> {formatPrice(businessOrder?.totalShippingCost)}</Box>
+              <Box> {formatPrice(promoSubmission?.totalShippingCost)}</Box>
             </Flex>
             <Flex pt={5} justifyContent="space-between" alignItems="center">
               <Box>Total Potongan Harga Pengiriman:</Box>
-              <Box> {formatPrice(businessOrder?.totalShippingDiscount)}</Box>
+              <Box> {formatPrice(promoSubmission?.totalShippingDiscount)}</Box>
             </Flex>
             <Flex pt={5} justifyContent="space-between" alignItems="center">
               <Box>Total Pembayaran:</Box>
-              <Box> {formatPrice(businessOrder?.totalPayment)}</Box>
+              <Box> {formatPrice(promoSubmission?.totalPayment)}</Box>
             </Flex>
             <Flex
               pt={5}
@@ -380,8 +379,8 @@ export const BusinessOrdersParamPage = () => {
               alignItems="center"
             >
               <Box>Total Tagihan Pembayaran:</Box>
-              <Box> {formatPrice(businessOrder?.totalBillPayment)}</Box>
-            </Flex>
+              <Box> {formatPrice(promoSubmission?.totalBillPayment)}</Box>
+            </Flex> */}
           </Box>
         </Grid>
       </Box>

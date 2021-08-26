@@ -26,7 +26,7 @@ import { Link } from 'react-router-dom'
 
 export const PromotionsPage = () => {
   const { data, error } = useSWR('/api/promos/submissions')
-  const { businessOrders } = data || {}
+  const { PromoSubmissions } = data || {}
 
   return (
     <DefaultLayout>
@@ -37,7 +37,7 @@ export const PromotionsPage = () => {
           </Heading>
 
           <Text ml={5} fontWeight={500}>
-            {businessOrders?.length ?? 0} promo
+            {PromoSubmissions?.length ?? 0} promo
           </Text>
         </Header>
       </Flex>
@@ -46,22 +46,22 @@ export const PromotionsPage = () => {
           Gagal memuat semua promo
         </Box>
       )}
-      {!businessOrders && !error && (
+      {!PromoSubmissions && !error && (
         <Box px={5} py={3}>
           <Spinner color="orange.500" />
         </Box>
       )}
-      {businessOrders && (
-        <PromoSubmissionsRows businessOrders={businessOrders} />
+      {PromoSubmissions && (
+        <PromoSubmissionsRows promoSubmissions={PromoSubmissions} />
       )}
     </DefaultLayout>
   )
 }
 
 export const PromoSubmissionsRows = ({
-  businessOrders,
+  promoSubmissions,
 }: {
-  businessOrders: any
+  promoSubmissions: any
 }) => {
   const bg = useColorModeValue('gray.50', 'gray.900')
   const border = useColorModeValue('gray.200', 'gray.700')
@@ -77,41 +77,43 @@ export const PromoSubmissionsRows = ({
         bg={bg}
         borderBottom="1px solid gray"
         borderColor={border}
-        gridTemplateColumns="50px 100px 100px 100px 200px 1fr 1fr"
+        gridTemplateColumns="50px 100px 100px 200px 200px 200px 1fr 1fr"
       >
         {/* to be decided from api return value */}
         <Text fontWeight={700}>No</Text>
         <Text fontWeight={700}>Avatar</Text>
-        <Text fontWeight={700}>Handle</Text>
         <Text fontWeight={700}>Nama</Text>
-        <Text fontWeight={700}>Metode Pembayaran</Text>
-        <Text fontWeight={700}>Alamat Pengiriman</Text>
+        <Text fontWeight={700}>No HP</Text>
+        <Text fontWeight={700}>Email</Text>
+        <Text fontWeight={700}>Tempat Lahir</Text>
+        <Text fontWeight={700}>Tanggal Lahir</Text>
         <Text fontWeight={700}>Status</Text>
       </SimpleGrid>
-      {businessOrders?.length &&
-        businessOrders.map((businessOrder: any, index: number) => {
+      {promoSubmissions?.length &&
+        promoSubmissions.map((promoSubmission: any, index: number) => {
           return (
             <SimpleGrid
               spacingX={3}
               columns={{ base: 1, md: 3 }}
               as={Link}
-              key={`${businessOrder?.id}`}
-              to={`/business/orders/${businessOrder?.id}`}
+              key={`${promoSubmission?.id}`}
+              to={`/promos/submissions/${promoSubmission?.id}`}
               w="100%"
               px={5}
               py={3}
               bg={bg}
               borderBottom="1px solid gray"
               borderColor={border}
-              gridTemplateColumns="50px 100px 100px 100px 200px 1fr 1fr"
+              gridTemplateColumns="50px 100px 100px 200px 200px 200px 1fr 1fr"
             >
               <Text>#{index}</Text>
-              <Avatar size="xs" name={businessOrder?.owner.name as string} />
-              <Text>{businessOrder?.owner.handle}</Text>
-              <Text>{businessOrder?.owner.name}</Text>
-              <Text>{businessOrder?.paymentMethod?.name}</Text>
-              <Text>{businessOrder?.shipmentAddress?.streetDetails}</Text>
-              <Text>{businessOrder?.status}</Text>
+              <Avatar size="xs" name={promoSubmission?.name as string} />
+              <Text>{promoSubmission?.name}</Text>
+              <Text>{promoSubmission?.phone}</Text>
+              <Text>{promoSubmission?.email}</Text>
+              <Text>{promoSubmission?.birthPlace}</Text>
+              <Text>{promoSubmission?.birthDate}</Text>
+              <Text>{promoSubmission?.status}</Text>
             </SimpleGrid>
           )
         })}
