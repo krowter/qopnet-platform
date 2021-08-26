@@ -208,6 +208,15 @@ export const SidebarLinks = () => {
         </SidebarLink>
       </Flex>
 
+      <SidebarNestedLink name="promotions" to="/promotions">
+        Promo
+      </SidebarNestedLink>
+      <Flex flexDirection="column" alignItems="flex-start" px={4}>
+        <SidebarLink name="promotions" to="/promotions">
+          Semua Promo
+        </SidebarLink>
+      </Flex>
+
       {/* <SidebarLink to="/logistics">Logistics</SidebarLink>
       <SidebarLink to="/customers">Customers</SidebarLink> */}
     </Stack>
