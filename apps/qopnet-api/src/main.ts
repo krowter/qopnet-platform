@@ -19,6 +19,7 @@ import courierVehicles from './app/couriers/vehicles'
 import paymentMethods from './app/payments/methods'
 import paymentRecords from './app/payments/records'
 import promoEmployees from './app/promos/employees'
+import promoSubmissions from './app/promos/submissions'
 
 const app = express()
 
@@ -64,6 +65,7 @@ app.use('/api/couriers/vehicles', courierVehicles)
 app.use('/api/payments/methods', paymentMethods)
 app.use('/api/payments/records', paymentRecords)
 app.use('/api/promos/employees', promoEmployees)
+app.use('/api/promos/submissions', promoSubmissions)
 
 // The error handler must be before any other error middleware
 // and after all controllers
