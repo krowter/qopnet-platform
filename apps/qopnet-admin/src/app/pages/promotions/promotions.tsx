@@ -102,7 +102,6 @@ export const PromoSubmissionsRows = ({
 
   const setModalContent = async (data) => {
     await setState(data)
-    console.log({ state })
     onOpen()
   }
   const {
@@ -121,7 +120,6 @@ export const PromoSubmissionsRows = ({
       // history.push('/suppliers')
       alert(`${data.status}`)
       onClose()
-      // console.log('submit data: ', data)
     } catch (error) {
       alert('Gagal memperbarui promo')
     }
@@ -204,12 +202,6 @@ export const PromoSubmissionsRows = ({
               <Text>Status: {state?.status}</Text>
               <Select variant="filled" {...register('status')}>
                 {['PENDING', 'APPROVED'].map((item) => {
-                  console.log(
-                    'selected',
-                    item,
-                    state.status,
-                    item === state.status
-                  )
                   return <option value={item}>{item}</option>
                 })}
               </Select>
