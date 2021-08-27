@@ -63,8 +63,8 @@ export const CreatePromoPanarubPage = () => {
         `https://api-staging.qopnet.id/api/promos/employees/${employerId}/${values.employeeId}`
       )
       const { promoEmployee } = data
-      // @ts-ignore
       setValues((values) => ({
+        ...values,
         name: promoEmployee.name,
         phone: promoEmployee.phone,
         email: promoEmployee.email,
