@@ -26,6 +26,10 @@ import {
   useDisclosure,
   Button,
   Select,
+  Stack,
+  Radio,
+  RadioGroup,
+  StatHelpText,
 } from '@chakra-ui/react'
 
 import { Merchant } from '@qopnet/shared-types'
@@ -33,7 +37,7 @@ import { Header } from '../../components'
 import { DefaultLayout } from '../../layouts'
 import { useSWR } from '../../utils/swr'
 import { Link } from 'react-router-dom'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { PromoSubmission } from '.prisma/client'
 import { useForm } from 'react-hook-form'
 
@@ -105,6 +109,7 @@ export const PromoSubmissionsRows = ({
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors },
   } = useForm()
   const onSubmit = async (data: any) => {
@@ -121,6 +126,10 @@ export const PromoSubmissionsRows = ({
       alert('Gagal memperbarui promo')
     }
   }
+
+  useEffect(() => {
+    reset({ status: state.status })
+  }, [isOpen, reset, state.status])
   return (
     <Box>
       <SimpleGrid
@@ -193,13 +202,16 @@ export const PromoSubmissionsRows = ({
               <Text>Tempat Lahir: {state?.birthPlace}</Text>
               <Text>Tanggal Lahir: {state?.birthDate}</Text>
               <Text>Status: {state?.status}</Text>
-              <Select
-                defaultValue={'PENDING'}
-                variant="filled"
-                {...register('status')}
-              >
-                <option value="PENDING">PENDING</option>
-                <option value="APPROVED">APPROVED</option>
+              <Select variant="filled" {...register('status')}>
+                {['PENDING', 'APPROVED'].map((item) => {
+                  console.log(
+                    'selected',
+                    item,
+                    state.status,
+                    item === state.status
+                  )
+                  return <option value={item}>{item}</option>
+                })}
               </Select>
             </ModalBody>
 
