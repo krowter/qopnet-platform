@@ -246,6 +246,10 @@ export const BusinessOrdersList = ({ businessOrders }) => {
                     <ListItem>
                       Hanya disarankan untuk transfer melalui rekening langsung
                     </ListItem>
+                    <ListItem>
+                      Menunggu pembayaran terkonfirmasi dari kami setelah
+                      transfer dalam waktu 2×24 jam
+                    </ListItem>
                   </OrderedList>
                 </Box>
               </Stack>
