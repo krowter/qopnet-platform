@@ -1,5 +1,5 @@
 const SEO = {
-  title: 'Qopnet',
+  title: 'Qopnet Commerce',
   shortDescription: 'Kelola persediaan bisnis jadi lebih mudah',
   description:
     'Kelola persediaan bisnis jadi lebih mudah. Penghubung para pedagang supplier dengan para toko.',
