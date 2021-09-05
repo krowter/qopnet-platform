@@ -13,7 +13,8 @@ import { createClient } from '@supabase/supabase-js'
 import { SupabaseContextProvider } from 'use-supabase'
 
 // Local lib components and configs
-import { Layout, Header, Footer } from '@qopnet/qopnet-ui'
+import { Header } from '../components'
+import { Layout, Footer } from '@qopnet/qopnet-ui'
 import { swrConfig } from '@qopnet/util-swr'
 
 // Local styles and configs

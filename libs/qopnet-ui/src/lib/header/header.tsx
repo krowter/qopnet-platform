@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import {
   Avatar,
   AvatarBadge,
+  Badge,
   Box,
   chakra,
   Flex,
@@ -29,7 +30,8 @@ import { Icon } from '../icon/icon'
 
 /* eslint-disable-next-line */
 export interface HeaderProps {
-  cart?: unknown
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  cart?: any
 }
 
 export const Header = (props: HeaderProps) => {
@@ -47,7 +49,7 @@ export const Header = (props: HeaderProps) => {
 
   // Should be passed down from props of respective app
   // Because useSWR
-  const { cart = {} } = props
+  const { cart } = props
 
   // Handle sign out via Header, user action button
   const handleSignOut = async () => {
@@ -118,14 +120,25 @@ export const Header = (props: HeaderProps) => {
             </NextLink>
             <ButtonGroup id="user-action-buttons" size="md" variant="ghost">
               <NextLink href="/cart" passHref>
-                <IconButton
-                  id="shopping-cart-button"
-                  as="a"
-                  colorScheme="green"
-                  aria-label="Keranjang belanja"
-                >
-                  <Icon name="cart" />
-                </IconButton>
+                <Box as="a" position="relative">
+                  <IconButton
+                    id="shopping-cart-button"
+                    colorScheme="green"
+                    aria-label="Keranjang belanja"
+                  >
+                    <Icon name="cart" />
+                  </IconButton>
+                  <Badge
+                    fontSize="10px"
+                    variant="solid"
+                    border="2px solid white"
+                    position="absolute"
+                    bottom="-8px"
+                    right="0px"
+                  >
+                    {cart?.totalItemsCount}
+                  </Badge>
+                </Box>
               </NextLink>
               <IconButton
                 id="signout-button"

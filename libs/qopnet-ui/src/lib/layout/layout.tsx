@@ -17,7 +17,7 @@ export function Layout(props: LayoutProps & BoxProps) {
     <Container spacing={10} maxW={1200}>
       {meta?.title && (
         <NextSeo
-          title={`${meta?.title} - Qopnet`}
+          title={`${meta?.title} - Qopnet Commerce`}
           description={meta?.description}
         />
       )}
