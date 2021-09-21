@@ -23,7 +23,19 @@ export const apiUrl =
     ? apiStaging
     : apiDevelopment
 
-console.info({ apiUrl })
+/**
+ * Set webUrl if needed
+ */
+export const webUrl = window
+  ? String(window.location.origin)
+  : 'http://localhost:3000'
+
+console.info({
+  message: 'Qopnet Admin is ready',
+  env: process.env.NX_NODE_ENV,
+  apiUrl,
+  webUrl,
+})
 
 /**
  * Dynamic fetcher which use apiUrl automatically
