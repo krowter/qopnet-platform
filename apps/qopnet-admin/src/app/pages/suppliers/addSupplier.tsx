@@ -36,7 +36,7 @@ export const SupplierAddPage = () => {
     formState: { errors },
   } = useForm()
   const onSubmit = async (data: any) => {
-    console.log({ data })
+    // console.info({ data })
     try {
       const submitData = await postToAPI(`/api/suppliers`, data)
       if (!submitData) throw new Error('Create supplier response error')

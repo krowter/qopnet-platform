@@ -223,20 +223,21 @@ export const ManualTransferPaymentModalGroup = ({ totalCalculatedBill }) => {
   const inputAccountNumber = watch('accountNumber')
   const inputAccountHolderName = watch('accountHolderName')
 
-  const handleSubmitPaymentRecord = (data) => {
+  const handleProcessMyOrder = async (data) => {
     try {
       const formData = {
-        accountNumber: data?.accountNumber,
-        accountHolderName: data?.accountHolderName,
-        totalCalculatedBill: totalCalculatedBill,
+        accountNumber: data?.accountNumber || '123',
+        accountHolderName: data?.accountHolderName || 'Nama',
+        totalCalculatedBill: totalCalculatedBill || 1230000,
       }
       // console.info({ formData })
-      const response = requestToAPI(
+      const response = await requestToAPI(
         'PUT',
         '/api/business/orders/my/cart/process',
         formData
       )
-      if (!response) throw new Error('Update my cart to process order failed')
+      // console.info({ response, formData })
+
       router.push(`/dashboard/orders`)
       toast({
         status: 'success',
@@ -268,7 +269,7 @@ export const ManualTransferPaymentModalGroup = ({ totalCalculatedBill }) => {
       >
         <ModalOverlay />
         <ModalContent>
-          <form onSubmit={handleSubmit(handleSubmitPaymentRecord)}>
+          <form onSubmit={handleSubmit(handleProcessMyOrder)}>
             <ModalCloseButton />
             <ModalHeader>Detail transfer manual</ModalHeader>
 

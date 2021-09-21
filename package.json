@@ -1,6 +1,6 @@
 {
   "name": "qopnet-platform",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "private": true,
   "scripts": {
     "nx": "nx",
@@ -43,8 +43,10 @@
     "prisma:generate": "prisma generate",
     "prisma:studio": "prisma studio",
     "prisma:format": "prisma format",
-    "prisma:seed": "prisma db seed --preview-feature",
-    "ts-node": "ts-node --compiler-options \"{\\\"module\\\":\\\"commonjs\\\",\\\"resolveJsonModule\\\":true}\""
+    "prisma:seed": "prisma db seed --preview-feature"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   },
   "dependencies": {
     "@chakra-ui/icons": "^1.0.15",
@@ -67,7 +69,7 @@
     "@nrwl/tao": "12.7.0",
     "@nrwl/web": "12.7.0",
     "@nrwl/workspace": "12.7.0",
-    "@prisma/client": "2.29.1",
+    "@prisma/client": "3.0.2",
     "@sentry/browser": "6.11.0",
     "@sentry/node": "6.11.0",
     "@sentry/tracing": "6.11.0",
@@ -84,7 +86,6 @@
     "next": "11.0.1",
     "next-pwa": "5.2.24",
     "next-seo": "4.26.0",
-    "random": "3.0.6",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-hook-form": "7.12.2",
@@ -128,11 +129,11 @@
     "jest": "27.0.6",
     "msw": "^0.34.0",
     "prettier": "2.3.2",
-    "prisma": "2.29.1",
+    "prisma": "3.0.2",
     "serve": "12.0.0",
     "ts-jest": "27.0.4",
-    "ts-node": "~10.2.0",
-    "typescript": "~4.3.5"
+    "ts-node": "10.2.1",
+    "typescript": "4.3.5"
   },
   "msw": {
     "workerDirectory": "apps/qopnet-admin/src"

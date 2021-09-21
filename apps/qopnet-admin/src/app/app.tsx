@@ -17,6 +17,8 @@ import {
   MerchantsPage,
   BusinessOrdersPage,
   BusinessOrdersParamPage,
+  PromotionsPage,
+  PromotionsParamPage,
   SignInPage,
   NotFoundPage,
 } from './pages'
@@ -90,6 +92,12 @@ export const App = () => {
           exact
           path="/business/orders/:businessOrdersParam"
           component={BusinessOrdersParamPage}
+        />
+        <Route exact path="/promos/submissions" component={PromotionsPage} />
+        <Route
+          exact
+          path="/promos/submissions/:submissionsParam"
+          component={PromotionsParamPage}
         />
         <Route exact path="/about" component={AboutPage} />
         <Route exact path="/profiles" component={Profiles} />
