@@ -1,6 +1,6 @@
 # Qopnet Platform
 
-Qopnet Platform (@qopnet) project was generated using [Nx](https://nx.dev) workspace. Nx is a smart, extensible build framework.
+Qopnet Platform project was generated using [Nx](https://nx.dev) workspace. Nx is a smart, extensible build framework.
 
 This repo handle these apps:
 
