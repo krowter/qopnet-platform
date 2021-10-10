@@ -4,29 +4,21 @@ Qopnet Platform project was generated using [Nx](https://nx.dev) workspace.
 
 This repo handle these apps:
 
-- Qopnet API (`qopnet-api`)
-  - [api.qopnet.id](https://api.qopnet.id)
-- Qopnet Admin (`qopnet-admin`)
-  - [admin.qopnet.id](https://admin.qopnet.id)
 - Qopnet Commerce (`qopnet-commerce`)
   - [qopnet.id](https://qopnet.id)
-- Qopnet Concierge (`qopnet-concierge`)
-  - [concierge.qopnet.id](https://concierge.qopnet.id)
-- Qopnet POS (`qopnet-pos`)
-  - [pos.qopnet.id](https://pos.qopnet.id)
-- Qopnet WA (`chat_zero`)
-  - [wa.qopnet.id](https://wa.qopnet.id)
+- Qopnet Admin (`qopnet-admin`)
+  - [admin.qopnet.id](https://admin.qopnet.id)
+- Qopnet API (`qopnet-api`)
+  - [api.qopnet.id](https://api.qopnet.id)
 
 Check the complete technical documentation in [the `docs` folder](./docs/README.md).
 
 ## Known URL (host and port)
 
-- `http://localhost:5555` - Prisma Studio
-- `http://localhost:4000` - Qopnet API
-- `http://localhost:4200` - Qopnet Admin UI
 - `http://localhost:3000` - Qopnet Commerce
-- `http://localhost:` - Qopnet Concierge
-- `http://localhost:` - Qopnet POS
+- `http://localhost:4200` - Qopnet Admin
+- `http://localhost:4000` - Qopnet API
+- `http://localhost:5555` - Prisma Studio
 
 ---
 
@@ -50,17 +42,17 @@ Check the complete technical documentation in [the `docs` folder](./docs/README.
    - Usually only the tech lead do this.
    - This also also update the `package.json` version and give a Git tag such as `v1.2.3`.
 
+### Frontend
+
+1. UI/UX with Figma for Qopnet Commerce and Qopnet Admin.
+2. Implement pages and components with React, React Router, Next.js, Chakra UI.
+3. Fetch to Qopnet API with SWR or interact auth with Supabase.
+
 ### Backend
 
 1. Qopnet API documentation with Postman API collection.
 2. Implement API endpoints with Express routes.
 3. Check and test via Postman.
-
-### Frontend
-
-1. UI/UX with Figma for Qopnet Admin, Qopnet Commerce, Qopnet Concierge, Qopnet POS.
-2. Implement pages and components with React, React Router, Next.js, Chakra UI.
-3. Fetch to Qopnet API with SWR or interact auth with Supabase.
 
 ---
 
