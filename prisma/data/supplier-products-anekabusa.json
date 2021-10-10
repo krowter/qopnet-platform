@@ -484,7 +484,7 @@
     "priceMin": null,
     "images": ["AB-412.jpg"],
     "slug": "sofa-set-minimalis-+-meja-lama",
-    "dimension": null
+    "dimension": { "width": null, "length": null, "height": null }
   },
   {
     "sku": "AB-413",
@@ -495,7 +495,7 @@
     "priceMin": null,
     "images": ["AB-413.jpg"],
     "slug": "sofa-minimalis-(-3-seater-+-2-puff-+-meja-lama-)",
-    "dimension": null
+    "dimension": { "width": null, "length": null, "height": null }
   },
   {
     "sku": "AB-414",
@@ -506,7 +506,7 @@
     "priceMin": null,
     "images": ["AB-414.jpg"],
     "slug": "sofa-minimalis-(-2-seater-+-1-seater-+-2-puff-+-meja-lama-)",
-    "dimension": null
+    "dimension": { "width": null, "length": null, "height": null }
   },
   {
     "sku": "AB-415",
@@ -517,7 +517,7 @@
     "priceMin": null,
     "images": ["AB-415.jpg"],
     "slug": "sofa-minimalis-(-3-seater-+-2-seater-+-1-puff-+-meja-lama-)",
-    "dimension": null
+    "dimension": { "width": null, "length": null, "height": null }
   },
   {
     "sku": "AB-420",
@@ -528,7 +528,7 @@
     "priceMin": null,
     "images": ["AB-420.jpg"],
     "slug": "sofa-set-minimalis-+-meja-baru",
-    "dimension": null
+    "dimension": { "width": null, "length": null, "height": null }
   },
   {
     "sku": "AB-421",
@@ -539,7 +539,7 @@
     "priceMin": null,
     "images": ["AB-421.jpg"],
     "slug": "sofa-minimalis-(-3-seater-+-2-puff-+-meja-baru-)",
-    "dimension": null
+    "dimension": { "width": null, "length": null, "height": null }
   },
   {
     "sku": "AB-422",
@@ -550,7 +550,7 @@
     "priceMin": null,
     "images": ["AB-422.jpg"],
     "slug": "sofa-minimalis-(-2-seater-+-1-seater-+-2-puff-+-meja-baru-)",
-    "dimension": null
+    "dimension": { "width": null, "length": null, "height": null }
   },
   {
     "sku": "AB-423",
@@ -561,7 +561,7 @@
     "priceMin": null,
     "images": ["AB-423.jpg"],
     "slug": "sofa-minimalis-(-3-seater-+-2-seater-+-1-puff-+-meja-baru-)",
-    "dimension": null
+    "dimension": { "width": null, "length": null, "height": null }
   },
   {
     "sku": "AB-416",
@@ -572,7 +572,7 @@
     "priceMin": null,
     "images": ["AB-416.jpg"],
     "slug": "sofa-l-kiri-+-meja-lama",
-    "dimension": null
+    "dimension": { "width": null, "length": null, "height": null }
   },
   {
     "sku": "AB-417",
@@ -583,7 +583,7 @@
     "priceMin": null,
     "images": ["AB-417.jpg"],
     "slug": "sofa-l-kanan-+-meja-lama",
-    "dimension": null
+    "dimension": { "width": null, "length": null, "height": null }
   },
   {
     "sku": "AB-418",
@@ -594,7 +594,7 @@
     "priceMin": null,
     "images": ["AB-418.jpg"],
     "slug": "sofa-l-putus-+-meja-lama",
-    "dimension": null
+    "dimension": { "width": null, "length": null, "height": null }
   },
   {
     "sku": "AB-424",
@@ -605,7 +605,7 @@
     "priceMin": null,
     "images": ["AB-424.jpg"],
     "slug": "sofa-l-kiri-+-meja-baru",
-    "dimension": null
+    "dimension": { "width": null, "length": null, "height": null }
   },
   {
     "sku": "AB-425",
@@ -616,7 +616,7 @@
     "priceMin": null,
     "images": ["AB-425.jpg"],
     "slug": "sofa-l-kanan-+-meja-baru",
-    "dimension": null
+    "dimension": { "width": null, "length": null, "height": null }
   },
   {
     "sku": "AB-426",
@@ -627,7 +627,7 @@
     "priceMin": null,
     "images": ["AB-426.jpg"],
     "slug": "sofa-l-putus-+-meja-baru",
-    "dimension": null
+    "dimension": { "width": null, "length": null, "height": null }
   },
   {
     "sku": "AB-419",
@@ -638,7 +638,7 @@
     "priceMin": null,
     "images": ["AB-419.jpg"],
     "slug": "sofa-sudut-+-meja-baru",
-    "dimension": null
+    "dimension": { "width": null, "length": null, "height": null }
   },
   {
     "sku": "AB-427",
@@ -649,7 +649,7 @@
     "priceMin": null,
     "images": ["AB-427.jpg"],
     "slug": "sofa-sudut-+-meja-baru",
-    "dimension": null
+    "dimension": { "width": null, "length": null, "height": null }
   },
   {
     "sku": "AB-428",
@@ -660,7 +660,7 @@
     "priceMin": null,
     "images": ["AB-428.jpg"],
     "slug": "sofa-cozy-stainless-+-meja",
-    "dimension": null
+    "dimension": { "width": null, "length": null, "height": null }
   },
   {
     "sku": "AB-431",
@@ -671,7 +671,7 @@
     "priceMin": null,
     "images": ["AB-431.jpg"],
     "slug": "sofa-euki-100-1-seater",
-    "dimension": null
+    "dimension": { "width": null, "length": null, "height": null }
   },
   {
     "sku": "AB-432",
@@ -682,7 +682,7 @@
     "priceMin": null,
     "images": ["AB-432.jpg"],
     "slug": "sofa-euki-100-2-seater",
-    "dimension": null
+    "dimension": { "width": null, "length": null, "height": null }
   },
   {
     "sku": "AB-433",
@@ -693,7 +693,7 @@
     "priceMin": null,
     "images": ["AB-433.jpg"],
     "slug": "sofa-euki-100-3-seater",
-    "dimension": null
+    "dimension": { "width": null, "length": null, "height": null }
   },
   {
     "sku": "AB-434",
@@ -704,7 +704,7 @@
     "priceMin": null,
     "images": ["AB-434.jpg"],
     "slug": "sofa-euki-200-1-seater",
-    "dimension": null
+    "dimension": { "width": null, "length": null, "height": null }
   },
   {
     "sku": "AB-435",
@@ -715,7 +715,7 @@
     "priceMin": null,
     "images": ["AB-435.jpg"],
     "slug": "sofa-euki-200-2-seater",
-    "dimension": null
+    "dimension": { "width": null, "length": null, "height": null }
   },
   {
     "sku": "AB-436",
@@ -726,7 +726,7 @@
     "priceMin": null,
     "images": ["AB-436.jpg"],
     "slug": "sofa-euki-200-3-seater",
-    "dimension": null
+    "dimension": { "width": null, "length": null, "height": null }
   },
   {
     "sku": "AB-437",
@@ -737,7 +737,7 @@
     "priceMin": null,
     "images": ["AB-437.jpg"],
     "slug": "sofa-euki-300-1-seater",
-    "dimension": null
+    "dimension": { "width": null, "length": null, "height": null }
   },
   {
     "sku": "AB-438",
@@ -748,7 +748,7 @@
     "priceMin": null,
     "images": ["AB-438.jpg"],
     "slug": "sofa-euki-300-2-seater",
-    "dimension": null
+    "dimension": { "width": null, "length": null, "height": null }
   },
   {
     "sku": "AB-439",
@@ -759,7 +759,7 @@
     "priceMin": null,
     "images": ["AB-439.jpg"],
     "slug": "sofa-euki-300-3-seater",
-    "dimension": null
+    "dimension": { "width": null, "length": null, "height": null }
   },
   {
     "sku": "AB-507",
@@ -770,7 +770,7 @@
     "priceMin": null,
     "images": ["AB-507-1.jpg", "AB-507-2.jpg", "AB-507-3.jpg"],
     "slug": "sofa-euki-1-set-+-meja-lama",
-    "dimension": null
+    "dimension": { "width": null, "length": null, "height": null }
   },
   {
     "sku": "AB-508",
@@ -781,6 +781,6 @@
     "priceMin": null,
     "images": ["AB-507-1.jpg", "AB-507-2.jpg", "AB-507-3.jpg"],
     "slug": "sofa-euki-1-set-+-meja-baru",
-    "dimension": null
+    "dimension": { "width": null, "length": null, "height": null }
   }
 ]

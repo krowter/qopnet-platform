@@ -38,22 +38,20 @@ export const Footer = (props: FooterProps) => {
       bg="orange.900"
       mt={40}
     >
-      {process.env.NODE_ENV === 'development' && (
-        <Stack>
-          <Heading as="h4" size="sm" textTransform="uppercase">
-            Peta situs
-          </Heading>
-          <SimpleGrid spacing={1} columns={3} maxW={720}>
-            {linkToPages.map((link) => {
-              return (
-                <NextLink key={link.href} href={link.href} passHref>
-                  <Link>{link.text}</Link>
-                </NextLink>
-              )
-            })}
-          </SimpleGrid>
-        </Stack>
-      )}
+      <Stack>
+        <Heading as="h4" size="sm" textTransform="uppercase">
+          Peta situs
+        </Heading>
+        <SimpleGrid spacing={1} columns={3} maxW={720}>
+          {linkToPages.map((link) => {
+            return (
+              <NextLink key={link.href} href={link.href} passHref>
+                <Link>{link.text}</Link>
+              </NextLink>
+            )
+          })}
+        </SimpleGrid>
+      </Stack>
 
       <Stack>
         <Text fontSize="sm">
