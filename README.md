@@ -13,6 +13,12 @@ This repo handle these apps:
 
 Check the complete technical documentation in [the `docs` folder](./docs/README.md).
 
+## Git Branch Convention
+
+- `main`: production server
+- `develop`: staging server
+- `feature/qop-000-issue-name`: staging server
+
 ## Known URL (host and port)
 
 - `http://localhost:3000` - Qopnet Commerce
