@@ -22,5 +22,6 @@
     "statusBarItem.remoteForeground": "#e7e7e7"
   },
   "peacock.color": "#160a01",
-  "jest.jestCommandLine": "jest"
+  "jest.jestCommandLine": "jest",
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

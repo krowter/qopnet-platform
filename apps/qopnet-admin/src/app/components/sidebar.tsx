@@ -178,10 +178,10 @@ export const SidebarLinks = () => {
         <SidebarLink name="suppliers-products" to="/suppliers/products">
           Semua Produk Supplier
         </SidebarLink>
-        <SidebarLink to="/suppliers/purchase-orders">
+        <SidebarLink name="suppliers-po" to="/suppliers/purchase-orders">
           Purchase Orders (PO)
-        </SidebarLink>
-        <SidebarLink to="/suppliers/invoices">Suppliers Invoices</SidebarLink>
+        </SidebarLink> 
+        <SidebarLink name="suppliers-invoice" to="/suppliers/invoices">Suppliers Invoices</SidebarLink>
       </Flex>
 
       {/* <SidebarNestedLink name="merchant" to="/merchants">
