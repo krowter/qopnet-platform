@@ -128,6 +128,7 @@
     "eslint-plugin-react-hooks": "4.2.0",
     "jest": "27.0.6",
     "msw": "^0.34.0",
+    "nx": "^12.10.0",
     "prettier": "2.3.2",
     "prisma": "3.2.1",
     "serve": "12.0.0",
