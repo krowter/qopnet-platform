@@ -7,17 +7,7 @@ import packageData from '../../../../../package.json'
  * Can be refactored later
  */
 const linkToPages = [
-  { href: '/', text: 'Beranda' },
-  { href: '/signup', text: 'Daftar' },
-  { href: '/signin', text: 'Masuk' },
-  { href: '/dashboard', text: 'Dasbor' },
-  { href: '/create-profile', text: 'Buat profil' },
-  { href: '/create-supplier', text: 'Buat toko supplier' },
-  { href: '/create-product', text: 'Buat produk supplier' },
-  { href: '/suppliers', text: 'Semua supplier' },
-  { href: '/anekabaju', text: 'Halaman supplier Aneka baju' },
-  { href: '/products', text: 'Semua produk supplier' },
-  { href: '/search', text: 'Cari produk' },
+  { href: '/about', text: 'Tentang Kami' },
   { href: '/terms', text: 'Syarat dan Ketentuan' },
   { href: '/faq', text: 'FAQ' },
 ]
