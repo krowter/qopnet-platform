@@ -148,9 +148,6 @@ export const SidebarAuth = () => {
 
   return (
     <ButtonGroup id="sidebar-auth-buttons">
-      <Button colorScheme="orange" size="xs">
-        Pengaturan
-      </Button>
       <Button colorScheme="red" size="xs" onClick={handleLogout}>
         Keluar
       </Button>
