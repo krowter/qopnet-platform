@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import NextLink from 'next/link'
 import NextImage from 'next/image'
 import {
@@ -173,6 +174,12 @@ export const CartContainer = ({ businessOrder }) => {
 }
 
 export const BusinessOrderItem = ({ item }) => {
+  const [customQuantity, setCustomQuantity] = useState(item.quantity)
+
+  const handleChangeCustomQuantity = (e) => {
+    setCustomQuantity(e.target.value)
+  }
+
   // Optimistic UI when DELETE
   const handleDeleteBusinessOrderItem = async (itemId) => {
     try {
@@ -272,6 +279,40 @@ export const BusinessOrderItem = ({ item }) => {
     }
   }
 
+  const handleCustomQuantityBusinessOrderItem = async (itemId) => {
+    try {
+      mutate(
+        '/api/business/orders/my/cart',
+        (data) => {
+          const filtered = data?.businessOrder?.businessOrderItems?.map(
+            (item) => {
+              if (item.id === itemId) {
+                item.quantity = customQuantity
+              }
+              return item
+            }
+          )
+          return {
+            ...data,
+            businessOrder: {
+              ...data.businessOrder,
+              businessOrderItems: [...filtered],
+            },
+          }
+        },
+        false
+      )
+      await requestToAPI('PATCH', '/api/business/orders/my/cart/item', {
+        action: 'CUSTOM_QUANTITY',
+        id: itemId,
+        quantity: customQuantity,
+      })
+      mutate('/api/business/orders/my/cart')
+    } catch (error) {
+      console.error({ error })
+    }
+  }
+
   return (
     <Stack spacing={5}>
       <Stack
@@ -338,9 +379,21 @@ export const BusinessOrderItem = ({ item }) => {
             icon={<Icon name="increment" />}
             onClick={() => handleIncrementBusinessOrderItem(item.id)}
           />
-          <Text textAlign="center" w="70px" fontSize="lg">
-            {item.quantity}
-          </Text>
+          <Input
+            type="number"
+            textAlign="center"
+            w="70px"
+            fontSize="lg"
+            value={customQuantity}
+            onChange={(value) => handleChangeCustomQuantity(value)}
+          />
+          <IconButton
+            aria-label="Konfirmasi jumlah barang"
+            colorScheme="green"
+            icon={<Icon name="checkmark" />}
+            onClick={() => handleCustomQuantityBusinessOrderItem(item.id)}
+            // disabled={item.quantity <= 1}
+          />
           <IconButton
             className="decrement-item"
             aria-label="Kurangi jumlah barang"
