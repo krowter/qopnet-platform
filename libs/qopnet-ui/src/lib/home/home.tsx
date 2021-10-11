@@ -66,6 +66,32 @@ export const testimonials = [
   },
 ]
 
+export const mediaCoverages = [
+  {
+    name: 'IDX channel',
+    imageUrl:
+      'https://ik.imagekit.io/qopnetlabs/logos/idx-channel.png?updatedAt=1633938054234',
+  },
+  {
+    name: 'Tribun News',
+    imageUrl:
+      'https://ik.imagekit.io/qopnetlabs/logos/tribun-news.png?updatedAt=1633938055737',
+    url: 'https://jakarta.tribunnews.com/2020/12/17/program-buka-toko-tanpa-modal-bantu-umkm-dan-koperasi-hadapi-new-normal',
+  },
+  {
+    name: 'Sindo News',
+    imageUrl:
+      'https://ik.imagekit.io/qopnetlabs/logos/sindonews.png?updatedAt=1633938054776',
+    url: 'https://daerah.sindonews.com/read/271100/707/dinas-koperasi-umkm-kota-semarang-dan-qopnet-luncurkan-buka-toko-tanpa-modal-1608171175',
+  },
+  {
+    name: 'YouTube',
+    imageUrl:
+      'https://ik.imagekit.io/qopnetlabs/logos/youtube.png?updatedAt=1633938056623',
+    url: 'https://youtu.be/k-Dos6PWS8o',
+  },
+]
+
 export const partners = [
   {
     name: 'Adira Semesta Industry',
@@ -198,6 +224,44 @@ export const HomeBannerCarousel = () => {
   )
 }
 
+export const HomeMediaCoverage = () => {
+  return (
+    <Stack id="home-media-coverage" spacing={10} textAlign="center">
+      <Heading>Telah Diliput Oleh</Heading>
+      <VStack>
+        <Flex flexWrap="wrap" align="center" justify="center">
+          {mediaCoverages.map((media, index) => {
+            return (
+              <chakra.a
+                key={index}
+                href={media?.url}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Box m={2}>
+                  {media?.imageUrl ? (
+                    <ChakraImage
+                      alt={media?.name}
+                      src={media?.imageUrl}
+                      h="50px"
+                      mx={3}
+                      rounded={'md'}
+                    />
+                  ) : (
+                    <Text fontSize="sm" mx={5} fontWeight="bold">
+                      {media.name}
+                    </Text>
+                  )}
+                </Box>
+              </chakra.a>
+            )
+          })}
+        </Flex>
+      </VStack>
+    </Stack>
+  )
+}
+
 export const HomePartners = () => {
   return (
     <Stack id="home-partners" spacing={10} textAlign="center">
@@ -214,9 +278,6 @@ export const HomePartners = () => {
                     h="50px"
                     mx={3}
                     rounded={'md'}
-                    // layout="responsive"
-                    // width={100}
-                    // height={100}
                   />
                 ) : (
                   <Text fontSize="sm" mx={5} fontWeight="bold">

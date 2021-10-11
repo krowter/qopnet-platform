@@ -4,6 +4,7 @@ import {
   HomeBanner,
   HomeProductCategory,
   HomeProductSpecial,
+  HomeMediaCoverage,
   HomePartners,
   HomeTestimonials,
   HomeFaq,
@@ -19,6 +20,7 @@ export const HomeContainer = () => {
       <HomeBanner />
       <HomeProductSpecial supplierProducts={supplierProducts} error={error} />
       <Divider />
+      <HomeMediaCoverage />
       <HomePartners />
       <Divider />
       <HomeTestimonials />
