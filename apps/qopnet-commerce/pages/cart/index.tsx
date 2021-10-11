@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import NextLink from 'next/link'
 import NextImage from 'next/image'
 import {
@@ -13,11 +13,13 @@ import {
   Input,
   StackDivider,
   Divider,
+  Flex,
   Tag,
   Text,
   useColorModeValue,
 } from '@chakra-ui/react'
 import { mutate } from 'swr'
+import { useForm } from 'react-hook-form'
 
 import { Layout, Icon, SupplierProductPrice } from '@qopnet/qopnet-ui'
 import {
@@ -27,7 +29,6 @@ import {
 } from '@qopnet/util-format'
 import { BreadcrumbCart } from '../../components'
 import { useSWR, postToAPI, requestToAPI } from '../../utils'
-import { useEffect } from 'react'
 
 /**
  * /cart
@@ -174,10 +175,17 @@ export const CartContainer = ({ businessOrder }) => {
 }
 
 export const BusinessOrderItem = ({ item }) => {
-  const [customQuantity, setCustomQuantity] = useState(item.quantity)
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm()
 
-  const handleChangeCustomQuantity = (e) => {
-    setCustomQuantity(e.target.value)
+  const onSubmitCustomQuantity = (data) => {
+    alert(data)
+    console.log({ data })
+    handleCustomQuantityBusinessOrderItem(item.id, data.customQuantity)
   }
 
   // Optimistic UI when DELETE
@@ -279,7 +287,10 @@ export const BusinessOrderItem = ({ item }) => {
     }
   }
 
-  const handleCustomQuantityBusinessOrderItem = async (itemId) => {
+  const handleCustomQuantityBusinessOrderItem = async (
+    itemId,
+    customQuantity
+  ) => {
     try {
       mutate(
         '/api/business/orders/my/cart',
@@ -375,33 +386,45 @@ export const BusinessOrderItem = ({ item }) => {
           <IconButton
             className="increment-item"
             aria-label="Tambah jumlah barang"
-            colorScheme="green"
+            variant="ghost"
             icon={<Icon name="increment" />}
             onClick={() => handleIncrementBusinessOrderItem(item.id)}
-          />
-          <Input
-            type="number"
-            textAlign="center"
-            w="70px"
-            fontSize="lg"
-            value={customQuantity}
-            onChange={(value) => handleChangeCustomQuantity(value)}
-          />
-          <IconButton
-            aria-label="Konfirmasi jumlah barang"
-            colorScheme="green"
-            icon={<Icon name="checkmark" />}
-            onClick={() => handleCustomQuantityBusinessOrderItem(item.id)}
-            // disabled={item.quantity <= 1}
           />
           <IconButton
             className="decrement-item"
             aria-label="Kurangi jumlah barang"
-            colorScheme="blue"
+            variant="ghost"
             icon={<Icon name="decrement" />}
             onClick={() => handleDecrementBusinessOrderItem(item.id)}
             disabled={item.quantity <= 1}
           />
+          {/* Use form because we have input and suibmit button */}
+          <chakra.form
+            onSubmit={handleSubmit(onSubmitCustomQuantity)}
+            as={Flex}
+          >
+            <Input
+              type="number"
+              textAlign="center"
+              w="100px"
+              fontSize="lg"
+              defaultValue={item.quantity}
+              {...register('customQuantity', {
+                required: true,
+                min: 1,
+                // max: item.stock
+              })}
+            />
+            <IconButton
+              type="submit"
+              aria-label="Konfirmasi jumlah barang"
+              colorScheme="green"
+              variant="ghost"
+              icon={<Icon name="checkmark" />}
+              // disabled={item.quantity <= 1}
+            />
+          </chakra.form>
+
           <IconButton
             className="delete-item"
             aria-label="Hapus barang"
