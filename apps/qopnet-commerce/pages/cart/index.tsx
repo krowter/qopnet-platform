@@ -400,27 +400,29 @@ export const BusinessOrderItem = ({ item }) => {
             disabled={item.quantity <= 1}
           />
           {/* Use form because we have input and suibmit button */}
-          <form onSubmit={handleSubmit(onSubmitCustomQuantity)} as={Flex}>
-            <Input
-              type="number"
-              textAlign="center"
-              w="100px"
-              fontSize="lg"
-              defaultValue={item.quantity}
-              {...register('customQuantity', {
-                required: true,
-                min: 1,
-                // max: item.stock
-              })}
-            />
-            <IconButton
-              type="submit"
-              aria-label="Konfirmasi jumlah barang"
-              colorScheme="green"
-              variant="ghost"
-              icon={<Icon name="checkmark" />}
-              // disabled={item.quantity <= 1}
-            />
+          <form onSubmit={handleSubmit(onSubmitCustomQuantity)}>
+            <Flex>
+              <Input
+                type="number"
+                textAlign="center"
+                w="100px"
+                fontSize="lg"
+                defaultValue={item.quantity}
+                {...register('customQuantity', {
+                  required: true,
+                  min: 1,
+                  // max: item.stock
+                })}
+              />
+              <IconButton
+                type="submit"
+                aria-label="Konfirmasi jumlah barang"
+                colorScheme="green"
+                variant="ghost"
+                icon={<Icon name="checkmark" />}
+                // disabled={item.quantity <= 1}
+              />
+            </Flex>
           </form>
 
           <IconButton
