@@ -183,9 +183,10 @@ export const BusinessOrderItem = ({ item }) => {
   } = useForm()
 
   const onSubmitCustomQuantity = (data) => {
-    alert(data)
-    console.log({ data })
-    handleCustomQuantityBusinessOrderItem(item.id, data.customQuantity)
+    handleCustomQuantityBusinessOrderItem(
+      item.id,
+      parseInt(data.customQuantity)
+    )
   }
 
   // Optimistic UI when DELETE
@@ -399,10 +400,7 @@ export const BusinessOrderItem = ({ item }) => {
             disabled={item.quantity <= 1}
           />
           {/* Use form because we have input and suibmit button */}
-          <chakra.form
-            onSubmit={handleSubmit(onSubmitCustomQuantity)}
-            as={Flex}
-          >
+          <form onSubmit={handleSubmit(onSubmitCustomQuantity)} as={Flex}>
             <Input
               type="number"
               textAlign="center"
@@ -423,7 +421,7 @@ export const BusinessOrderItem = ({ item }) => {
               icon={<Icon name="checkmark" />}
               // disabled={item.quantity <= 1}
             />
-          </chakra.form>
+          </form>
 
           <IconButton
             className="delete-item"
