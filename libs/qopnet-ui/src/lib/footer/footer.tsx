@@ -4,10 +4,13 @@ import {
   Stack,
   Text,
   Link,
-  SimpleGrid,
   Heading,
-  Divider,
+  Grid,
+  GridItem,
+  Center,
 } from '@chakra-ui/react'
+import { Icon } from '@chakra-ui/icons'
+import { FaInstagram, FaFacebook, FaTwitter } from 'react-icons/fa'
 
 import packageData from '../../../../../package.json'
 
@@ -31,69 +34,120 @@ export const Footer = (props: FooterProps) => {
     <Stack
       as="footer"
       spacing={10}
-      p={5}
+      px={5}
+      py={10}
       color="orange.50"
       bg="orange.900"
       mt={40}
     >
-      <Stack>
-        <Heading as="h4" size="sm" textTransform="uppercase">
-          Peta situs
-        </Heading>
-        <Stack spacing={1} maxW={720}>
-          {linkToPages.map((link) => {
-            return (
-              <NextLink key={link.href} href={link.href} passHref>
-                <Link>{link.text}</Link>
-              </NextLink>
-            )
-          })}
-        </Stack>
-      </Stack>
+      <Center>
+        <Grid
+          templateAreas={{
+            base: `
+            'sm'
+            'ad'
+            'co'
+          `,
+            sm: `
+            'sm ad'
+            'co co'
+          `,
+            md: `'sm ad co'`,
+          }}
+          gap={10}
+        >
+          <GridItem gridArea="sm">
+            <Stack spacing={1}>
+              <Heading as="h4" fontSize="lg">
+                Peta situs
+              </Heading>
+              {linkToPages.map((link) => {
+                return (
+                  <NextLink key={link.href} href={link.href} passHref>
+                    <Link>{link.text}</Link>
+                  </NextLink>
+                )
+              })}
+            </Stack>
+          </GridItem>
 
-      <Stack maxW="320px">
-        <Heading as="h4" fontSize="sm">
-          PT Teknologi Harapan Republik
-        </Heading>
-        <Text as="address" fontSize="sm" fontStyle="normal">
-          Treasury Building Lantai 21 unit M-N
-          <br />
-          District 8, SCBD Lot 28
-          <br />
-          Jend. Sudirman Kav. 52-53, RT.8/RW.3,
-          <br />
-          Senayan, Kec. Kebayoran Baru,
-          <br />
-          DKI Jakarta, 12190, Indonesia
-        </Text>
-        <Divider />
-        <Stack spacing={0}>
-          <span>
-            Phone{' '}
-            <chakra.a href="tel:+622150157599" fontWeight="bold">
-              +62-21-5015-7599
-            </chakra.a>
-          </span>
-          <span>
-            Fax{' '}
-            <chakra.a href="tel:+622124155531" fontWeight="bold">
-              +62-21-2415-5531
-            </chakra.a>
-          </span>
-          <span>
-            Email{' '}
-            <chakra.a href="mailto:sales@qopnet.id" fontWeight="bold">
-              sales@qopnet.id
-            </chakra.a>
-          </span>
-        </Stack>
-      </Stack>
+          <GridItem gridArea="ad">
+            <Stack spacing={1}>
+              <Heading as="h4" fontSize="lg">
+                PT Teknologi Harapan Republik
+              </Heading>
+              <Text as="address" fontSize="sm" fontStyle="normal">
+                Treasury Building Lantai 21 unit M-N
+                <br />
+                District 8, SCBD Lot 28
+                <br />
+                Jend. Sudirman Kav. 52-53, RT.8/RW.3,
+                <br />
+                Senayan, Kec. Kebayoran Baru,
+                <br />
+                DKI Jakarta, 12190, Indonesia
+              </Text>
+            </Stack>
+          </GridItem>
 
-      <Stack>
+          <GridItem gridArea="co">
+            <Stack spacing={0}>
+              <span>
+                Phone:{' '}
+                <Link
+                  textDecoration="underline"
+                  href="tel:+622150157599"
+                  fontWeight="bold"
+                >
+                  +62-21-5015-7599
+                </Link>
+              </span>
+              <span>
+                Fax:{' '}
+                <Link
+                  textDecoration="underline"
+                  href="tel:+622124155531"
+                  fontWeight="bold"
+                >
+                  +62-21-2415-5531
+                </Link>
+              </span>
+              <span>
+                Email:{' '}
+                <Link
+                  textDecoration="underline"
+                  href="mailto:sales@qopnet.id"
+                  fontWeight="bold"
+                >
+                  sales@qopnet.id
+                </Link>
+              </span>
+            </Stack>
+          </GridItem>
+        </Grid>
+      </Center>
+
+      <Center>
+        <Stack direction="row">
+          <Link href="https://instagram.com/qopnet.id">
+            <Icon as={FaInstagram} fontSize={25} />
+          </Link>
+          <Link href="https://facebook.com/qopnet">
+            <Icon as={FaFacebook} fontSize={25} />
+          </Link>
+          <Link href="https://twitter.com/qopnet">
+            <Icon as={FaTwitter} fontSize={25} />
+          </Link>
+        </Stack>
+      </Center>
+
+      <Stack textAlign="center">
         <Text fontSize="sm">
           Copyright <b>&copy;</b> 2015-2021 Qopnet
         </Text>
-        <Text fontSize="xs">v{packageData.version}</Text>
+        <Text fontSize="sm" fontWeight="bold">
+          v{packageData.version}
+        </Text>
       </Stack>
     </Stack>
   )
