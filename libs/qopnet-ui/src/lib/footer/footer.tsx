@@ -44,15 +44,15 @@ export const Footer = (props: FooterProps) => {
         <Grid
           templateAreas={{
             base: `
-            'sm'
-            'ad'
-            'co'
+            "sm"
+            "ad"
+            "co"
           `,
             sm: `
-            'sm ad'
-            'co co'
+            "sm ad"
+            "co co"
           `,
-            md: `'sm ad co'`,
+            md: `"sm ad co"`,
           }}
           gap={10}
         >
@@ -71,9 +71,9 @@ export const Footer = (props: FooterProps) => {
             </Stack>
           </GridItem>
 
-          <GridItem gridArea="ad">
+          <GridItem gridArea="ad" as="address">
             <Stack spacing={1}>
-              <Heading as="h4" fontSize="lg">
+              <Heading as="h4" fontSize="lg" fontWeight="bold">
                 PT Teknologi Harapan Republik
               </Heading>
               <Text as="address" fontSize="sm" fontStyle="normal">
@@ -129,13 +129,25 @@ export const Footer = (props: FooterProps) => {
 
       <Center>
         <Stack direction="row">
-          <Link href="https://instagram.com/qopnet.id">
+          <Link
+            href="https://instagram.com/qopnet.id"
+            target="_blank"
+            rel="noreferer"
+          >
             <Icon as={FaInstagram} fontSize={25} />
           </Link>
-          <Link href="https://facebook.com/qopnet">
+          <Link
+            href="https://facebook.com/qopnet"
+            target="_blank"
+            rel="noreferer"
+          >
             <Icon as={FaFacebook} fontSize={25} />
           </Link>
-          <Link href="https://twitter.com/qopnet">
+          <Link
+            href="https://twitter.com/qopnet"
+            target="_blank"
+            rel="noreferer"
+          >
             <Icon as={FaTwitter} fontSize={25} />
           </Link>
         </Stack>
