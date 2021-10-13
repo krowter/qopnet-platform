@@ -71,7 +71,7 @@ export const Footer = (props: FooterProps) => {
             </Stack>
           </GridItem>
 
-          <GridItem gridArea="ad" as="address">
+          <GridItem gridArea="ad">
             <Stack spacing={1}>
               <Heading as="h4" fontSize="lg" fontWeight="bold">
                 PT Teknologi Harapan Republik
@@ -94,31 +94,19 @@ export const Footer = (props: FooterProps) => {
             <Stack spacing={0}>
               <span>
                 Phone:{' '}
-                <Link
-                  textDecoration="underline"
-                  href="tel:+622150157599"
-                  fontWeight="bold"
-                >
+                <Link href="tel:+622150157599" fontWeight="bold">
                   +62-21-5015-7599
                 </Link>
               </span>
               <span>
                 Fax:{' '}
-                <Link
-                  textDecoration="underline"
-                  href="tel:+622124155531"
-                  fontWeight="bold"
-                >
+                <Link href="tel:+622124155531" fontWeight="bold">
                   +62-21-2415-5531
                 </Link>
               </span>
               <span>
                 Email:{' '}
-                <Link
-                  textDecoration="underline"
-                  href="mailto:sales@qopnet.id"
-                  fontWeight="bold"
-                >
+                <Link href="mailto:sales@qopnet.id" fontWeight="bold">
                   sales@qopnet.id
                 </Link>
               </span>
