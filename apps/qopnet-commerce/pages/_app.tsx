@@ -6,7 +6,13 @@ import { SWRConfig } from 'swr'
 
 // MDX and Chakra UI
 import { MDXProvider } from '@mdx-js/react'
-import { Text, UnorderedList, ListItem } from '@chakra-ui/react'
+import {
+  Heading,
+  Text,
+  OrderedList,
+  UnorderedList,
+  ListItem,
+} from '@chakra-ui/react'
 
 // Supabase
 import { createClient } from '@supabase/supabase-js'
@@ -31,22 +37,23 @@ const supabase = createClient(
 // Chakra UI component mapping for MDX
 const components = {
   h1: (props) => (
-    <Text as="h1" fontSize="2xl" mb={3}>
+    <Heading as="h1" fontSize="2xl" mt={9} mb={6}>
       {props.children}
-    </Text>
+    </Heading>
   ),
   h2: (props) => (
-    <Text as="h2" fontSize="xl" my={3}>
+    <Heading as="h2" fontSize="xl" mt={6} mb={3}>
       {props.children}
-    </Text>
+    </Heading>
   ),
   h3: (props) => (
-    <Text as="h3" fontSize="md" my={3}>
+    <Heading as="h3" fontSize="md" mt={3} mb={1}>
       {props.children}
-    </Text>
+    </Heading>
   ),
+  ol: (props) => <OrderedList my={2}>{props.children}</OrderedList>,
   ul: (props) => <UnorderedList my={2}>{props.children}</UnorderedList>,
-  li: (props) => <ListItem>{props.children}</ListItem>,
+  li: (props) => <ListItem ml={2}>{props.children}</ListItem>,
   p: (props) => <Text my={2}>{props.children}</Text>,
   Header,
   Layout,
