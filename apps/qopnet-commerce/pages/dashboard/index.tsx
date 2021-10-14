@@ -48,7 +48,7 @@ export const DashboardContainer = ({ user }) => {
         <Stack align="flex-start">
           <Text>Gagal memuat profil</Text>
           <Text>Silakan buat profil terlebih dahulu sebelum melanjutkan</Text>
-          <DashboardActionLink name="profile" href="/create-profile">
+          <DashboardActionLink name="profile" href="/profile">
             Buat profil
           </DashboardActionLink>
         </Stack>
@@ -105,7 +105,7 @@ export const DashboardContent = ({ profile }) => {
               <DashboardActionLink name="shop" href="/shop">
                 Lanjut belanja
               </DashboardActionLink>
-              <DashboardActionLink name="profile" href="/create-profile">
+              <DashboardActionLink name="profile" href="/profile">
                 Buat profil
               </DashboardActionLink>
             </Stack>
@@ -119,7 +119,7 @@ export const DashboardContent = ({ profile }) => {
                 <DashboardActionLink name="shop" href="/shop">
                   Lanjut belanja
                 </DashboardActionLink>
-                <DashboardActionLink name="profile" href="/create-profile">
+                <DashboardActionLink name="profile" href="/profile">
                   Ubah profil
                 </DashboardActionLink>
                 <DashboardActionLink name="order" href="/dashboard/orders">
