@@ -356,5 +356,379 @@
     "images": [
       "https://ik.imagekit.io/qopnetlabs/products/daging-ayam-kemasan-palet-100pcs.jpeg?updatedAt=1628838999329"
     ]
+  },
+  {
+    "slug": "beras-premium-kemasan-kecil-5kg",
+    "name": "Beras Premium (Kemasan Kecil 5 kg)",
+    "description": "Beras putih premium\n\nKemasan 5 kg\nCatatan\nDisarankan mencapai bobot minimum 300 kg sewaktu memesan.\nTiap nomor pesanan bisa terdiri dari satu produk atau lebih.\nContoh\nOrder No #1500 terdiri dari\n1. Minyak Goreng Sovia @2l sebanyak 2 dus (1 dus isi 6 pcs)\n2. Gula Rose Brand @1kg sebanyak 1 dus (1 dus isi 20 pcs)\n3. Beras Sari Padi @50kg sebanyak 5 karung",
+    "sku": "Q-BPKK-5",
+    "price": 65472,
+    "weight": 5,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "Non Brand,cipinang",
+    "discount": null,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/beras-premium-kemasan-kecil-5kg?updatedAt=1632733765079"
+    ]
+  },
+  {
+    "slug": "beras-super-premium",
+    "name": "Beras Super Premium",
+    "description": "Beras Putih Super Premium\nKemasan 50 kg\nKualitas beras yang digunakan oleh Resto Makanan Padang\nCatatan\nDisarankan mencapai bobot minimum 300 kg sewaktu memesan.\nTiap nomor pesanan bisa terdiri dari satu produk atau lebih.\nContoh\nOrder No #1500 terdiri dari\n1. Minyak Goreng Sovia @2l sebanyak 2 dus (1 dus isi 6 pcs)\n2. Gula Rose Brand @1kg sebanyak 1 dus (1 dus isi 20 pcs)\n3. Beras Sari Padi @50kg sebanyak 5 karung",
+    "sku": "Q-BSP",
+    "price": 690525,
+    "weight": 50,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "Non Brand,cipinang",
+    "discount": null,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/beras-super-premium?updatedAt=1632733738457"
+    ]
+  },
+  {
+    "slug": "saos-cabai-delmonte-5500g",
+    "name": "Saos Cabai Del Monte 5,5KG",
+    "description": "Saos Cabai.\nMerk Del Monte.\nKemasan Jerrycan 5,5KG",
+    "sku": "Q-SCBD-5",
+    "price": 104162,
+    "weight": 6,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "bintara, branded",
+    "discount": null,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/saos-cabai-delmonte-5500g?updatedAt=1632733715867"
+    ]
+  },
+  {
+    "slug": "sabun-cuci-piring-sunlight-pouch-755ml",
+    "name": "Sabun Cuci Piring Sunlight (Kemasan Pouch) 755 ml",
+    "description": "Sunlight \nSabun cuci piring \nKemasan pouch 755 ml \nIsi 6 pouch per karton \nCatatan \nDisarankan mencapai bobot minimum 300 kg sewaktu memesan.  \nTiap nomor pesanan bisa terdiri dari satu produk atau lebih.  \nContoh \nOrder No #1500 terdiri dari\n1. Minyak Goreng Sovia @2l sebanyak 2 dus (1 dus isi 6 pcs) \n2. Gula Rose Brand @1kg sebanyak 1 dus (1 dus isi 20 pcs)\n3. Beras Sari Padi @50kg sebanyak 5 karung",
+    "sku": "Q-SCPS-755",
+    "price": 179230,
+    "weight": 1,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "cipinang, branded",
+    "discount": null,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/sabun-cuci-piring-sunlight-pouch-755ml?updatedAt=1632733689929"
+    ]
+  },
+  {
+    "slug": "royco-pelezat-rasa-ayam-12x-2x240g",
+    "name": "Royco Pelezat Rasa Ayam 12x (2 x 240g)",
+    "description": null,
+    "sku": "Q-RPRA-12-240",
+    "price": 223187,
+    "weight": 6,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "bintara, branded",
+    "discount": null,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/royco-pelezat-rasa-ayam-12x-2x240g?updatedAt=1632733653863"
+    ]
+  },
+  {
+    "slug": "royco-pelezat-rasa-sapi-12x-2x240g",
+    "name": "Royco Pelezat Rasa Sapi 12x (2 x 240g)",
+    "description": null,
+    "sku": "Q-RPRS-12-240",
+    "price": 223187,
+    "weight": 6,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "bintara, branded",
+    "discount": null,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/royco-pelezat-rasa-sapi-12x-2x240g?updatedAt=1632733628934"
+    ]
+  },
+  {
+    "slug": "royco-bumbu-dasar-ayam-kuning-6x600g",
+    "name": "Royco Bumbu Dasar Ayam Kuning (6 x 600g)",
+    "description": null,
+    "sku": "Q-RPRS-12-240",
+    "price": 226382,
+    "weight": 4,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "bintara, branded",
+    "discount": null,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/royco-bumbu-dasar-ayam-kuning-6x600g?updatedAt=1632733595025"
+    ]
+  },
+  {
+    "slug": "sari-melati-twins-12x-100x-1-9g",
+    "name": "Sari Melati Twins 12x (100 x 1.9g)",
+    "description": null,
+    "sku": "Q-SMT-12-100-1-9",
+    "price": 299766,
+    "weight": 3,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "bintara, branded",
+    "discount": null,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/sari-melati-twins-12x-100x-1-9g?updatedAt=1632733523814"
+    ]
+  },
+  {
+    "slug": "sariwangi-tb-asli-rock-48x-25x1-85g",
+    "name": "Sariwangi TB Asli Rock 48x (25 x 1.85g)",
+    "description": null,
+    "sku": "Q-SWTAR-48-25-1-85",
+    "price": 254184,
+    "weight": 3,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "bintara, branded",
+    "discount": null,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/sariwangi-tb-asli-rock-48x-25x1-85g?updatedAt=1632733564705"
+    ]
+  },
+  {
+    "slug": "bango-kecap-manis-6x-1-6kg",
+    "name": "Bango Kecap Manis (6 x 1.6 kg)",
+    "description": null,
+    "sku": "Q-BKM-6-1-6",
+    "price": 273825,
+    "weight": 10,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "bintara, branded",
+    "discount": null,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/bango-kecap-manis-6x-1-6kg?updatedAt=1632738818531"
+    ]
+  },
+  {
+    "slug": "royco-rendang-top-dish-6x525g",
+    "name": "Royco Rendang Top Dish (6 x 525g)",
+    "description": null,
+    "sku": "Q-RPTD-6-525",
+    "price": 264830,
+    "weight": 4,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "bintara, branded",
+    "discount": null,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/royco-rendang-top-dish-6x525g?updatedAt=1632738836651"
+    ]
+  },
+  {
+    "slug": "sari-murni-twins-12x-100x-1-6g",
+    "name": "Sari Murni Twins 12x (100 x 1.6g)",
+    "description": null,
+    "sku": "Q-SMT-12-100-1-6",
+    "price": 249385,
+    "weight": 2,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "bintara, branded",
+    "discount": null,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/sari-murni-twins-12x-100x-1-6g?updatedAt=1632738996666"
+    ]
+  },
+  {
+    "slug": "penyedap-rasa-royco-kaldu-ayam-pouch-1-kg",
+    "name": "Penyedap Rasa Royco Kaldu Ayam (Kemasan Pouch 1 Kg)",
+    "description": "Merk Royco \nRasa Kaldu Ayam \nKemasan pouch 1 kg \nIsi 6 pcs dalam dus",
+    "sku": "Q-PRRKAP-1",
+    "price": 232630,
+    "weight": 6,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "bintara, branded",
+    "discount": null,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/penyedap-rasa-royco-kaldu-ayam-pouch-1-kg?updatedAt=1632739384813"
+    ]
+  },
+  {
+    "slug": "kecap-manis-bango-kemasan-jerrycan-6-5-kg",
+    "name": "Kecap Manis Bango (Kemasan Jerrycan 6.5 Kg)",
+    "description": "Kecap Manis \nMerk Bango \nKemasan Jerrycan 6,5 kg",
+    "sku": "Q-KMBKJ-6-5",
+    "price": 172887,
+    "weight": 7,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "bintara, branded",
+    "discount": null,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/kecap-manis-bango-kemasan-jerrycan-6-5-kg?updatedAt=1632739551061"
+    ]
+  },
+  {
+    "slug": "saos-tomat-del-monte-kemasan-jerrycan-5-7-kg",
+    "name": "Saos Tomat Del Monte (Kemasan Jerrycan 5.7 Kg) ",
+    "description": "Saos Tomat \nMerk Del Monte \nKemasan Jerrycan 5,7 kg",
+    "sku": "Q-STDMKJ-5-7",
+    "price": 83738,
+    "weight": 6,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "bintara, branded",
+    "discount": null,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/saos-tomat-del-monte-kemasan-jerrycan-5-7-kg?updatedAt=1632739639388"
+    ]
+  },
+  {
+    "slug": "beras-premium-kemasan-kecil-10-kg",
+    "name": "Beras Premium (Kemasan Kecil 10 Kg)",
+    "description": "Beras putih premium \nKemasan 10 kg \nCatatan \nDisarankan mencapai bobot minimum 300 kg sewaktu memesan.  \nTiap nomor pesanan bisa terdiri dari satu produk atau lebih.  \nContoh \nOrder No #1500 terdiri dari \n1. Minyak Goreng Sovia @2l sebanyak 2 dus (1 dus isi 6 pcs) \n2. Gula Rose Brand @1kg sebanyak 1 dus (1 dus isi 20 pcs) \n3. Beras Sari Padi @50kg sebanyak 5 karung",
+    "sku": "Q-BPKK-10",
+    "price": 125829,
+    "weight": 10,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "Non Brand,cipinang",
+    "discount": null,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/beras-premium-kemasan-kecil-10-kg?updatedAt=1632739911995"
+    ]
+  },
+  {
+    "slug": "beras-super-kemasan-kecil-20-kg",
+    "name": "Beras Super (Kemasan Kecil 20 Kg)",
+    "description": "Beras Putih Premium Super \nKemasan 20 kg \nKualitas beras yang digunakan oleh Resto Makanan Padang \nCatatan \nDisarankan mencapai bobot minimum 300 kg sewaktu memesan.  \nTiap nomor pesanan bisa terdiri dari satu produk atau lebih.  \nContoh \nOrder No #1500 terdiri dari \n1. Minyak Goreng Sovia @2l sebanyak 2 dus (1 dus isi 6 pcs) \n2. Gula Rose Brand @1kg sebanyak 1 dus (1 dus isi 20 pcs) \n3. Beras Sari Padi @50kg sebanyak 5 karung",
+    "sku": "Q-BSKK-20",
+    "price": 261888,
+    "weight": 20,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "Non Brand,cipinang",
+    "discount": null,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/beras-super-kemasan-kecil-20-kg?updatedAt=1632740099217"
+    ]
+  },
+  {
+    "slug": "telur-ayam-ras-15-kg",
+    "name": "Telur Ayam Ras (15 Kg per crate)",
+    "description": "Telur Ayam Ras \nKemasan 15 kg/crate",
+    "sku": "Q-TAR-15",
+    "price": 390000,
+    "weight": 15,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "Non Brand,cipinang",
+    "discount": null,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/telur-ayam-ras-15-kg?updatedAt=1632740265524"
+    ]
+  },
+  {
+    "slug": "daging-ayam-beku",
+    "name": "Daging Ayam Beku",
+    "description": "Daging Ayam Beku \nKarkas kosong per ekor \nNon parting",
+    "sku": "Q-DAB",
+    "price": 32122,
+    "weight": 1,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "Non Brand,pasar minggu",
+    "discount": 9,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/daging-ayam-beku?updatedAt=1632740437234"
+    ]
+  },
+  {
+    "slug": "beras-super-kemasan-50-kg",
+    "name": "Beras Super (Kemasan 50 Kg)",
+    "description": "Beras Putih Super Premium \nKemasan 50 kg \nKualitas beras yang digunakan oleh Resto Makanan Padang \nCatatan \nDisarankan mencapai bobot minimum 300 kg sewaktu memesan.  \nTiap nomor pesanan bisa terdiri dari satu produk atau lebih.  \nContoh \nOrder No #1500 terdiri dari \n1. Minyak Goreng Sovia @2l sebanyak 2 dus (1 dus isi 6 pcs) \n2. Gula Rose Brand @1kg sebanyak 1 dus (1 dus isi 20 pcs) \n3. Beras Sari Padi @50kg sebanyak 5 karung",
+    "sku": "Q-BSK-50",
+    "price": 654270,
+    "weight": 50,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "Non Brand,cipinang",
+    "discount": 15,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/beras-super-kemasan-50-kg?updatedAt=1632740797534"
+    ]
+  },
+  {
+    "slug": "ikan-cucut-beku-kemasan-1-kg",
+    "name": "Ikan Cucut Beku (Kemasan Vacuum 1 Kg)",
+    "description": "Ikan Cucut Beku \nKemasan Vacuum 1 kg",
+    "sku": "Q-ICBK-1",
+    "price": 34782,
+    "weight": 1,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "Non Brand",
+    "discount": 15,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/ikan-cucut-beku-kemasan-1-kg?updatedAt=1632740964800"
+    ]
+  },
+  {
+    "slug": "gula-pasir-polos-kemasan-500-g",
+    "name": "Gula Pasir Polos (Kemasan 500 g)",
+    "description": "Gula pasir asli dari tebu pilihan, tanpa pemutih. Kemasan 500g",
+    "sku": "Q-GPPK-500",
+    "price": 600000,
+    "weight": 1,
+    "stock": 1000,
+    "status": "ACTIVE",
+    "dimension": { "width": null, "length": null, "height": null },
+    "category": "cipinang",
+    "discount": null,
+    "weightUnit": "KG",
+    "images": [
+      "https://ik.imagekit.io/qopnetlabs/products/gula-pasir-polos-kemasan-500-g?updatedAt=1632741146327"
+    ]
   }
 ]

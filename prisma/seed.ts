@@ -14,7 +14,6 @@ import {
   Supplier,
   SupplierProduct,
 } from '@prisma/client'
-import axios, { AxiosResponse } from 'axios'
 const prisma = new PrismaClient()
 
 import usersData from './data/users.json'
@@ -42,11 +41,10 @@ console.info({ env: process.env.NX_NODE_ENV })
 // Get storageUrl from env
 const storageUrl = process.env.NX_SUPABASE_URL
 
-// qopnetlabs@gmail.com profile.id
+// Default user for all environments: qopnetlabs@gmail.com
+// Set profile.id
 const qopnetlabsProfileId = 'ckr86vmxt005010pjeh4mqs6n'
-
-// Currently only for qopnetlabs@gmail.com
-// Assign id based on the environment
+// Set id based on the environment
 const qopnetlabsUserId =
   process.env.NX_NODE_ENV === 'production'
     ? 'cb0a71e6-da95-4631-acc0-bbd3f0d39e5c' // production
@@ -57,9 +55,7 @@ const qopnetlabsUserId =
 // -----------------------------------------------------------------------------
 
 async function deleteEverything() {
-  console.info({
-    message: 'Delete everything',
-  })
+  console.info({ message: 'Delete everything' })
 
   await prisma.user.deleteMany()
   await prisma.profile.deleteMany()
@@ -117,7 +113,7 @@ async function createSupplierProducts({
     skipDuplicates: true,
   })
 
-  console.info({ qopnetSupplierProducts })
+  // console.info({ qopnetSupplierProducts })
 }
 
 async function createSupplierProductsDynamic({
@@ -150,7 +146,7 @@ async function createSupplierProductsDynamic({
     skipDuplicates: true,
   })
 
-  console.info({ anekaBusaSupplierProducts })
+  // console.info({ anekaBusaSupplierProducts })
 }
 
 // -----------------------------------------------------------------------------
@@ -167,7 +163,8 @@ const seedUsers = async () => {
       }
     }),
   })
-  console.info({ users })
+
+  // console.info({ users })
 }
 
 const seedProfiles = async () => {
@@ -181,21 +178,21 @@ const seedProfiles = async () => {
       }
     }),
   })
-  console.info({ profiles })
+  // console.info({ profiles })
 }
 
 const seedAddresses = async () => {
   const addresses = await prisma.address.createMany({
     data: addressesData,
   })
-  console.info({ addresses })
+  // console.info({ addresses })
 }
 
 const seedSuppliers = async () => {
   const suppliers = await prisma.supplier.createMany({
     data: suppliersData,
   })
-  console.info({ suppliers })
+  // console.info({ suppliers })
 }
 
 const seedBusinessOrder = async () => {
@@ -204,14 +201,14 @@ const seedBusinessOrder = async () => {
     // @ts-ignore
     data: businessOrdersData,
   })
-  console.info({ businessOrders })
+  // console.info({ businessOrders })
 }
 
 const seedCouriers = async () => {
   const couriers = await prisma.courier.createMany({
     data: couriersData,
   })
-  console.info({ couriers })
+  // console.info({ couriers })
 }
 
 const seedCourierVehicles = async () => {
@@ -252,11 +249,11 @@ const seedCourierVehicles = async () => {
     }),
   })
 
-  console.info({
-    courierVehiclesDeliveree,
-    courierVehiclesLalamove,
-    courierVehiclesMasKargo,
-  })
+  // console.info({
+  //   courierVehiclesDeliveree,
+  //   courierVehiclesLalamove,
+  //   courierVehiclesMasKargo,
+  // })
 }
 
 const seedPaymentMethods = async () => {
@@ -265,14 +262,14 @@ const seedPaymentMethods = async () => {
     // @ts-ignore
     data: paymentMethodsData,
   })
-  console.info({ paymentMethods })
+  // console.info({ paymentMethods })
 }
 
 const seedPaymentRecords = async () => {
   const paymentRecords = await prisma.paymentRecord.createMany({
     data: paymentRecordsData,
   })
-  console.info({ paymentRecords })
+  // console.info({ paymentRecords })
 }
 
 // -----------------------------------------------------------------------------
@@ -312,7 +309,7 @@ async function seedPromoEmployees() {
     }),
   })
 
-  console.info({ promoEmployees })
+  // console.info({ promoEmployees })
 }
 
 /**

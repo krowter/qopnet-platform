@@ -16,8 +16,12 @@
     "titleBar.activeBackground": "#160a01",
     "titleBar.activeForeground": "#e7e7e7",
     "titleBar.inactiveBackground": "#160a0199",
-    "titleBar.inactiveForeground": "#e7e7e799"
+    "titleBar.inactiveForeground": "#e7e7e799",
+    "sash.hoverBorder": "#472003",
+    "statusBarItem.remoteBackground": "#160a01",
+    "statusBarItem.remoteForeground": "#e7e7e7"
   },
   "peacock.color": "#160a01",
-  "jest.jestCommandLine": "jest"
+  "jest.jestCommandLine": "jest",
+  "typescript.tsdk": "node_modules/typescript/lib"
 }
