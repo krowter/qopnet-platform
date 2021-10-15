@@ -118,4 +118,82 @@ router.get('/my', checkUser, async (req, res) => {
   })
 })
 
+/**
+ * PUT /api/profiles/my
+ */
+router.put('/my', checkUser, async (req, res) => {
+  const userId = req.user.sub
+  const newProfile = req.body
+
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      include: { profile: true },
+      // Just to check whether the user already had a profile too
+    })
+    if (!user) throw new Error('User not found')
+
+    // Check if profile.handle for a user already exist
+    try {
+      const existingProfile = await prisma.profile.findUnique({
+        where: { handle: newProfile.handle },
+        include: { addresses: true },
+      })
+      if (existingProfile) {
+        if (existingProfile.handle !== user.profile.handle) {
+          throw new Error('Username already exist')
+        }
+      }
+
+      /**
+       * Manually arrange the profile data,
+       */
+      const payloadData = {
+        name: newProfile.name,
+        handle: newProfile.handle,
+        phone: newProfile.phone,
+        userId,
+        addresses: {
+          update: {
+            where: { id: newProfile.address.id },
+            data: newProfile.address,
+          },
+        },
+      }
+
+      /**
+       * Continue to update profile if username no changes or no existing username
+       * Also with address
+       */
+      const updatedProfile = await prisma.profile.update({
+        where: { userId },
+        data: payloadData,
+        include: {
+          addresses: {
+            where: { id: newProfile.address.id },
+          },
+        },
+      })
+
+      res.json({
+        message: 'Update user profile success',
+        userId,
+        newProfile: updatedProfile,
+      })
+    } catch (error) {
+      res.status(400).json({
+        message: 'Update user profile failed because username already exist',
+        user: req.user,
+        error,
+      })
+    }
+  } catch (error) {
+    res.status(400).json({
+      message: 'Update profile failed because user not found',
+      userId,
+      error,
+    })
+  }
+})
+
 export default router
