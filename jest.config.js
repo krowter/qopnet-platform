@@ -9,5 +9,6 @@ module.exports = {
     '<rootDir>/libs/util-swr',
     '<rootDir>/libs/util-format',
     '<rootDir>/libs/util-prisma',
+    '<rootDir>/libs/util-object',
   ],
 }
