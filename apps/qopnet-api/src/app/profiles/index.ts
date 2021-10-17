@@ -135,21 +135,16 @@ router.put('/my', checkUser, async (req, res) => {
           },
         },
       },
-      // Just to check whether the user already had a profile too
     })
-
     if (!user) throw new Error('User not found')
 
-    // Check if profile.handle for a user already exist
     try {
-      console.log({ user })
-
       /**
        * Manually arrange the profile data,
        */
       const payloadData = {
         name: newProfile.name,
-        // handle: newProfile.handle,
+        handle: newProfile.handle,
         phone: newProfile.phone,
         userId,
         addresses: {
