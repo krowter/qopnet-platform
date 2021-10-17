@@ -74,7 +74,7 @@ export const CreateProfileForm = ({ user, profile }) => {
   }
 
   const updateProfile = async (profileFormData: ProfileData) => {
-    const data = await requestToAPI('PUT', '/api/profiles', {
+    const data = await requestToAPI('PUT', '/api/profiles/my', {
       ...profileFormData,
     })
 
