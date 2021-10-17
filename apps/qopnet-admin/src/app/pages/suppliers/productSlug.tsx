@@ -41,7 +41,7 @@ export const SupplierProductSlugPage = () => {
     supplierParam,
     productParam,
   }: { supplierParam: string; productParam: string } = useParams()
-  const { data: { supplierProduct = [], message } = [], error } = useSWR(
+  const { data: { supplierProduct = {}, message } = [], error } = useSWR(
     `/api/suppliers/products/${productParam}`
   )
 
@@ -149,7 +149,7 @@ export const SupplierProductSlugPage = () => {
                         alignItems="center"
                       >
                         <Box>Toko Supplier </Box>
-                        <Box>{supplierProduct?.supplierId}</Box>
+                        <Box>{supplierProduct?.supplier?.name}</Box>
                       </Flex>
 
                       <Flex
@@ -287,7 +287,7 @@ export const SupplierProductSlugPage = () => {
 
             <Flex pt={5} justifyContent="space-between" alignItems="center">
               <Box>Toko Supplier </Box>
-              <Box>{supplierProduct?.supplierId ?? ''}</Box>
+              <Box>{supplierProduct?.supplier.name ?? ''}</Box>
             </Flex>
 
             <Flex pt={5} justifyContent="space-between" alignItems="center">
