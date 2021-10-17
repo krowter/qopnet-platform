@@ -161,25 +161,6 @@ export const SupplierProductSlugPage = () => {
                         <Box>{supplierProduct.ownerId}</Box>
                       </Flex>
 
-                      <Flex
-                        pt={3}
-                        justifyContent="space-between"
-                        alignItems="center"
-                      >
-                        <Box>Kategori </Box>
-                        <Box>Keperluan rumah tangga </Box>
-                      </Flex>
-
-                      <Flex
-                        pt={3}
-                        pb={3}
-                        justifyContent="space-between"
-                        alignItems="center"
-                      >
-                        <Box>Bidang</Box>
-                        <Box>Papan</Box>
-                      </Flex>
-
                       <Divider />
 
                       <Flex
@@ -313,23 +294,6 @@ export const SupplierProductSlugPage = () => {
               <Box>Pemilik </Box>
               <Box>{supplierProduct?.ownerId ?? ''}</Box>
             </Flex>
-
-            <Flex pt={3} justifyContent="space-between" alignItems="center">
-              <Box>Kategori </Box>
-              <Box>Keperluan rumah tangga </Box>
-            </Flex>
-
-            <Flex
-              pt={3}
-              pb={3}
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <Box>Bidang</Box>
-              <Box>Papan</Box>
-            </Flex>
-
-            <Divider />
 
             <Flex pt={5} justifyContent="space-between" alignItems="center">
               <Box>Dijual mulai </Box>
