@@ -22,6 +22,7 @@ import {
   SimpleGrid,
   useToast,
 } from '@chakra-ui/react'
+import { pickKeys } from '@qopnet/util-object'
 
 import { Icon } from '@qopnet/qopnet-ui'
 import { requestToAPI } from '../utils'
@@ -74,9 +75,22 @@ export const CreateProfileForm = ({ user, profile }) => {
   }
 
   const updateProfile = async (profileFormData: ProfileData) => {
-    const data = await requestToAPI('PUT', '/api/profiles/my', {
-      ...profileFormData,
-    })
+    const requestObject = pickKeys(profileFormData, [
+      'name',
+      'handle',
+      'phone',
+      'address',
+    ])
+    requestObject.address = pickKeys(requestObject.address, [
+      'street',
+      'streetDetails',
+      'city',
+      'state',
+      'zip',
+      'countryCode',
+    ])
+
+    const data = await requestToAPI('PUT', '/api/profiles/my', requestObject)
 
     if (!data) throw new Error('Update profile response error')
 
