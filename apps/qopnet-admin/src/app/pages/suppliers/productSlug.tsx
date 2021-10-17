@@ -27,20 +27,20 @@ import {
 import cuid from 'cuid'
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import { Link } from 'react-router-dom'
-
 import { useParams, useHistory } from 'react-router'
+
+import { Icon, formatPrice } from '@qopnet/qopnet-ui'
 
 import { DefaultLayout } from '../../layouts'
 import { useSWR } from '../../utils/swr'
 import { ModifierButtons } from '../../components'
-import { Icon, formatPrice } from '@qopnet/qopnet-ui'
 
 export const SupplierProductSlugPage = () => {
-  const sidebar = useDisclosure()
   const {
     supplierParam,
     productParam,
   }: { supplierParam: string; productParam: string } = useParams()
+
   const { data: { supplierProduct = {}, message } = [], error } = useSWR(
     `/api/suppliers/products/${productParam}`
   )
@@ -111,86 +111,9 @@ export const SupplierProductSlugPage = () => {
                 <BreadcrumbLink>{productParam}</BreadcrumbLink>
               </BreadcrumbItem>
             </Breadcrumb>
-            <Drawer
-              isFullHeight
-              isOpen={sidebar.isOpen}
-              onClose={sidebar.onClose}
-              placement="right"
-              size="xs"
-            >
-              <DrawerOverlay />
-              <DrawerContent style={{ width: 'auto' }}>
-                <Stack
-                  bg={useColorModeValue('gray.100', 'gray.900')}
-                  borderRight="1px solid gray"
-                  height="100vh"
-                  justify="space-between"
-                  p={2}
-                  minWidth="250px"
-                >
-                  <Stack as="nav" w="auto" spacing={3} mx={2} mt={6}>
-                    <DrawerCloseButton right={0} mr={2} />
-                    <Box
-                      minWidth={{ md: '300px' }}
-                      pl={5}
-                      pr={5}
-                      pt={5}
-                      borderLeft=" 1px solid gray"
-                    >
-                      <Box pb={3} justifyContent="center">
-                        {supplierProduct?.supplierId}
-                      </Box>
 
-                      <Divider />
-
-                      <Flex
-                        pt={5}
-                        justifyContent="space-between"
-                        alignItems="center"
-                      >
-                        <Box>Toko Supplier </Box>
-                        <Box>{supplierProduct?.supplier?.name}</Box>
-                      </Flex>
-
-                      <Flex
-                        pt={5}
-                        justifyContent="space-between"
-                        alignItems="center"
-                      >
-                        <Box>Pemilik </Box>
-                        <Box>{supplierProduct.ownerId}</Box>
-                      </Flex>
-
-                      <Divider />
-
-                      <Flex
-                        pt={5}
-                        justifyContent="space-between"
-                        alignItems="center"
-                      >
-                        <Box>Dijual mulai </Box>
-                        <Box>{supplierProduct.createdAt}</Box>
-                      </Flex>
-
-                      <Flex
-                        pt={5}
-                        justifyContent="space-between"
-                        alignItems="center"
-                      >
-                        <Box>Terakhir diubah</Box>
-                        <Box>{supplierProduct.updatedAt}</Box>
-                      </Flex>
-                    </Box>
-                  </Stack>
-                  <HStack px={5}>
-                    <Text as="code" fontSize="xs" color="gray.500"></Text>
-                  </HStack>
-                </Stack>
-              </DrawerContent>
-            </Drawer>
             {error ? (
               <Box px={5} py={3}>
-                {' '}
                 {message ? message : 'Gagal memuat produk supplier'}
               </Box>
             ) : supplierProduct.length === 0 ? (
@@ -236,36 +159,19 @@ export const SupplierProductSlugPage = () => {
                       )}
                     </Flex>
                   )}
-                  <Text> Kode SKU: {supplierProduct?.sku}</Text>
+                  <Text>Kode SKU: {supplierProduct?.sku}</Text>
                   <Text>Nama Produk: {supplierProduct?.name}</Text>
-                  <Text> Harga: Rp. {formatPrice(supplierProduct?.price)}</Text>
-                  {/* <Text>
-                    {' '}
-                    Harga Minimum: Rp. {supplierProduct?.priceMin ?? '-'}
-                  </Text>
+                  <Text>Harga: {formatPrice(supplierProduct?.price)}</Text>
+                  <Text>Minimum Order: {supplierProduct?.minOrder ?? '-'}</Text>
                   <Text>
-                    {' '}
-                    Harga Maximum: Rp. {supplierProduct?.priceMax ?? '-'}
-                  </Text> */}
-                  <Text>
-                    {' '}
-                    Minimum Order: {supplierProduct?.minOrder ?? '-'}
+                    Berat: {supplierProduct?.weight ?? '-'}{' '}
+                    {supplierProduct?.weightUnit}
                   </Text>
-                  <Text> Berat: {supplierProduct?.weight ?? '-'} Kg</Text>
-                  <Text>
-                    {' '}
-                    Satuan Berat: {supplierProduct?.weightUnit ?? 'Kg'}
-                  </Text>
-                  <Text>
-                    {' '}
-                    Detail Berat: {supplierProduct?.weightDetails ?? ''}
-                  </Text>
-                  <Text>
-                    {' '}
-                    Dimensi: {supplierProduct?.dimension?.width ?? ''}
-                  </Text>
-                  <Text> Stok: {supplierProduct.stock ?? ''} pcs</Text>
-                  <Text>Deskripsi: {supplierProduct?.description ?? ''}</Text>
+                  <Text>Detail Berat: {supplierProduct?.weightDetails}</Text>
+                  <Text>Dimensi: {supplierProduct?.dimension?.width}</Text>
+                  <Text>Stok: {supplierProduct.stock} pcs</Text>
+                  <Text>Deskripsi:</Text>
+                  <Text>{supplierProduct?.description}</Text>
                 </Stack>
               </VStack>
             )}
@@ -276,7 +182,6 @@ export const SupplierProductSlugPage = () => {
             pr={5}
             pt={5}
             borderLeft=" 1px solid gray"
-            // h="92vh"
             display={{ base: 'none', lg: 'unset' }}
           >
             <Box pb={3} justifyContent="center">
@@ -287,12 +192,12 @@ export const SupplierProductSlugPage = () => {
 
             <Flex pt={5} justifyContent="space-between" alignItems="center">
               <Box>Toko Supplier </Box>
-              <Box>{supplierProduct?.supplier.name ?? ''}</Box>
+              <Box>{supplierProduct?.supplier?.name}</Box>
             </Flex>
 
             <Flex pt={5} justifyContent="space-between" alignItems="center">
               <Box>Pemilik </Box>
-              <Box>{supplierProduct?.ownerId ?? ''}</Box>
+              <Box>{supplierProduct?.owner?.name}</Box>
             </Flex>
 
             <Flex pt={5} justifyContent="space-between" alignItems="center">
