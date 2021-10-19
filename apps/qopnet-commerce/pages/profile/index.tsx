@@ -22,7 +22,7 @@ export const CreateProfilePage = () => {
   return (
     <Layout pt={10}>
       {/* {error && <Text>Gagal memuat formulir profil</Text>} */}
-      {user && <CreateProfileForm user={user} profile={profile} />}
+      {data && user && <CreateProfileForm user={user} profile={profile} />}
     </Layout>
   )
 }
