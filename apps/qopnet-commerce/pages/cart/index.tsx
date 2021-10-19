@@ -17,6 +17,7 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react'
 import { mutate } from 'swr'
+import { useUser } from 'use-supabase'
 
 import { Layout, Icon, SupplierProductPrice } from '@qopnet/qopnet-ui'
 import {
@@ -39,23 +40,28 @@ import { useEffect } from 'react'
  * because BusinessCart is just a draft BusinessOrder
  */
 export const CartPage = () => {
+  const user = useUser()
+
   const { data, error } = useSWR('/api/business/orders/my/cart')
   const { businessOrder } = data || {}
 
   // Try to create my cart if my cart does not exist yet
   // Or when there is an error
   useEffect(() => {
-    const createMyCart = async () => {
-      const { businessOrder } = await postToAPI(
-        '/api/business/orders/my/cart',
-        {}
-      )
-      // console.info({ businessOrder })
+    if (user) {
+      const createMyCart = async () => {
+        const { businessOrder } = await postToAPI(
+          '/api/business/orders/my/cart',
+          {}
+        )
+        // console.info({ businessOrder })
+      }
+
+      if (error) {
+        createMyCart()
+      }
     }
-    if (error) {
-      createMyCart()
-    }
-  }, [error])
+  }, [error, user])
 
   return (
     <Layout
