@@ -19,6 +19,7 @@
       "@qopnet/qopnet-ui": ["libs/qopnet-ui/src/index.ts"],
       "@qopnet/shared-types": ["libs/shared-types/src/index.ts"],
       "@qopnet/util-format": ["libs/util-format/src/index.ts"],
+      "@qopnet/util-object": ["libs/util-object/src/index.ts"],
       "@qopnet/util-prisma": ["libs/util-prisma/src/index.ts"],
       "@qopnet/util-supabase": ["libs/util-supabase/src/index.ts"],
       "@qopnet/util-swr": ["libs/util-swr/src/index.ts"]
