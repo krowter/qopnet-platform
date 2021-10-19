@@ -724,6 +724,7 @@ export const getOneBusinessOrder = async (req, res) => {
           businessOrderItems: {
             include: {
               supplier: true,
+              supplierProduct: true,
             },
           },
           shipmentAddress: true, // One address

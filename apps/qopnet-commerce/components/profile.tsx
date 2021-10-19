@@ -22,6 +22,7 @@ import {
   SimpleGrid,
   useToast,
 } from '@chakra-ui/react'
+import { pickKeys } from '@qopnet/util-object'
 
 import { Icon } from '@qopnet/qopnet-ui'
 import { requestToAPI } from '../utils'
@@ -48,11 +49,15 @@ export const CreateProfileForm = ({ user, profile }) => {
   const toast = useToast()
   const [loading, setLoading] = useState(false)
 
+  // `profile` From prisma is null if user doesn't have profile yet
+  const isProfileExist = Boolean(profile)
+
   // React Hook Form
   const {
     register,
     handleSubmit,
     formState: { errors },
+    ...rest
   } = useForm<ProfileData>({
     defaultValues: {
       ...profile,
@@ -60,21 +65,51 @@ export const CreateProfileForm = ({ user, profile }) => {
     },
   })
 
+  const createProfile = async (profileFormData: ProfileData) => {
+    const data = await requestToAPI('POST', '/api/profiles', {
+      ...profileFormData,
+    })
+    if (!data) throw new Error('Create profile response error')
+
+    toast({ title: 'Berhasil membuat profil', status: 'success' })
+  }
+
+  const updateProfile = async (profileFormData: ProfileData) => {
+    const requestObject = pickKeys(profileFormData, [
+      'name',
+      'handle',
+      'phone',
+      'address',
+    ])
+    requestObject.address = pickKeys(requestObject.address, [
+      'street',
+      'streetDetails',
+      'city',
+      'state',
+      'zip',
+      'countryCode',
+    ])
+
+    const data = await requestToAPI('PUT', '/api/profiles/my', requestObject)
+
+    if (!data) throw new Error('Update profile response error')
+
+    toast({ title: 'Berhasil menyimpan profil', status: 'success' })
+  }
+
   // Create profile process and toast
-  const handleSubmitCreateProfile: SubmitHandler<ProfileData> = async (
+  const handleSubmitForm: SubmitHandler<ProfileData> = async (
     profileFormData
   ) => {
     try {
       setLoading(true)
-      // This will use PUT instead of POST
-      // Adaptive create or update
-      const data = await requestToAPI('POST', '/api/profiles', {
-        ...profileFormData,
-      })
-      if (!data) throw new Error('Update profile response error')
-      console.error({ data })
 
-      toast({ title: 'Berhasil menyimpan profil', status: 'success' })
+      if (isProfileExist) {
+        await updateProfile(profileFormData)
+      } else {
+        await createProfile(profileFormData)
+      }
+
       router.push(`/dashboard`)
     } catch (error) {
       toast({ title: 'Gagal menyimpan profil', status: 'error' })
@@ -100,7 +135,7 @@ export const CreateProfileForm = ({ user, profile }) => {
       </VStack>
 
       <SimpleGrid
-        onSubmit={handleSubmit(handleSubmitCreateProfile)}
+        onSubmit={handleSubmit(handleSubmitForm)}
         as="form"
         w="100%"
         maxW="720px"

@@ -168,7 +168,14 @@
             "outputPath": "dist/apps/qopnet-commerce"
           },
           "configurations": {
-            "production": {}
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/qopnet-commerce/src/environments/environment.ts",
+                  "with": "apps/qopnet-commerce/src/environments/environment.prod.ts"
+                }
+              ]
+            }
           }
         },
         "serve": {
@@ -290,6 +297,27 @@
           "outputs": ["coverage/libs/util-format"],
           "options": {
             "jestConfig": "libs/util-format/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "util-object": {
+      "root": "libs/util-object",
+      "sourceRoot": "libs/util-object/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/util-object/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/util-object"],
+          "options": {
+            "jestConfig": "libs/util-object/jest.config.js",
             "passWithNoTests": true
           }
         }
