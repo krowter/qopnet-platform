@@ -10,7 +10,7 @@ const SignUpPage = () => {
   const router = useRouter()
   useEffect(() => {
     if (user) {
-      router.replace('/create-profile')
+      router.replace('/profile')
     }
   }, [user, router])
 
