@@ -105,6 +105,14 @@ export const calculateCart = (businessOrder) => {
     const totalItems =
       businessOrder?.totalItems || totalItemArray.reduce((a, c) => a + c)
 
+    // Total Weight
+    const totalWeight = businessOrder?.businessOrderItems?.reduce(
+      (total, item) => {
+        return (total += item.quantity * item.supplierProduct.weight)
+      },
+      0
+    )
+
     // Total Price
     const totalPriceArray = businessOrder?.businessOrderItems?.map(
       (item) => item.supplierProduct?.price * item.quantity || 0
@@ -136,6 +144,7 @@ export const calculateCart = (businessOrder) => {
 
     return {
       totalItems,
+      totalWeight,
       totalPrice,
       totalDiscount,
       totalCalculatedPrice,
@@ -145,6 +154,7 @@ export const calculateCart = (businessOrder) => {
   } else {
     return {
       totalItems: 0,
+      totalWeight: 0,
       totalPrice: 0,
       totalDiscount: 0,
       totalCalculatedPrice: 0,
