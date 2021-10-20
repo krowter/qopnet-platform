@@ -302,6 +302,27 @@
         }
       }
     },
+    "util-object": {
+      "root": "libs/util-object",
+      "sourceRoot": "libs/util-object/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/util-object/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/util-object"],
+          "options": {
+            "jestConfig": "libs/util-object/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "util-prisma": {
       "root": "libs/util-prisma",
       "sourceRoot": "libs/util-prisma/src",

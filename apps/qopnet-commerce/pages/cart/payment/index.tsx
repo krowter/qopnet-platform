@@ -150,14 +150,7 @@ export const PaymentContainer = ({ businessOrder }) => {
 export const PaymentSummaryContainer = ({ businessOrder }) => {
   const router = useRouter()
 
-  const {
-    // totalItems,
-    // totalPrice,
-    // totalDiscount,
-    totalCalculatedPrice,
-    totalShipmentCost,
-    totalCalculatedBill,
-  } = calculateCart(businessOrder)
+  const calculatedCartValues = calculateCart(businessOrder)
 
   const handleClickPay = () => {
     router.push('/dashboard/orders')
@@ -183,27 +176,29 @@ export const PaymentSummaryContainer = ({ businessOrder }) => {
         </HStack>
         <HStack justify="space-between">
           <Text>Total Harga ({1} produk)</Text>
-          <Text>{formatRupiah(totalCalculatedPrice)}</Text>
+          <Text>
+            {formatRupiah(calculatedCartValues?.totalCalculatedPrice)}
+          </Text>
         </HStack>
         <HStack justify="space-between">
           <Text>Total Ongkos Kirim</Text>
-          <Text>{formatRupiah(totalShipmentCost)}</Text>
+          <Text>{formatRupiah(calculatedCartValues?.totalShipmentCost)}</Text>
         </HStack>
         <hr />
         <HStack justify="space-between" fontSize="lg" fontWeight="bold">
           <Text>Total Tagihan</Text>
-          <Text>{formatRupiah(totalCalculatedBill)}</Text>
+          <Text>{formatRupiah(calculatedCartValues?.totalCalculatedBill)}</Text>
         </HStack>
       </Stack>
 
       <ManualTransferPaymentModalGroup
-        totalCalculatedBill={totalCalculatedBill}
+        calculatedCartValues={calculatedCartValues}
       />
     </Stack>
   )
 }
 
-export const ManualTransferPaymentModalGroup = ({ totalCalculatedBill }) => {
+export const ManualTransferPaymentModalGroup = ({ calculatedCartValues }) => {
   // Next.js
   const router = useRouter()
 
@@ -226,10 +221,11 @@ export const ManualTransferPaymentModalGroup = ({ totalCalculatedBill }) => {
   const handleProcessMyOrder = async (data) => {
     try {
       const formData = {
-        accountNumber: data?.accountNumber || '123',
-        accountHolderName: data?.accountHolderName || 'Nama',
-        totalCalculatedBill: totalCalculatedBill || 1230000,
+        ...calculatedCartValues,
+        accountNumber: data?.accountNumber || '0',
+        accountHolderName: data?.accountHolderName || 'Anonim',
       }
+
       // console.info({ formData })
       const response = await requestToAPI(
         'PUT',
@@ -276,7 +272,9 @@ export const ManualTransferPaymentModalGroup = ({ totalCalculatedBill }) => {
             <ModalBody as={Stack}>
               <HStack justify="space-between" fontSize="lg" fontWeight="bold">
                 <Text>Total Tagihan</Text>
-                <Text>{formatRupiah(totalCalculatedBill)}</Text>
+                <Text>
+                  {formatRupiah(calculatedCartValues?.totalCalculatedBill)}
+                </Text>
               </HStack>
 
               <FormControl>
