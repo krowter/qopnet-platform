@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import NextLink from 'next/link'
 import NextImage from 'next/image'
 import {
@@ -12,11 +13,13 @@ import {
   Input,
   StackDivider,
   Divider,
+  Flex,
   Tag,
   Text,
   useColorModeValue,
 } from '@chakra-ui/react'
 import { mutate } from 'swr'
+import { useForm } from 'react-hook-form'
 import { useUser } from 'use-supabase'
 import { useRouter } from 'next/router'
 
@@ -28,7 +31,6 @@ import {
 } from '@qopnet/util-format'
 import { BreadcrumbCart } from '../../components'
 import { useSWR, postToAPI, requestToAPI } from '../../utils'
-import { useEffect } from 'react'
 
 /**
  * /cart
@@ -183,6 +185,20 @@ export const CartContainer = ({ businessOrder }) => {
 }
 
 export const BusinessOrderItem = ({ item }) => {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm()
+
+  const onSubmitCustomQuantity = (data) => {
+    handleCustomQuantityBusinessOrderItem(
+      item.id,
+      parseInt(data.customQuantity)
+    )
+  }
+
   // Optimistic UI when DELETE
   const handleDeleteBusinessOrderItem = async (itemId) => {
     try {
@@ -282,6 +298,43 @@ export const BusinessOrderItem = ({ item }) => {
     }
   }
 
+  const handleCustomQuantityBusinessOrderItem = async (
+    itemId,
+    customQuantity
+  ) => {
+    try {
+      mutate(
+        '/api/business/orders/my/cart',
+        (data) => {
+          const filtered = data?.businessOrder?.businessOrderItems?.map(
+            (item) => {
+              if (item.id === itemId) {
+                item.quantity = customQuantity
+              }
+              return item
+            }
+          )
+          return {
+            ...data,
+            businessOrder: {
+              ...data.businessOrder,
+              businessOrderItems: [...filtered],
+            },
+          }
+        },
+        false
+      )
+      await requestToAPI('PATCH', '/api/business/orders/my/cart/item', {
+        action: 'CUSTOM_QUANTITY',
+        id: itemId,
+        quantity: customQuantity,
+      })
+      mutate('/api/business/orders/my/cart')
+    } catch (error) {
+      console.error({ error })
+    }
+  }
+
   return (
     <Stack spacing={5}>
       <Stack
@@ -344,21 +397,44 @@ export const BusinessOrderItem = ({ item }) => {
           <IconButton
             className="increment-item"
             aria-label="Tambah jumlah barang"
-            colorScheme="green"
+            variant="ghost"
             icon={<Icon name="increment" />}
             onClick={() => handleIncrementBusinessOrderItem(item.id)}
           />
-          <Text textAlign="center" w="70px" fontSize="lg">
-            {item.quantity}
-          </Text>
           <IconButton
             className="decrement-item"
             aria-label="Kurangi jumlah barang"
-            colorScheme="blue"
+            variant="ghost"
             icon={<Icon name="decrement" />}
             onClick={() => handleDecrementBusinessOrderItem(item.id)}
             disabled={item.quantity <= 1}
           />
+          {/* Use form because we have input and suibmit button */}
+          <form onSubmit={handleSubmit(onSubmitCustomQuantity)}>
+            <Flex>
+              <Input
+                type="number"
+                textAlign="center"
+                w="100px"
+                fontSize="lg"
+                defaultValue={item.quantity}
+                {...register('customQuantity', {
+                  required: true,
+                  min: 1,
+                  // max: item.stock
+                })}
+              />
+              <IconButton
+                type="submit"
+                aria-label="Konfirmasi jumlah barang"
+                colorScheme="green"
+                variant="ghost"
+                icon={<Icon name="checkmark" />}
+                // disabled={item.quantity <= 1}
+              />
+            </Flex>
+          </form>
+
           <IconButton
             className="delete-item"
             aria-label="Hapus barang"

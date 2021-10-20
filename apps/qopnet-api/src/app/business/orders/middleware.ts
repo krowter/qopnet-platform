@@ -363,6 +363,17 @@ export const patchMyCartItem = async (req, res) => {
           formData,
           businessOrderItem: incrementedBusinessOrderItem,
         })
+      } else if (formData.action === 'CUSTOM_QUANTITY') {
+        const incrementedBusinessOrderItem =
+          await prisma.businessOrderItem.update({
+            where: { id: formData.id },
+            data: { quantity: formData.quantity ?? 1 },
+          })
+        res.status(200).json({
+          message: 'Patch my cart CUSTOM_QUANTITY item success',
+          formData,
+          businessOrderItem: incrementedBusinessOrderItem,
+        })
       } else if (formData.action === 'DECREMENT') {
         const decrementedBusinessOrderItem =
           await prisma.businessOrderItem.update({
