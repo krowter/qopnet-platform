@@ -150,7 +150,6 @@ export const SupplierProductSlugPage = () => {
                     </Flex>
                   )}
                   <Text>Kode SKU: {supplierProduct?.sku}</Text>
-                  <Text>Nama Produk: {supplierProduct?.name}</Text>
                   <Text>Harga: {formatPrice(supplierProduct?.price)}</Text>
                   <Text>Minimum Order: {supplierProduct?.minOrder ?? '-'}</Text>
                   <Text>
