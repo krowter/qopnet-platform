@@ -155,7 +155,7 @@ export const SupplierProductSlugPage = () => {
                   <Text>Harga: {formatPrice(supplierProduct?.price)}</Text>
                   <Text>Minimum Order: {supplierProduct?.minOrder ?? '-'}</Text>
                   <Text>
-                    Berat: {supplierProduct?.weight ?? '-'}{' '}
+                    Berat: {supplierProduct?.weight ?? '-'}
                     {supplierProduct?.weightUnit}
                   </Text>
                   <Text>Detail Berat: {supplierProduct?.weightDetails}</Text>
@@ -163,13 +163,13 @@ export const SupplierProductSlugPage = () => {
                   <Box pl={5}>
                     <UnorderedList>
                       <ListItem>
-                        Lebar: {supplierProduct?.dimension?.width} cm
+                        Lebar: {supplierProduct?.dimension?.width ?? '-'} cm
                       </ListItem>
                       <ListItem>
-                        Tinggi: {supplierProduct?.dimension?.height} cm
+                        Tinggi: {supplierProduct?.dimension?.height ?? '-'} cm
                       </ListItem>
                       <ListItem>
-                        Panjang: {supplierProduct?.dimension?.length} cm
+                        Panjang: {supplierProduct?.dimension?.length ?? '-'} cm
                       </ListItem>
                     </UnorderedList>
                   </Box>
