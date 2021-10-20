@@ -18,6 +18,7 @@ import {
 } from '@chakra-ui/react'
 import { mutate } from 'swr'
 import { useUser } from 'use-supabase'
+import { useRouter } from 'next/router'
 
 import { Layout, Icon, SupplierProductPrice } from '@qopnet/qopnet-ui'
 import {
@@ -41,6 +42,7 @@ import { useEffect } from 'react'
  */
 export const CartPage = () => {
   const user = useUser()
+  const router = useRouter()
 
   const { data, error } = useSWR('/api/business/orders/my/cart')
   const { businessOrder } = data || {}
@@ -60,6 +62,8 @@ export const CartPage = () => {
       if (error) {
         createMyCart()
       }
+    } else {
+      router.push('/')
     }
   }, [error, user])
 
