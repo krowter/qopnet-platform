@@ -30,6 +30,7 @@ import { Link } from 'react-router-dom'
 import { useParams, useHistory } from 'react-router'
 
 import { Icon, formatPrice } from '@qopnet/qopnet-ui'
+import { formatDateTime } from '@qopnet/util-format'
 
 import { DefaultLayout } from '../../layouts'
 import { useSWR } from '../../utils/swr'
@@ -68,17 +69,6 @@ export const SupplierProductSlugPage = () => {
             supplierParam={supplierParam}
             productParam={productParam}
             editRoute={`/suppliers/${supplierParam}/products/${productParam}/edit`}
-          />
-          <IconButton
-            aria-label="Menu"
-            bg="none"
-            display={{ base: 'inline-flex', lg: 'none' }}
-            icon={<Icon name="menu" />}
-            onClick={sidebar.onOpen}
-            m={2}
-            size="sm"
-            top={0}
-            right={0}
           />
         </Flex>
         <Grid gridTemplateColumns={{ md: '1fr', lg: '2fr 1fr' }}>
@@ -202,12 +192,12 @@ export const SupplierProductSlugPage = () => {
 
             <Flex pt={5} justifyContent="space-between" alignItems="center">
               <Box>Dijual mulai </Box>
-              <Box>{supplierProduct.createdAt}</Box>
+              <Box>{formatDateTime(supplierProduct.createdAt)}</Box>
             </Flex>
 
             <Flex pt={5} justifyContent="space-between" alignItems="center">
               <Box>Terakhir diubah</Box>
-              <Box>{supplierProduct.updatedAt}</Box>
+              <Box>{formatDateTime(supplierProduct.updatedAt)}</Box>
             </Flex>
           </Box>
         </Grid>
