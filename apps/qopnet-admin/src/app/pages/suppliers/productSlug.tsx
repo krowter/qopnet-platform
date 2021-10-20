@@ -187,7 +187,7 @@ export const SupplierProductSlugPage = () => {
 
             <Flex pt={5} justifyContent="space-between" alignItems="center">
               <Box>Pemilik </Box>
-              <Box>{supplierProduct?.owner?.name}</Box>
+              <Box>{supplierProduct?.supplier?.owner?.name}</Box>
             </Flex>
 
             <Flex pt={5} justifyContent="space-between" alignItems="center">
