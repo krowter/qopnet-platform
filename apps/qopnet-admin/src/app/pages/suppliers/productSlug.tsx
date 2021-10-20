@@ -23,6 +23,8 @@ import {
   IconButton,
   Link as ChakraLink,
   Image as ChakraImage,
+  UnorderedList,
+  ListItem,
 } from '@chakra-ui/react'
 import cuid from 'cuid'
 import { ChevronRightIcon } from '@chakra-ui/icons'
@@ -157,7 +159,20 @@ export const SupplierProductSlugPage = () => {
                     {supplierProduct?.weightUnit}
                   </Text>
                   <Text>Detail Berat: {supplierProduct?.weightDetails}</Text>
-                  <Text>Dimensi: {supplierProduct?.dimension?.width}</Text>
+                  <Text>Dimensi:</Text>
+                  <Box pl={5}>
+                    <UnorderedList>
+                      <ListItem>
+                        Lebar: {supplierProduct?.dimension?.width} cm
+                      </ListItem>
+                      <ListItem>
+                        Tinggi: {supplierProduct?.dimension?.height} cm
+                      </ListItem>
+                      <ListItem>
+                        Panjang: {supplierProduct?.dimension?.length} cm
+                      </ListItem>
+                    </UnorderedList>
+                  </Box>
                   <Text>Stok: {supplierProduct.stock} pcs</Text>
                   <Text>Deskripsi:</Text>
                   <Text>{supplierProduct?.description}</Text>
