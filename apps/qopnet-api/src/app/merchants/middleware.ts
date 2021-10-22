@@ -1,5 +1,5 @@
 import { prisma } from '@qopnet/util-prisma'
-import { Prisma, Merchant, MerchantProduct, Address } from '@prisma/client'
+import { Merchant } from '@prisma/client'
 import slugify from 'slugify'
 
 // Specify merchant fields for Prisma
