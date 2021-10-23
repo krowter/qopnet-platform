@@ -1,6 +1,6 @@
 {
   "name": "qopnet-platform",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "private": true,
   "scripts": {
     "nx": "nx",
@@ -11,8 +11,8 @@
     "serve:admin": "nx serve qopnet-admin --port=4200",
     "serve:commerce": "nx serve qopnet-commerce --port=3000",
     "build": "prisma generate && nx build",
-    "build:api": "prisma generate && nx build qopnet-api",
-    "build:admin": "prisma generate && nx build qopnet-admin",
+    "build:api": "prisma generate && nx build qopnet-api --prod",
+    "build:admin": "prisma generate && nx build qopnet-admin --prod",
     "build:commerce": "prisma generate && nx build qopnet-commerce --prod",
     "start": "npm run start:api",
     "start:api": "node dist/apps/qopnet-api/main --port=4000",
