@@ -44,13 +44,18 @@ export const CartPage = () => {
   const user = useUser()
   const router = useRouter()
 
-  const { data, error } = useSWR('/api/business/orders/my/cart')
+  const isLoggedIn = Boolean(user)
+
+  const { data, error } = useSWR(
+    isLoggedIn ? '/api/business/orders/my/cart' : null
+  )
+
   const { businessOrder } = data || {}
 
   // Try to create my cart if my cart does not exist yet
   // Or when there is an error
   useEffect(() => {
-    if (user) {
+    if (isLoggedIn) {
       const createMyCart = async () => {
         const { businessOrder } = await postToAPI(
           '/api/business/orders/my/cart',
