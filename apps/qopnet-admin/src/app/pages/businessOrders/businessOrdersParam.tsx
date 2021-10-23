@@ -85,14 +85,8 @@ export const BusinessOrdersParamPage = () => {
               separator={<ChevronRightIcon color="gray.500" />}
             >
               <BreadcrumbItem>
-                <BreadcrumbLink as={Link} to="/suppliers">
+                <BreadcrumbLink as={Link} to="/business/orders">
                   Pesanan Bisnis
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-
-              <BreadcrumbItem>
-                <BreadcrumbLink as={Link} to="/suppliers/products">
-                  Daftar Pesanan
                 </BreadcrumbLink>
               </BreadcrumbItem>
 
@@ -248,8 +242,7 @@ export const BusinessOrdersParamPage = () => {
                     businessOrder?.businessOrderItems?.map((item, index) => {
                       return (
                         <>
-                          <Text> No: {index}</Text>
-                          <Text> Id: {item?.id}</Text>
+                          <Text>Nama: {item?.supplierProduct?.name}</Text>
                           <Text> Jumlah: {item?.quantity}</Text>
                           <Text> SupplierId: {item?.supplierId}</Text>
                           <Text>

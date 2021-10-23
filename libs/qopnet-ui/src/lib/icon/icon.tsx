@@ -42,6 +42,7 @@ import {
   FaChevronLeft as ChevronLeft,
   FaPlus as Increment,
   FaMinus as Decrement,
+  FaCheck as CheckMark,
 } from 'react-icons/fa'
 import { FiMenu as Menu } from 'react-icons/fi'
 import { MdFreeBreakfast as Breakfast } from 'react-icons/md'
@@ -165,7 +166,8 @@ export const Icon = (props: IconProps) => {
       return <Increment />
     case 'decrement':
       return <Decrement />
-
+    case 'checkmark':
+      return <CheckMark />
     /**
      * When nothing found
      */

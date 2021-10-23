@@ -48,6 +48,9 @@
     "util-format": {
       "tags": []
     },
+    "util-object": {
+      "tags": []
+    },
     "util-prisma": {
       "tags": []
     },

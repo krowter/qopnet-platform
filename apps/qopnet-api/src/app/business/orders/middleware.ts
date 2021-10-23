@@ -363,6 +363,17 @@ export const patchMyCartItem = async (req, res) => {
           formData,
           businessOrderItem: incrementedBusinessOrderItem,
         })
+      } else if (formData.action === 'CUSTOM_QUANTITY') {
+        const incrementedBusinessOrderItem =
+          await prisma.businessOrderItem.update({
+            where: { id: formData.id },
+            data: { quantity: formData.quantity ?? 1 },
+          })
+        res.status(200).json({
+          message: 'Patch my cart CUSTOM_QUANTITY item success',
+          formData,
+          businessOrderItem: incrementedBusinessOrderItem,
+        })
       } else if (formData.action === 'DECREMENT') {
         const decrementedBusinessOrderItem =
           await prisma.businessOrderItem.update({
@@ -612,12 +623,21 @@ export const processMyOrder = async (req, res) => {
           },
           data: {
             status: 'WAITING_FOR_PAYMENT',
+            totalItems: formData?.totalItems || 0,
+            totalWeight: formData?.totalWeight || 0,
+            totalPrice: formData?.totalPrice || 0,
+            totalShippingCost:
+              formData?.totalShippingCost || formData?.totalShipmentCost || 0,
+            totalShippingDiscount: formData?.totalShippingDiscount || 0,
+            totalPayment:
+              formData?.totalPayment || formData?.totalCalculatedBill || 0,
+            totalBillPayment: amountDue || 0,
             paymentRecord: {
               create: {
                 status: 'PENDING',
-                accountNumber: formData.accountNumber,
-                accountHolderName: formData.accountHolderName,
-                amountDue: amountDue,
+                accountNumber: formData?.accountNumber || '0',
+                accountHolderName: formData?.accountHolderName || 'Anonim',
+                amountDue: amountDue || 0,
                 uniqueDigits: uniqueDigits,
                 amountPaid: 0,
                 proofImages: [],
