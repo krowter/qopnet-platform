@@ -1,6 +1,72 @@
+import { supabase } from '@qopnet/util-supabase'
 import { prisma } from '@qopnet/util-prisma'
 import * as jwt from 'jsonwebtoken'
 
+// Sign up user
+export const signUp = async (req, res) => {
+  try {
+    const { user, error } = await supabase.auth.signUp({
+      email: req.body.email,
+      password: req.body.password,
+    })
+
+    if (error) throw new Error('Sign up error')
+
+    await prisma.user.create({ data: { id: user.id, email: user.email } })
+
+    res.status(200).json({
+      message: 'Sign up success',
+      user,
+    })
+  } catch (error) {
+    res.status(500).json({
+      message: 'Sign up error',
+      error,
+    })
+  }
+}
+
+// Sign in user
+export const signIn = async (req, res) => {
+  try {
+    const { session, error } = await supabase.auth.signIn({
+      email: req.body.email,
+      password: req.body.password,
+    })
+
+    if (error) throw new Error('Sign in error')
+
+    res.status(200).json({
+      message: 'Sign in success',
+      session,
+    })
+  } catch (error) {
+    res.status(500).json({
+      message: 'Sign in error',
+      error,
+    })
+  }
+}
+
+// Sign out user
+export const signOut = async (req, res) => {
+  try {
+    const { error } = await supabase.auth.signOut()
+
+    if (error) throw new Error('Sign out error')
+
+    res.status(200).json({
+      message: 'Sign out success',
+    })
+  } catch (error) {
+    res.status(500).json({
+      message: 'Sign out error',
+      error,
+    })
+  }
+}
+
+// Check user via JWT in header authorization bearer
 export const checkUser = async (req, res, next) => {
   /**
    * Headers
@@ -18,7 +84,6 @@ export const checkUser = async (req, res, next) => {
           message: 'Check user is failed because there is no user in JWT',
         })
       } else {
-        // console.info({ userInJWT })
         try {
           // Get user id, but not checked yet
           req.user = userInJWT // { sub: "a1b2c3-d4e5f6" }
@@ -28,11 +93,12 @@ export const checkUser = async (req, res, next) => {
             where: { id: req.user.sub },
             include: { profile: true },
           })
-          // console.info({ user })
+
           if (!user) throw 'Failed to findFirst user'
 
           // Assign profile once get the user
           req.profile = user.profile
+
           next()
         } catch (error) {
           res.status(400).json({
