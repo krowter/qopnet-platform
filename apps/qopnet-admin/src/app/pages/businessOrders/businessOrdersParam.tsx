@@ -1,54 +1,43 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
+  Badge,
   Box,
-  Button,
-  CloseButton,
-  Flex,
-  HStack,
-  Spinner,
-  Text,
-  VStack,
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
-  Grid,
-  useColorModeValue,
-  Divider,
-  Stack,
-  Drawer,
-  DrawerCloseButton,
-  DrawerContent,
-  DrawerOverlay,
-  useDisclosure,
-  IconButton,
-  Link as RouterLink,
-  Image as ChakraImage,
-  Heading,
+  Button,
   chakra,
-  Badge,
+  Divider,
+  Flex,
+  Heading,
+  Image,
+  Spinner,
+  Stack,
+  Text,
   Wrap,
 } from '@chakra-ui/react'
-import cuid from 'cuid'
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import { Link } from 'react-router-dom'
 import { useParams, useHistory } from 'react-router'
+import cuid from 'cuid'
+
 import {
+  formatAddressComplete,
   formatBusinessOrderStatus,
   formatDateTime,
   formatRupiah,
   formatWeight,
 } from '@qopnet/util-format'
-
 import { DefaultLayout } from '../../layouts'
 import { useSWR } from '../../utils/swr'
-// import { ModifierButtons } from '../../components'
-// import { Icon, formatPrice } from '@qopnet/qopnet-ui'
 
 export const BusinessOrdersParamPage = () => {
-  const sidebar = useDisclosure()
   const { businessOrdersParam }: { businessOrdersParam: string } = useParams()
   const { data, error } = useSWR(`/api/business/orders/${businessOrdersParam}`)
+  // const { data: data2, error: error2 } = useSWR('/api/suppliers/products')
   const { businessOrderParam, businessOrder, message } = data || {}
+
+  const history = useHistory()
 
   return (
     <DefaultLayout>
@@ -81,17 +70,26 @@ export const BusinessOrdersParamPage = () => {
           </Box>
         ) : (
           <Flex direction={{ base: 'column-reverse', lg: 'row' }} fontSize="sm">
-            <VStack
+            <Stack
               id="suppliers-products-all"
               spacing={5}
-              alignItems="flex-start"
               w={{ base: '100%', lg: '60%' }}
               mr={{ lg: 5 }}
             >
               {businessOrder?.businessOrderItems?.length &&
                 businessOrder?.businessOrderItems?.map((item, index) => {
+                  const handleProductDetail = () => {
+                    const supplierName = item?.supplier?.handle
+                    const productSlug = item?.supplierProduct?.slug
+
+                    history.push(
+                      `/suppliers/${supplierName}/products/${productSlug}`
+                    )
+                  }
+
                   return (
                     <Wrap
+                      key={cuid()}
                       id="product-detail"
                       w="full"
                       p={5}
@@ -101,23 +99,29 @@ export const BusinessOrdersParamPage = () => {
                       borderColor="gray.300"
                       borderRadius="lg"
                     >
-                      <ChakraImage
+                      <Image
                         src={item?.supplierProduct?.images[0]}
                         boxSize="70"
-                      ></ChakraImage>
+                        objectFit="cover"
+                      />
 
-                      <VStack align="flex-start">
+                      <Stack>
                         <Text fontWeight="bold">
-                          {item?.supplierProduct?.sku}
+                          SKU: {item?.supplierProduct?.sku}
                         </Text>
                         <Text fontWeight="bold">
                           {item?.supplierProduct?.name}
                         </Text>
-                        {/* <Text>Subtotal</Text> */}
-                      </VStack>
 
-                      <VStack align="flex-end" flex="1">
-                        {/*alignSelf="flex-end" */}{' '}
+                        {item?.supplierProduct?.subname && (
+                          <Text fontSize="xs">
+                            {item?.supplierProduct?.subname}
+                          </Text>
+                        )}
+                      </Stack>
+
+                      <Stack align="flex-end" flex="1">
+                        {/* alignSelf="flex-end"{' '} */}
                         <Text>
                           {item?.quantity} x{' '}
                           {formatRupiah(item?.supplierProduct?.price)}
@@ -127,19 +131,31 @@ export const BusinessOrdersParamPage = () => {
                             item?.quantity * item?.supplierProduct?.price
                           )}
                         </Text>
-                      </VStack>
+                        <Button
+                          bg="orange"
+                          size="xs"
+                          color="white"
+                          onClick={handleProductDetail}
+                          _hover={{
+                            bg: 'none',
+                            border: '1px solid orange',
+                            color: 'orange',
+                          }}
+                        >
+                          Detail Produk
+                        </Button>
+                      </Stack>
                     </Wrap>
                   )
                 })}
-            </VStack>
+            </Stack>
 
-            <VStack
+            <Stack
+              spacing={5}
               position={{ lg: 'sticky' }}
               top="0"
               w={{ base: '100%', lg: '40%' }}
               h="max-content"
-              align="flex-start"
-              spacing={5}
               mb={{ base: 5, lg: 0 }}
               p={5}
               border="1px solid"
@@ -147,11 +163,11 @@ export const BusinessOrdersParamPage = () => {
               borderRadius="lg"
             >
               <Text fontWeight="bold">Informasi Pesanan</Text>
-              <VStack spacing={0} align="flex-start">
+              <Stack spacing={0}>
                 <Text>
                   Pesanan Dibuat:{' '}
                   <chakra.span fontWeight="bold">
-                    {formatDateTime(businessOrder?.createdAt)}
+                    {formatDateTime(businessOrder?.updatedAt)}
                   </chakra.span>
                 </Text>
                 <Text>
@@ -161,18 +177,22 @@ export const BusinessOrdersParamPage = () => {
                   </chakra.span>
                 </Text>
                 <Text>
-                  Dikirim Ke:{' '}
+                  No Telp:{' '}
                   <chakra.span fontWeight="bold">
-                    {businessOrder?.shipmentAddress?.street},{' '}
-                    {businessOrder?.shipmentAddress?.city},{' '}
-                    {businessOrder?.shipmentAddress?.state}, Indonesia
+                    {businessOrder?.owner?.phone}
                   </chakra.span>
                 </Text>
-              </VStack>
+                <Text>
+                  Dikirim Ke:{' '}
+                  <chakra.span fontWeight="bold">
+                    {formatAddressComplete(businessOrder?.shipmentAddress)}
+                  </chakra.span>
+                </Text>
+              </Stack>
 
-              <Divider></Divider>
+              <Divider />
 
-              <VStack align="flex-start" spacing={0}>
+              <Stack spacing={0}>
                 <Text>
                   Total Barang:{' '}
                   <chakra.span fontWeight="bold">
@@ -208,9 +228,9 @@ export const BusinessOrdersParamPage = () => {
                     {formatRupiah(businessOrder?.totalShippingDiscount)}
                   </chakra.span>
                 </Text>
-              </VStack>
+              </Stack>
 
-              <Divider></Divider>
+              <Divider />
 
               <Text fontSize="lg" fontWeight="bold">
                 Total Pembayaran:{' '}
@@ -220,10 +240,16 @@ export const BusinessOrdersParamPage = () => {
                 </chakra.span>
               </Text>
 
-              <Badge colorScheme="red" fontSize="sm" p={2} borderRadius="lg">
+              <Badge
+                w="max-content"
+                p={2}
+                borderRadius="lg"
+                fontSize="sm"
+                colorScheme="red"
+              >
                 {formatBusinessOrderStatus(businessOrder?.status)}
               </Badge>
-            </VStack>
+            </Stack>
           </Flex>
         )}
       </Box>

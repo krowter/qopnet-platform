@@ -1,6 +1,5 @@
 import {
   Box,
-  Flex,
   Heading,
   Spinner,
   Table,
@@ -12,14 +11,16 @@ import {
   Tr,
   useColorModeValue,
 } from '@chakra-ui/react'
-
 import { useHistory } from 'react-router'
 
-// import { Merchant } from '@qopnet/shared-types'
-// import { Header } from '../../components'
 import { DefaultLayout } from '../../layouts'
 import { useSWR } from '../../utils/swr'
-import { formatBusinessOrderStatus, formatRupiah } from '@qopnet/util-format'
+import {
+  formatAddressComplete,
+  formatBusinessOrderStatus,
+  formatRupiah,
+  truncateText,
+} from '@qopnet/util-format'
 
 export const BusinessOrdersPage = () => {
   const { data, error } = useSWR('/api/business/orders')
@@ -58,14 +59,8 @@ export const BusinessOrdersRows = ({
 }) => {
   const bg = useColorModeValue('gray.200', 'gray.900')
   const history = useHistory()
-  const handleRowClick = (businessOrder) => {
-    history.push(`/business/orders/${businessOrder?.id}`)
-  }
-
-  const truncateAddress = (street, city, state) => {
-    return `${street}, ${city}, ${state}, Indonesia`.length > 20
-      ? `${street}, ${city}, ${state}, Indonesia`.slice(0, 20) + '...'
-      : `${street}, ${city}, ${state}, Indonesia`
+  const handleRowClick = (businessOrderId) => {
+    history.push(`/business/orders/${businessOrderId}`)
   }
 
   return (
@@ -79,7 +74,7 @@ export const BusinessOrdersRows = ({
             Status
           </Th>
           <Th fontSize="md" textTransform="none">
-            Nama
+            Pemesan
           </Th>
           <Th fontSize="md" textTransform="none">
             No Telp
@@ -99,30 +94,31 @@ export const BusinessOrdersRows = ({
         {businessOrders?.length &&
           businessOrders.map((businessOrder: any, index: number) => {
             return (
-              <Tr
-                key={index}
-                onClick={() => handleRowClick(businessOrder)}
-                _hover={{
-                  bg: bg,
-                }}
-                cursor="pointer"
-                fontSize="sm"
-              >
-                <Td>{businessOrder?.id}</Td>
-                <Td>{formatBusinessOrderStatus(businessOrder?.status)}</Td>
-                <Td>{businessOrder?.owner?.name}</Td>
-                <Td>{businessOrder?.owner?.phone}</Td>
+              businessOrder?.status !== 'DRAFT' && (
+                <Tr
+                  key={index}
+                  onClick={() => handleRowClick(businessOrder?.id)}
+                  _hover={{
+                    bg: bg,
+                  }}
+                  cursor="pointer"
+                  fontSize="sm"
+                >
+                  <Td>{truncateText(businessOrder?.id, 8)}</Td>
+                  <Td>{formatBusinessOrderStatus(businessOrder?.status)}</Td>
+                  <Td>{businessOrder?.owner?.name}</Td>
+                  <Td>{businessOrder?.owner?.phone}</Td>
 
-                <Td>
-                  {truncateAddress(
-                    businessOrder?.shipmentAddress?.street,
-                    businessOrder?.shipmentAddress?.city,
-                    businessOrder?.shipmentAddress?.state
-                  )}
-                </Td>
-                <Td>{businessOrder?.paymentMethod?.name}</Td>
-                <Td>{formatRupiah(businessOrder?.totalBillPayment)}</Td>
-              </Tr>
+                  <Td>
+                    {truncateText(
+                      formatAddressComplete(businessOrder?.shipmentAddress),
+                      30
+                    )}
+                  </Td>
+                  <Td>{businessOrder?.paymentMethod?.name}</Td>
+                  <Td>{formatRupiah(businessOrder?.totalBillPayment)}</Td>
+                </Tr>
+              )
             )
           })}
       </Tbody>

@@ -18,6 +18,12 @@ export const formatDateTime = (text: string | Date) => {
   return dayjs(text).format('D MMMM YYYY, HH:mm')
 }
 
+// Truncate text if length > maximum allowed characters
+
+export const truncateText = (text: string, maxChar: number): string => {
+  return text.length > maxChar ? text.slice(0, maxChar) + '...' : text
+}
+
 /**
  * To handle different case of image URL format
  * 1. https://domain.com/path/to/image.jpg
