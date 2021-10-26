@@ -34,7 +34,12 @@ export const BusinessOrdersPage = () => {
         </Heading>
 
         <Text fontWeight={500}>
-          Total {businessOrders?.length ?? 0} pesanan
+          {
+            businessOrders?.filter(
+              (businessOrder) => businessOrder?.status !== 'DRAFT'
+            ).length
+          }{' '}
+          pesanan
         </Text>
       </Box>
       {error && (
@@ -77,6 +82,9 @@ export const BusinessOrdersRows = ({
             Pemesan
           </Th>
           <Th fontSize="md" textTransform="none">
+            Email
+          </Th>
+          <Th fontSize="md" textTransform="none">
             No Telp
           </Th>
           <Th fontSize="md" textTransform="none">
@@ -107,6 +115,7 @@ export const BusinessOrdersRows = ({
                   <Td>{truncateText(businessOrder?.id, 8)}</Td>
                   <Td>{formatBusinessOrderStatus(businessOrder?.status)}</Td>
                   <Td>{businessOrder?.owner?.name}</Td>
+                  <Td>{businessOrder?.owner?.email}</Td>
                   <Td>{businessOrder?.owner?.phone}</Td>
 
                   <Td>

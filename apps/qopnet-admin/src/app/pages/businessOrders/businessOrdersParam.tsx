@@ -177,6 +177,12 @@ export const BusinessOrdersParamPage = () => {
                   </chakra.span>
                 </Text>
                 <Text>
+                  Email:{' '}
+                  <chakra.span fontWeight="bold">
+                    {businessOrder?.owner?.email}
+                  </chakra.span>
+                </Text>
+                <Text>
                   No Telp:{' '}
                   <chakra.span fontWeight="bold">
                     {businessOrder?.owner?.phone}
