@@ -1,6 +1,7 @@
 import * as express from 'express'
 
 import { paginate } from '../../root/middleware'
+import { checkUser } from '../../auth/middleware'
 
 import {
   getSupplierProducts,
@@ -22,6 +23,6 @@ router.get('/special', paginate, getSpecialSupplierProducts)
 router.get('/:supplierProductParam', getSupplierProductBySupplierProductParam)
 
 // PUT /api/suppliers/products/:supplierProductId
-router.put('/:supplierProductId', updateSupplierProduct)
+router.put('/:supplierProductId', checkUser, updateSupplierProduct)
 
 export default router
