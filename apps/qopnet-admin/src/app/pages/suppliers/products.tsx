@@ -1,7 +1,8 @@
 import { useState } from 'react'
+import { SupplierProduct } from '@prisma/client'
+import { Link } from 'react-router-dom'
 import {
   Box,
-  Button,
   Flex,
   Heading,
   SimpleGrid,
@@ -9,22 +10,18 @@ import {
   Text,
   useColorModeValue,
 } from '@chakra-ui/react'
-import { Link } from 'react-router-dom'
+
 import { DefaultLayout } from '../../layouts'
 import { useSWR } from '../../utils/swr'
 import { Header } from '../../components'
 
 import { SearchBox, formatPrice } from '@qopnet/qopnet-ui'
 
-export interface DataItem {
-  name: string
-}
-
 export const SuppliersProductsPage = () => {
   const { data, error } = useSWR('/api/suppliers/products')
   const { supplierProducts } = data || {}
   const [filteredSupplierProducts, setFilteredSupplierProducts] = useState<
-    DataItem[] | undefined
+    SupplierProduct[] | undefined
   >(undefined)
 
   return (
