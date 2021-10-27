@@ -79,7 +79,7 @@ export const SupplierProductSlugPage = () => {
           </BreadcrumbItem>
         </Breadcrumb>
 
-        <Flex direction={{ base: 'column-reverse', lg: 'row' }} fontSize="sm">
+        <Flex direction={{ base: 'column', lg: 'row' }} fontSize="sm">
           {error ? (
             <Box px={5} py={3}>
               {message ? message : 'Gagal memuat produk supplier'}
@@ -101,6 +101,7 @@ export const SupplierProductSlugPage = () => {
                 borderColor="gray.300"
                 borderRadius="lg"
                 id="product-detail"
+                mb={{ base: 5, lg: 0 }}
               >
                 {supplierProduct?.images?.length && (
                   <HStack w="full" justify="center">
@@ -257,7 +258,6 @@ export const SupplierProductSlugPage = () => {
             h="max-content"
             align="flex-start"
             spacing={5}
-            mb={{ base: 5, lg: 0 }}
             p={5}
             border="1px solid"
             borderColor="gray.300"
