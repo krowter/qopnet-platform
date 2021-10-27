@@ -15,6 +15,8 @@ import {
   ListItem,
   Heading,
   Wrap,
+  Stack,
+  useMediaQuery,
 } from '@chakra-ui/react'
 import cuid from 'cuid'
 import { ChevronRightIcon } from '@chakra-ui/icons'
@@ -41,6 +43,8 @@ export const SupplierProductSlugPage = () => {
   const discountValue =
     (Number(supplierProduct?.price) * Number(supplierProduct?.discount)) / 100
   const discountedPrice = Number(supplierProduct?.price) - discountValue
+
+  const [isDesktop] = useMediaQuery('(min-width: 60em)')
 
   return (
     <DefaultLayout>
@@ -85,11 +89,14 @@ export const SupplierProductSlugPage = () => {
               <Spinner color="orange.500" />
             </Box>
           ) : (
-            <VStack id="suppliers-products-all" alignItems="flex-start">
+            <VStack
+              id="suppliers-products-all"
+              alignItems="flex-start"
+              w={{ base: '100%', lg: '60%' }}
+              mr={{ lg: 5 }}
+            >
               <Wrap
-                w="50vw"
                 p={5}
-                align="center"
                 border="1px solid"
                 borderColor="gray.300"
                 borderRadius="lg"
@@ -128,9 +135,13 @@ export const SupplierProductSlugPage = () => {
                 <VStack w="full" align="flex-start">
                   <Text fontWeight="bold">Informasi Produk</Text>
                 </VStack>
-                <HStack w="full">
-                  <Box pr={5} flex={0.5}>
-                    <Flex justifyContent="space-between" flex={1}>
+                <Stack w="full" direction={isDesktop ? 'row' : 'column'}>
+                  <Box
+                    w={{ base: '100%', lg: '50%' }}
+                    alignItems="stretch"
+                    mr={5}
+                  >
+                    <Flex justifyContent="space-between">
                       <Box>Kode SKU</Box>
                       <Box>
                         <Text fontWeight="bold">{supplierProduct?.sku}</Text>
@@ -186,8 +197,7 @@ export const SupplierProductSlugPage = () => {
                         </Flex>
                       )}
                   </Box>
-
-                  <Box flex={0.5}>
+                  <Box w={{ base: '100%', lg: '50%' }} alignItems="stretch">
                     <Flex justifyContent="space-between">
                       <Box>Subnama</Box>
                       <Box>
@@ -230,8 +240,7 @@ export const SupplierProductSlugPage = () => {
                       </Box>
                     </Flex>
                   </Box>
-                </HStack>
-
+                </Stack>
                 <HStack w="full">
                   <Box>
                     <Text fontWeight="bold">Deskripsi Barang:</Text>
@@ -253,7 +262,6 @@ export const SupplierProductSlugPage = () => {
             border="1px solid"
             borderColor="gray.300"
             borderRadius="lg"
-            ml={5}
           >
             <Text fontWeight="bold">Informasi Toko</Text>
             <Flex pt={5} justifyContent="space-between" alignItems="center">
