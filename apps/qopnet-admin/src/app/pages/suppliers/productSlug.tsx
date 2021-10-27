@@ -253,7 +253,7 @@ export const SupplierProductSlugPage = () => {
             border="1px solid"
             borderColor="gray.300"
             borderRadius="lg"
-            ml={10}
+            ml={5}
           >
             <Text fontWeight="bold">Informasi Toko</Text>
             <Flex pt={5} justifyContent="space-between" alignItems="center">
