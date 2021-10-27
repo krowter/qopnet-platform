@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import {
   Box,
   Button,
@@ -18,6 +19,7 @@ import { SearchBox, formatPrice } from '@qopnet/qopnet-ui'
 export const SuppliersProductsPage = () => {
   const { data, error } = useSWR('/api/suppliers/products')
   const { supplierProducts } = data || {}
+  const [filteredSupplierProducts, setFilteredSupplierProducts] = useState([])
 
   return (
     <DefaultLayout>
@@ -33,6 +35,9 @@ export const SuppliersProductsPage = () => {
             <SearchBox
               placeholder="Cari produk supplier"
               dataToFilter={supplierProducts}
+              setFilteredData={() => {
+                console.log()
+              }}
             />
           </Flex>
         </Flex>
@@ -48,8 +53,11 @@ export const SuppliersProductsPage = () => {
           <Spinner color="orange.500" />
         </Box>
       )}
-      {supplierProducts && (
+      {supplierProducts && !filteredSupplierProducts && (
         <SupplierProductsGrid supplierProducts={supplierProducts} />
+      )}
+      {supplierProducts && filteredSupplierProducts && (
+        <SupplierProductsGrid supplierProducts={filteredSupplierProducts} />
       )}
     </DefaultLayout>
   )

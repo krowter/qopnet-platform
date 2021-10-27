@@ -10,6 +10,7 @@ export type DataItem = {
 export interface SearchBoxProps {
   placeholder: string
   dataToFilter: DataItem[]
+  setFilteredData?: () => void
 }
 
 export interface SearchKeywordParams {
@@ -39,6 +40,9 @@ export function SearchBox(props: SearchBoxProps) {
     const filteredData = params.dataToFilter.filter((item, index) => {
       return item.name.toLowerCase().includes(params.keyword.toLowerCase())
     })
+    console.log({ filteredData })
+
+    // props.setFilteredData(filteredData)
   }
 
   return (
