@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Box,
-  Button,
-  CloseButton,
   Flex,
   HStack,
   Spinner,
@@ -11,32 +9,23 @@ import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
-  Grid,
-  useColorModeValue,
-  Divider,
-  Stack,
-  Drawer,
-  DrawerCloseButton,
-  DrawerContent,
-  DrawerOverlay,
-  useDisclosure,
-  IconButton,
   Link as ChakraLink,
   Image as ChakraImage,
   UnorderedList,
   ListItem,
+  Heading,
+  Wrap,
 } from '@chakra-ui/react'
 import cuid from 'cuid'
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import { Link } from 'react-router-dom'
 import { useParams, useHistory } from 'react-router'
 
-import { Icon, formatPrice } from '@qopnet/qopnet-ui'
+import { formatPrice } from '@qopnet/qopnet-ui'
 import { formatDateTime } from '@qopnet/util-format'
 
 import { DefaultLayout } from '../../layouts'
 import { useSWR } from '../../utils/swr'
-import { ModifierButtons } from '../../components'
 
 export const SupplierProductSlugPage = () => {
   const {
@@ -48,173 +37,260 @@ export const SupplierProductSlugPage = () => {
     `/api/suppliers/products/${productParam}`
   )
 
+  // Calculate if there is a discount
+  const discountValue =
+    (Number(supplierProduct?.price) * Number(supplierProduct?.discount)) / 100
+  const discountedPrice = Number(supplierProduct?.price) - discountValue
+
   return (
     <DefaultLayout>
-      <Box
-        m={2}
-        rounded={10}
-        minHeight="98vh"
-        border="1px solid gray"
-        borderColor={useColorModeValue('gray.300', 'gray.600')}
-      >
-        <Flex
-          p={3}
-          alignItems="center"
-          borderBottom="1px solid gray"
-          borderColor={useColorModeValue('gray.100', 'gray.700')}
+      <Box px={7} py={7}>
+        <Heading>Semua Supplier</Heading>
+        <Breadcrumb
+          mb={10}
+          spacing={2}
+          separator={<ChevronRightIcon color="gray.500" />}
+          mt={2}
         >
-          <CloseButton as={Link} to="/suppliers/products" />
-          <Text ml={3} fontWeight={700}>
-            {productParam}
-          </Text>
-          <ModifierButtons
-            supplierParam={supplierParam}
-            productParam={productParam}
-            editRoute={`/suppliers/${supplierParam}/products/${productParam}/edit`}
-          />
-        </Flex>
-        <Grid gridTemplateColumns={{ md: '1fr', lg: '2fr 1fr' }}>
-          <Box mr={14}>
-            <Breadcrumb
-              mt={5}
-              ml={14}
-              spacing="8px"
-              separator={<ChevronRightIcon color="gray.500" />}
-            >
-              <BreadcrumbItem>
-                <BreadcrumbLink as={Link} to="/suppliers">
-                  Supplier
-                </BreadcrumbLink>
-              </BreadcrumbItem>
+          <BreadcrumbItem>
+            <BreadcrumbLink as={Link} to="/suppliers">
+              Supplier
+            </BreadcrumbLink>
+          </BreadcrumbItem>
 
-              <BreadcrumbItem>
-                <BreadcrumbLink as={Link} to={`/suppliers/${supplierParam}`}>
-                  {supplierProduct?.supplier?.handle}
-                </BreadcrumbLink>
-              </BreadcrumbItem>
+          <BreadcrumbItem>
+            <BreadcrumbLink as={Link} to={`/suppliers/${supplierParam}`}>
+              {supplierProduct?.supplier?.handle}
+            </BreadcrumbLink>
+          </BreadcrumbItem>
 
-              <BreadcrumbItem>
-                <BreadcrumbLink as={Link} to="/suppliers/products">
-                  Semua Produk
-                </BreadcrumbLink>
-              </BreadcrumbItem>
+          <BreadcrumbItem>
+            <BreadcrumbLink as={Link} to="/suppliers/products">
+              Semua Produk
+            </BreadcrumbLink>
+          </BreadcrumbItem>
 
-              <BreadcrumbItem isCurrentPage>
-                <BreadcrumbLink>{productParam}</BreadcrumbLink>
-              </BreadcrumbItem>
-            </Breadcrumb>
+          <BreadcrumbItem isCurrentPage>
+            <BreadcrumbLink>{productParam}</BreadcrumbLink>
+          </BreadcrumbItem>
+        </Breadcrumb>
 
-            {error ? (
-              <Box px={5} py={3}>
-                {message ? message : 'Gagal memuat produk supplier'}
-              </Box>
-            ) : supplierProduct.length === 0 ? (
-              <Box px={5} py={3}>
-                <Spinner color="orange.500" />
-              </Box>
-            ) : (
-              <VStack
-                id="suppliers-products-all"
-                mt={5}
-                pl={14}
-                spacing={5}
-                alignItems="flex-start"
-              >
-                <Stack id="product-detail">
-                  {supplierProduct?.images?.length && (
-                    <Flex>
-                      {supplierProduct.images.map(
-                        (uploadedImageUrl: string, index: number) => {
-                          return (
-                            <Box
-                              key={cuid()}
-                              border="1px solid gray"
-                              rounded="base"
-                              mr={5}
-                            >
-                              <ChakraLink
-                                isExternal
-                                href={uploadedImageUrl}
-                                passHref
-                                display="block"
-                              >
-                                <ChakraImage
-                                  src={uploadedImageUrl}
-                                  alt={`Uploaded image ${index + 1}`}
-                                  width={150}
-                                  height={150}
-                                />
-                              </ChakraLink>
-                            </Box>
-                          )
-                        }
-                      )}
-                    </Flex>
-                  )}
-                  <Text>Kode SKU: {supplierProduct?.sku}</Text>
-                  <Text>Harga: {formatPrice(supplierProduct?.price)}</Text>
-                  <Text>Minimum Order: {supplierProduct?.minOrder ?? '-'}</Text>
-                  <Text>
-                    Berat: {supplierProduct?.weight ?? '-'}
-                    {supplierProduct?.weightUnit}
-                  </Text>
-                  <Text>Detail Berat: {supplierProduct?.weightDetails}</Text>
-                  <Text>Dimensi:</Text>
-                  <Box pl={5}>
-                    <UnorderedList>
-                      <ListItem>
-                        Lebar: {supplierProduct?.dimension?.width ?? '-'} cm
-                      </ListItem>
-                      <ListItem>
-                        Tinggi: {supplierProduct?.dimension?.height ?? '-'} cm
-                      </ListItem>
-                      <ListItem>
-                        Panjang: {supplierProduct?.dimension?.length ?? '-'} cm
-                      </ListItem>
-                    </UnorderedList>
-                  </Box>
-                  <Text>Stok: {supplierProduct.stock} pcs</Text>
-                  <Text>Deskripsi:</Text>
-                  <Text>{supplierProduct?.description}</Text>
-                </Stack>
-              </VStack>
-            )}
-          </Box>
-          <Box
-            minWidth={{ md: '300px' }}
-            pl={5}
-            pr={5}
-            pt={5}
-            borderLeft=" 1px solid gray"
-            display={{ base: 'none', lg: 'unset' }}
-          >
-            <Box pb={3} justifyContent="center">
-              {supplierProduct?.id}
+        <Flex direction={{ base: 'column-reverse', lg: 'row' }} fontSize="sm">
+          {error ? (
+            <Box px={5} py={3}>
+              {message ? message : 'Gagal memuat produk supplier'}
             </Box>
+          ) : supplierProduct.length === 0 ? (
+            <Box px={5} py={3}>
+              <Spinner color="orange.500" />
+            </Box>
+          ) : (
+            <VStack id="suppliers-products-all" alignItems="flex-start">
+              <Wrap
+                w="50vw"
+                p={5}
+                align="center"
+                border="1px solid"
+                borderColor="gray.300"
+                borderRadius="lg"
+                id="product-detail"
+              >
+                {supplierProduct?.images?.length && (
+                  <HStack w="full" justify="center">
+                    {supplierProduct.images.map(
+                      (uploadedImageUrl: string, index: number) => {
+                        return (
+                          <Box
+                            key={cuid()}
+                            border="1px solid gray"
+                            rounded="base"
+                          >
+                            <ChakraLink
+                              isExternal
+                              href={uploadedImageUrl}
+                              passHref
+                              display="block"
+                            >
+                              <ChakraImage
+                                src={uploadedImageUrl}
+                                alt={`Uploaded image ${index + 1}`}
+                                width={150}
+                                height={150}
+                                objectFit="cover"
+                              />
+                            </ChakraLink>
+                          </Box>
+                        )
+                      }
+                    )}
+                  </HStack>
+                )}
+                <VStack w="full" align="flex-start">
+                  <Text fontWeight="bold">Informasi Produk</Text>
+                </VStack>
+                <HStack w="full">
+                  <Box pr={5} flex={0.5}>
+                    <Flex justifyContent="space-between" flex={1}>
+                      <Box>Kode SKU</Box>
+                      <Box>
+                        <Text fontWeight="bold">{supplierProduct?.sku}</Text>
+                      </Box>
+                    </Flex>
 
-            <Divider />
+                    <Flex justifyContent="space-between">
+                      <Box>Minimum Order</Box>
+                      <Box>
+                        <Text fontWeight="bold">
+                          {supplierProduct?.minOrder ?? '-'}
+                        </Text>
+                      </Box>
+                    </Flex>
 
+                    <Flex justifyContent="space-between">
+                      <Box>Stok</Box>
+                      <Box>
+                        <Text fontWeight="bold">
+                          {supplierProduct.stock} pcs
+                        </Text>
+                      </Box>
+                    </Flex>
+
+                    <Flex justifyContent="space-between">
+                      <Box>Harga</Box>
+                      <Box>
+                        <Text fontWeight="bold">
+                          {formatPrice(supplierProduct?.price)}
+                        </Text>
+                      </Box>
+                    </Flex>
+
+                    <Flex justifyContent="space-between">
+                      <Box>Diskon</Box>
+                      <Box>
+                        <Text fontWeight="bold">
+                          {supplierProduct?.discount ?? 0} %
+                        </Text>
+                      </Box>
+                    </Flex>
+
+                    {supplierProduct?.discount &&
+                      supplierProduct?.price &&
+                      discountedPrice && (
+                        <Flex justifyContent="space-between">
+                          <Box>Harga setelah diskon</Box>
+                          <Box>
+                            <Text fontWeight="bold">
+                              {formatPrice(discountedPrice)}
+                            </Text>
+                          </Box>
+                        </Flex>
+                      )}
+                  </Box>
+
+                  <Box flex={0.5}>
+                    <Flex justifyContent="space-between">
+                      <Box>Subnama</Box>
+                      <Box>
+                        <Text fontWeight="bold">
+                          {supplierProduct?.subname ?? '-'}
+                        </Text>
+                      </Box>
+                    </Flex>
+                    <Flex justifyContent="space-between">
+                      <Box>Berat</Box>
+                      <Box>
+                        <Text fontWeight="bold">
+                          {supplierProduct?.weight ?? '-'} kg
+                        </Text>
+                      </Box>
+                    </Flex>
+
+                    <Flex justifyContent="space-between">
+                      <Box>Dimensi</Box>
+                    </Flex>
+
+                    <Flex justifyContent="space-between">
+                      <Box pl={5}>
+                        <UnorderedList>
+                          <ListItem>Lebar:</ListItem>
+                          <ListItem>Tinggi:</ListItem>
+                          <ListItem>Panjang:</ListItem>
+                        </UnorderedList>
+                      </Box>
+                      <Box>
+                        <Text fontWeight="bold">
+                          {supplierProduct?.dimension?.width ?? '-'} cm
+                        </Text>
+                        <Text fontWeight="bold">
+                          {supplierProduct?.dimension?.height ?? '-'} cm
+                        </Text>
+                        <Text fontWeight="bold">
+                          {supplierProduct?.dimension?.length ?? '-'} cm
+                        </Text>
+                      </Box>
+                    </Flex>
+                  </Box>
+                </HStack>
+
+                <HStack w="full">
+                  <Box>
+                    <Text fontWeight="bold">Deskripsi Barang:</Text>
+                    <Text>{supplierProduct?.description ?? '-'}</Text>
+                  </Box>
+                </HStack>
+              </Wrap>
+            </VStack>
+          )}
+          <Box
+            position={{ lg: 'sticky' }}
+            top="0"
+            w={{ base: '100%', lg: '40%' }}
+            h="max-content"
+            align="flex-start"
+            spacing={5}
+            mb={{ base: 5, lg: 0 }}
+            p={5}
+            border="1px solid"
+            borderColor="gray.300"
+            borderRadius="lg"
+            ml={10}
+          >
+            <Text fontWeight="bold">Informasi Toko</Text>
             <Flex pt={5} justifyContent="space-between" alignItems="center">
               <Box>Toko Supplier </Box>
-              <Box>{supplierProduct?.supplier?.name}</Box>
+              <Box>
+                <Text fontWeight="bold">{supplierProduct?.supplier?.name}</Text>
+              </Box>
             </Flex>
 
             <Flex pt={5} justifyContent="space-between" alignItems="center">
               <Box>Pemilik </Box>
-              <Box>{supplierProduct?.supplier?.owner?.name}</Box>
+              <Box>
+                <Text fontWeight="bold">
+                  {supplierProduct?.supplier?.owner?.name}
+                </Text>
+              </Box>
             </Flex>
 
             <Flex pt={5} justifyContent="space-between" alignItems="center">
               <Box>Dijual mulai </Box>
-              <Box>{formatDateTime(supplierProduct.createdAt)}</Box>
+              <Box>
+                <Text fontWeight="bold">
+                  {formatDateTime(supplierProduct.createdAt)}
+                </Text>
+              </Box>
             </Flex>
 
             <Flex pt={5} justifyContent="space-between" alignItems="center">
               <Box>Terakhir diubah</Box>
-              <Box>{formatDateTime(supplierProduct.updatedAt)}</Box>
+              <Box>
+                <Text fontWeight="bold">
+                  {formatDateTime(supplierProduct.updatedAt)}
+                </Text>
+              </Box>
             </Flex>
           </Box>
-        </Grid>
+        </Flex>
       </Box>
     </DefaultLayout>
   )
