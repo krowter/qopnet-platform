@@ -1,17 +1,25 @@
-import styled from '@emotion/styled'
+import { chakra, InputGroup, Input, InputLeftElement } from '@chakra-ui/react'
 
-/* eslint-disable-next-line */
-export interface SearchBoxProps {}
+import { Icon } from '@qopnet/qopnet-ui'
 
-const StyledSearchBox = styled.div`
-  color: black;
-`
+export interface SearchBoxProps {
+  placeholder: string
+}
 
 export function SearchBox(props: SearchBoxProps) {
+  const handleSearch = () => {
+    console.log('Searching {keyword}')
+  }
+
   return (
-    <StyledSearchBox>
-      <h1>Search Box</h1>
-    </StyledSearchBox>
+    <chakra.form onSubmit={handleSearch} width="100%" maxWidth="500px">
+      <InputGroup size="sm" maxWidth="500px">
+        <InputLeftElement>
+          <Icon name="search" />
+        </InputLeftElement>
+        <Input type="text" placeholder={props.placeholder} />
+      </InputGroup>
+    </chakra.form>
   )
 }
 

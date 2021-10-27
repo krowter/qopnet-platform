@@ -23,15 +23,15 @@ export const SuppliersProductsPage = () => {
     <DefaultLayout>
       <Header>
         <Flex alignItems="center" justifyContent="space-between" width="100%">
-          <Box>
+          <Box width="100%">
             <Heading as="h1" size="md">
               Semua Produk Supplier {supplierProducts?.name ?? ''}
             </Heading>
             <Text>{supplierProducts?.length} produk</Text>
           </Box>
-          <Box>
-            <SearchBox />
-          </Box>
+          <Flex width="100%" justifyContent="flex-end">
+            <SearchBox placeholder="Cari produk supplier" />
+          </Flex>
         </Flex>
       </Header>
 
