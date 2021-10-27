@@ -14,7 +14,7 @@ export interface SearchBoxProps {
 
 export interface SearchKeywordParams {
   dataToFilter: DataItem[]
-  keyword: string | undefined
+  keyword: string
 }
 
 export function SearchBox(props: SearchBoxProps) {
@@ -25,18 +25,20 @@ export function SearchBox(props: SearchBoxProps) {
   } = useForm()
 
   // For React Hook Form handleSubmit
-  const handleSearch = (data: { keyword?: string | undefined }) => {
-    searchDataByKeyword({
+  const handleSearch = (data: { keyword: string }) => {
+    const formData = {
       dataToFilter: props?.dataToFilter,
       keyword: data?.keyword,
-    })
+    }
+    searchDataByKeyword(formData)
   }
 
   // For now it's only a filter on the frontend
   // Later on it can be improved to be a request to the backend
   const searchDataByKeyword = (params: SearchKeywordParams) => {
-    console.log({ params })
-    // return foundData
+    const filteredData = params.dataToFilter.filter((item, index) => {
+      return item.name.toLowerCase().includes(params.keyword.toLowerCase())
+    })
   }
 
   return (
