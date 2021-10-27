@@ -11,8 +11,9 @@ import {
 import { Link } from 'react-router-dom'
 import { DefaultLayout } from '../../layouts'
 import { useSWR } from '../../utils/swr'
-import { formatPrice } from '@qopnet/qopnet-ui'
 import { Header } from '../../components'
+
+import { SearchBox, formatPrice } from '@qopnet/qopnet-ui'
 
 export const SuppliersProductsPage = () => {
   const { data, error } = useSWR('/api/suppliers/products')
@@ -20,25 +21,20 @@ export const SuppliersProductsPage = () => {
 
   return (
     <DefaultLayout>
-      <Flex alignItems="center">
-        <Header width="100%">
-          <Heading as="h1" size="md">
-            Semua Produk Supplier {supplierProducts?.name ?? ''}
-          </Heading>
-          <Text>{supplierProducts?.length} produk</Text>
-          <div style={{ marginLeft: 'auto' }}>
-            <Button
-              as={Link}
-              variant="outline"
-              size="xs"
-              colorScheme="orange.900"
-              to={`/suppliers/products/add`}
-            >
-              Tambah Produk
-            </Button>
-          </div>
-        </Header>
-      </Flex>
+      <Header>
+        <Flex alignItems="center" justifyContent="space-between" width="100%">
+          <Box>
+            <Heading as="h1" size="md">
+              Semua Produk Supplier {supplierProducts?.name ?? ''}
+            </Heading>
+            <Text>{supplierProducts?.length} produk</Text>
+          </Box>
+          <Box>
+            <SearchBox />
+          </Box>
+        </Flex>
+      </Header>
+
       {error && (
         <Box px={5} py={3}>
           Gagal memuat produk supplier
