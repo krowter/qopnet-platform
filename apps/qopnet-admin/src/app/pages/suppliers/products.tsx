@@ -30,7 +30,10 @@ export const SuppliersProductsPage = () => {
             <Text>{supplierProducts?.length} produk</Text>
           </Box>
           <Flex width="100%" justifyContent="flex-end">
-            <SearchBox placeholder="Cari produk supplier" />
+            <SearchBox
+              placeholder="Cari produk supplier"
+              dataToFilter={supplierProducts}
+            />
           </Flex>
         </Flex>
       </Header>
