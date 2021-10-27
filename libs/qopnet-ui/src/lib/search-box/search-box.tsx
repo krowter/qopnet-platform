@@ -3,14 +3,19 @@ import { useForm } from 'react-hook-form'
 
 import { Icon } from '@qopnet/qopnet-ui'
 
-export type DataItem = {
+type Dispatcher<S> = React.Dispatch<React.SetStateAction<S>>
+
+export interface DataItem {
   name: string
 }
 
 export interface SearchBoxProps {
   placeholder: string
   dataToFilter: DataItem[]
-  setFilteredData?: () => void
+
+  setFilteredData: any
+  // setFilteredData?: Dispatcher<DataItem[]>
+  // https://newbedev.com/passing-usestate-as-props-in-typescript
 }
 
 export interface SearchKeywordParams {
@@ -40,9 +45,7 @@ export function SearchBox(props: SearchBoxProps) {
     const filteredData = params.dataToFilter.filter((item, index) => {
       return item.name.toLowerCase().includes(params.keyword.toLowerCase())
     })
-    console.log({ filteredData })
-
-    // props.setFilteredData(filteredData)
+    props.setFilteredData(filteredData)
   }
 
   return (

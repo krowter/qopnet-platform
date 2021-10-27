@@ -16,10 +16,16 @@ import { Header } from '../../components'
 
 import { SearchBox, formatPrice } from '@qopnet/qopnet-ui'
 
+export interface DataItem {
+  name: string
+}
+
 export const SuppliersProductsPage = () => {
   const { data, error } = useSWR('/api/suppliers/products')
   const { supplierProducts } = data || {}
-  const [filteredSupplierProducts, setFilteredSupplierProducts] = useState([])
+  const [filteredSupplierProducts, setFilteredSupplierProducts] = useState<
+    DataItem[]
+  >([])
 
   return (
     <DefaultLayout>
@@ -35,9 +41,7 @@ export const SuppliersProductsPage = () => {
             <SearchBox
               placeholder="Cari produk supplier"
               dataToFilter={supplierProducts}
-              setFilteredData={() => {
-                console.log()
-              }}
+              setFilteredData={setFilteredSupplierProducts}
             />
           </Flex>
         </Flex>
