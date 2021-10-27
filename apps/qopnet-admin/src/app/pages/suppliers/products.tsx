@@ -24,8 +24,8 @@ export const SuppliersProductsPage = () => {
   const { data, error } = useSWR('/api/suppliers/products')
   const { supplierProducts } = data || {}
   const [filteredSupplierProducts, setFilteredSupplierProducts] = useState<
-    DataItem[]
-  >([])
+    DataItem[] | undefined
+  >(undefined)
 
   return (
     <DefaultLayout>
