@@ -835,6 +835,41 @@ export const patchOneBusinessOrderStatus = async (req, res) => {
   }
 }
 
+// Patch one business order status to PAID by businessOrderParam (id)
+export const patchOneBusinessOrderStatusToPaid = async (req, res) => {
+  const { businessOrderParam } = req.params
+  const isBusinessOrderExist = req.isBusinessOrderExist
+  const businessOrder = req.businessOrder
+
+  if (isBusinessOrderExist) {
+    const updatedCart = await prisma.businessOrder.update({
+      where: { id: businessOrderParam },
+      include: { businessOrderItems: true },
+      data: { status: 'PAID' },
+    })
+
+    const updatedPaymentRecord = await prisma.paymentRecord.update({
+      where: { id: businessOrder.paymentRecordId },
+      data: { status: 'PAID' },
+    })
+
+    res.status(200).json({
+      message: 'Patch one business order status to PAID success',
+      businessOrderParam,
+      isBusinessOrderExist,
+      businessOrder: updatedCart,
+      paymentRecord: updatedPaymentRecord,
+    })
+  } else {
+    res.status(404).json({
+      message:
+        'Patch one business order status to PAID failed, because it is not found',
+      businessOrderParam,
+      isBusinessOrderExist,
+    })
+  }
+}
+
 // Delete all business orders
 export const deleteAllBusinessOrders = async (req, res) => {
   try {
