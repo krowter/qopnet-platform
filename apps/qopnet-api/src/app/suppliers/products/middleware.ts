@@ -157,6 +157,10 @@ export const updateSupplierProduct = async (req, res) => {
         await prisma.supplierProduct.update({
           where: { id: supplierProductId },
           data: newSupplierProduct,
+          include: {
+            supplier: { include: { owner: true } },
+            owner: true,
+          },
         })
 
       res.status(200).json({
