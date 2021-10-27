@@ -10,6 +10,7 @@ import {
   Thead,
   Tr,
   useColorModeValue,
+  Badge,
 } from '@chakra-ui/react'
 import { useHistory } from 'react-router'
 
@@ -101,6 +102,9 @@ export const BusinessOrdersRows = ({
       <Tbody>
         {businessOrders?.length &&
           businessOrders.map((businessOrder: any, index: number) => {
+            const [businessOrderStatus, statusColor] =
+              formatBusinessOrderStatus(businessOrder?.status)
+
             return (
               businessOrder?.status !== 'DRAFT' && (
                 <Tr
@@ -113,7 +117,11 @@ export const BusinessOrdersRows = ({
                   fontSize="sm"
                 >
                   <Td>{truncateText(businessOrder?.id, 8)}</Td>
-                  <Td>{formatBusinessOrderStatus(businessOrder?.status)}</Td>
+                  <Td>
+                    <Badge fontSize="xs" colorScheme={statusColor}>
+                      {businessOrderStatus}
+                    </Badge>
+                  </Td>
                   <Td>{businessOrder?.owner?.name}</Td>
                   <Td>{businessOrder?.owner?.email}</Td>
                   <Td>{businessOrder?.owner?.phone}</Td>

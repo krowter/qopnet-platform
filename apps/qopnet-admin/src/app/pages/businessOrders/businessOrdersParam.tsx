@@ -34,8 +34,14 @@ import { useSWR } from '../../utils/swr'
 export const BusinessOrdersParamPage = () => {
   const { businessOrdersParam }: { businessOrdersParam: string } = useParams()
   const { data, error } = useSWR(`/api/business/orders/${businessOrdersParam}`)
-  // const { data: data2, error: error2 } = useSWR('/api/suppliers/products')
   const { businessOrderParam, businessOrder, message } = data || {}
+  const [businessOrderStatus, statusColor] = formatBusinessOrderStatus(
+    businessOrder?.status
+  )
+  const totalWeight = formatWeight(
+    businessOrder?.totalWeight,
+    businessOrder?.weightUnit
+  )
 
   const history = useHistory()
 
@@ -209,10 +215,7 @@ export const BusinessOrdersParamPage = () => {
                   Total Berat:{' '}
                   <chakra.span fontWeight="bold">
                     {' '}
-                    {formatWeight(
-                      businessOrder?.totalWeight,
-                      businessOrder?.weightUnit
-                    )}
+                    {totalWeight === 'null kg' ? '0 kg' : totalWeight}
                   </chakra.span>
                 </Text>
                 <Text>
@@ -251,9 +254,9 @@ export const BusinessOrdersParamPage = () => {
                 p={2}
                 borderRadius="lg"
                 fontSize="sm"
-                colorScheme="red"
+                colorScheme={statusColor}
               >
-                {formatBusinessOrderStatus(businessOrder?.status)}
+                {businessOrderStatus}
               </Badge>
             </Stack>
           </Flex>
