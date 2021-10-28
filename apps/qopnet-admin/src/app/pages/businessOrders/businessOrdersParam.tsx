@@ -45,6 +45,11 @@ export const BusinessOrdersParamPage = () => {
     businessOrder?.weightUnit
   )
   const [isChangeStatusDisabled, setIsChangeStatusDisabled] = useState(true)
+  const [changeStatusValue, setChangeStatusValue] = useState('')
+  const handleChangeStatus = (e: any) => {
+    setChangeStatusValue(e.target.value)
+    setIsChangeStatusDisabled(!isChangeStatusDisabled)
+  }
 
   const history = useHistory()
 
@@ -262,13 +267,16 @@ export const BusinessOrdersParamPage = () => {
                 {businessOrderStatus}
               </Badge>
 
-              <Stack direction="row">
+              <Stack direction={{ base: 'column', sm: 'row' }}>
                 <Select
-                  placeholder="Pilih Status"
-                  w="50%"
+                  onChange={handleChangeStatus}
+                  w="70%"
                   border="1px solid"
                   borderColor="gray.300"
                   borderRadius="lg"
+                  isDisabled={isChangeStatusDisabled}
+                  value={changeStatusValue}
+                  textTransform="uppercase"
                 >
                   <option value="WAITING_FOR_PAYMENT">
                     Menunggu Pembayaran
@@ -287,7 +295,14 @@ export const BusinessOrdersParamPage = () => {
                   <option value="REFUNDED">Di-refund</option>
                   <option value="Tidak Jelas">Tidak Jelas</option>
                 </Select>
-                <Button variant="link" w="50%" color="orange">
+                <Button
+                  onClick={() =>
+                    setIsChangeStatusDisabled(!isChangeStatusDisabled)
+                  }
+                  variant="link"
+                  w="30%"
+                  color="orange"
+                >
                   Ganti Status
                 </Button>
               </Stack>
