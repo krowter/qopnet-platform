@@ -13,6 +13,9 @@ export const getMyAllBusinessOrders = async (req, res) => {
       await prisma.businessOrder.findMany({
         where: {
           ownerId,
+          NOT: {
+            status: 'DRAFT',
+          },
         },
         include: {
           businessOrderItems: {
