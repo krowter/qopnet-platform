@@ -36,6 +36,7 @@ export const getMyAllBusinessOrders = async (req, res) => {
           paymentMethod: true,
           paymentRecord: true,
         },
+        orderBy: [{ createdAt: 'asc' }],
       })
 
     res.send({
