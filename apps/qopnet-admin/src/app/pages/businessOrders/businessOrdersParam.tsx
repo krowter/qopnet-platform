@@ -15,6 +15,7 @@ import {
   Stack,
   Text,
   Wrap,
+  Select,
 } from '@chakra-ui/react'
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import { Link } from 'react-router-dom'
@@ -30,6 +31,7 @@ import {
 } from '@qopnet/util-format'
 import { DefaultLayout } from '../../layouts'
 import { useSWR } from '../../utils/swr'
+import { useState } from 'react'
 
 export const BusinessOrdersParamPage = () => {
   const { businessOrdersParam }: { businessOrdersParam: string } = useParams()
@@ -42,6 +44,7 @@ export const BusinessOrdersParamPage = () => {
     businessOrder?.totalWeight,
     businessOrder?.weightUnit
   )
+  const [isChangeStatusDisabled, setIsChangeStatusDisabled] = useState(true)
 
   const history = useHistory()
 
@@ -258,6 +261,36 @@ export const BusinessOrdersParamPage = () => {
               >
                 {businessOrderStatus}
               </Badge>
+
+              <Stack direction="row">
+                <Select
+                  placeholder="Pilih Status"
+                  w="50%"
+                  border="1px solid"
+                  borderColor="gray.300"
+                  borderRadius="lg"
+                >
+                  <option value="WAITING_FOR_PAYMENT">
+                    Menunggu Pembayaran
+                  </option>
+                  <option value="PAID">Telah Dibayar</option>
+                  <option value="WAITING_FOR_CONFIRMATION">
+                    Menunggu Konfirmasi Toko
+                  </option>
+                  <option value="PROCESSED">Sedang Diproses</option>
+                  <option value="WAITING_FOR_PICKUP">Menunggu Diambil</option>
+                  <option value="ONDELIVERY">Sedang Dikirim</option>
+                  <option value="DELIVERED">Telah Sampai</option>
+                  <option value="CONFIRMED">Telah Dikonfirmasi</option>
+                  <option value="COMPLAINED">Terdapat Komplain</option>
+                  <option value="CANCELED">Dibatalkan</option>
+                  <option value="REFUNDED">Di-refund</option>
+                  <option value="Tidak Jelas">Tidak Jelas</option>
+                </Select>
+                <Button variant="link" w="50%" color="orange">
+                  Ganti Status
+                </Button>
+              </Stack>
             </Stack>
           </Flex>
         )}
