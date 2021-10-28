@@ -1,6 +1,5 @@
 import { prisma } from '@qopnet/util-prisma'
-import { Prisma, PaymentRecord } from '@prisma/client'
-import slugify from 'slugify'
+import { PaymentRecord } from '@prisma/client'
 
 // Get all payment records
 export const getAllPaymentRecords = async (req, res) => {
