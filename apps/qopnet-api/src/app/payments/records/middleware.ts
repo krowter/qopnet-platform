@@ -24,3 +24,47 @@ export const getAllPaymentRecords = async (req, res) => {
     })
   }
 }
+
+export const updatePaymentProofImages = async (req, res) => {
+  const formData = req.body
+
+  try {
+    const payment: PaymentRecord = await prisma.paymentRecord.findUnique({
+      where: {
+        id: formData.id,
+      },
+    })
+
+    if (!payment) throw new Error('Payment not found')
+
+    try {
+      const updatedPaymentRecord: PaymentRecord =
+        await prisma.paymentRecord.update({
+          where: {
+            id: formData.id,
+          },
+          data: {
+            proofImages: formData.proofImages,
+          },
+        })
+
+      res.status(200).json({
+        message: 'Update payment proof images success',
+        formData,
+        paymentRecords: updatedPaymentRecord,
+      })
+    } catch (error) {
+      res.status(500).json({
+        message: 'Update payment proof images failed',
+        error,
+        formData,
+      })
+    }
+  } catch (error) {
+    res.status(404).json({
+      message: 'Update payment proof images failed because payment not found',
+      error,
+      formData,
+    })
+  }
+}
