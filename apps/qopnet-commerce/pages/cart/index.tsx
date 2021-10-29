@@ -20,7 +20,7 @@ import {
 } from '@chakra-ui/react'
 import { mutate } from 'swr'
 import { useForm } from 'react-hook-form'
-import { useUser } from 'use-supabase'
+import { supabase } from '@qopnet/util-supabase'
 import { useRouter } from 'next/router'
 
 import { Layout, Icon, SupplierProductPrice } from '@qopnet/qopnet-ui'
@@ -43,10 +43,9 @@ import { useSWR, postToAPI, requestToAPI } from '../../utils'
  * because BusinessCart is just a draft BusinessOrder
  */
 export const CartPage = () => {
-  const user = useUser()
   const router = useRouter()
 
-  const isLoggedIn = Boolean(user)
+  const isLoggedIn = Boolean(supabase.auth.user())
 
   const { data, error } = useSWR(
     isLoggedIn ? '/api/business/orders/my/cart' : null
@@ -72,7 +71,7 @@ export const CartPage = () => {
     } else {
       router.push('/')
     }
-  }, [error, user])
+  }, [error, isLoggedIn])
 
   return (
     <Layout
