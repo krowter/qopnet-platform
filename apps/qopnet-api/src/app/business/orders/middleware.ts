@@ -13,6 +13,9 @@ export const getMyAllBusinessOrders = async (req, res) => {
       await prisma.businessOrder.findMany({
         where: {
           ownerId,
+          NOT: {
+            status: 'DRAFT',
+          },
         },
         include: {
           businessOrderItems: {
@@ -36,6 +39,7 @@ export const getMyAllBusinessOrders = async (req, res) => {
           paymentMethod: true,
           paymentRecord: true,
         },
+        orderBy: [{ createdAt: 'asc' }],
       })
 
     res.send({
