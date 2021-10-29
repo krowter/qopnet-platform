@@ -16,6 +16,7 @@ import {
   Text,
   Wrap,
   Select,
+  useToast,
 } from '@chakra-ui/react'
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import { Link } from 'react-router-dom'
@@ -32,6 +33,12 @@ import {
 import { DefaultLayout } from '../../layouts'
 import { useSWR } from '../../utils/swr'
 import { useState } from 'react'
+import { useUser, useSupabase } from 'use-supabase'
+import { requestToAPI } from '../../utils'
+
+type BodyDataType = {
+  status: string
+}
 
 export const BusinessOrdersParamPage = () => {
   const { businessOrdersParam }: { businessOrdersParam: string } = useParams()
@@ -44,11 +51,40 @@ export const BusinessOrdersParamPage = () => {
     businessOrder?.totalWeight,
     businessOrder?.weightUnit
   )
+
+  const toast = useToast()
+
   const [isChangeStatusDisabled, setIsChangeStatusDisabled] = useState(true)
-  const [changeStatusValue, setChangeStatusValue] = useState('')
-  const handleChangeStatus = (e: any) => {
-    setChangeStatusValue(e.target.value)
-    setIsChangeStatusDisabled(!isChangeStatusDisabled)
+  const [statusValue, setStatusValue] = useState('')
+
+  const handleChangeStatus = (event: any) => {
+    setStatusValue(event.target.value)
+    setIsChangeStatusDisabled(false)
+  }
+
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    try {
+      const bodyData = {
+        status: statusValue,
+      }
+
+      const responseBusinessOrder = await requestToAPI(
+        'PATCH',
+        `/api/business/orders/${businessOrder?.id}/status`,
+        bodyData
+      )
+
+      if (!responseBusinessOrder) {
+        throw new Error('Error business order when changing status')
+      } else {
+        toast({ title: 'Berhasil mengubah status pesanan', status: 'success' })
+      }
+    } catch (error) {
+      toast({ title: 'Gagal mengubah status pesanan', status: 'error' })
+    } finally {
+      setIsChangeStatusDisabled(true)
+    }
   }
 
   const history = useHistory()
@@ -267,15 +303,18 @@ export const BusinessOrdersParamPage = () => {
                 {businessOrderStatus}
               </Badge>
 
-              <Stack direction={{ base: 'column', sm: 'row' }}>
+              <Stack
+                as="form"
+                onSubmit={handleSubmit}
+                direction={{ base: 'column', sm: 'row' }}
+              >
                 <Select
                   onChange={handleChangeStatus}
                   w="70%"
                   border="1px solid"
                   borderColor="gray.300"
                   borderRadius="lg"
-                  isDisabled={isChangeStatusDisabled}
-                  value={changeStatusValue}
+                  value={statusValue}
                   textTransform="uppercase"
                 >
                   <option value="WAITING_FOR_PAYMENT">
@@ -296,9 +335,8 @@ export const BusinessOrdersParamPage = () => {
                   <option value="Tidak Jelas">Tidak Jelas</option>
                 </Select>
                 <Button
-                  onClick={() =>
-                    setIsChangeStatusDisabled(!isChangeStatusDisabled)
-                  }
+                  isDisabled={isChangeStatusDisabled}
+                  type="submit"
                   variant="link"
                   w="30%"
                   color="orange"
