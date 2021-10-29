@@ -327,23 +327,18 @@ export const BusinessOrdersParamPage = () => {
                 direction={{ base: 'column', sm: 'row' }}
               >
                 <Select
-                  onChange={handleChangeStatus}
                   w="70%"
                   border="1px solid"
                   borderColor="gray.300"
                   borderRadius="lg"
                   textTransform="uppercase"
                   size="sm"
-                  value={statusValue}
+                  onChange={handleChangeStatus}
+                  defaultValue={businessOrder?.status}
                 >
                   {businessOrderStatuses.map(({ value, text }) => {
-                    // console.log(businessOrder?.status, value)
                     return (
-                      <option
-                        key={value}
-                        value={value}
-                        // selected={businessOrder?.status === value}
-                      >
+                      <option key={value} value={value}>
                         {text}
                       </option>
                     )
