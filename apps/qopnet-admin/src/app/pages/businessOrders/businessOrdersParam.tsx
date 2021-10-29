@@ -35,6 +35,7 @@ import { useSWR } from '../../utils/swr'
 import { useState } from 'react'
 import { useUser, useSupabase } from 'use-supabase'
 import { requestToAPI } from '../../utils'
+import { mutate } from 'swr'
 
 type BodyDataType = {
   status: string
@@ -69,11 +70,27 @@ export const BusinessOrdersParamPage = () => {
         status: statusValue,
       }
 
+      mutate(
+        `/api/business/orders/${businessOrdersParam}`,
+        (data) => {
+          return {
+            ...data,
+            businessOrder: {
+              ...data.businessOrder,
+              status: statusValue, // from component's state
+            },
+          }
+        },
+        false
+      )
+
       const responseBusinessOrder = await requestToAPI(
         'PATCH',
         `/api/business/orders/${businessOrder?.id}/status`,
         bodyData
       )
+
+      mutate(`/api/business/orders/${businessOrdersParam}`)
 
       if (!responseBusinessOrder) {
         throw new Error('Error business order when changing status')
