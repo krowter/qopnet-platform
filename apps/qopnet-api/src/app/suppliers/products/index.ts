@@ -1,12 +1,14 @@
 import * as express from 'express'
 
 import { paginate } from '../../root/middleware'
+import { checkUser } from '../../auth/middleware'
 
 import {
   getSupplierProducts,
   getSupplierProductsByQuery,
   getSpecialSupplierProducts,
   getSupplierProductBySupplierProductParam,
+  updateSupplierProduct,
 } from './middleware'
 
 const router = express.Router()
@@ -19,5 +21,8 @@ router.get('/search', paginate, getSupplierProductsByQuery)
 router.get('/special', paginate, getSpecialSupplierProducts)
 // GET /api/suppliers/products/:supplierProductParam
 router.get('/:supplierProductParam', getSupplierProductBySupplierProductParam)
+
+// PUT /api/suppliers/products/:supplierProductId
+router.put('/:supplierProductId', checkUser, updateSupplierProduct)
 
 export default router

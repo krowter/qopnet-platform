@@ -138,3 +138,45 @@ export const getSpecialSupplierProducts = async (req, res) => {
     })
   }
 }
+
+// Update supplier product
+export const updateSupplierProduct = async (req, res) => {
+  const { supplierProductId } = req.params
+  const newSupplierProduct = req.body
+
+  try {
+    const supplierProduct: Partial<SupplierProduct> =
+      await prisma.supplierProduct.findUnique({
+        where: { id: supplierProductId },
+      })
+
+    if (!supplierProduct) throw new Error('Supplier product not found')
+
+    try {
+      const updatedSupplierProduct: Partial<SupplierProduct> =
+        await prisma.supplierProduct.update({
+          where: { id: supplierProductId },
+          data: newSupplierProduct,
+          include: {
+            supplier: { include: { owner: true } },
+            owner: true,
+          },
+        })
+
+      res.status(200).json({
+        message: 'Update supplier product success',
+        updatedSupplierProduct,
+      })
+    } catch (error) {
+      res.status(500).json({
+        message: 'Update supplier product failed',
+        error,
+      })
+    }
+  } catch (error) {
+    res.status(404).json({
+      message: 'Update supplier product failed because product not found',
+      error,
+    })
+  }
+}
