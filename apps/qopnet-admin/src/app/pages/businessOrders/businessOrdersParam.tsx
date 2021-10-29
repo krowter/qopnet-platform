@@ -333,6 +333,7 @@ export const BusinessOrdersParamPage = () => {
                   borderRadius="lg"
                   value={statusValue}
                   textTransform="uppercase"
+                  size="sm"
                 >
                   <option value="WAITING_FOR_PAYMENT">
                     Menunggu Pembayaran
@@ -354,9 +355,10 @@ export const BusinessOrdersParamPage = () => {
                 <Button
                   isDisabled={isChangeStatusDisabled}
                   type="submit"
-                  variant="link"
+                  variant="solid"
                   w="30%"
-                  color="orange"
+                  colorScheme="orange"
+                  size="sm"
                 >
                   Ganti Status
                 </Button>
