@@ -54,7 +54,7 @@ export const BusinessOrdersParamPage = () => {
     businessOrder?.weightUnit
   )
 
-  const toast = useToast()
+  const toast = useToast({ position: 'top' })
 
   const [isChangeStatusDisabled, setIsChangeStatusDisabled] = useState(true)
   const [statusValue, setStatusValue] = useState(businessOrder?.status)
