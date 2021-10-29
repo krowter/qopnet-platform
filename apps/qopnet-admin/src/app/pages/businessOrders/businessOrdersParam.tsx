@@ -110,22 +110,22 @@ export const BusinessOrdersParamPage = () => {
   return (
     <DefaultLayout>
       <Box px={7} py={7}>
-        <Heading mb={1}>Pesanan</Heading>
-        <Breadcrumb
-          separator={<ChevronRightIcon color="gray.700" />}
-          spacing={2}
-          mb={10}
-        >
-          <BreadcrumbItem>
-            <BreadcrumbLink as={Link} to="/business/orders">
-              Pesanan Bisnis
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-
-          <BreadcrumbItem isCurrentPage fontWeight="bold">
-            <BreadcrumbLink>{businessOrdersParam}</BreadcrumbLink>
-          </BreadcrumbItem>
-        </Breadcrumb>
+        <Stack mb={5}>
+          <Heading>Pesanan</Heading>
+          <Breadcrumb
+            separator={<ChevronRightIcon color="gray.700" />}
+            spacing={2}
+          >
+            <BreadcrumbItem>
+              <BreadcrumbLink as={Link} to="/business/orders">
+                Pesanan Bisnis
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbItem isCurrentPage fontWeight="bold">
+              <BreadcrumbLink>{businessOrdersParam}</BreadcrumbLink>
+            </BreadcrumbItem>
+          </Breadcrumb>
+        </Stack>
 
         {error ? (
           <Box px={5} py={3}>
@@ -230,7 +230,18 @@ export const BusinessOrdersParamPage = () => {
               borderColor="gray.300"
               borderRadius="lg"
             >
-              <Text fontWeight="bold">Informasi Pesanan</Text>
+              <Heading as="h3" size="md">
+                Informasi Pesanan
+              </Heading>
+              <Badge
+                w="max-content"
+                p={2}
+                borderRadius="lg"
+                size="sm"
+                colorScheme={statusColor}
+              >
+                {businessOrderStatusText}
+              </Badge>
               <Stack spacing={0}>
                 <Text>
                   Pesanan Dibuat:{' '}
@@ -311,23 +322,9 @@ export const BusinessOrdersParamPage = () => {
                 </chakra.span>
               </Text>
 
-              <Badge
-                w="max-content"
-                p={2}
-                borderRadius="lg"
-                fontSize="sm"
-                colorScheme={statusColor}
-              >
-                {businessOrderStatusText}
-              </Badge>
-
-              <Stack
-                as="form"
-                onSubmit={handleSubmit}
-                direction={{ base: 'column', sm: 'row' }}
-              >
+              <Stack as="form" onSubmit={handleSubmit}>
                 <Select
-                  w="70%"
+                  w="100%"
                   border="1px solid"
                   borderColor="gray.300"
                   borderRadius="lg"
@@ -344,13 +341,14 @@ export const BusinessOrdersParamPage = () => {
                     )
                   })}
                 </Select>
+
                 <Button
                   isDisabled={isChangeStatusDisabled}
                   type="submit"
                   variant="solid"
-                  w="30%"
                   colorScheme="orange"
                   size="sm"
+                  alignSelf="flex-start"
                 >
                   Ganti Status
                 </Button>
