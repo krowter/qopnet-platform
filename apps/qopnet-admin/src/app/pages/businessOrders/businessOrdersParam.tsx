@@ -36,6 +36,7 @@ import { useState } from 'react'
 import { useUser, useSupabase } from 'use-supabase'
 import { requestToAPI } from '../../utils'
 import { mutate } from 'swr'
+import businessOrderStatuses from './businessOrderStatuses.json'
 
 type BodyDataType = {
   status: string
@@ -45,7 +46,7 @@ export const BusinessOrdersParamPage = () => {
   const { businessOrdersParam }: { businessOrdersParam: string } = useParams()
   const { data, error } = useSWR(`/api/business/orders/${businessOrdersParam}`)
   const { businessOrderParam, businessOrder, message } = data || {}
-  const [businessOrderStatus, statusColor] = formatBusinessOrderStatus(
+  const [businessOrderStatusText, statusColor] = formatBusinessOrderStatus(
     businessOrder?.status
   )
   const totalWeight = formatWeight(
@@ -56,7 +57,7 @@ export const BusinessOrdersParamPage = () => {
   const toast = useToast()
 
   const [isChangeStatusDisabled, setIsChangeStatusDisabled] = useState(true)
-  const [statusValue, setStatusValue] = useState('')
+  const [statusValue, setStatusValue] = useState(businessOrder?.status)
 
   const handleChangeStatus = (event: any) => {
     setStatusValue(event.target.value)
@@ -317,7 +318,7 @@ export const BusinessOrdersParamPage = () => {
                 fontSize="sm"
                 colorScheme={statusColor}
               >
-                {businessOrderStatus}
+                {businessOrderStatusText}
               </Badge>
 
               <Stack
@@ -331,26 +332,22 @@ export const BusinessOrdersParamPage = () => {
                   border="1px solid"
                   borderColor="gray.300"
                   borderRadius="lg"
-                  value={statusValue}
                   textTransform="uppercase"
                   size="sm"
+                  value={statusValue}
                 >
-                  <option value="WAITING_FOR_PAYMENT">
-                    Menunggu Pembayaran
-                  </option>
-                  <option value="PAID">Telah Dibayar</option>
-                  <option value="WAITING_FOR_CONFIRMATION">
-                    Menunggu Konfirmasi Toko
-                  </option>
-                  <option value="PROCESSED">Sedang Diproses</option>
-                  <option value="WAITING_FOR_PICKUP">Menunggu Diambil</option>
-                  <option value="ONDELIVERY">Sedang Dikirim</option>
-                  <option value="DELIVERED">Telah Sampai</option>
-                  <option value="CONFIRMED">Telah Dikonfirmasi</option>
-                  <option value="COMPLAINED">Terdapat Komplain</option>
-                  <option value="CANCELED">Dibatalkan</option>
-                  <option value="REFUNDED">Di-refund</option>
-                  <option value="Tidak Jelas">Tidak Jelas</option>
+                  {businessOrderStatuses.map(({ value, text }) => {
+                    // console.log(businessOrder?.status, value)
+                    return (
+                      <option
+                        key={value}
+                        value={value}
+                        // selected={businessOrder?.status === value}
+                      >
+                        {text}
+                      </option>
+                    )
+                  })}
                 </Select>
                 <Button
                   isDisabled={isChangeStatusDisabled}
