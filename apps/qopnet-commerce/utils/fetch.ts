@@ -11,7 +11,9 @@ export const requestToAPI = async (
 ) => {
   try {
     // This might be replaced with accessToken from useSupabase
-    const supabaseAuthToken = window.localStorage.getItem('supabase.auth.token')
+    const supabaseAuthToken = String(
+      window.localStorage.getItem('supabase.auth.token')
+    )
     const parsedObject = JSON.parse(supabaseAuthToken)
     const accessToken = parsedObject.currentSession.access_token || ''
 

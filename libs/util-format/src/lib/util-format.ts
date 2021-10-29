@@ -18,6 +18,12 @@ export const formatDateTime = (text: string | Date) => {
   return dayjs(text).format('D MMMM YYYY, HH:mm')
 }
 
+// Truncate text if length > maximum allowed characters
+
+export const truncateText = (text: string, maxChar: number): string => {
+  return text.length > maxChar ? text.slice(0, maxChar) + '...' : text
+}
+
 /**
  * To handle different case of image URL format
  * 1. https://domain.com/path/to/image.jpg
@@ -51,7 +57,7 @@ export const formatRupiah = (price: number) => {
     style: 'currency',
     currency: 'IDR',
   })
-    .format(Number(price))
+    .format(Math.round(price))
     .replace(/\D00$/, '')
 
   return formattedPrice
@@ -179,31 +185,31 @@ export const calculateSupplierProductItem = (item) => {
 export const formatBusinessOrderStatus = (status: string) => {
   switch (status) {
     case 'DRAFT':
-      return 'Dalam Keranjang'
+      return ['Dalam Keranjang', 'blue']
     case 'WAITING_FOR_PAYMENT':
-      return 'Menunggu Pembayaran'
+      return ['Menunggu Pembayaran', 'blue']
     case 'PAID':
-      return 'Telah Dibayar'
+      return ['Telah Dibayar', 'orange']
     case 'WAITING_FOR_CONFIRMATION':
-      return 'Menunggu Konfirmasi Toko'
+      return ['Menunggu Konfirmasi Toko', 'orange']
     case 'PROCESSED':
-      return 'Sedang Diproses'
+      return ['Sedang Diproses', 'orange']
     case 'WAITING_FOR_PICKUP':
-      return 'Menunggu Diambil'
+      return ['Menunggu Diambil', 'orange']
     case 'ONDELIVERY':
-      return 'Sedang Dikirim'
+      return ['Sedang Dikirim', 'orange']
     case 'DELIVERED':
-      return 'Telah Sampai'
+      return ['Telah Sampai', 'green']
     case 'CONFIRMED':
-      return 'Telah Dikonfirmasi'
+      return ['Telah Dikonfirmasi', 'green']
     case 'COMPLAINED':
-      return 'Terdapat Komplain'
+      return ['Terdapat Komplain', 'red']
     case 'CANCELED':
-      return 'Dibatalkan'
+      return ['Dibatalkan', 'red']
     case 'REFUNDED':
-      return 'Di-refund'
+      return ['Di-refund', 'red']
     default:
-      return 'Tidak Jelas'
+      return ['Tidak Jelas', 'red']
       break
   }
 }
