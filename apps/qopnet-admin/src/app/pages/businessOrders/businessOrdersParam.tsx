@@ -36,7 +36,9 @@ import { useState } from 'react'
 import { useUser, useSupabase } from 'use-supabase'
 import { requestToAPI } from '../../utils'
 import { mutate } from 'swr'
+import { BusinessOrderPaymentSection } from '../../components/businessOrderPaymentSection'
 import businessOrderStatuses from './businessOrderStatuses.json'
+import { BusinessOrdersPage } from '..'
 
 type BodyDataType = {
   status: string
@@ -219,140 +221,148 @@ export const BusinessOrdersParamPage = () => {
             </Stack>
 
             <Stack
-              spacing={5}
               position={{ lg: 'sticky' }}
               top="0"
               w={{ base: '100%', lg: '40%' }}
               h="max-content"
               mb={{ base: 5, lg: 0 }}
-              p={5}
-              border="1px solid"
-              borderColor="gray.300"
-              borderRadius="lg"
             >
-              <Heading as="h3" size="md">
-                Informasi Pesanan
-              </Heading>
-              <Badge
-                w="max-content"
-                p={2}
+              <Stack
+                spacing={5}
+                p={5}
+                border="1px solid"
+                borderColor="gray.300"
                 borderRadius="lg"
-                size="sm"
-                colorScheme={statusColor}
+                mb={5}
               >
-                {businessOrderStatusText}
-              </Badge>
-              <Stack spacing={0}>
-                <Text>
-                  Pesanan Dibuat:{' '}
-                  <chakra.span fontWeight="bold">
-                    {formatDateTime(businessOrder?.updatedAt)}
-                  </chakra.span>
-                </Text>
-                <Text>
-                  Pemesan:{' '}
-                  <chakra.span fontWeight="bold">
-                    {businessOrder?.owner?.name}
-                  </chakra.span>
-                </Text>
-                <Text>
-                  Email:{' '}
-                  <chakra.span fontWeight="bold">
-                    {businessOrder?.owner?.email}
-                  </chakra.span>
-                </Text>
-                <Text>
-                  No Telp:{' '}
-                  <chakra.span fontWeight="bold">
-                    {businessOrder?.owner?.phone}
-                  </chakra.span>
-                </Text>
-                <Text>
-                  Dikirim Ke:{' '}
-                  <chakra.span fontWeight="bold">
-                    {formatAddressComplete(businessOrder?.shipmentAddress)}
-                  </chakra.span>
-                </Text>
-              </Stack>
-
-              <Divider />
-
-              <Stack spacing={0}>
-                <Text>
-                  Total Barang:{' '}
-                  <chakra.span fontWeight="bold">
-                    {businessOrder?.totalItems}
-                  </chakra.span>
-                </Text>
-                <Text>
-                  Total Berat:{' '}
-                  <chakra.span fontWeight="bold">
-                    {' '}
-                    {totalWeight === 'null kg' ? '0 kg' : totalWeight}
-                  </chakra.span>
-                </Text>
-                <Text>
-                  Total Harga:{' '}
-                  <chakra.span fontWeight="bold">
-                    {' '}
-                    {formatRupiah(businessOrder?.totalPrice)}
-                  </chakra.span>
-                </Text>
-                <Text>
-                  Total Ongkos Kirim:{' '}
-                  <chakra.span fontWeight="bold">
-                    {formatRupiah(businessOrder?.totalShippingCost)}
-                  </chakra.span>
-                </Text>
-                <Text>
-                  Total Diskon Ongkos Kirim:{' '}
-                  <chakra.span fontWeight="bold">
-                    {formatRupiah(businessOrder?.totalShippingDiscount)}
-                  </chakra.span>
-                </Text>
-              </Stack>
-
-              <Divider />
-
-              <Text fontSize="lg" fontWeight="bold">
-                Total Pembayaran:{' '}
-                <chakra.span fontWeight="bold" color="orange">
-                  {' '}
-                  {formatRupiah(businessOrder?.totalBillPayment)}
-                </chakra.span>
-              </Text>
-
-              <Stack as="form" onSubmit={handleSubmit}>
-                <Select
-                  w="100%"
-                  border="1px solid"
-                  borderColor="gray.300"
+                <Heading as="h3" size="md">
+                  Informasi Pesanan
+                </Heading>
+                <Badge
+                  w="max-content"
+                  p={2}
                   borderRadius="lg"
-                  textTransform="uppercase"
                   size="sm"
-                  onChange={handleChangeStatus}
-                  defaultValue={businessOrder?.status}
+                  colorScheme={statusColor}
                 >
-                  {businessOrderStatuses.map(({ value, text }) => {
-                    return (
-                      <option key={value} value={value}>
-                        {text}
-                      </option>
-                    )
-                  })}
-                </Select>
+                  {businessOrderStatusText}
+                </Badge>
+                <Stack spacing={0}>
+                  <Text>
+                    Pesanan Dibuat:{' '}
+                    <chakra.span fontWeight="bold">
+                      {formatDateTime(businessOrder?.updatedAt)}
+                    </chakra.span>
+                  </Text>
+                  <Text>
+                    Pemesan:{' '}
+                    <chakra.span fontWeight="bold">
+                      {businessOrder?.owner?.name}
+                    </chakra.span>
+                  </Text>
+                  <Text>
+                    Email:{' '}
+                    <chakra.span fontWeight="bold">
+                      {businessOrder?.owner?.email}
+                    </chakra.span>
+                  </Text>
+                  <Text>
+                    No Telp:{' '}
+                    <chakra.span fontWeight="bold">
+                      {businessOrder?.owner?.phone}
+                    </chakra.span>
+                  </Text>
+                  <Text>
+                    Dikirim Ke:{' '}
+                    <chakra.span fontWeight="bold">
+                      {formatAddressComplete(businessOrder?.shipmentAddress)}
+                    </chakra.span>
+                  </Text>
+                </Stack>
 
-                <Button
-                  isDisabled={isChangeStatusDisabled}
-                  type="submit"
-                  variant="solid"
-                  colorScheme="orange"
-                  size="sm"
-                  alignSelf="flex-start"
-                >
-                  Ganti Status
-                </Button>
+                <Divider />
+
+                <Stack spacing={0}>
+                  <Text>
+                    Total Barang:{' '}
+                    <chakra.span fontWeight="bold">
+                      {businessOrder?.totalItems}
+                    </chakra.span>
+                  </Text>
+                  <Text>
+                    Total Berat:{' '}
+                    <chakra.span fontWeight="bold">
+                      {' '}
+                      {totalWeight === 'null kg' ? '0 kg' : totalWeight}
+                    </chakra.span>
+                  </Text>
+                  <Text>
+                    Total Harga:{' '}
+                    <chakra.span fontWeight="bold">
+                      {' '}
+                      {formatRupiah(businessOrder?.totalPrice)}
+                    </chakra.span>
+                  </Text>
+                  <Text>
+                    Total Ongkos Kirim:{' '}
+                    <chakra.span fontWeight="bold">
+                      {formatRupiah(businessOrder?.totalShippingCost)}
+                    </chakra.span>
+                  </Text>
+                  <Text>
+                    Total Diskon Ongkos Kirim:{' '}
+                    <chakra.span fontWeight="bold">
+                      {formatRupiah(businessOrder?.totalShippingDiscount)}
+                    </chakra.span>
+                  </Text>
+                </Stack>
+
+                <Divider />
+
+                <Text fontSize="lg" fontWeight="bold">
+                  Total Pembayaran:{' '}
+                  <chakra.span fontWeight="bold" color="orange">
+                    {' '}
+                    {formatRupiah(businessOrder?.totalBillPayment)}
+                  </chakra.span>
+                </Text>
+
+                <Stack as="form" onSubmit={handleSubmit}>
+                  <Select
+                    w="100%"
+                    border="1px solid"
+                    borderColor="gray.300"
+                    borderRadius="lg"
+                    textTransform="uppercase"
+                    size="sm"
+                    onChange={handleChangeStatus}
+                    defaultValue={businessOrder?.status}
+                  >
+                    {businessOrderStatuses.map(({ value, text }) => {
+                      return (
+                        <option key={value} value={value}>
+                          {text}
+                        </option>
+                      )
+                    })}
+                  </Select>
+
+                  <Button
+                    isDisabled={isChangeStatusDisabled}
+                    type="submit"
+                    variant="solid"
+                    colorScheme="orange"
+                    size="sm"
+                    alignSelf="flex-start"
+                  >
+                    Ganti Status
+                  </Button>
+                </Stack>
               </Stack>
+              <BusinessOrderPaymentSection
+                businessOrderStatus={businessOrder?.status}
+                paymentMethod={businessOrder?.paymentMethod?.name}
+              />
             </Stack>
           </Flex>
         )}
