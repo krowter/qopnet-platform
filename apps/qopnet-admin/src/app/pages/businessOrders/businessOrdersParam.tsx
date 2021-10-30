@@ -360,6 +360,8 @@ export const BusinessOrdersParamPage = () => {
                 </Stack>
               </Stack>
               <BusinessOrderPaymentSection
+                businessOrderId={businessOrder?.id}
+                businessOrdersParam={businessOrdersParam}
                 businessOrderStatus={businessOrder?.status}
                 paymentMethod={businessOrder?.paymentMethod?.name}
               />
