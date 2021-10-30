@@ -21,7 +21,7 @@ export const BusinessOrderPaymentSection = ({
   businessOrderStatus,
   paymentMethod,
 }) => {
-  const toast = useToast()
+  const toast = useToast({ position: 'top' })
 
   const handleSubmit = async (event) => {
     event.preventDefault()
