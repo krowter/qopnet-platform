@@ -162,13 +162,15 @@ export const CartSummaryContainer = ({ businessOrder }) => {
 }
 
 export const CartContainer = ({ businessOrder }) => {
+  const [businessOrderStatusText, statusColor] = formatBusinessOrderStatus(
+    businessOrder?.status
+  )
+
   return (
     <Stack flex={1} minW="420px">
       <HStack>
         <Text>Status Pesanan:</Text>
-        <Tag colorScheme="green">
-          {formatBusinessOrderStatus(businessOrder?.status)}
-        </Tag>
+        <Tag colorScheme={statusColor}>{businessOrderStatusText}</Tag>
       </HStack>
 
       <Stack
