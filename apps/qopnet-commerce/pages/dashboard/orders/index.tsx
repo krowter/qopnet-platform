@@ -22,6 +22,7 @@ import {
   Stack,
   Text,
   useColorModeValue,
+  Button,
 } from '@chakra-ui/react'
 import { useUser } from 'use-supabase'
 
@@ -74,8 +75,18 @@ export const OrdersContainer = ({ user }) => {
             <Text>Memuat daftar pesanan saya...</Text>
           </HStack>
         )}
-        {!error && data && businessOrders && (
+        {!error && data && businessOrders.length !== 0 && (
           <BusinessOrdersList businessOrders={businessOrders} />
+        )}
+        {!error && data && businessOrders.length === 0 && (
+          <Stack align="flex-start" spacing={5}>
+            <Text>Maaf Anda tidak memiliki daftar pesanan.</Text>
+            <NextLink href="/shop" passHref>
+              <Button as="a" colorScheme="orange">
+                Lanjut belanja dahulu
+              </Button>
+            </NextLink>
+          </Stack>
         )}
       </Stack>
     </Stack>
