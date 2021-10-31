@@ -61,8 +61,6 @@ export const OrdersContainer = ({ user }) => {
   const { data, error } = useSWR('/api/business/orders/my')
   const { businessOrders } = data || []
 
-  console.log(`bussinessOrders`, data)
-
   return (
     <Stack>
       <NextSeo title="Dasbor daftar pesanan saya - Qopnet" />
