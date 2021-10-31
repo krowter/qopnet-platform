@@ -123,7 +123,7 @@ export const SupplierProductForm = ({ supplierParam }) => {
       },
 
       status: true,
-      stock: 1,
+      stock: 1000,
     },
   })
 
