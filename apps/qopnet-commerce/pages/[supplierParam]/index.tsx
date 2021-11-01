@@ -187,7 +187,12 @@ export const SupplierProductsContainer = ({ supplier }) => {
       </Box>
 
       {!keyword && supplier?.supplierProducts && (
-        <SupplierProductsGrid supplierProducts={supplier?.supplierProducts} />
+        <Stack>
+          <Text>
+            Terdapat <b>{supplier?.supplierProducts?.length}</b> produk
+          </Text>
+          <SupplierProductsGrid supplierProducts={supplier?.supplierProducts} />
+        </Stack>
       )}
 
       {keyword && (
@@ -222,7 +227,9 @@ export const SearchSupplierProductsResults = ({ supplier, keyword }) => {
       )}
       {!error && supplierProducts && (
         <Stack>
-          <Text>{meta.recordCount} produk ditemukan</Text>
+          <Text>
+            <b>{meta.recordCount}</b> produk ditemukan
+          </Text>
           <SupplierProductsGrid supplierProducts={supplierProducts} />
         </Stack>
       )}
