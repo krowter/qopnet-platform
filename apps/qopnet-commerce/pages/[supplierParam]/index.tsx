@@ -42,6 +42,11 @@ export const SupplierContainer = ({ supplierParam }) => {
   const { data, error } = useSWR(`/api/suppliers/${supplierParam}`)
   const { supplier } = data || {}
 
+  const address = supplier?.addresses[0]
+    ? `${supplier?.addresses[0]?.city}, ${supplier?.addresses[0]?.state}`
+    : `?`
+  const title = `${supplier?.name} - ${address} - Qopnet`
+
   return (
     <Stack spacing={10}>
       {error && <Text>Gagal memuat data supplier</Text>}
@@ -53,9 +58,7 @@ export const SupplierContainer = ({ supplierParam }) => {
       )}
       {!error && supplier && (
         <>
-          <NextSeo
-            title={`${supplier?.name} - ${supplier?.addresses[0]?.city}, ${supplier?.addresses[0]?.state} - Qopnet`}
-          />
+          <NextSeo title={title} />
           <Stack spacing={10} w="100%">
             <Stack spacing={5}>
               <Flex id="supplier-brand" flexWrap="wrap">
@@ -208,11 +211,14 @@ export const SearchSupplierProductsResults = ({ supplier, keyword }) => {
   )
   const { meta, supplierProducts } = data || {}
 
+  const address = supplier?.addresses[0]
+    ? `${supplier?.addresses[0]?.city}, ${supplier?.addresses[0]?.state}`
+    : `?`
+  const title = `Mencari: ${keyword} di ${supplier?.name} - ${address} - Qopnet`
+
   return (
     <Stack>
-      <NextSeo
-        title={`Mencari: ${keyword} di ${supplier?.name} - ${supplier?.addresses[0]?.city}, ${supplier?.addresses[0]?.state} - Qopnet`}
-      />
+      <NextSeo title={title} />
 
       <Heading as="h2" size="md">
         Hasil pencarian untuk <b>"{keyword}"</b>
