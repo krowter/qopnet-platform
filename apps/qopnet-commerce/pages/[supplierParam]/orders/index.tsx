@@ -50,44 +50,58 @@ import { useSWR } from '../../../utils'
 const SupplierOrdersPage = () => {
   const user = useUser()
   const router = useRouter()
+  const { supplierParam } = router.query
+
   useEffect(() => {
     // if (!user) {
     //   router.replace('/signin')
     // }
   }, [user, router])
 
-  return <Layout pt={10}>{user && <OrdersContainer user={user} />}</Layout>
+  return (
+    <Layout pt={10}>
+      {supplierParam && user && (
+        <OrdersContainer supplierParam={supplierParam} user={user} />
+      )}
+    </Layout>
+  )
 }
 
-export const OrdersContainer = ({ user }) => {
-  const supplierParam = 'qopnet'
+export const OrdersContainer = ({ supplierParam, user }) => {
   const { data, error } = useSWR(`/api/suppliers/${supplierParam}/orders`)
-  const { businessOrderItems } = data || []
+  const { supplier, businessOrderItems } = data || []
+  const supplierName = supplier?.name || supplierParam.toUpperCase()
 
   return (
     <Stack>
-      <NextSeo title="Dasbor daftar Toko Qopnet - Qopnet" />
+      <NextSeo title={`Dasbor daftar ${supplierName} - Qopnet`} />
 
       <Breadcrumb separator={<Icon name="chevron-right" />}>
         <BreadcrumbItem>
-          <BreadcrumbLink as={NextLink} href="/qopnet" passHref>
-            <ChakraLink>Toko Qopnet</ChakraLink>
+          <BreadcrumbLink as={NextLink} href={`/${supplierParam}`} passHref>
+            <ChakraLink>{supplierName}</ChakraLink>
           </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbItem>
-          <BreadcrumbLink as={NextLink} href="/qopnet/orders" passHref>
-            <ChakraLink>Pesanan</ChakraLink>
+          <BreadcrumbLink
+            as={NextLink}
+            href={`/${supplierParam}/orders`}
+            passHref
+          >
+            <ChakraLink>Pesanan masuk</ChakraLink>
           </BreadcrumbLink>
         </BreadcrumbItem>
       </Breadcrumb>
 
       <Stack spacing={10}>
-        <Heading>Daftar pesanan Toko Qopnet</Heading>
-        {error && !data && <Text>Gagal memuat daftar pesanan Toko Qopnet</Text>}
+        <Heading>Daftar pesanan {supplierName}</Heading>
+        {error && !data && (
+          <Text>Gagal memuat daftar pesanan di {supplierName}</Text>
+        )}
         {!error && !data && (
           <HStack>
             <Spinner />
-            <Text>Memuat daftar pesanan Toko Qopnet...</Text>
+            <Text>Memuat daftar pesanan di {supplierName}...</Text>
           </HStack>
         )}
         {!error && data && businessOrderItems.length !== 0 && (
@@ -95,7 +109,9 @@ export const OrdersContainer = ({ user }) => {
         )}
         {!error && data && businessOrderItems.length === 0 && (
           <Stack align="flex-start" spacing={5}>
-            <Text>Maaf belum ada pesanan yang berhasil masuk.</Text>
+            <Text>
+              Maaf belum ada pesanan yang berhasil masuk di {supplierName}.
+            </Text>
           </Stack>
         )}
       </Stack>
