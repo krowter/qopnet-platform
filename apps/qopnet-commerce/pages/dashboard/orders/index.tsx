@@ -22,6 +22,7 @@ import {
   Stack,
   Text,
   useColorModeValue,
+  useToast,
   Button,
 } from '@chakra-ui/react'
 import { useUser } from 'use-supabase'
@@ -34,9 +35,9 @@ import {
   formatDateTime,
   formatRupiah,
 } from '@qopnet/util-format'
-import { BreadcrumbOrders } from '../../../components'
+import { BreadcrumbOrders, UploadImageForm } from '../../../components'
 import { useSWR } from '../../../utils'
-import { GiMoneyStack } from 'react-icons/gi'
+import { requestToAPI } from '../../../utils/fetch'
 
 /**
  * /dashboard/businessOrders
@@ -95,6 +96,34 @@ export const OrdersContainer = ({ user }) => {
 
 export const BusinessOrdersList = ({ businessOrders }) => {
   const orderCardBackground = useColorModeValue('gray.50', 'gray.900')
+  const toast = useToast()
+
+  const handleReceiptUpload = async (
+    imageUrl: string,
+    paymenRecordId: string
+  ) => {
+    const formData = {
+      id: paymenRecordId,
+      proofImages: imageUrl,
+    }
+
+    try {
+      const data = await requestToAPI(
+        'PATCH',
+        `/api/payments/records/proof`,
+        formData
+      )
+
+      if (!data.error) {
+        toast({
+          title: 'Berhasil mengunggah bukti pembayaran',
+          status: 'success',
+        })
+      }
+    } catch (error) {
+      toast({ title: 'Gagal mengunggah bukti pembayaran', status: 'error' })
+    }
+  }
 
   return (
     <Stack spacing={5}>
@@ -248,21 +277,37 @@ export const BusinessOrdersList = ({ businessOrders }) => {
                     {formatRupiah(businessOrder?.paymentRecord?.amountDue)}
                   </Text>
                 </Box>
-                <Box fontSize="xs">
-                  <Text>Penting untuk:</Text>
-                  <OrderedList>
-                    <ListItem>
-                      Transfer tepat hingga <b>3 digit terakhir</b>
-                    </ListItem>
-                    <ListItem>
-                      Hanya disarankan untuk transfer melalui rekening langsung
-                    </ListItem>
-                    <ListItem>
-                      Menunggu pembayaran terkonfirmasi dari kami setelah
-                      transfer dalam waktu 2×24 jam
-                    </ListItem>
-                  </OrderedList>
-                </Box>
+                <Stack
+                  direction={['column', null, 'row']}
+                  justifyContent="space-between"
+                >
+                  <Box fontSize="xs">
+                    <Text>Penting untuk:</Text>
+                    <OrderedList>
+                      <ListItem>
+                        Transfer tepat hingga <b>3 digit terakhir</b>
+                      </ListItem>
+                      <ListItem>
+                        Hanya disarankan untuk transfer melalui rekening
+                        langsung
+                      </ListItem>
+                      <ListItem>
+                        Menunggu pembayaran terkonfirmasi dari kami setelah
+                        transfer dalam waktu 2×24 jam
+                      </ListItem>
+                    </OrderedList>
+                  </Box>
+                  <Box>
+                    <UploadImageForm
+                      appendImageUrl={(imageUrl) =>
+                        handleReceiptUpload(
+                          imageUrl,
+                          businessOrder.paymentRecordId
+                        )
+                      }
+                    />
+                  </Box>
+                </Stack>
               </Stack>
             )}
           </Stack>
