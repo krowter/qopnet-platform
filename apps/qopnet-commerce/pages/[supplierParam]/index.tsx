@@ -14,7 +14,7 @@ import {
   Spinner,
   VStack,
   Stack,
-  SimpleGrid,
+  ButtonGroup,
   Box,
   InputGroup,
   InputLeftElement,
@@ -94,7 +94,7 @@ export const SupplierContainer = ({ supplierParam }) => {
               {supplier?.supplierProducts?.length &&
                 user &&
                 user?.id === supplier?.owner?.user?.id && (
-                  <Stack align="flex-start" spacing={5}>
+                  <ButtonGroup spacing={5}>
                     <NextLinkButton
                       colorScheme="green"
                       size="sm"
@@ -103,7 +103,16 @@ export const SupplierContainer = ({ supplierParam }) => {
                     >
                       Tambah produk lagi
                     </NextLinkButton>
-                  </Stack>
+                    <NextLinkButton
+                      colorScheme="green"
+                      variant="outline"
+                      size="sm"
+                      leftIcon={<Icon name="order" />}
+                      href={`/${supplier.handle}/orders`}
+                    >
+                      Cek pesanan
+                    </NextLinkButton>
+                  </ButtonGroup>
                 )}
             </Stack>
 
