@@ -44,7 +44,7 @@ model Profile {
 
   // Relation: User
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String
+  userId String @unique
 
   // Relation: Address
   addresses         Address[]
@@ -72,7 +72,7 @@ model AdminProfile {
   id String @id @default(cuid())
 
   // Relations
-  userId String
+  userId String @unique
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   // Timestamp
@@ -326,9 +326,9 @@ model FundBeneficiary {
   id String @id @default(cuid())
 
   // Relations can also include access to Merchants
-  userId    String?
+  userId    String?  @unique
   user      User?    @relation(fields: [userId], references: [id])
-  profileId String?
+  profileId String?  @unique
   profile   Profile? @relation(fields: [profileId], references: [id])
 
   // Other personal info
@@ -437,7 +437,7 @@ model BusinessOrder {
 
   // Relation: PaymentRecord
   paymentRecord   PaymentRecord? @relation(fields: [paymentRecordId], references: [id])
-  paymentRecordId String?
+  paymentRecordId String?        @unique
 
   // Calculation for business order items
   totalItems            Int?
