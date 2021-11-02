@@ -14,7 +14,7 @@ import {
   Spinner,
   VStack,
   Stack,
-  SimpleGrid,
+  ButtonGroup,
   Box,
   InputGroup,
   InputLeftElement,
@@ -42,6 +42,11 @@ export const SupplierContainer = ({ supplierParam }) => {
   const { data, error } = useSWR(`/api/suppliers/${supplierParam}`)
   const { supplier } = data || {}
 
+  const address = supplier?.addresses[0]
+    ? `${supplier?.addresses[0]?.city}, ${supplier?.addresses[0]?.state}`
+    : `?`
+  const title = `${supplier?.name} - ${address} - Qopnet`
+
   return (
     <Stack spacing={10}>
       {error && <Text>Gagal memuat data supplier</Text>}
@@ -53,9 +58,7 @@ export const SupplierContainer = ({ supplierParam }) => {
       )}
       {!error && supplier && (
         <>
-          <NextSeo
-            title={`${supplier?.name} - ${supplier?.addresses[0]?.city}, ${supplier?.addresses[0]?.state} - Qopnet`}
-          />
+          <NextSeo title={title} />
           <Stack spacing={10} w="100%">
             <Stack spacing={5}>
               <Flex id="supplier-brand" flexWrap="wrap">
@@ -91,7 +94,7 @@ export const SupplierContainer = ({ supplierParam }) => {
               {supplier?.supplierProducts?.length &&
                 user &&
                 user?.id === supplier?.owner?.user?.id && (
-                  <Stack align="flex-start" spacing={5}>
+                  <ButtonGroup spacing={5}>
                     <NextLinkButton
                       colorScheme="green"
                       size="sm"
@@ -100,7 +103,16 @@ export const SupplierContainer = ({ supplierParam }) => {
                     >
                       Tambah produk lagi
                     </NextLinkButton>
-                  </Stack>
+                    <NextLinkButton
+                      colorScheme="green"
+                      variant="outline"
+                      size="sm"
+                      leftIcon={<Icon name="order" />}
+                      href={`/${supplier.handle}/orders`}
+                    >
+                      Cek pesanan
+                    </NextLinkButton>
+                  </ButtonGroup>
                 )}
             </Stack>
 
@@ -187,7 +199,12 @@ export const SupplierProductsContainer = ({ supplier }) => {
       </Box>
 
       {!keyword && supplier?.supplierProducts && (
-        <SupplierProductsGrid supplierProducts={supplier?.supplierProducts} />
+        <Stack>
+          <Text>
+            Terdapat <b>{supplier?.supplierProducts?.length}</b> produk
+          </Text>
+          <SupplierProductsGrid supplierProducts={supplier?.supplierProducts} />
+        </Stack>
       )}
 
       {keyword && (
@@ -203,11 +220,14 @@ export const SearchSupplierProductsResults = ({ supplier, keyword }) => {
   )
   const { meta, supplierProducts } = data || {}
 
+  const address = supplier?.addresses[0]
+    ? `${supplier?.addresses[0]?.city}, ${supplier?.addresses[0]?.state}`
+    : `?`
+  const title = `Mencari: ${keyword} di ${supplier?.name} - ${address} - Qopnet`
+
   return (
     <Stack>
-      <NextSeo
-        title={`Mencari: ${keyword} di ${supplier?.name} - ${supplier?.addresses[0]?.city}, ${supplier?.addresses[0]?.state} - Qopnet`}
-      />
+      <NextSeo title={title} />
 
       <Heading as="h2" size="md">
         Hasil pencarian untuk <b>"{keyword}"</b>
@@ -222,7 +242,9 @@ export const SearchSupplierProductsResults = ({ supplier, keyword }) => {
       )}
       {!error && supplierProducts && (
         <Stack>
-          <Text>{meta.recordCount} produk ditemukan</Text>
+          <Text>
+            <b>{meta.recordCount}</b> produk ditemukan
+          </Text>
           <SupplierProductsGrid supplierProducts={supplierProducts} />
         </Stack>
       )}

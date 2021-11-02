@@ -43,8 +43,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
                 }
               ]
             }
@@ -171,8 +171,8 @@
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "apps/qopnet-commerce/src/environments/environment.ts",
-                  "with": "apps/qopnet-commerce/src/environments/environment.prod.ts"
+                  "replace": "apps/qopnet-commerce/environments/environment.ts",
+                  "with": "apps/qopnet-commerce/environments/environment.prod.ts"
                 }
               ]
             }

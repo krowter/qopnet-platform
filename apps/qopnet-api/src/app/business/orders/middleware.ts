@@ -13,6 +13,9 @@ export const getMyAllBusinessOrders = async (req, res) => {
       await prisma.businessOrder.findMany({
         where: {
           ownerId,
+          NOT: {
+            status: 'DRAFT',
+          },
         },
         include: {
           businessOrderItems: {
@@ -36,6 +39,7 @@ export const getMyAllBusinessOrders = async (req, res) => {
           paymentMethod: true,
           paymentRecord: true,
         },
+        orderBy: [{ createdAt: 'asc' }],
       })
 
     res.send({
@@ -360,6 +364,17 @@ export const patchMyCartItem = async (req, res) => {
           })
         res.status(200).json({
           message: 'Patch my cart INCREMENT item success',
+          formData,
+          businessOrderItem: incrementedBusinessOrderItem,
+        })
+      } else if (formData.action === 'CUSTOM_QUANTITY') {
+        const incrementedBusinessOrderItem =
+          await prisma.businessOrderItem.update({
+            where: { id: formData.id },
+            data: { quantity: formData.quantity ?? 1 },
+          })
+        res.status(200).json({
+          message: 'Patch my cart CUSTOM_QUANTITY item success',
           formData,
           businessOrderItem: incrementedBusinessOrderItem,
         })
@@ -831,6 +846,41 @@ export const patchOneBusinessOrderStatus = async (req, res) => {
       businessOrderParam,
       isBusinessOrderExist,
       formData,
+    })
+  }
+}
+
+// Patch one business order status to PAID by businessOrderParam (id)
+export const patchOneBusinessOrderStatusToPaid = async (req, res) => {
+  const { businessOrderParam } = req.params
+  const isBusinessOrderExist = req.isBusinessOrderExist
+  const businessOrder = req.businessOrder
+
+  if (isBusinessOrderExist) {
+    const updatedCart = await prisma.businessOrder.update({
+      where: { id: businessOrderParam },
+      include: { businessOrderItems: true },
+      data: { status: 'PAID' },
+    })
+
+    const updatedPaymentRecord = await prisma.paymentRecord.update({
+      where: { id: businessOrder.paymentRecordId },
+      data: { status: 'PAID' },
+    })
+
+    res.status(200).json({
+      message: 'Patch one business order status to PAID success',
+      businessOrderParam,
+      isBusinessOrderExist,
+      businessOrder: updatedCart,
+      paymentRecord: updatedPaymentRecord,
+    })
+  } else {
+    res.status(404).json({
+      message:
+        'Patch one business order status to PAID failed, because it is not found',
+      businessOrderParam,
+      isBusinessOrderExist,
     })
   }
 }
