@@ -47,19 +47,21 @@ model Profile {
   userId String @unique
 
   // Relation: Address
-  addresses         Address[]
+  addresses             Address[]
   // Relation: Wholesaler
-  wholesalers       Wholesaler[]
+  wholesalers           Wholesaler[]
   // Relation: Supplier
-  suppliers         Supplier[]
-  supplierProducts  SupplierProduct[]
+  suppliers             Supplier[]
+  supplierProducts      SupplierProduct[]
   // Relation: BusinessOrder
-  businessOrders    BusinessOrder[]
+  businessOrders        BusinessOrder[]
   // Relation: Merchant
-  merchants         Merchant[]
-  merchantProducts  MerchantProduct[]
+  merchants             Merchant[]
+  merchantProducts      MerchantProduct[]
   // Relation: FundBeneficiary
-  fundBeneficiaries FundBeneficiary?
+  fundBeneficiaries     FundBeneficiary?
+  // Relation: VirtualAccountNumber
+  virtualAccountNumbers VirtualAccountNumber[]
 
   // Timestamp
   createdAt DateTime @default(now())
@@ -439,6 +441,9 @@ model BusinessOrder {
   paymentRecord   PaymentRecord? @relation(fields: [paymentRecordId], references: [id])
   paymentRecordId String?        @unique
 
+  // Relation: VirtualAccountNumber
+  virtualAccountNumber VirtualAccountNumber?
+
   // Calculation for business order items
   totalItems            Int?
   totalWeight           Int?
@@ -593,7 +598,15 @@ model PaymentRecord {
 }
 
 model VirtualAccountNumber {
-  id String @id @default(cuid())
+  id       String @id @default(cuid())
+  vaNumber String
+  instCode String
+
+  // Relations
+  ownerId          String
+  owner            Profile       @relation(fields: [ownerId], references: [id])
+  bussinessOrderId String        @unique
+  bussinessOrder   BusinessOrder @relation(fields: [bussinessOrderId], references: [id])
 
   // Timestamp
   createdAt DateTime @default(now())
@@ -604,6 +617,8 @@ model VirtualAccountNumber {
 
 model VirtualAccountPermataLog {
   id String @id @default(cuid())
+
+  requestObject Json
 
   // Timestamp
   createdAt DateTime @default(now())
