@@ -602,6 +602,16 @@ model VirtualAccountNumber {
   @@map(name: "virtual_account_numbers")
 }
 
+model VirtualAccountPermataLog {
+  id String @id @default(cuid())
+
+  // Timestamp
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@map(name: "virtual_account_permata_logs")
+}
+
 // -----------------------------------------------------------------------------
 // PROMO
 
