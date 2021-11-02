@@ -1,12 +1,12 @@
 [
   {
-    "name": "Manual Transfer Bank BCA",
-    "accountNumber": "006 059 9173",
-    "accountHolderName": "PT Anugerah Berkah Samudera",
-    "paymentCategory": "TRANSFER_MANUAL"
+    "name": "Transfer Virtual Account Permata",
+    "paymentCategory": "TRANSFER_VIRTUAL_ACCOUNT"
   },
   {
-    "name": "COD (Cash on Delivery)",
-    "paymentCategory": "CASH_ON_DELIVERY"
+    "name": "Transfer Manual BCA",
+    "paymentCategory": "TRANSFER_MANUAL",
+    "accountHolderName": "PT Anugerah Berkah Samudera",
+    "accountNumber": "006 059 9173"
   }
 ]
