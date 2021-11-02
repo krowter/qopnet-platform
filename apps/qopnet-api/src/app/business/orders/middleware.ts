@@ -716,6 +716,23 @@ const processTransferVirtualAccount = async (
   try {
     const billAmount = formData?.billAmount || formData?.totalCalculatedBill
 
+    const virtualAccountNumber =
+      '7301' +
+      req.profile.phone.substr(
+        req.profile.phone.length - 12,
+        req.profile.phone.length
+      )
+
+    const createdVirtualAccountNumber =
+      await prisma.virtualAccountNumber.create({
+        data: {
+          vaNumber: virtualAccountNumber,
+          instCode: '7301',
+          ownerId: req.profile.id,
+          bussinessOrderId: businessOrder.id,
+        },
+      })
+
     const updatedCart = await prisma.businessOrder.update({
       where: {
         id: businessOrder.id,
@@ -723,6 +740,7 @@ const processTransferVirtualAccount = async (
       include: {
         paymentMethod: true,
         paymentRecord: true,
+        virtualAccountNumber: true,
       },
       data: {
         status: 'WAITING_FOR_PAYMENT',
@@ -752,6 +770,7 @@ const processTransferVirtualAccount = async (
         'Process my order with Virtual Account success, order is waiting for payment, payment record is pending',
       // ownerId,
       // isCartExist,
+      virtualAccountNumber: createdVirtualAccountNumber,
       businessOrder: updatedCart,
     })
   } catch (error) {
