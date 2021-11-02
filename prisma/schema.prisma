@@ -599,7 +599,7 @@ model VirtualAccountNumber {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
-  @@map(name: "virtual_account_number")
+  @@map(name: "virtual_account_numbers")
 }
 
 // -----------------------------------------------------------------------------
