@@ -713,6 +713,13 @@ const processTransferVirtualAccount = async (
   formData,
   businessOrder
 ) => {
+  if (!req.profile.phone) {
+    res.status(404).json({
+      message:
+        'Process my order failed because user profile phone number is not found',
+    })
+  }
+
   try {
     const billAmount = formData?.billAmount || formData?.totalCalculatedBill
 
