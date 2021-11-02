@@ -544,6 +544,7 @@ enum PaymentCategory {
 model PaymentMethod {
   id String @id @default(cuid())
 
+  // slug String
   name              String
   paymentCategory   PaymentCategory
   accountNumber     String? // Example: 123456789
