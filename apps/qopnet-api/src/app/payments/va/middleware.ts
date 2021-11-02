@@ -42,14 +42,29 @@ export const getBill = async (req, res) => {
 }
 
 export const payBill = async (req, res) => {
+  const requestSample = {
+    PayBillRq: {
+      INSTCODE: '7301',
+      VI_VANUMBER: '7301123456789012',
+      VI_TRACENO: '000001',
+      VI_TRNDATE: '2021-09-13T14:00:00+07:00',
+      BILL_AMOUNT: '10000.00',
+      VI_CCY: '360',
+      VI_DELCHANNEL: '099',
+    },
+  }
+
   try {
     res.send({
-      message: '',
+      PayBillRs: {
+        STATUS: '00',
+      },
     })
   } catch (error) {
     res.status(500).send({
-      message: '',
-      error,
+      PayBillRs: {
+        STATUS: '96',
+      },
     })
   }
 }
