@@ -38,6 +38,7 @@ export const getMyAllBusinessOrders = async (req, res) => {
           shipmentAddress: true,
           paymentMethod: true,
           paymentRecord: true,
+          virtualAccountNumber: true,
         },
         orderBy: [{ createdAt: 'asc' }],
       })
@@ -99,6 +100,7 @@ export const getMyCart = async (req, res) => {
         shipmentCourier: true,
         paymentMethod: true,
         paymentRecord: true,
+        virtualAccountNumber: true,
       },
     })
     if (!businessOrder) throw 'My cart or draft business order is not found'
@@ -494,6 +496,7 @@ export const patchMyCartCourier = async (req, res) => {
           shipmentCourier: true,
           paymentMethod: true,
           paymentRecord: true,
+          virtualAccountNumber: true,
         },
         data: {
           shipmentCourierId: formData.id, // Patch
@@ -666,6 +669,7 @@ const processTransferManual = async (req, res, formData, businessOrder) => {
       include: {
         paymentMethod: true,
         paymentRecord: true,
+        virtualAccountNumber: true,
       },
       data: {
         status: 'WAITING_FOR_PAYMENT',
@@ -804,6 +808,7 @@ export const getAllBusinessOrders = async (req, res) => {
           shipmentAddress: true,
           paymentMethod: true,
           paymentRecord: true,
+          virtualAccountNumber: true,
         },
       })
 
@@ -840,9 +845,10 @@ export const getOneBusinessOrder = async (req, res) => {
               supplierProduct: true,
             },
           },
-          shipmentAddress: true, // One address
-          paymentMethod: true, // BCA / COD
-          paymentRecord: true, // Detail transfer
+          shipmentAddress: true,
+          paymentMethod: true,
+          paymentRecord: true,
+          virtualAccountNumber: true,
         },
       })
     if (!businessOrder) throw 'Business order by param is not found'
@@ -1069,6 +1075,7 @@ export const checkMyCart = async (req, res, next) => {
           shipmentCourierVehicle: true,
           paymentMethod: true,
           paymentRecord: true,
+          virtualAccountNumber: true,
           businessOrderItems: true,
         },
       })
@@ -1143,6 +1150,7 @@ export const checkOneBusinessOrder = async (req, res, next) => {
           businessOrderItems: true,
           paymentMethod: true,
           paymentRecord: true,
+          virtualAccountNumber: true,
         },
       })
 
