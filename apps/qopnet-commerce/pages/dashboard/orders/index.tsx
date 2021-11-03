@@ -100,7 +100,8 @@ export const BusinessOrdersList = ({ businessOrders }) => {
     <Stack spacing={5}>
       {businessOrders.map((businessOrder, index) => {
         const { totalCalculatedBill } = calculateCart(businessOrder)
-
+        const [businessOrderStatusText, statusColor] =
+          formatBusinessOrderStatus(businessOrder?.status)
         return (
           <Stack
             key={businessOrder.id}
@@ -116,8 +117,8 @@ export const BusinessOrdersList = ({ businessOrders }) => {
                 <Heading as="h2" size="sm">
                   #{index + 1}
                 </Heading>
-                <Tag size="sm" colorScheme="green">
-                  {formatBusinessOrderStatus(businessOrder.status)}
+                <Tag size="sm" colorScheme={statusColor}>
+                  {businessOrderStatusText}
                 </Tag>
               </HStack>
               <HStack>
