@@ -1,17 +1,30 @@
+import { prisma } from '@qopnet/util-prisma'
+
 export const getBill = async (req, res) => {
-  const requestSample = {
-    GetBillRq: {
-      INSTCODE: '7301',
-      VI_VANUMBER: '7301123456789012',
-      VI_TRACENO: '000001',
-      VI_TRNDATE: '2021-09-13T14:00:00+07:00',
-      VI_DELCHANNEL: '099',
-    },
-  }
+  const formData = req.body.GetBillRq
 
   try {
-    const customerName = 'JOKO WIDODO'
-    const billAmount = '10000.00'
+    await prisma.virtualAccountPermataLog.create({
+      data: {
+        requestObject: {
+          body: formData,
+          headers: req.headers,
+        },
+      },
+    })
+
+    const vaNumber = await prisma.virtualAccountNumber.findFirst({
+      where: {
+        vaNumber: formData['VI_VANUMBER'],
+      },
+      include: {
+        owner: true,
+        bussinessOrder: true,
+      },
+    })
+
+    const customerName = vaNumber.owner.name.toUpperCase()
+    const billAmount = vaNumber.bussinessOrder.totalBillPayment + '.00'
 
     res.send({
       GetBillRs: {
@@ -42,19 +55,18 @@ export const getBill = async (req, res) => {
 }
 
 export const payBill = async (req, res) => {
-  const requestSample = {
-    PayBillRq: {
-      INSTCODE: '7301',
-      VI_VANUMBER: '7301123456789012',
-      VI_TRACENO: '000001',
-      VI_TRNDATE: '2021-09-13T14:00:00+07:00',
-      BILL_AMOUNT: '10000.00',
-      VI_CCY: '360',
-      VI_DELCHANNEL: '099',
-    },
-  }
+  const formData = req.body.PayBillRq
 
   try {
+    await prisma.virtualAccountPermataLog.create({
+      data: {
+        requestObject: {
+          body: formData,
+          headers: req.headers,
+        },
+      },
+    })
+
     res.send({
       PayBillRs: {
         STATUS: '00',
@@ -70,19 +82,18 @@ export const payBill = async (req, res) => {
 }
 
 export const revBill = async (req, res) => {
-  const requestSample = {
-    PayBillRq: {
-      INSTCODE: '7301',
-      VI_VANUMBER: '7301123456789012',
-      VI_TRACENO: '000001',
-      VI_TRNDATE: '2021-09-13T14:00:00+07:00',
-      BILL_AMOUNT: '10000.00',
-      VI_CCY: '360',
-      VI_DELCHANNEL: '099',
-    },
-  }
+  const formData = req.body.PayBillRq
 
   try {
+    await prisma.virtualAccountPermataLog.create({
+      data: {
+        requestObject: {
+          body: formData,
+          headers: req.headers,
+        },
+      },
+    })
+
     res.send({
       PayBillRs: {
         STATUS: '00',
