@@ -191,9 +191,11 @@ export const PaymentSummaryContainer = ({ businessOrder }) => {
         </HStack>
       </Stack>
 
-      <ManualTransferPaymentModalGroup
-        calculatedCartValues={calculatedCartValues}
-      />
+      {businessOrder.paymentMethod.id === 'ckuy5pt2n0222dti0shya0zfu' && (
+        <ManualTransferPaymentModalGroup
+          calculatedCartValues={calculatedCartValues}
+        />
+      )}
     </Stack>
   )
 }
