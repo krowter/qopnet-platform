@@ -38,6 +38,7 @@ export const getMyAllBusinessOrders = async (req, res) => {
           shipmentAddress: true,
           paymentMethod: true,
           paymentRecord: true,
+          virtualAccountNumber: true,
         },
         orderBy: [{ createdAt: 'asc' }],
       })
@@ -99,6 +100,7 @@ export const getMyCart = async (req, res) => {
         shipmentCourier: true,
         paymentMethod: true,
         paymentRecord: true,
+        virtualAccountNumber: true,
       },
     })
     if (!businessOrder) throw 'My cart or draft business order is not found'
@@ -494,6 +496,7 @@ export const patchMyCartCourier = async (req, res) => {
           shipmentCourier: true,
           paymentMethod: true,
           paymentRecord: true,
+          virtualAccountNumber: true,
         },
         data: {
           shipmentCourierId: formData.id, // Patch
@@ -585,7 +588,6 @@ export const processMyOrder = async (req, res) => {
 
   if (isCartExist) {
     try {
-      // console.info({ formData })
       /**
        * This should not require any formData or req.body
        * But still need to check if these fields are available:
@@ -601,63 +603,24 @@ export const processMyOrder = async (req, res) => {
         businessOrder.shipmentCourierId &&
         businessOrder.paymentMethodId
       ) {
-        // console.info({ message: 'Generating digits' })
-        // Generate unique digits based on new value + random digits
-        const randomDigits = Math.floor(Math.random() * (999 - 100) + 100)
-        const amountDue = Number(formData.totalCalculatedBill) + randomDigits
-        const amountString = amountDue.toString()
-        const uniqueString = amountString.substring(amountString.length - 3)
-        const uniqueDigits = Number(uniqueString)
-        // console.info({
-        //   randomDigits,
-        //   amountDue,
-        //   amountString,
-        //   uniqueString,
-        //   uniqueDigits,
-        // })
-
-        // console.info({ message: 'Processing cart into business order' })
-        const updatedCart = await prisma.businessOrder.update({
-          where: {
-            id: businessOrder.id,
-          },
-          include: {
-            paymentMethod: true,
-            paymentRecord: true,
-          },
-          data: {
-            status: 'WAITING_FOR_PAYMENT',
-            totalItems: formData?.totalItems || 0,
-            totalWeight: formData?.totalWeight || 0,
-            totalPrice: formData?.totalPrice || 0,
-            totalShippingCost:
-              formData?.totalShippingCost || formData?.totalShipmentCost || 0,
-            totalShippingDiscount: formData?.totalShippingDiscount || 0,
-            totalPayment:
-              formData?.totalPayment || formData?.totalCalculatedBill || 0,
-            totalBillPayment: amountDue || 0,
-            paymentRecord: {
-              create: {
-                status: 'PENDING',
-                accountNumber: formData?.accountNumber || '0',
-                accountHolderName: formData?.accountHolderName || 'Anonim',
-                amountDue: amountDue || 0,
-                uniqueDigits: uniqueDigits,
-                amountPaid: 0,
-                proofImages: [],
-              },
-            },
-          },
-        })
-        // console.info({ updatedCart })
-
-        res.status(200).json({
-          message:
-            'Process my order success, order is waiting for payment, payment record is pending',
-          ownerId,
-          isCartExist,
-          businessOrder: updatedCart,
-        })
+        if (businessOrder.paymentMethod.paymentCategory === 'TRANSFER_MANUAL') {
+          processTransferManual(req, res, formData, businessOrder)
+        } else if (
+          businessOrder.paymentMethod.paymentCategory ===
+          'TRANSFER_VIRTUAL_ACCOUNT'
+        ) {
+          processTransferVirtualAccount(req, res, formData, businessOrder)
+        } else if (
+          businessOrder.paymentMethod.paymentCategory === 'CASH_ON_DELIVERY'
+        ) {
+          res.status(400).json({
+            message: 'Process my order with Cash on Delivery failed',
+          })
+        } else {
+          res.status(400).json({
+            message: 'Process my order failed',
+          })
+        }
       } else {
         res.status(400).json({
           message: 'Process my order failed because fields are missing',
@@ -688,6 +651,147 @@ export const processMyOrder = async (req, res) => {
   }
 }
 
+const processTransferManual = async (req, res, formData, businessOrder) => {
+  try {
+    const billAmount = formData?.billAmount || formData?.totalCalculatedBill
+
+    // Generate unique digits based on new value + random digits
+    const randomDigits = Math.floor(Math.random() * (999 - 100) + 100)
+    const amountDue = Number(billAmount) + randomDigits
+    const amountString = amountDue.toString()
+    const uniqueString = amountString.substring(amountString.length - 3)
+    const uniqueDigits = Number(uniqueString)
+
+    const updatedCart = await prisma.businessOrder.update({
+      where: {
+        id: businessOrder.id,
+      },
+      include: {
+        paymentMethod: true,
+        paymentRecord: true,
+        virtualAccountNumber: true,
+      },
+      data: {
+        status: 'WAITING_FOR_PAYMENT',
+        totalItems: formData?.totalItems || 0,
+        totalWeight: formData?.totalWeight || 0,
+        totalPrice: formData?.totalPrice || 0,
+        totalShippingCost:
+          formData?.totalShippingCost || formData?.totalShipmentCost || 0,
+        totalShippingDiscount: formData?.totalShippingDiscount || 0,
+        totalPayment:
+          formData?.totalPayment || formData?.totalCalculatedBill || 0,
+        totalBillPayment: amountDue || 0,
+        paymentRecord: {
+          create: {
+            status: 'PENDING',
+            accountNumber: formData?.accountNumber || '0',
+            accountHolderName: formData?.accountHolderName || 'Anonim',
+            amountDue: amountDue || 0,
+            uniqueDigits: uniqueDigits,
+            amountPaid: 0,
+            proofImages: [],
+          },
+        },
+      },
+    })
+
+    res.status(200).json({
+      message:
+        'Process my order success, order is waiting for payment, payment record is pending',
+      // ownerId,
+      // isCartExist,
+      businessOrder: updatedCart,
+    })
+  } catch (error) {
+    res.status(500).json({
+      message: 'Process my order failed',
+      error,
+    })
+  }
+}
+
+const processTransferVirtualAccount = async (
+  req,
+  res,
+  formData,
+  businessOrder
+) => {
+  if (!req.profile.phone) {
+    res.status(404).json({
+      message:
+        'Process my order failed because user profile phone number is not found',
+    })
+  }
+
+  try {
+    const billAmount = formData?.billAmount || formData?.totalCalculatedBill
+
+    const virtualAccountNumber =
+      '7301' +
+      req.profile.phone.substr(
+        req.profile.phone.length - 12,
+        req.profile.phone.length
+      )
+
+    const createdVirtualAccountNumber =
+      await prisma.virtualAccountNumber.create({
+        data: {
+          vaNumber: virtualAccountNumber,
+          instCode: '7301',
+          ownerId: req.profile.id,
+          bussinessOrderId: businessOrder.id,
+        },
+      })
+
+    const updatedCart = await prisma.businessOrder.update({
+      where: {
+        id: businessOrder.id,
+      },
+      include: {
+        paymentMethod: true,
+        paymentRecord: true,
+        virtualAccountNumber: true,
+      },
+      data: {
+        status: 'WAITING_FOR_PAYMENT',
+        totalItems: formData?.totalItems || 0,
+        totalWeight: formData?.totalWeight || 0,
+        totalPrice: formData?.totalPrice || 0,
+        totalShippingCost:
+          formData?.totalShippingCost || formData?.totalShipmentCost || 0,
+        totalShippingDiscount: formData?.totalShippingDiscount || 0,
+        totalPayment:
+          formData?.totalPayment || formData?.totalCalculatedBill || 0,
+        totalBillPayment: Number(billAmount) || 0,
+        paymentRecord: {
+          create: {
+            status: 'PENDING',
+            // accountNumber: formData?.accountNumber || '0',
+            // accountHolderName: formData?.accountHolderName || 'Anonim',
+            amountDue: Number(billAmount) || 0,
+            amountPaid: 0,
+          },
+        },
+      },
+    })
+
+    res.status(200).json({
+      message:
+        'Process my order with Virtual Account success, order is waiting for payment, payment record is pending',
+      // ownerId,
+      // isCartExist,
+      virtualAccountNumber: createdVirtualAccountNumber,
+      businessOrder: updatedCart,
+    })
+  } catch (error) {
+    res.status(500).json({
+      message: 'Process my order with Virtual Account failed',
+      error,
+    })
+  }
+}
+
 // -----------------------------------------------------------------------------
 // Admin Only
 // -----------------------------------------------------------------------------
@@ -704,6 +808,7 @@ export const getAllBusinessOrders = async (req, res) => {
           shipmentAddress: true,
           paymentMethod: true,
           paymentRecord: true,
+          virtualAccountNumber: true,
         },
       })
 
@@ -740,9 +845,10 @@ export const getOneBusinessOrder = async (req, res) => {
               supplierProduct: true,
             },
           },
-          shipmentAddress: true, // One address
-          paymentMethod: true, // BCA / COD
-          paymentRecord: true, // Detail transfer
+          shipmentAddress: true,
+          paymentMethod: true,
+          paymentRecord: true,
+          virtualAccountNumber: true,
         },
       })
     if (!businessOrder) throw 'Business order by param is not found'
@@ -969,6 +1075,7 @@ export const checkMyCart = async (req, res, next) => {
           shipmentCourierVehicle: true,
           paymentMethod: true,
           paymentRecord: true,
+          virtualAccountNumber: true,
           businessOrderItems: true,
         },
       })
@@ -1043,6 +1150,7 @@ export const checkOneBusinessOrder = async (req, res, next) => {
           businessOrderItems: true,
           paymentMethod: true,
           paymentRecord: true,
+          virtualAccountNumber: true,
         },
       })
 
