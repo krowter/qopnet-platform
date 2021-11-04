@@ -223,11 +223,13 @@ export const AddressesContainer = ({ businessOrder }) => {
                 >
                   <Text>{formatAddressComplete(address)}</Text>
                 </OptionBox>
-                <NextLinkButton
-                  href="/profile"
-                  children="Ubah Alamat"
-                  colorScheme="orange"
-                />
+                <Box>
+                  <NextLinkButton
+                    href="/profile"
+                    children="Ubah Alamat"
+                    colorScheme="orange"
+                  />
+                </Box>
               </>
             )
           })}
