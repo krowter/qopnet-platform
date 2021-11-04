@@ -1,5 +1,11 @@
 import NextImage from 'next/image'
 import NextLink from 'next/link'
+// import {
+//   BusinessOrder,
+//   BusinessOrderItem,
+//   SupplierProduct,
+//   Supplier,
+// } from '@prisma/client'
 
 import {
   Box,
@@ -30,12 +36,6 @@ import {
 import { UploadImageForm } from '.'
 
 import { requestToAPI } from '../utils/fetch'
-// import {
-//   BusinessOrder,
-//   BusinessOrderItem,
-//   SupplierProduct,
-//   Supplier,
-// } from '.prisma/client'
 
 export type BusinessOrderCardProps = {
   // businessOrder: BusinessOrder & {
@@ -55,15 +55,18 @@ export const BusinessOrderCard: React.FC<BusinessOrderCardProps> = ({
   const orderCardBackground = useColorModeValue('gray.50', 'gray.900')
   const { totalCalculatedBill } = calculateCart(businessOrder)
 
-  const [status, color] = formatBusinessOrderStatus(businessOrder.status)
+  const [businessOrderStatusText, statusColor] = formatBusinessOrderStatus(
+    businessOrder?.status
+  )
+
   const toast = useToast()
 
   const handleReceiptUpload = async (
     imageUrl: string,
-    paymenRecordId: string
+    paymentRecordId: string
   ) => {
     const formData = {
-      id: paymenRecordId,
+      id: paymentRecordId,
       proofImages: imageUrl,
     }
 
@@ -95,8 +98,8 @@ export const BusinessOrderCard: React.FC<BusinessOrderCardProps> = ({
           <Heading as="h2" size="sm">
             #{index + 1}
           </Heading>
-          <Tag size="sm" colorScheme={color}>
-            {status}
+          <Tag size="sm" colorScheme={statusColor}>
+            {businessOrderStatusText}
           </Tag>
         </HStack>
         <HStack>

@@ -33,6 +33,7 @@ import {
   Tag,
   useColorModeValue,
   useToast,
+  chakra,
 } from '@chakra-ui/react'
 
 import {
@@ -430,7 +431,17 @@ export const SupplierProductDetail = ({
             Deskripsi
           </Heading>
           {product?.description ? (
-            <Text>{product?.description}</Text>
+            <Text>
+              {' '}
+              {product?.description.split('\n').map((paragraph) => {
+                return (
+                  <>
+                    <chakra.span>{paragraph}</chakra.span>
+                    <br />
+                  </>
+                )
+              })}
+            </Text>
           ) : (
             <Text>Tidak ada deskripsi.</Text>
           )}
