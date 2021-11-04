@@ -88,3 +88,24 @@ Rules:
 4. Update my cart (D) can automatically create my cart if it is not exist.
    - This can bypass rule (2)
 5. Delete my cart is not available, only able to clear the items.
+
+---
+
+## Permata VA Service
+
+### Staging API: https://api-staging.qopnet.id
+
+- GetBill https://api-staging.qopnet.id/api/payments/va/permata/getbill
+- PayBill https://api-staging.qopnet.id/api/payments/va/permata/paybill
+- RevBill https://api-staging.qopnet.id/api/payments/va/permata/revbill
+
+### Production API: https://api.qopnet.id
+
+- GetBill https://api.qopnet.id/api/payments/va/permata/getbill
+- PayBill https://api.qopnet.id/api/payments/va/permata/paybill
+- RevBill https://api.qopnet.id/api/payments/va/permata/revbill
+
+### Frontend UI: https://qopnet.id
+
+- https://qopnet.id/cart/payment Where there will be Permata VA option
+- https://qopnet.id/dashboard/orders Where the Virtual Account number will generated and appear
