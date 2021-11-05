@@ -161,7 +161,7 @@ export const BusinessOrderCard: React.FC<BusinessOrderCardProps> = ({
                         {item.supplierProduct?.name}
                       </ChakraLink>
                     </NextLink>
-                    {item.supplier?.name && (
+                    {/* {item.supplier?.name && (
                       <Text fontSize="sm">
                         <chakra.span> dari </chakra.span>
                         <NextLink href={`/${item.supplier?.handle}`} passHref>
@@ -176,7 +176,7 @@ export const BusinessOrderCard: React.FC<BusinessOrderCardProps> = ({
                           </chakra.span>
                         )}
                       </Text>
-                    )}
+                    )} */}
                   </Stack>
                   <Text>
                     {item.quantity} barang × {formatRupiah(calculatedPrice)} ={' '}

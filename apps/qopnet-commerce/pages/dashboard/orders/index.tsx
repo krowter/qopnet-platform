@@ -210,7 +210,9 @@ export const SimpleBusinessOrderCard = ({ businessOrder, index }) => {
             <Text fontSize="xl">{formatRupiah(totalCalculatedBill)}</Text>
           </Box>
           <Button
-            onClick={() => router.push(`/dashboard/orders/${businessOrder.id}`)}
+            onClick={() =>
+              router.push(`/dashboard/orders/${businessOrder.id}?id=${index}`)
+            }
             size="sm"
             colorScheme="orange"
           >

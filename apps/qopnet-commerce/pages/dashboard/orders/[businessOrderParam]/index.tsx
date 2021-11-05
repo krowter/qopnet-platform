@@ -1,8 +1,10 @@
 import { useRouter } from 'next/router'
 import { HStack, Spinner, Text } from '@chakra-ui/react'
+import { useLocation } from 'react-router-dom'
 
 import { Layout } from '@qopnet/qopnet-ui'
 import { useSWR, requestToAPI } from '../../../../utils'
+import { BusinessOrderCard } from '../../../../components'
 
 const BusinessOrderParamPage = () => {
   const router = useRouter()
@@ -36,7 +38,10 @@ export const BusinessOrderContainer = ({ businessOrderParam }) => {
 }
 
 export const BusinessOrderDetail = ({ businessOrder }) => {
-  return <pre>{JSON.stringify(businessOrder, null, 2)}</pre>
+  const router = useRouter()
+  const { id } = router.query
+
+  return <BusinessOrderCard businessOrder={businessOrder} index={+id} />
 }
 
 export default BusinessOrderParamPage
