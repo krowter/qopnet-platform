@@ -212,11 +212,27 @@ export const BusinessOrderCard: React.FC<BusinessOrderCardProps> = ({
             Selesaikan pembayaran dengan mentransfer ke detail berikut:
           </Alert>
           <Box>
-            <Text>Nomor dan nama pemilik rekening:</Text>
-            <Text fontSize="lg" fontWeight="bold">
-              {businessOrder?.paymentMethod?.accountNumber}
-            </Text>
-            <Text>{businessOrder?.paymentMethod?.accountHolderName}</Text>
+            {businessOrder?.paymentMethod?.paymentCategory ===
+            'TRANSFER_VIRTUAL_ACCOUNT' ? (
+              <>
+                <Text>Nomor Virtual Account:</Text>
+                <Text fontSize="lg" fontWeight="bold">
+                  {businessOrder?.virtualAccountNumber?.vaNumber}
+                </Text>
+              </>
+            ) : (
+              <>
+                <Text>Nomor rekening dan nama pemilik rekening:</Text>
+                <Text fontSize="lg" fontWeight="bold">
+                  {businessOrder?.paymentMethod?.accountNumber}
+                </Text>
+                <Text fontSize="lg" fontWeight="bold">
+                  {businessOrder?.paymentMethod?.accountHolderName}
+                </Text>
+              </>
+            )}
+
+            {/*  */}
           </Box>
           <Box>
             <Text>Total pembayaran:</Text>
