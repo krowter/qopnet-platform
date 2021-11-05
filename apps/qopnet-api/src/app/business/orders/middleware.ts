@@ -767,8 +767,6 @@ const processTransferVirtualAccount = async (
         paymentRecord: {
           create: {
             status: 'PENDING',
-            // accountNumber: formData?.accountNumber || '0',
-            // accountHolderName: formData?.accountHolderName || 'Anonim',
             amountDue: Number(billAmount) || 0,
             amountPaid: 0,
           },

@@ -191,17 +191,63 @@ export const PaymentSummaryContainer = ({ businessOrder }) => {
         </HStack>
       </Stack>
 
+      {/* TransferVirtualAccountContainer */}
+      {businessOrder?.paymentMethod?.paymentCategory ===
+        'TRANSFER_VIRTUAL_ACCOUNT' && (
+        <TransferVirtualAccountContainer
+          calculatedCartValues={calculatedCartValues}
+        />
+      )}
+
+      {/* ManualTransferPaymentModalGroup */}
+      {/* TransferManualContainer */}
       {businessOrder?.paymentMethod?.paymentCategory === 'TRANSFER_MANUAL' && (
         <ManualTransferPaymentModalGroup
           calculatedCartValues={calculatedCartValues}
         />
       )}
-
-      {businessOrder?.paymentMethod?.paymentCategory ===
-        'TRANSFER_VIRTUAL_ACCOUNT' && (
-        <Button colorScheme="orange">Pembayaran Virtual Account</Button>
-      )}
     </Stack>
+  )
+}
+
+export const TransferVirtualAccountContainer = ({ calculatedCartValues }) => {
+  const router = useRouter()
+  const toast = useToast()
+
+  const handleProcessMyOrder = async () => {
+    try {
+      const formData = {
+        ...calculatedCartValues,
+      }
+      const response = await requestToAPI(
+        'PUT',
+        '/api/business/orders/my/cart/process',
+        formData
+      )
+      // console.info({ response, formData })
+
+      if (response) {
+        router.push(`/dashboard/orders/${response?.businessOrder?.id}`)
+        toast({
+          status: 'success',
+          title: 'Proses pengaturan pembayaran berhasil',
+          description: 'Silakan mengikuti petunjuk untuk melunasi pembayaran',
+        })
+      }
+    } catch (error) {
+      console.error(error)
+      toast({
+        status: 'error',
+        title: 'Proses pengaturan pembayaran gagal',
+        description: 'Silakan coba lagi',
+      })
+    }
+  }
+
+  return (
+    <Button colorScheme="orange" onClick={handleProcessMyOrder}>
+      Pembayaran Virtual Account
+    </Button>
   )
 }
 
@@ -233,20 +279,20 @@ export const ManualTransferPaymentModalGroup = ({ calculatedCartValues }) => {
         accountHolderName: data?.accountHolderName || 'Anonim',
       }
 
-      // console.info({ formData })
       const response = await requestToAPI(
         'PUT',
         '/api/business/orders/my/cart/process',
         formData
       )
-      // console.info({ response, formData })
 
-      router.push(`/dashboard/orders`)
-      toast({
-        status: 'success',
-        title: 'Proses pengaturan pembayaran berhasil',
-        description: 'Silakan mengikuti petunjuk untuk melunasi pembayaran',
-      })
+      if (response) {
+        router.push(`/dashboard/orders/${response?.businessOrder?.id}`)
+        toast({
+          status: 'success',
+          title: 'Proses pengaturan pembayaran berhasil',
+          description: 'Silakan mengikuti petunjuk untuk melunasi pembayaran',
+        })
+      }
     } catch (error) {
       console.error(error)
       toast({
