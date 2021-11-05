@@ -95,6 +95,8 @@ export const SimpleBusinessOrderCard = ({ businessOrder, index }) => {
     businessOrder?.status
   )
 
+  const router = useRouter()
+
   return (
     <Stack key={businessOrder.id} p={3} rounded="md" bg={orderCardBackground}>
       <Stack
@@ -207,9 +209,13 @@ export const SimpleBusinessOrderCard = ({ businessOrder, index }) => {
             </Heading>
             <Text fontSize="xl">{formatRupiah(totalCalculatedBill)}</Text>
           </Box>
-          {/* <Button size="sm" colorScheme="orange">
-                    Detail Transaksi
-                  </Button> */}
+          <Button
+            onClick={() => router.push(`/dashboard/orders/${businessOrder.id}`)}
+            size="sm"
+            colorScheme="orange"
+          >
+            Detail Pesanan
+          </Button>
         </Stack>
       </Stack>
     </Stack>
