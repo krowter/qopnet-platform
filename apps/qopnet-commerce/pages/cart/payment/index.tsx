@@ -87,7 +87,7 @@ export const PaymentContainer = ({ businessOrder }) => {
             paymentMethod: {
               id: paymentMethods[index]?.id,
               name: paymentMethods[index]?.name,
-              paymentCategory: paymentMethods[index]?.category,
+              paymentCategory: paymentMethods[index]?.paymentCategory,
             },
           },
         }
