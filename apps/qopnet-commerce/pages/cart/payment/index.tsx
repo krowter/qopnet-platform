@@ -191,10 +191,15 @@ export const PaymentSummaryContainer = ({ businessOrder }) => {
         </HStack>
       </Stack>
 
-      {businessOrder.paymentMethod.paymentCategory === 'TRANSFER_MANUAL' && (
+      {businessOrder?.paymentMethod?.paymentCategory === 'TRANSFER_MANUAL' && (
         <ManualTransferPaymentModalGroup
           calculatedCartValues={calculatedCartValues}
         />
+      )}
+
+      {businessOrder?.paymentMethod?.paymentCategory ===
+        'TRANSFER_VIRTUAL_ACCOUNT' && (
+        <Button colorScheme="orange">Pembayaran Virtual Account</Button>
       )}
     </Stack>
   )
@@ -255,7 +260,7 @@ export const ManualTransferPaymentModalGroup = ({ calculatedCartValues }) => {
   return (
     <>
       <Button colorScheme="orange" onClick={onOpen} ref={finalRef}>
-        Pembayaran
+        Pembayaran Manual
       </Button>
 
       <Modal
