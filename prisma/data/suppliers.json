@@ -3,20 +3,17 @@
     "name": "Qopnet",
     "handle": "qopnet",
     "ownerId": "ckr86vmxt005010pjeh4mqs6n",
-    "category": "DISTRIBUTOR",
     "phone": "622150157599"
   },
   {
     "name": "Aneka Busa",
     "handle": "anekabusa",
-    "ownerId": "ckr86vmxt005010pjeh4mqs6n",
-    "category": "PRODUCER"
+    "ownerId": "ckr86vmxt005010pjeh4mqs6n"
   },
   {
     "name": "Ardena Food",
     "handle": "ardena",
     "ownerId": "cksqy7lfk1299423mckvv1mnp2",
-    "phone": "62214216133",
-    "category": "PRODUCER"
+    "phone": "62214216133"
   }
 ]
