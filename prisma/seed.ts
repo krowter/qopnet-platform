@@ -28,7 +28,7 @@ import paymentRecordsData from './data/payments-records.json'
 
 import supplierProductsQopnetData from './data/supplier-products-qopnet.json'
 import supplierProductsAnekaBusaData from './data/supplier-products-anekabusa.json'
-import rawProductsData from './raw-products.json'
+import supplierProductsArdenaData from './data/supplier-products-ardena.json'
 
 import promoEmployerData from './data/qopnet-promo-employer.json'
 import promoEmployeeData from './data/qopnet-promo-employee.json'
@@ -89,6 +89,9 @@ async function deleteEverything() {
   await prisma.promoSubmission.deleteMany()
   await prisma.promoEmployer.deleteMany()
   await prisma.promoEmployee.deleteMany()
+
+  await prisma.virtualAccountNumber.deleteMany()
+  await prisma.virtualAccountPermataLog.deleteMany()
 }
 
 // -----------------------------------------------------------------------------
@@ -116,6 +119,9 @@ async function createSupplierProducts({
   // console.info({ qopnetSupplierProducts })
 }
 
+/* 
+  Dynamic environment aware to generate the image url automatically
+*/
 async function createSupplierProductsDynamic({
   data,
   supplier,
@@ -140,13 +146,10 @@ async function createSupplierProductsDynamic({
     return product
   })
 
-  // create supplierProduct -- aneka busa
-  const anekaBusaSupplierProducts = await prisma.supplierProduct.createMany({
+  await prisma.supplierProduct.createMany({
     data: products,
     skipDuplicates: true,
   })
-
-  // console.info({ anekaBusaSupplierProducts })
 }
 
 // -----------------------------------------------------------------------------
@@ -156,12 +159,7 @@ const seedUsers = async () => {
   // To get their id
 
   const users = await prisma.user.createMany({
-    data: usersData.map((user) => {
-      return {
-        id: qopnetlabsUserId,
-        email: user?.email,
-      }
-    }),
+    data: usersData,
   })
 
   // console.info({ users })
@@ -169,14 +167,7 @@ const seedUsers = async () => {
 
 const seedProfiles = async () => {
   const profiles = await prisma.profile.createMany({
-    data: profilesData.map((user) => {
-      return {
-        id: qopnetlabsProfileId,
-        handle: 'qopnetlabs',
-        name: 'Qopnet Labs',
-        userId: qopnetlabsUserId,
-      }
-    }),
+    data: profilesData,
   })
   // console.info({ profiles })
 }
@@ -294,6 +285,16 @@ async function seedAnekaBusaProducts() {
   })
 }
 
+async function seedArdenaProducts() {
+  await createSupplierProducts({
+    data: supplierProductsArdenaData,
+    supplier: {
+      id: 'cksqy7lfk1299423mckvv1mnp2',
+      handle: 'ardena',
+    },
+  })
+}
+
 async function seedPromoEmployees() {
   const promoEmployer = await prisma.promoEmployer.create({
     data: promoEmployerData[0],
@@ -329,6 +330,7 @@ async function main() {
   await seedSuppliers()
   await seedQopnetProducts()
   await seedAnekaBusaProducts()
+  await seedArdenaProducts()
 
   await seedBusinessOrder()
 
