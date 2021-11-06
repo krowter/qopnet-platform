@@ -101,7 +101,7 @@ model Address {
 
   // Relations
   profileId              String?
-  profile                Profile?        @relation(fields: [profileId], references: [id])
+  profile                Profile?        @relation(fields: [profileId], references: [id], onDelete: Cascade)
   wholesalerId           String?
   wholesaler             Wholesaler?     @relation(fields: [wholesalerId], references: [id])
   supplierId             String?
@@ -158,7 +158,7 @@ model Supplier {
   avatarUrl         String?
   nationalTax       String?
   certificationFile String?
-  category          SupplierCategory?
+  category          SupplierCategory? @default(PRODUCER)
 
   // Relations
   ownerId            String?
@@ -605,7 +605,7 @@ model VirtualAccountNumber {
 
   // Relations
   ownerId          String
-  owner            Profile       @relation(fields: [ownerId], references: [id])
+  owner            Profile       @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   bussinessOrderId String        @unique
   bussinessOrder   BusinessOrder @relation(fields: [bussinessOrderId], references: [id])
 

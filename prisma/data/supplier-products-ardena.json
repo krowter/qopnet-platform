@@ -1,0 +1,56 @@
+[
+  {
+    "slug": "food-club-rich-dimsum",
+    "name": "Food Club Rich Dimsum",
+    "subname": "",
+    "sku": "FCRD300",
+    "price": "32900",
+    "images": [
+      "https://xbsxanmbihphdwfviqmh.supabase.co/storage/v1/object/public/images/Rich Dimsum.png",
+      "https://xbsxanmbihphdwfviqmh.supabase.co/storage/v1/object/public/images/Rich Dimsum-04.jpg"
+    ]
+  },
+  {
+    "slug": "food-club-mozzarella-stick",
+    "name": "Food Club Mozzarella Stick",
+    "subname": "",
+    "sku": "FCMS600",
+    "price": "74900",
+    "images": [
+      "https://xbsxanmbihphdwfviqmh.supabase.co/storage/v1/object/public/images/Mozarella Stick.png"
+    ]
+  },
+  {
+    "slug": "food-club-dory-katsu",
+    "name": "Food Club Dory Katsu",
+    "subname": "",
+    "sku": "FCDK500",
+    "price": "64900",
+    "images": [
+      "https://xbsxanmbihphdwfviqmh.supabase.co/storage/v1/object/public/images/Dori Katsu.png",
+      "https://xbsxanmbihphdwfviqmh.supabase.co/storage/v1/object/public/images/Dori Katsu-03.jpg"
+    ]
+  },
+  {
+    "slug": "food-club-chickin-katsu",
+    "name": "Food Club Chickin Katsu",
+    "subname": "",
+    "sku": "FCCK500",
+    "price": "64900",
+    "images": [
+      "https://xbsxanmbihphdwfviqmh.supabase.co/storage/v1/object/public/images/Chickin Katsu.png",
+      "https://xbsxanmbihphdwfviqmh.supabase.co/storage/v1/object/public/images/chickin katsu-02.jpg"
+    ]
+  },
+  {
+    "slug": "food-club-salmon-ball",
+    "name": "Food Club Salmon Ball",
+    "subname": "",
+    "sku": "FCBSL500",
+    "price": "49900",
+    "images": [
+      "https://xbsxanmbihphdwfviqmh.supabase.co/storage/v1/object/public/images/Salmon Ball.png",
+      "https://xbsxanmbihphdwfviqmh.supabase.co/storage/v1/object/public/images/Salmon Ball-05.jpg"
+    ]
+  }
+]
