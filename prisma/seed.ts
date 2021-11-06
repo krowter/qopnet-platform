@@ -16,8 +16,12 @@ import {
 } from '@prisma/client'
 const prisma = new PrismaClient()
 
-import usersData from './data/users.json'
-import profilesData from './data/profiles.json'
+import usersDevData from './data/users-dev.json'
+import usersStgData from './data/users-stg.json'
+import usersPrdData from './data/users-prd.json'
+import profilesDevData from './data/profiles-dev.json'
+import profilesStgData from './data/profiles-stg.json'
+import profilesPrdData from './data/profiles-prd.json'
 import addressesData from './data/addresses.json'
 import suppliersData from './data/suppliers.json'
 import businessOrdersData from './data/business-orders.json'
@@ -158,6 +162,13 @@ const seedUsers = async () => {
   // Should check existing users in Supabase auth.users
   // To get their id
 
+  const usersData =
+    process.env.NX_NODE_ENV === 'production'
+      ? usersPrdData // production
+      : process.env.NX_NODE_ENV === 'staging'
+      ? usersStgData // staging
+      : usersDevData // development
+
   const users = await prisma.user.createMany({
     data: usersData,
   })
@@ -166,6 +177,13 @@ const seedUsers = async () => {
 }
 
 const seedProfiles = async () => {
+  const profilesData =
+    process.env.NX_NODE_ENV === 'production'
+      ? profilesPrdData // production
+      : process.env.NX_NODE_ENV === 'staging'
+      ? profilesStgData // staging
+      : profilesDevData // development
+
   const profiles = await prisma.profile.createMany({
     data: profilesData,
   })
