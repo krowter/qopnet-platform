@@ -259,13 +259,16 @@ export const BusinessOrderCard: React.FC<BusinessOrderCardProps> = ({
                 </ListItem>
               </OrderedList>
             </Box>
-            <Box>
-              <UploadImageForm
-                appendImageUrl={(imageUrl) =>
-                  handleReceiptUpload(imageUrl, businessOrder.paymentRecordId)
-                }
-              />
-            </Box>
+            {businessOrder?.paymentMethod?.paymentCategory ===
+              'TRANSFER_MANUAL' && (
+              <Box>
+                <UploadImageForm
+                  appendImageUrl={(imageUrl) =>
+                    handleReceiptUpload(imageUrl, businessOrder.paymentRecordId)
+                  }
+                />
+              </Box>
+            )}
           </Stack>
         </Stack>
       )}
