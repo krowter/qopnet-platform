@@ -20,6 +20,7 @@ import {
   Icon,
   SupplierProductPrice,
   OptionBox,
+  NextLinkButton,
 } from '@qopnet/qopnet-ui'
 import {
   calculateCart,
@@ -213,14 +214,23 @@ export const AddressesContainer = ({ businessOrder }) => {
         <Stack>
           {availableAddresses?.map((address) => {
             return (
-              <OptionBox
-                key={address.id}
-                id={`address-${address.id}`}
-                selected={selectedAddressId === address.id}
-                onClick={() => handleSelectAddressOption(address.id)}
-              >
-                <Text>{formatAddressComplete(address)}</Text>
-              </OptionBox>
+              <>
+                <OptionBox
+                  key={address.id}
+                  id={`address-${address.id}`}
+                  selected={selectedAddressId === address.id}
+                  onClick={() => handleSelectAddressOption(address.id)}
+                >
+                  <Text>{formatAddressComplete(address)}</Text>
+                </OptionBox>
+                <Box>
+                  <NextLinkButton
+                    href="/profile"
+                    children="Ubah Alamat"
+                    colorScheme="orange"
+                  />
+                </Box>
+              </>
             )
           })}
         </Stack>

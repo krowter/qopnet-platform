@@ -1,0 +1,14 @@
+[
+  { "value": "WAITING_FOR_PAYMENT", "text": "Menunggu Pembayaran" },
+  { "value": "PAID", "text": "Telah Dibayar" },
+  { "value": "WAITING_FOR_CONFIRMATION", "text": "Menunggu Konfirmasi Toko" },
+  { "value": "PROCESSED", "text": "Sedang Diproses" },
+  { "value": "WAITING_FOR_PICKUP", "text": "Menunggu Diambil" },
+  { "value": "ONDELIVERY", "text": "Sedang Dikirim" },
+  { "value": "DELIVERED", "text": "Telah Sampai" },
+  { "value": "CONFIRMED", "text": "Telah Dikonfirmasi" },
+  { "value": "COMPLAINED", "text": "Terdapat Komplain" },
+  { "value": "CANCELED", "text": "Dibatalkan" },
+  { "value": "REFUNDED", "text": "Di-refund" },
+  { "value": "Tidak Jelas", "text": "Tidak Jelas" }
+]

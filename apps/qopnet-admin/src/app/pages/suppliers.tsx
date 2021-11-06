@@ -1,3 +1,6 @@
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { Supplier } from '@prisma/client'
 import {
   Avatar,
   Box,
@@ -6,29 +9,22 @@ import {
   Heading,
   SimpleGrid,
   Spinner,
-  Table,
-  TableCaption,
-  Tbody,
-  Td,
   Text,
-  Tfoot,
-  Th,
-  Thead,
-  Tr,
   useColorModeValue,
-  VStack,
-  chakra,
 } from '@chakra-ui/react'
 
-import { Supplier } from '@prisma/client'
-import { Link } from 'react-router-dom'
 import { Header } from '../components'
 import { DefaultLayout } from '../layouts'
 import { useSWR } from '../utils/swr'
 
+import { SearchBox } from '@qopnet/qopnet-ui'
+
 export const SuppliersPage = () => {
   const { data, error } = useSWR('/api/suppliers')
   const { suppliers } = data || {}
+  const [filteredSuppliers, setFilteredSuppliers] = useState<
+    Supplier[] | undefined
+  >(undefined)
 
   return (
     <DefaultLayout>
@@ -48,6 +44,11 @@ export const SuppliersPage = () => {
             >
               Tambah Supplier
             </Button>
+            <SearchBox
+              placeholder="Cari supplier"
+              dataToFilter={suppliers}
+              setFilteredData={setFilteredSuppliers}
+            />
           </div>
         </Header>
       </Flex>
@@ -62,7 +63,12 @@ export const SuppliersPage = () => {
           <Spinner color="orange.500" />
         </Box>
       )}
-      {suppliers && <SupplierRows suppliers={suppliers} />}
+      {suppliers && !filteredSuppliers && (
+        <SupplierRows suppliers={suppliers} />
+      )}
+      {suppliers && filteredSuppliers && (
+        <SupplierRows suppliers={filteredSuppliers} />
+      )}
     </DefaultLayout>
   )
 }

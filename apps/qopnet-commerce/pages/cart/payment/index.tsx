@@ -87,7 +87,7 @@ export const PaymentContainer = ({ businessOrder }) => {
             paymentMethod: {
               id: paymentMethods[index]?.id,
               name: paymentMethods[index]?.name,
-              paymentCategory: paymentMethods[index]?.category,
+              paymentCategory: paymentMethods[index]?.paymentCategory,
             },
           },
         }
@@ -191,10 +191,63 @@ export const PaymentSummaryContainer = ({ businessOrder }) => {
         </HStack>
       </Stack>
 
-      <ManualTransferPaymentModalGroup
-        calculatedCartValues={calculatedCartValues}
-      />
+      {/* TransferVirtualAccountContainer */}
+      {businessOrder?.paymentMethod?.paymentCategory ===
+        'TRANSFER_VIRTUAL_ACCOUNT' && (
+        <TransferVirtualAccountContainer
+          calculatedCartValues={calculatedCartValues}
+        />
+      )}
+
+      {/* ManualTransferPaymentModalGroup */}
+      {/* TransferManualContainer */}
+      {businessOrder?.paymentMethod?.paymentCategory === 'TRANSFER_MANUAL' && (
+        <ManualTransferPaymentModalGroup
+          calculatedCartValues={calculatedCartValues}
+        />
+      )}
     </Stack>
+  )
+}
+
+export const TransferVirtualAccountContainer = ({ calculatedCartValues }) => {
+  const router = useRouter()
+  const toast = useToast()
+
+  const handleProcessMyOrder = async () => {
+    try {
+      const formData = {
+        ...calculatedCartValues,
+      }
+      const response = await requestToAPI(
+        'PUT',
+        '/api/business/orders/my/cart/process',
+        formData
+      )
+      // console.info({ response, formData })
+
+      if (response) {
+        router.push(`/dashboard/orders/${response?.businessOrder?.id}`)
+        toast({
+          status: 'success',
+          title: 'Proses pengaturan pembayaran berhasil',
+          description: 'Silakan mengikuti petunjuk untuk melunasi pembayaran',
+        })
+      }
+    } catch (error) {
+      console.error(error)
+      toast({
+        status: 'error',
+        title: 'Proses pengaturan pembayaran gagal',
+        description: 'Silakan coba lagi',
+      })
+    }
+  }
+
+  return (
+    <Button colorScheme="orange" onClick={handleProcessMyOrder}>
+      Pembayaran Virtual Account
+    </Button>
   )
 }
 
@@ -226,20 +279,20 @@ export const ManualTransferPaymentModalGroup = ({ calculatedCartValues }) => {
         accountHolderName: data?.accountHolderName || 'Anonim',
       }
 
-      // console.info({ formData })
       const response = await requestToAPI(
         'PUT',
         '/api/business/orders/my/cart/process',
         formData
       )
-      // console.info({ response, formData })
 
-      router.push(`/dashboard/orders`)
-      toast({
-        status: 'success',
-        title: 'Proses pengaturan pembayaran berhasil',
-        description: 'Silakan mengikuti petunjuk untuk melunasi pembayaran',
-      })
+      if (response) {
+        router.push(`/dashboard/orders/${response?.businessOrder?.id}`)
+        toast({
+          status: 'success',
+          title: 'Proses pengaturan pembayaran berhasil',
+          description: 'Silakan mengikuti petunjuk untuk melunasi pembayaran',
+        })
+      }
     } catch (error) {
       console.error(error)
       toast({
@@ -253,7 +306,7 @@ export const ManualTransferPaymentModalGroup = ({ calculatedCartValues }) => {
   return (
     <>
       <Button colorScheme="orange" onClick={onOpen} ref={finalRef}>
-        Pembayaran
+        Pembayaran Manual
       </Button>
 
       <Modal

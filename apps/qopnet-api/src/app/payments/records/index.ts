@@ -14,4 +14,7 @@ router.get(
   paymentRecord.getAllPaymentRecords
 )
 
+// PATCH /api/payments/records/proof
+router.patch('/proof', auth.checkUser, paymentRecord.updatePaymentProofImages)
+
 export default router

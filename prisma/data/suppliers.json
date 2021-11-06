@@ -3,12 +3,20 @@
     "id": "ckrqopnet0001swpjglh6i6nl",
     "name": "Qopnet",
     "handle": "qopnet",
-    "ownerId": "ckr86vmxt005010pjeh4mqs6n"
+    "ownerId": "ckr86vmxt005010pjeh4mqs6n",
+    "phone": "622150157599"
   },
   {
     "id": "ckrzfccqz0001swpjglh6i6nl",
     "name": "Aneka Busa",
     "handle": "anekabusa",
     "ownerId": "ckr86vmxt005010pjeh4mqs6n"
+  },
+  {
+    "id": "cksqy7lfk1299423mckvv1mnp2",
+    "name": "Ardena Food",
+    "handle": "ardena",
+    "ownerId": "cksqy7lfk1299423mckvv1mnp2",
+    "phone": "62214216133"
   }
 ]

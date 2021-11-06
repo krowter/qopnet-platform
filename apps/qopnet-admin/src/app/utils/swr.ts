@@ -11,8 +11,8 @@ import {
  * Set apiUrl based on variable availability
  * Because there is still an issue on Vercel deployment
  */
-export const apiProduction = 'https://qopnet-api.catamyst.com'
-export const apiStaging = 'https://qopnet-api-staging.up.railway.app'
+export const apiProduction = 'https://api.qopnet.id'
+export const apiStaging = 'https://api-staging.qopnet.id'
 export const apiDevelopment =
   process.env.NX_API_URL || process.env.API_URL || 'http://localhost:4000'
 

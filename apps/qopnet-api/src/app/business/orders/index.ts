@@ -101,6 +101,14 @@ router.patch(
   businessOrder.patchOneBusinessOrderStatus
 )
 
+// PATCH /api/business/orders/:businessOrderParam/confirm
+router.patch(
+  '/:businessOrderParam/confirm',
+  auth.checkUser,
+  businessOrder.checkOneBusinessOrder,
+  businessOrder.patchOneBusinessOrderStatusToPaid
+)
+
 // DELETE /api/business/orders
 router.delete('/', auth.checkUser, businessOrder.deleteAllBusinessOrders)
 // DELETE /api/business/orders/:businessOrderParam

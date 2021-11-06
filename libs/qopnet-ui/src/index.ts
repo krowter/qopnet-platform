@@ -1,3 +1,4 @@
+export * from './lib/search-box/search-box'
 export * from './lib/color-mode/color-mode'
 export * from './lib/footer/footer'
 export * from './lib/form/form'

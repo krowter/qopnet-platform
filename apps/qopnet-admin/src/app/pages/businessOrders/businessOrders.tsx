@@ -1,28 +1,27 @@
 import {
-  Avatar,
   Box,
-  Flex,
   Heading,
-  SimpleGrid,
   Spinner,
   Table,
-  TableCaption,
   Tbody,
   Td,
   Text,
-  Tfoot,
   Th,
   Thead,
   Tr,
   useColorModeValue,
-  VStack,
+  Badge,
 } from '@chakra-ui/react'
+import { useHistory } from 'react-router'
 
-import { Merchant } from '@qopnet/shared-types'
-import { Header } from '../../components'
 import { DefaultLayout } from '../../layouts'
 import { useSWR } from '../../utils/swr'
-import { Link } from 'react-router-dom'
+import {
+  formatAddressComplete,
+  formatBusinessOrderStatus,
+  formatRupiah,
+  truncateText,
+} from '@qopnet/util-format'
 
 export const BusinessOrdersPage = () => {
   const { data, error } = useSWR('/api/business/orders')
@@ -30,17 +29,20 @@ export const BusinessOrdersPage = () => {
 
   return (
     <DefaultLayout>
-      <Flex alignItems="center">
-        <Header width="100%">
-          <Heading as="h1" size="md">
-            Semua Pesanan
-          </Heading>
+      <Box p={5}>
+        <Heading as="h1" mb={1} fontSize="3xl">
+          Daftar Pesanan
+        </Heading>
 
-          <Text ml={5} fontWeight={500}>
-            {businessOrders?.length ?? 0} pesanan
-          </Text>
-        </Header>
-      </Flex>
+        <Text fontWeight={500}>
+          {
+            businessOrders?.filter(
+              (businessOrder) => businessOrder?.status !== 'DRAFT'
+            ).length
+          }{' '}
+          pesanan
+        </Text>
+      </Box>
       {error && (
         <Box px={5} py={3}>
           Gagal memuat semua pesanan bisnis
@@ -61,57 +63,82 @@ export const BusinessOrdersRows = ({
 }: {
   businessOrders: any
 }) => {
-  const bg = useColorModeValue('gray.50', 'gray.900')
-  const border = useColorModeValue('gray.200', 'gray.700')
+  const bg = useColorModeValue('gray.200', 'gray.900')
+  const history = useHistory()
+  const handleRowClick = (businessOrderId) => {
+    history.push(`/business/orders/${businessOrderId}`)
+  }
 
   return (
-    <Box>
-      <SimpleGrid
-        spacingX={3}
-        columns={{ base: 1, md: 3 }}
-        w="100%"
-        px={5}
-        py={3}
-        bg={bg}
-        borderBottom="1px solid gray"
-        borderColor={border}
-        gridTemplateColumns="50px 100px 100px 100px 200px 1fr 1fr"
-      >
-        <Text fontWeight={700}>No</Text>
-        <Text fontWeight={700}>Avatar</Text>
-        <Text fontWeight={700}>Handle</Text>
-        <Text fontWeight={700}>Nama</Text>
-        <Text fontWeight={700}>Metode Pembayaran</Text>
-        <Text fontWeight={700}>Alamat Pengiriman</Text>
-        <Text fontWeight={700}>Status</Text>
-      </SimpleGrid>
-      {businessOrders?.length &&
-        businessOrders.map((businessOrder: any, index: number) => {
-          return (
-            <SimpleGrid
-              spacingX={3}
-              columns={{ base: 1, md: 3 }}
-              as={Link}
-              key={`${businessOrder?.id}`}
-              to={`/business/orders/${businessOrder?.id}`}
-              w="100%"
-              px={5}
-              py={3}
-              bg={bg}
-              borderBottom="1px solid gray"
-              borderColor={border}
-              gridTemplateColumns="50px 100px 100px 100px 200px 1fr 1fr"
-            >
-              <Text>#{index}</Text>
-              <Avatar size="xs" name={businessOrder?.owner.name as string} />
-              <Text>{businessOrder?.owner.handle}</Text>
-              <Text>{businessOrder?.owner.name}</Text>
-              <Text>{businessOrder?.paymentMethod?.name}</Text>
-              <Text>{businessOrder?.shipmentAddress?.streetDetails}</Text>
-              <Text>{businessOrder?.status}</Text>
-            </SimpleGrid>
-          )
-        })}
-    </Box>
+    <Table variant="simple">
+      <Thead>
+        <Tr>
+          <Th fontSize="md" textTransform="none">
+            ID
+          </Th>
+          <Th fontSize="md" textTransform="none">
+            Status
+          </Th>
+          <Th fontSize="md" textTransform="none">
+            Pemesan
+          </Th>
+          <Th fontSize="md" textTransform="none">
+            Email
+          </Th>
+          <Th fontSize="md" textTransform="none">
+            No Telp
+          </Th>
+          <Th fontSize="md" textTransform="none">
+            Alamat
+          </Th>
+          <Th fontSize="md" textTransform="none">
+            Metode Pembayaran
+          </Th>
+          <Th fontSize="md" textTransform="none">
+            Total
+          </Th>
+        </Tr>
+      </Thead>
+      <Tbody>
+        {businessOrders?.length &&
+          businessOrders.map((businessOrder: any, index: number) => {
+            const [businessOrderStatus, statusColor] =
+              formatBusinessOrderStatus(businessOrder?.status)
+
+            return (
+              businessOrder?.status !== 'DRAFT' && (
+                <Tr
+                  key={index}
+                  onClick={() => handleRowClick(businessOrder?.id)}
+                  _hover={{
+                    bg: bg,
+                  }}
+                  cursor="pointer"
+                  fontSize="sm"
+                >
+                  <Td>{truncateText(businessOrder?.id, 8)}</Td>
+                  <Td>
+                    <Badge fontSize="xs" colorScheme={statusColor}>
+                      {businessOrderStatus}
+                    </Badge>
+                  </Td>
+                  <Td>{businessOrder?.owner?.name}</Td>
+                  <Td>{businessOrder?.owner?.email}</Td>
+                  <Td>{businessOrder?.owner?.phone}</Td>
+
+                  <Td>
+                    {truncateText(
+                      formatAddressComplete(businessOrder?.shipmentAddress),
+                      30
+                    )}
+                  </Td>
+                  <Td>{businessOrder?.paymentMethod?.name}</Td>
+                  <Td>{formatRupiah(businessOrder?.totalBillPayment)}</Td>
+                </Tr>
+              )
+            )
+          })}
+      </Tbody>
+    </Table>
   )
 }

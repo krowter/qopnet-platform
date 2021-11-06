@@ -44,22 +44,24 @@ model Profile {
 
   // Relation: User
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String
+  userId String @unique
 
   // Relation: Address
-  addresses         Address[]
+  addresses             Address[]
   // Relation: Wholesaler
-  wholesalers       Wholesaler[]
+  wholesalers           Wholesaler[]
   // Relation: Supplier
-  suppliers         Supplier[]
-  supplierProducts  SupplierProduct[]
+  suppliers             Supplier[]
+  supplierProducts      SupplierProduct[]
   // Relation: BusinessOrder
-  businessOrders    BusinessOrder[]
+  businessOrders        BusinessOrder[]
   // Relation: Merchant
-  merchants         Merchant[]
-  merchantProducts  MerchantProduct[]
+  merchants             Merchant[]
+  merchantProducts      MerchantProduct[]
   // Relation: FundBeneficiary
-  fundBeneficiaries FundBeneficiary?
+  fundBeneficiaries     FundBeneficiary?
+  // Relation: VirtualAccountNumber
+  virtualAccountNumbers VirtualAccountNumber[]
 
   // Timestamp
   createdAt DateTime @default(now())
@@ -72,7 +74,7 @@ model AdminProfile {
   id String @id @default(cuid())
 
   // Relations
-  userId String
+  userId String @unique
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   // Timestamp
@@ -99,7 +101,7 @@ model Address {
 
   // Relations
   profileId              String?
-  profile                Profile?        @relation(fields: [profileId], references: [id])
+  profile                Profile?        @relation(fields: [profileId], references: [id], onDelete: Cascade)
   wholesalerId           String?
   wholesaler             Wholesaler?     @relation(fields: [wholesalerId], references: [id])
   supplierId             String?
@@ -156,7 +158,7 @@ model Supplier {
   avatarUrl         String?
   nationalTax       String?
   certificationFile String?
-  category          SupplierCategory?
+  category          SupplierCategory? @default(PRODUCER)
 
   // Relations
   ownerId            String?
@@ -326,9 +328,9 @@ model FundBeneficiary {
   id String @id @default(cuid())
 
   // Relations can also include access to Merchants
-  userId    String?
+  userId    String?  @unique
   user      User?    @relation(fields: [userId], references: [id])
-  profileId String?
+  profileId String?  @unique
   profile   Profile? @relation(fields: [profileId], references: [id])
 
   // Other personal info
@@ -437,7 +439,10 @@ model BusinessOrder {
 
   // Relation: PaymentRecord
   paymentRecord   PaymentRecord? @relation(fields: [paymentRecordId], references: [id])
-  paymentRecordId String?
+  paymentRecordId String?        @unique
+
+  // Relation: VirtualAccountNumber
+  virtualAccountNumber VirtualAccountNumber?
 
   // Calculation for business order items
   totalItems            Int?
@@ -539,6 +544,7 @@ enum PaymentCategory {
 model PaymentMethod {
   id String @id @default(cuid())
 
+  // slug String
   name              String
   paymentCategory   PaymentCategory
   accountNumber     String? // Example: 123456789
@@ -590,6 +596,36 @@ model PaymentRecord {
   updatedAt DateTime @default(now()) @updatedAt
 
   @@map(name: "payment_records")
+}
+
+model VirtualAccountNumber {
+  id       String @id @default(cuid())
+  vaNumber String
+  instCode String
+
+  // Relations
+  ownerId          String
+  owner            Profile       @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  bussinessOrderId String        @unique
+  bussinessOrder   BusinessOrder @relation(fields: [bussinessOrderId], references: [id])
+
+  // Timestamp
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@map(name: "virtual_account_numbers")
+}
+
+model VirtualAccountPermataLog {
+  id String @id @default(cuid())
+
+  requestObject Json
+
+  // Timestamp
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@map(name: "virtual_account_permata_logs")
 }
 
 // -----------------------------------------------------------------------------

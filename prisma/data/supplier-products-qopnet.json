@@ -730,5 +730,60 @@
     "images": [
       "https://ik.imagekit.io/qopnetlabs/products/gula-pasir-polos-kemasan-500-g?updatedAt=1632741146327"
     ]
+  },
+  {
+    "slug": "west-java-white-cardamom",
+    "name": "West Java White Cardamom",
+    "subname": "Kapulaga Putih Cianjur",
+    "sku": "BB09083100",
+    "price": "240000",
+    "images": [
+      "https://xbsxanmbihphdwfviqmh.supabase.co/storage/v1/object/public/images/IMG_20211013_062656.jpg",
+      "https://xbsxanmbihphdwfviqmh.supabase.co/storage/v1/object/public/images/IMG-20210924-WA0003.jpg"
+    ]
+  },
+  {
+    "slug": "papua-nutmeg",
+    "name": "Papua Nutmeg",
+    "subname": "Long Shell ",
+    "sku": "BB09081100",
+    "price": "89000",
+    "images": [
+      "https://xbsxanmbihphdwfviqmh.supabase.co/storage/v1/object/public/images/AMR_Spices_Nutmeg+Long_13_3173.jpg",
+      "https://xbsxanmbihphdwfviqmh.supabase.co/storage/v1/object/public/images/IMG_20211011_142333.jpg"
+    ]
+  },
+  {
+    "slug": "west-sumatra-cinnamon",
+    "name": "West Sumatra Cinnamon",
+    "subname": "Grade A",
+    "sku": "BB09061100",
+    "price": "98000",
+    "images": [
+      "https://xbsxanmbihphdwfviqmh.supabase.co/storage/v1/object/public/images/pngwing.com (2).png",
+      "https://xbsxanmbihphdwfviqmh.supabase.co/storage/v1/object/public/images/IMG_20211011_142414.jpg"
+    ]
+  },
+  {
+    "slug": "west-java-white-pepper",
+    "name": "West Java White Pepper",
+    "subname": "",
+    "sku": "BB09041110",
+    "price": "126000",
+    "images": [
+      "https://xbsxanmbihphdwfviqmh.supabase.co/storage/v1/object/public/images/pngwing.com (3).png",
+      "https://xbsxanmbihphdwfviqmh.supabase.co/storage/v1/object/public/images/IMG_20211011_142318.jpg"
+    ]
+  },
+  {
+    "slug": "west-java-edamame",
+    "name": "West Java Edamame",
+    "subname": "Export Quality",
+    "sku": "BB07102900",
+    "price": "24999",
+    "images": [
+      "https://xbsxanmbihphdwfviqmh.supabase.co/storage/v1/object/public/images/IMG-20200713-WA0008.jpg",
+      "https://xbsxanmbihphdwfviqmh.supabase.co/storage/v1/object/public/images/IMG-20200724-WA0017.jpg"
+    ]
   }
 ]

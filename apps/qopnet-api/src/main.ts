@@ -20,6 +20,7 @@ import paymentMethods from './app/payments/methods'
 import paymentRecords from './app/payments/records'
 import promoEmployees from './app/promos/employees'
 import promoSubmissions from './app/promos/submissions'
+import paymentsVA from './app/payments/va'
 
 const app = express()
 
@@ -64,6 +65,7 @@ app.use('/api/couriers', couriers)
 app.use('/api/couriers/vehicles', courierVehicles)
 app.use('/api/payments/methods', paymentMethods)
 app.use('/api/payments/records', paymentRecords)
+app.use('/api/payments/va', paymentsVA)
 app.use('/api/promos/employees', promoEmployees)
 app.use('/api/promos/submissions', promoSubmissions)
 
