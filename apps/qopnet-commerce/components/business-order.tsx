@@ -1,32 +1,26 @@
 import NextImage from 'next/image'
 import NextLink from 'next/link'
-// import {
-//   BusinessOrder,
-//   BusinessOrderItem,
-//   SupplierProduct,
-//   Supplier,
-// } from '@prisma/client'
 
 import {
   Box,
-  chakra,
-  Alert,
-  AlertIcon,
-  Code,
-  OrderedList,
-  ListItem,
-  HStack,
   Tag,
   Link as ChakraLink,
   Heading,
-  Divider,
   Stack,
   Text,
   useColorModeValue,
   useToast,
+  Badge,
+  Flex,
+  OrderedList,
+  ListItem,
+  Divider
 } from '@chakra-ui/react'
 
-import { formatBusinessOrderStatus } from '@qopnet/util-format'
+import {
+  formatAddressComplete,
+  formatBusinessOrderStatus,
+} from '@qopnet/util-format'
 import {
   calculateCart,
   calculateSupplierProductItem,
@@ -45,16 +39,11 @@ export type BusinessOrderCardProps = {
   //   })[]
   // }
   businessOrder: any
-  index: number
 }
 
 export const BusinessOrderCard: React.FC<BusinessOrderCardProps> = ({
   businessOrder,
-  index,
 }) => {
-  const orderCardBackground = useColorModeValue('gray.50', 'gray.900')
-  const { totalCalculatedBill } = calculateCart(businessOrder)
-
   const [businessOrderStatusText, statusColor] = formatBusinessOrderStatus(
     businessOrder?.status
   )
@@ -89,170 +78,213 @@ export const BusinessOrderCard: React.FC<BusinessOrderCardProps> = ({
   }
 
   return (
-    <Stack key={businessOrder.id} p={3} rounded="md" bg={orderCardBackground}>
+    <Stack direction={{ base: 'column', lg: 'row' }}>
       <Stack
-        direction={['column', 'column', 'row']}
-        align={['flex-start', 'flex-start', 'center']}
+        p={5}
+        border="2px solid"
+        borderColor="gray.200"
+        borderRadius="lg"
+        spacing={8}
+        w={{ lg: '70%' }}
+        mr={{ lg: 5 }}
+        mb={{ base: 5, lg: 0 }}
+        h="max-content"
       >
-        <HStack>
-          <Heading as="h2" size="sm">
-            #{index + 1}
-          </Heading>
-          <Tag size="sm" colorScheme={statusColor}>
-            {businessOrderStatusText}
+        <Stack
+          direction={['column', 'column', 'row']}
+          align={['flex-start', 'flex-start', 'center']}
+        >
+          <Tag fontSize="sm" colorScheme="orange">
+            {businessOrder.id}
           </Tag>
-        </HStack>
-        <HStack>
-          <Code fontSize="xs">{businessOrder.id}</Code>
-        </HStack>
-        <HStack>
           <Text fontSize="sm">{formatDateTime(businessOrder.updatedAt)}</Text>
-        </HStack>
-      </Stack>
+        </Stack>
 
-      <Divider />
+        <Stack
+          className="business-order"
+          direction={['column', 'column', 'row']}
+        >
+          <Stack className="business-order-items" spacing={3}>
+            {businessOrder.businessOrderItems.map((item, index) => {
+              const { calculatedPrice, subTotalCalculatedPrice } =
+                calculateSupplierProductItem(item)
 
-      <Stack
-        pt={3}
-        className="business-order"
-        spacing={5}
-        direction={['column', 'column', 'row']}
-        justify="space-between"
-      >
-        <Stack className="business-order-items" spacing={3}>
-          {businessOrder.businessOrderItems.map((item, index) => {
-            const { calculatedPrice, subTotalCalculatedPrice } =
-              calculateSupplierProductItem(item)
-
-            return (
-              <Stack
-                key={item?.id || index}
-                direction={['column', 'column', 'row']}
-              >
-                {item.supplierProduct?.images[0] && (
-                  <NextLink
-                    href={`/${item.supplier?.handle}/${item.supplierProduct?.slug}`}
-                    passHref
-                  >
-                    <Box as="a" className="next-image-container">
-                      <NextImage
-                        src={item.supplierProduct?.images[0]}
-                        key={item.supplierProduct?.slug}
-                        alt={item.supplierProduct?.name}
-                        layout="fixed"
-                        width={50}
-                        height={50}
-                      />
-                    </Box>
-                  </NextLink>
-                )}
-
-                <Stack spacing={1}>
-                  <Stack
-                    align={['flex-start', 'flex-start', 'center']}
-                    direction={['column', 'column', 'row']}
-                    spacing={1}
-                  >
+              return (
+                <Stack
+                  key={item?.id || index}
+                  direction={['column', 'column', 'row']}
+                >
+                  {item.supplierProduct?.images[0] && (
                     <NextLink
                       href={`/${item.supplier?.handle}/${item.supplierProduct?.slug}`}
                       passHref
                     >
-                      <ChakraLink size="sm" fontWeight="bold">
-                        {item.supplierProduct?.name}
-                      </ChakraLink>
+                      <Box as="a" className="next-image-container">
+                        <NextImage
+                          src={item.supplierProduct?.images[0]}
+                          key={item.supplierProduct?.slug}
+                          alt={item.supplierProduct?.name}
+                          layout="fixed"
+                          width={100}
+                          height={100}
+                        />
+                      </Box>
                     </NextLink>
-                    {item.supplier?.name && (
-                      <Text fontSize="sm">
-                        <chakra.span> dari </chakra.span>
-                        <NextLink href={`/${item.supplier?.handle}`} passHref>
-                          <ChakraLink>{item.supplier?.name}</ChakraLink>
-                        </NextLink>
-                        {item.supplier?.addresses[0]?.city && (
-                          <chakra.span fontSize="sm">
-                            <chakra.span> di </chakra.span>
-                            <chakra.span fontWeight="bold">
-                              {item.supplier?.addresses[0]?.city}
-                            </chakra.span>
-                          </chakra.span>
-                        )}
-                      </Text>
-                    )}
-                  </Stack>
-                  <Text>
-                    {item.quantity} barang × {formatRupiah(calculatedPrice)} ={' '}
-                    {formatRupiah(subTotalCalculatedPrice)}
-                  </Text>
-                </Stack>
-              </Stack>
-            )
-          })}
-        </Stack>
+                  )}
 
-        <Stack
-          className="businessOrder-total"
-          textAlign="right"
-          alignSelf="flex-end"
-        >
-          <Divider display={['block', 'block', 'none']} />
-          <Box>
-            <Heading as="h4" size="sm">
-              Total Belanja
-            </Heading>
-            <Text fontSize="xl">{formatRupiah(totalCalculatedBill)}</Text>
-          </Box>
-          {/* <Button size="sm" colorScheme="orange">
-                    Detail Transaksi
-                  </Button> */}
-        </Stack>
-      </Stack>
-      {businessOrder?.status === 'WAITING_FOR_PAYMENT' && (
-        <Stack>
-          <Alert status="info">
-            <AlertIcon />
-            Selesaikan pembayaran dengan mentransfer ke detail berikut:
-          </Alert>
-          <Box>
-            <Text>Nomor dan nama pemilik rekening:</Text>
-            <Text fontSize="lg" fontWeight="bold">
-              {businessOrder?.paymentMethod?.accountNumber}
-            </Text>
-            <Text>{businessOrder?.paymentMethod?.accountHolderName}</Text>
-          </Box>
-          <Box>
-            <Text>Total pembayaran:</Text>
-            <Text fontSize="lg" fontWeight="bold">
-              {formatRupiah(businessOrder?.paymentRecord?.amountDue)}
-            </Text>
-          </Box>
-          <Stack
-            direction={['column', null, 'row']}
-            justifyContent="space-between"
-          >
-            <Box fontSize="xs">
-              <Text>Penting untuk:</Text>
-              <OrderedList>
-                <ListItem>
-                  Transfer tepat hingga <b>3 digit terakhir</b>
-                </ListItem>
-                <ListItem>
-                  Hanya disarankan untuk transfer melalui rekening langsung
-                </ListItem>
-                <ListItem>
-                  Menunggu pembayaran terkonfirmasi dari kami setelah transfer
-                  dalam waktu 2×24 jam
-                </ListItem>
-              </OrderedList>
-            </Box>
-            <Box>
-              <UploadImageForm
-                appendImageUrl={(imageUrl) =>
-                  handleReceiptUpload(imageUrl, businessOrder.paymentRecordId)
-                }
-              />
-            </Box>
+                  <Stack spacing={1} alignSelf="center">
+                    <Stack
+                      align={['flex-start', 'flex-start', 'center']}
+                      direction={['column', 'column', 'row']}
+                      spacing={1}
+                    >
+                      <NextLink
+                        href={`/${item.supplier?.handle}/${item.supplierProduct?.slug}`}
+                        passHref
+                      >
+                        <ChakraLink size="sm" fontWeight="bold">
+                          {item.supplierProduct?.name}
+                        </ChakraLink>
+                      </NextLink>
+                    </Stack>
+                    <Text>
+                      {item.quantity} barang × {formatRupiah(calculatedPrice)} ={' '}
+                      {formatRupiah(subTotalCalculatedPrice)}
+                    </Text>
+                  </Stack>
+                </Stack>
+              )
+            })}
           </Stack>
         </Stack>
-      )}
+        {businessOrder?.status === 'WAITING_FOR_PAYMENT' && (
+          <Stack spacing={2}>
+            <Heading size="md">Detail Pembayaran</Heading>
+            <Box>
+              <Text color="gray" fontSize="sm">
+                Metode Pembayaran
+              </Text>
+              <Text fontSize="lg">{businessOrder?.paymentMethod?.name}</Text>
+            </Box>
+            {businessOrder?.paymentMethod?.paymentCategory ===
+            'TRANSFER_VIRTUAL_ACCOUNT' ? (
+              <Box>
+                <Text color="gray" fontSize="sm">
+                  Nomor Virtual Account
+                </Text>
+                <Text fontSize="lg">
+                  {businessOrder?.virtualAccountNumber?.vaNumber}
+                </Text>
+              </Box>
+            ) : (
+              <>
+                <Box>
+                  <Text color="gray" fontSize="sm">
+                    Nomor Rekening
+                  </Text>
+                  <Text fontSize="lg">
+                    {businessOrder?.paymentMethod?.accountNumber}
+                  </Text>
+                </Box>
+
+                <Box>
+                  <Text color="gray" fontSize="sm">
+                    Nama Pemilik Rekening
+                  </Text>
+                  <Text fontSize="lg">
+                    {businessOrder?.paymentMethod?.accountHolderName}
+                  </Text>
+                </Box>
+              </>
+            )}
+            <Box>
+              <Text color="gray" fontSize="sm">
+                Rincian Pembayaran
+              </Text>
+              <Flex direction="row">
+                <Stack spacing={0}>
+                  <Text fontSize="lg">Total Belanja</Text>
+                  <Text fontSize="lg">Biaya Pengiriman</Text>
+                  <Text fontSize="lg">Diskon Biaya Pengiriman</Text>
+                  <Text fontSize="lg" fontWeight="bold">
+                    Total Pembayaran
+                  </Text>
+                </Stack>
+                <Stack alignItems="flex-end" flex={1} spacing={0}>
+                  <Text fontSize="lg">
+                    {formatRupiah(businessOrder?.totalPrice)}
+                  </Text>
+                  <Text fontSize="lg">
+                    {formatRupiah(businessOrder?.totalShippingCost)}
+                  </Text>
+                  <Text fontSize="lg">
+                    {formatRupiah(businessOrder?.totalShippingDiscount)}
+                  </Text>
+                  <Text fontSize="lg" fontWeight="bold">
+                    {formatRupiah(businessOrder?.totalBillPayment)}
+                  </Text>
+                </Stack>
+              </Flex>
+            </Box>
+          </Stack>
+        )}
+        <Badge
+          fontSize="lg"
+          p={3}
+          w="max-content"
+          colorScheme={statusColor}
+          borderRadius="lg"
+        >
+          {businessOrderStatusText}
+        </Badge>
+      </Stack>
+      <Stack
+        w={{ lg: '30%' }}
+        p={5}
+        border="2px solid"
+        borderColor="gray.200"
+        borderRadius="lg"
+        spacing={8}
+        h="max-content"
+      >
+        <Box>
+          <Heading size="md" mb={2}>
+            Alamat Pengiriman
+          </Heading>
+          <Text>{formatAddressComplete(businessOrder?.shipmentAddress)}</Text>
+        </Box>
+
+        <Box>
+          <Heading size="md" mb={2}>
+            Penting:
+          </Heading>
+          <OrderedList>
+            <ListItem>
+              Transfer tepat hingga <b>3 digit terakhir</b>
+            </ListItem>
+            <ListItem>
+              Hanya disarankan untuk transfer melalui <b>rekening langsung</b>
+            </ListItem>
+            <ListItem>
+              Menunggu pembayaran terkonfirmasi dari kami setelah transfer dalam
+              waktu <b>2×24 jam</b>
+            </ListItem>
+          </OrderedList>
+        </Box>
+        {businessOrder?.paymentMethod?.paymentCategory ===
+          'TRANSFER_MANUAL' && (
+          <Box>
+            <Heading size="md" mb={2}>
+              Upload Bukti Pembayaran
+            </Heading>
+            <UploadImageForm
+              appendImageUrl={(imageUrl) =>
+                handleReceiptUpload(imageUrl, businessOrder.paymentRecordId)
+              }
+            />
+          </Box>
+        )}
+      </Stack>
     </Stack>
   )
 }

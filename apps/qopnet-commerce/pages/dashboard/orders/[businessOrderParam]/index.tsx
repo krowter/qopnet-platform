@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router'
-import { HStack, Spinner, Text } from '@chakra-ui/react'
-
+import { HStack, Spinner, Text, Heading } from '@chakra-ui/react'
 import { Layout } from '@qopnet/qopnet-ui'
-import { useSWR, requestToAPI } from '../../../../utils'
+import { useSWR } from '../../../../utils'
+import { BusinessOrderCard, BreadcrumbOrder } from '../../../../components'
 
 const BusinessOrderParamPage = () => {
   const router = useRouter()
@@ -11,7 +11,13 @@ const BusinessOrderParamPage = () => {
   return (
     <Layout pt={10} meta={{ title: 'Detail pesanan' }}>
       {businessOrderParam && (
-        <BusinessOrderContainer businessOrderParam={businessOrderParam} />
+        <>
+          <BreadcrumbOrder businessOrderParam={businessOrderParam} />
+          <Heading mt={3} mb={10}>
+            Pesanan Saya
+          </Heading>
+          <BusinessOrderContainer businessOrderParam={businessOrderParam} />
+        </>
       )}
     </Layout>
   )
@@ -36,7 +42,7 @@ export const BusinessOrderContainer = ({ businessOrderParam }) => {
 }
 
 export const BusinessOrderDetail = ({ businessOrder }) => {
-  return <pre>{JSON.stringify(businessOrder, null, 2)}</pre>
+  return <BusinessOrderCard businessOrder={businessOrder} />
 }
 
 export default BusinessOrderParamPage
