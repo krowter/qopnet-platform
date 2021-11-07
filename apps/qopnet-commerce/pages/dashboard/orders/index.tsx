@@ -61,7 +61,7 @@ export const OrdersContainer = ({ user }) => {
 
       <BreadcrumbOrders />
       <Stack spacing={10}>
-        <Heading>Semua pesanan saya</Heading>
+        <Heading>Semua Pesanan Saya</Heading>
         {error && !data && <Text>Gagal memuat daftar pesanan saya</Text>}
         {!error && !data && (
           <HStack>
@@ -88,9 +88,6 @@ export const OrdersContainer = ({ user }) => {
 }
 
 export const SimpleBusinessOrderCard = ({ businessOrder, index }) => {
-  const orderCardBackground = useColorModeValue('gray.50', 'gray.900')
-  const { totalCalculatedBill } = calculateCart(businessOrder)
-
   const [businessOrderStatusText, statusColor] = formatBusinessOrderStatus(
     businessOrder?.status
   )
@@ -98,7 +95,13 @@ export const SimpleBusinessOrderCard = ({ businessOrder, index }) => {
   const router = useRouter()
 
   return (
-    <Stack key={businessOrder.id} p={3} rounded="md" bg={orderCardBackground}>
+    <Stack
+      key={businessOrder.id}
+      p={5}
+      border="2px solid"
+      borderColor="gray.200"
+      borderRadius="lg"
+    >
       <Stack
         direction={['column', 'column', 'row']}
         align={['flex-start', 'flex-start', 'center']}
@@ -149,14 +152,14 @@ export const SimpleBusinessOrderCard = ({ businessOrder, index }) => {
                         key={item.supplierProduct?.slug}
                         alt={item.supplierProduct?.name}
                         layout="fixed"
-                        width={50}
-                        height={50}
+                        width={100}
+                        height={100}
                       />
                     </Box>
                   </NextLink>
                 )}
 
-                <Stack spacing={1}>
+                <Stack spacing={1} alignSelf="center">
                   <Stack
                     align={['flex-start', 'flex-start', 'center']}
                     direction={['column', 'column', 'row']}
@@ -207,12 +210,10 @@ export const SimpleBusinessOrderCard = ({ businessOrder, index }) => {
             <Heading as="h4" size="sm">
               Total Belanja
             </Heading>
-            <Text fontSize="xl">{formatRupiah(totalCalculatedBill)}</Text>
+            <Text fontSize="xl">{formatRupiah(businessOrder?.totalPrice)}</Text>
           </Box>
           <Button
-            onClick={() =>
-              router.push(`/dashboard/orders/${businessOrder.id}?id=${index}`)
-            }
+            onClick={() => router.push(`/dashboard/orders/${businessOrder.id}`)}
             size="sm"
             colorScheme="orange"
           >
@@ -234,7 +235,6 @@ export const BusinessOrdersList = ({ businessOrders }) => {
           index={index}
         />
       ))}
-      {/* <Text as="pre">{JSON.stringify(businessOrders, null, 2)}</Text> */}
     </Stack>
   )
 }

@@ -41,7 +41,7 @@ export const BreadcrumbOrders = () => {
       </BreadcrumbItem>
       <BreadcrumbItem>
         <BreadcrumbLink as={NextLink} href="/dashboard/orders" passHref>
-          <ChakraLink>Orders</ChakraLink>
+          <ChakraLink>Semua Pesanan</ChakraLink>
         </BreadcrumbLink>
       </BreadcrumbItem>
     </Breadcrumb>
@@ -58,7 +58,7 @@ export const BreadcrumbOrder = ({ businessOrderParam }) => {
       </BreadcrumbItem>
       <BreadcrumbItem>
         <BreadcrumbLink as={NextLink} href="/dashboard/orders" passHref>
-          <ChakraLink>Orders</ChakraLink>
+          <ChakraLink>Semua Pesanan</ChakraLink>
         </BreadcrumbLink>
       </BreadcrumbItem>
       <BreadcrumbItem>

@@ -3,13 +3,9 @@ import NextLink from 'next/link'
 
 import {
   Box,
-  chakra,
-  Code,
-  HStack,
   Tag,
   Link as ChakraLink,
   Heading,
-  Divider,
   Stack,
   Text,
   useColorModeValue,
@@ -18,6 +14,7 @@ import {
   Flex,
   OrderedList,
   ListItem,
+  Divider
 } from '@chakra-ui/react'
 
 import {
@@ -42,19 +39,14 @@ export type BusinessOrderCardProps = {
   //   })[]
   // }
   businessOrder: any
-  index: number
 }
 
 export const BusinessOrderCard: React.FC<BusinessOrderCardProps> = ({
   businessOrder,
-  index,
 }) => {
-  const orderCardBackground = useColorModeValue('gray.50', 'gray.900')
   const [businessOrderStatusText, statusColor] = formatBusinessOrderStatus(
     businessOrder?.status
   )
-  const uniqueDigits =
-    businessOrder?.totalBillPayment - businessOrder?.totalPayment
 
   const toast = useToast()
 
@@ -96,6 +88,7 @@ export const BusinessOrderCard: React.FC<BusinessOrderCardProps> = ({
         w={{ lg: '70%' }}
         mr={{ lg: 5 }}
         mb={{ base: 5, lg: 0 }}
+        h="max-content"
       >
         <Stack
           direction={['column', 'column', 'row']}
@@ -211,8 +204,8 @@ export const BusinessOrderCard: React.FC<BusinessOrderCardProps> = ({
               <Flex direction="row">
                 <Stack spacing={0}>
                   <Text fontSize="lg">Total Belanja</Text>
-                  <Text fontSize="lg">Ongkos Kirim</Text>
-                  <Text fontSize="lg">Digit unik</Text>
+                  <Text fontSize="lg">Biaya Pengiriman</Text>
+                  <Text fontSize="lg">Diskon Biaya Pengiriman</Text>
                   <Text fontSize="lg" fontWeight="bold">
                     Total Pembayaran
                   </Text>
@@ -225,7 +218,7 @@ export const BusinessOrderCard: React.FC<BusinessOrderCardProps> = ({
                     {formatRupiah(businessOrder?.totalShippingCost)}
                   </Text>
                   <Text fontSize="lg">
-                    {formatRupiah(businessOrder?.paymentRecord?.uniqueDigits)}
+                    {formatRupiah(businessOrder?.totalShippingDiscount)}
                   </Text>
                   <Text fontSize="lg" fontWeight="bold">
                     {formatRupiah(businessOrder?.totalBillPayment)}
