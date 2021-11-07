@@ -724,67 +724,84 @@ const processTransferVirtualAccount = async (
     })
   }
 
+  const billAmount = formData?.billAmount || formData?.totalCalculatedBill
+
+  const virtualAccountNumber =
+    '7301' +
+    req.profile.phone.substr(
+      req.profile.phone.length - 12,
+      req.profile.phone.length
+    )
+
   try {
-    const billAmount = formData?.billAmount || formData?.totalCalculatedBill
+    const unpaidOrder = await prisma.virtualAccountNumber.findFirst({
+      where: {
+        vaNumber: virtualAccountNumber,
+        bussinessOrder: {
+          status: 'WAITING_FOR_PAYMENT',
+        },
+      },
+    })
 
-    const virtualAccountNumber =
-      '7301' +
-      req.profile.phone.substr(
-        req.profile.phone.length - 12,
-        req.profile.phone.length
-      )
+    if (unpaidOrder) throw new Error('Unpaid order found')
 
-    const createdVirtualAccountNumber =
-      await prisma.virtualAccountNumber.create({
+    try {
+      const createdVirtualAccountNumber =
+        await prisma.virtualAccountNumber.create({
+          data: {
+            vaNumber: virtualAccountNumber,
+            instCode: '7301',
+            ownerId: req.profile.id,
+            bussinessOrderId: businessOrder.id,
+          },
+        })
+
+      const updatedCart = await prisma.businessOrder.update({
+        where: {
+          id: businessOrder.id,
+        },
+        include: {
+          paymentMethod: true,
+          paymentRecord: true,
+          virtualAccountNumber: true,
+        },
         data: {
-          vaNumber: virtualAccountNumber,
-          instCode: '7301',
-          ownerId: req.profile.id,
-          bussinessOrderId: businessOrder.id,
+          status: 'WAITING_FOR_PAYMENT',
+          totalItems: formData?.totalItems || 0,
+          totalWeight: formData?.totalWeight || 0,
+          totalPrice: formData?.totalPrice || 0,
+          totalShippingCost:
+            formData?.totalShippingCost || formData?.totalShipmentCost || 0,
+          totalShippingDiscount: formData?.totalShippingDiscount || 0,
+          totalPayment:
+            formData?.totalPayment || formData?.totalCalculatedBill || 0,
+          totalBillPayment: Number(billAmount) || 0,
+          paymentRecord: {
+            create: {
+              status: 'PENDING',
+              amountDue: Number(billAmount) || 0,
+              amountPaid: 0,
+            },
+          },
         },
       })
 
-    const updatedCart = await prisma.businessOrder.update({
-      where: {
-        id: businessOrder.id,
-      },
-      include: {
-        paymentMethod: true,
-        paymentRecord: true,
-        virtualAccountNumber: true,
-      },
-      data: {
-        status: 'WAITING_FOR_PAYMENT',
-        totalItems: formData?.totalItems || 0,
-        totalWeight: formData?.totalWeight || 0,
-        totalPrice: formData?.totalPrice || 0,
-        totalShippingCost:
-          formData?.totalShippingCost || formData?.totalShipmentCost || 0,
-        totalShippingDiscount: formData?.totalShippingDiscount || 0,
-        totalPayment:
-          formData?.totalPayment || formData?.totalCalculatedBill || 0,
-        totalBillPayment: Number(billAmount) || 0,
-        paymentRecord: {
-          create: {
-            status: 'PENDING',
-            amountDue: Number(billAmount) || 0,
-            amountPaid: 0,
-          },
-        },
-      },
-    })
-
-    res.status(200).json({
-      message:
-        'Process my order with Virtual Account success, order is waiting for payment, payment record is pending',
-      // ownerId,
-      // isCartExist,
-      virtualAccountNumber: createdVirtualAccountNumber,
-      businessOrder: updatedCart,
-    })
+      res.status(200).json({
+        message:
+          'Process my order with virtual account success, order is waiting for payment, payment record is pending',
+        virtualAccountNumber: createdVirtualAccountNumber,
+        businessOrder: updatedCart,
+      })
+    } catch (error) {
+      res.status(500).json({
+        message: 'Process my order with virtual account failed',
+        error,
+      })
+    }
   } catch (error) {
     res.status(500).json({
-      message: 'Process my order with Virtual Account failed',
+      message:
+        'Process my order with virtual account failed because you have unpaid order by virtual account',
       error,
     })
   }
