@@ -61,7 +61,7 @@ export const OrdersContainer = ({ user }) => {
 
       <BreadcrumbOrders />
       <Stack spacing={10}>
-        <Heading>Dasbor daftar pesanan saya</Heading>
+        <Heading>Semua pesanan saya</Heading>
         {error && !data && <Text>Gagal memuat daftar pesanan saya</Text>}
         {!error && !data && (
           <HStack>

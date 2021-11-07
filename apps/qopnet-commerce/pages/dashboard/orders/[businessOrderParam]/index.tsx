@@ -13,7 +13,7 @@ const BusinessOrderParamPage = () => {
       {businessOrderParam && (
         <>
           <BreadcrumbOrder businessOrderParam={businessOrderParam} />
-          <Heading mt={1} mb={10}>
+          <Heading mt={3} mb={10}>
             Pesanan saya
           </Heading>
           <BusinessOrderContainer businessOrderParam={businessOrderParam} />
