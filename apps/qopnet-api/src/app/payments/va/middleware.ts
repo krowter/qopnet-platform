@@ -7,7 +7,7 @@ export const getBill = async (req, res) => {
     await prisma.virtualAccountPermataLog.create({
       data: {
         requestObject: {
-          body: formData,
+          body: req.body,
           headers: req.headers,
         },
       },
@@ -67,7 +67,7 @@ export const payBill = async (req, res) => {
     await prisma.virtualAccountPermataLog.create({
       data: {
         requestObject: {
-          body: formData,
+          body: req.body,
           headers: req.headers,
         },
       },
@@ -125,7 +125,7 @@ export const revBill = async (req, res) => {
     await prisma.virtualAccountPermataLog.create({
       data: {
         requestObject: {
-          body: formData,
+          body: req.body,
           headers: req.headers,
         },
       },
