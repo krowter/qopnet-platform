@@ -14,7 +14,12 @@ import {
   Flex,
   OrderedList,
   ListItem,
-  Divider
+  Divider,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
 } from '@chakra-ui/react'
 
 import {
@@ -255,21 +260,151 @@ export const BusinessOrderCard: React.FC<BusinessOrderCardProps> = ({
         </Box>
 
         <Box>
-          <Heading size="md" mb={2}>
-            Penting:
-          </Heading>
-          <OrderedList>
-            <ListItem>
-              Transfer tepat hingga <b>3 digit terakhir</b>
-            </ListItem>
-            <ListItem>
-              Hanya disarankan untuk transfer melalui <b>rekening langsung</b>
-            </ListItem>
-            <ListItem>
-              Menunggu pembayaran terkonfirmasi dari kami setelah transfer dalam
-              waktu <b>2×24 jam</b>
-            </ListItem>
-          </OrderedList>
+          {businessOrder?.paymentMethod?.paymentCategory ===
+          'TRANSFER_MANUAL' ? (
+            <>
+              <Heading size="md" mb={2}>
+                Penting:
+              </Heading>
+              <OrderedList>
+                <ListItem>
+                  Transfer tepat hingga <b>3 digit terakhir</b>
+                </ListItem>
+                <ListItem>
+                  Hanya disarankan untuk transfer melalui{' '}
+                  <b>rekening langsung</b>
+                </ListItem>
+                <ListItem>
+                  Menunggu pembayaran terkonfirmasi dari kami setelah transfer
+                  dalam waktu <b>2×24 jam</b>
+                </ListItem>
+              </OrderedList>
+            </>
+          ) : (
+            <>
+              <Heading size="md" mb={2}>
+                Petunjuk Pembayaran:
+              </Heading>
+              <Accordion allowToggle>
+                <AccordionItem>
+                  <h2>
+                    <AccordionButton>
+                      <Box flex="1" textAlign="left">
+                        ATM Permata
+                      </Box>
+                      <AccordionIcon />
+                    </AccordionButton>
+                  </h2>
+                  <AccordionPanel pb={4}>
+                    <OrderedList>
+                      <ListItem>
+                        Pilih <strong>Transfer</strong>, lalu{' '}
+                        <strong>Transfer antar Rekening PermataBank</strong>
+                      </ListItem>
+                      <ListItem>
+                        Masukkan nomor <strong>Virtual Account</strong>
+                      </ListItem>
+                      <ListItem>
+                        Pilih <strong>Rekening</strong> yang akan di{' '}
+                        <strong>Debit</strong>
+                      </ListItem>
+                      <ListItem>
+                        <strong>Konfirmasi</strong> dan selesaikan pembayaran
+                      </ListItem>
+                    </OrderedList>
+                  </AccordionPanel>
+                </AccordionItem>
+
+                <AccordionItem>
+                  <h2>
+                    <AccordionButton>
+                      <Box flex="1" textAlign="left">
+                        ATM Bank Lain (Alto, Prima, ATM Bersama)
+                      </Box>
+                      <AccordionIcon />
+                    </AccordionButton>
+                  </h2>
+                  <AccordionPanel pb={4}>
+                    <OrderedList>
+                      <ListItem>
+                        Pilih <strong>Transfer</strong>, lalu{' '}
+                        <strong>Transfer antar Rekening PermataBank</strong>
+                      </ListItem>
+                      <ListItem>
+                        (ATM Bersama Alto) Masukkan kode{' '}
+                        <strong>013 + nomor Virtual Account</strong>
+                      </ListItem>
+                      <ListItem>
+                        (Prima) Masukkan <strong> kode 013</strong>, lalu
+                        masukkan <strong> nomor Virtual Account</strong>
+                      </ListItem>
+                      <ListItem>
+                        <strong>Konfirmasi</strong> dan selesaikan pembayaran
+                      </ListItem>
+                    </OrderedList>
+                  </AccordionPanel>
+                </AccordionItem>
+
+                <AccordionItem>
+                  <h2>
+                    <AccordionButton>
+                      <Box flex="1" textAlign="left">
+                        Mobile Banking Permata
+                      </Box>
+                      <AccordionIcon />
+                    </AccordionButton>
+                  </h2>
+                  <AccordionPanel pb={4}>
+                    <OrderedList>
+                      <ListItem>
+                        Buka <strong>aplikasi Permata, pilih Transfer</strong>
+                      </ListItem>
+                      <ListItem>
+                        Pilih menu Antar <strong>Rekening PermataBank</strong>
+                      </ListItem>
+                      <ListItem>
+                        Masukkan nomor{' '}
+                        <strong>Rekening Asal & Virtual Account</strong>
+                      </ListItem>
+                      <ListItem>
+                        Masukkan <strong>kode SMS/Token</strong> & transaksi
+                        selesai
+                      </ListItem>
+                    </OrderedList>
+                  </AccordionPanel>
+                </AccordionItem>
+                <AccordionItem>
+                  <h2>
+                    <AccordionButton>
+                      <Box flex="1" textAlign="left">
+                        Internet Banking Permata
+                      </Box>
+                      <AccordionIcon />
+                    </AccordionButton>
+                  </h2>
+                  <AccordionPanel pb={4}>
+                    <OrderedList>
+                      <ListItem>
+                        Login ke <strong>iBanking Permata</strong>, pilih{' '}
+                        <strong>Transfer</strong>
+                      </ListItem>
+                      <ListItem>
+                        Pilih <strong>Antar Rekening PermataBank</strong>
+                      </ListItem>
+                      <ListItem>
+                        Masukkan nomor{' '}
+                        <strong>Rekening Asal & Virtual Account</strong>
+                      </ListItem>
+                      <ListItem>
+                        Masukkan <strong>kode SMS/Token</strong> & transaksi
+                        selesai
+                      </ListItem>
+                    </OrderedList>
+                  </AccordionPanel>
+                </AccordionItem>
+              </Accordion>
+            </>
+          )}
         </Box>
         {businessOrder?.paymentMethod?.paymentCategory ===
           'TRANSFER_MANUAL' && (
