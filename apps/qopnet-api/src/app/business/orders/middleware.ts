@@ -58,6 +58,39 @@ export const getMyAllBusinessOrders = async (req, res) => {
   }
 }
 
+// Get all paid business orders items by handle supplier
+export const getAllPaidBusinessOrderItems = async (req, res) => {
+  const { supplierHandle } = req.params
+
+  try {
+    const paidBusinessOrderItems = await prisma.businessOrderItem.findMany({
+      where: {
+        supplier: {
+          handle: supplierHandle,
+        },
+        businessOrder: {
+          status: 'PAID',
+        },
+      },
+      include: {
+        businessOrder: true,
+        supplierProduct: true,
+        supplier: true,
+      },
+    })
+
+    res.send({
+      message: 'Get all paid business orders items by supplier handle success',
+      paidBusinessOrderItems,
+    })
+  } catch (error) {
+    res.status(500).send({
+      message: 'Get all paid business orders items by supplier handle failed',
+      error,
+    })
+  }
+}
+
 /**
  * Get my cart
  *

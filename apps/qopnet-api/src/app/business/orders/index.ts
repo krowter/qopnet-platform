@@ -21,6 +21,13 @@ router.get(
   businessOrder.getMyCart
 )
 
+// GET /api/business/orders/items/paid/:supplierHandle
+router.get(
+  '/items/paid/:supplierHandle',
+  auth.checkUser,
+  businessOrder.getAllPaidBusinessOrderItems
+)
+
 // POST /api/business/orders/my/cart
 router.post(
   '/my/cart',
