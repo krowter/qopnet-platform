@@ -68,9 +68,13 @@ const SupplierOrdersPage = () => {
 }
 
 export const OrdersContainer = ({ supplierParam, user }) => {
-  const { data, error } = useSWR(`/api/suppliers/${supplierParam}/orders`)
-  const { supplier, businessOrderItems } = data || []
+  const { data, error } = useSWR(
+    `/api/business/orders/items/paid/${supplierParam}`
+  )
+  const { supplier, paidBusinessOrderItems } = data || []
   const supplierName = supplier?.name || supplierParam.toUpperCase()
+
+  console.log(`paidBusinessOrderItems`, paidBusinessOrderItems)
 
   return (
     <Stack>
@@ -104,10 +108,10 @@ export const OrdersContainer = ({ supplierParam, user }) => {
             <Text>Memuat daftar pesanan di {supplierName}...</Text>
           </HStack>
         )}
-        {!error && data && businessOrderItems.length !== 0 && (
-          <BusinessOrderItemsList businessOrderItems={businessOrderItems} />
+        {!error && data && paidBusinessOrderItems.length !== 0 && (
+          <BusinessOrderItemsList businessOrderItems={paidBusinessOrderItems} />
         )}
-        {!error && data && businessOrderItems.length === 0 && (
+        {!error && data && paidBusinessOrderItems.length === 0 && (
           <Stack align="flex-start" spacing={5}>
             <Text>
               Maaf belum ada pesanan yang berhasil masuk di {supplierName}.
@@ -120,7 +124,18 @@ export const OrdersContainer = ({ supplierParam, user }) => {
 }
 
 export const BusinessOrderItemsList = ({ businessOrderItems }) => {
-  return <Stack spacing={5}>{JSON.stringify(businessOrderItems)}</Stack>
+  console.log(`businessOrderItems`, businessOrderItems)
+  return (
+    <>
+      {businessOrderItems.map((businessOrderItem) => {
+        return (
+          <Stack spacing={5}>
+            <Box>{JSON.stringify(businessOrderItem)}</Box>
+          </Stack>
+        )
+      })}
+    </>
+  )
 }
 
 export default SupplierOrdersPage
