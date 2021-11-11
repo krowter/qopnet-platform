@@ -116,6 +116,14 @@ router.patch(
   businessOrder.patchOneBusinessOrderStatusToPaid
 )
 
+// PATCH /api/business/orders/items/:businessOrderItemId
+router.patch(
+  '/items/:businessOrderItemId',
+  auth.checkUser,
+  // businessOrder.checkOneBusinessOrder,
+  businessOrder.patchOneBusinessOrderItemStatus
+)
+
 // DELETE /api/business/orders
 router.delete('/', auth.checkUser, businessOrder.deleteAllBusinessOrders)
 // DELETE /api/business/orders/:businessOrderParam

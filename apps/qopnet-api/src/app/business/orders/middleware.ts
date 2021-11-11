@@ -1045,6 +1045,45 @@ export const patchOneBusinessOrderStatusToPaid = async (req, res) => {
   }
 }
 
+// Patch one business order item status businessOrderItem (id)
+export const patchOneBusinessOrderItemStatus = async (req, res) => {
+  const { businessOrderItemId } = req.params
+  const { status } = req.body
+
+  try {
+    const businessOrderItem = await prisma.businessOrderItem.findUnique({
+      where: {
+        id: businessOrderItemId,
+      },
+    })
+
+    if (!businessOrderItem) throw new Error('Business order item not found')
+
+    const updatedBusinessOrderItem = await prisma.businessOrderItem.update({
+      where: {
+        id: businessOrderItemId,
+      },
+      data: {
+        status: status,
+      },
+      include: {
+        supplierProduct: true,
+        businessOrder: true,
+      },
+    })
+
+    res.status(200).json({
+      message: 'Patch one business order item status success',
+      updatedBusinessOrderItem,
+    })
+  } catch (error) {
+    res.status(404).json({
+      message:
+        'Patch one business order item status failed, because it is not found',
+    })
+  }
+}
+
 // Delete all business orders
 export const deleteAllBusinessOrders = async (req, res) => {
   try {
