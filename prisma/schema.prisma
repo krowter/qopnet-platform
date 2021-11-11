@@ -387,12 +387,8 @@ enum BusinessOrderStatus {
   // supplier processed order internally
   PROCESSED
 
-  // supplier waiting for pickup by courier
-  WAITING_FOR_PICKUP
-
   // supplier product is on delivery by courier
-  ONDELIVERY
-  // ON_DELIVERY
+  ON_DELIVERY
 
   // supplier product is delivered to shipment address
   DELIVERED
@@ -461,18 +457,25 @@ model BusinessOrder {
 }
 
 enum BusinessOrderItemStatus {
-  DRAFT
-  WAITING_FOR_PAYMENT
-  PAID
-  WAITING_FOR_CONFIRMATION
-  PROCESSED
+  // supplier waiting for pickup by courier
   WAITING_FOR_PICKUP
-  ONDELIVERY
+
+  // supplier product is on delivery by courier
+  ON_DELIVERY
+
+  IN_WAREHOUSE
+
+  // supplier product is delivered to shipment address
   DELIVERED
+
+  // confirmed by recipient
   CONFIRMED
+
+  // confirmed, product arrived but something wrong, include lost
   COMPLAINED
+
+  // before PAID | PROCESSED | ONDELIVERY
   CANCELED
-  REFUNDED
 }
 
 model BusinessOrderItem {
