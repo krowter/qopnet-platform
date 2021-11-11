@@ -460,8 +460,24 @@ model BusinessOrder {
   @@map(name: "business_orders")
 }
 
+enum BusinessOrderItemStatus {
+  DRAFT
+  WAITING_FOR_PAYMENT
+  PAID
+  WAITING_FOR_CONFIRMATION
+  PROCESSED
+  WAITING_FOR_PICKUP
+  ONDELIVERY
+  DELIVERED
+  CONFIRMED
+  COMPLAINED
+  CANCELED
+  REFUNDED
+}
+
 model BusinessOrderItem {
-  id String @id @default(cuid())
+  id     String                   @id @default(cuid())
+  status BusinessOrderItemStatus?
 
   quantity Int @default(1)
 
