@@ -73,7 +73,13 @@ export const getAllPaidBusinessOrderItems = async (req, res) => {
         },
       },
       include: {
-        businessOrder: true,
+        businessOrder: {
+          include: {
+            owner: true,
+            shipmentAddress: true,
+            shipmentCourier: true,
+          },
+        },
         supplierProduct: true,
         supplier: true,
       },
