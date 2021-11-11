@@ -368,7 +368,7 @@ model FundBenefactor {
 // -----------------------------------------------------------------------------
 // BUSINESS ORDER
 
-enum OrderStatus {
+enum BusinessOrderStatus {
   // order is still a cart
   DRAFT
 
@@ -411,8 +411,8 @@ enum OrderStatus {
 }
 
 model BusinessOrder {
-  id     String       @id @default(cuid())
-  status OrderStatus?
+  id     String               @id @default(cuid())
+  status BusinessOrderStatus?
 
   // Relation: Profile
   ownerId String?
