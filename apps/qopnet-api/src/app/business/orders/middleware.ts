@@ -858,7 +858,12 @@ export const getAllBusinessOrders = async (req, res) => {
         orderBy: [{ updatedAt: 'desc' }],
         include: {
           owner: true,
-          businessOrderItems: true,
+          businessOrderItems: {
+            include: {
+              supplierProduct: true,
+              shipmentCourier: true,
+            },
+          },
           shipmentAddress: true,
           paymentMethod: true,
           paymentRecord: true,
@@ -1080,6 +1085,46 @@ export const patchOneBusinessOrderItemStatus = async (req, res) => {
     res.status(404).json({
       message:
         'Patch one business order item status failed, because it is not found',
+    })
+  }
+}
+
+// Patch one business order item courier
+export const patchOneBusinessOrderItemCourier = async (req, res) => {
+  const { businessOrderItemId } = req.params
+  const { courier } = req.body
+
+  try {
+    const businessOrderItem = await prisma.businessOrderItem.findUnique({
+      where: {
+        id: businessOrderItemId,
+      },
+    })
+
+    if (!businessOrderItem) throw new Error('Business order item not found')
+
+    const updatedBusinessOrderItem = await prisma.businessOrderItem.update({
+      where: {
+        id: businessOrderItemId,
+      },
+      data: {
+        shipmentCourierId: courier,
+      },
+      include: {
+        supplierProduct: true,
+        businessOrder: true,
+        shipmentCourier: true,
+      },
+    })
+
+    res.status(200).json({
+      message: 'Patch one business order item courier success',
+      updatedBusinessOrderItem,
+    })
+  } catch (error) {
+    res.status(404).json({
+      message:
+        'Patch one business order item courier failed, because it is not found',
     })
   }
 }

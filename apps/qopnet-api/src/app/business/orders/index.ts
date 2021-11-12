@@ -120,8 +120,14 @@ router.patch(
 router.patch(
   '/items/:businessOrderItemId',
   auth.checkUser,
-  // businessOrder.checkOneBusinessOrder,
   businessOrder.patchOneBusinessOrderItemStatus
+)
+
+// PATCH /api/business/orders/items/:businessOrderItemId/courier
+router.patch(
+  '/items/:businessOrderItemId/courier',
+  auth.checkUser,
+  businessOrder.patchOneBusinessOrderItemCourier
 )
 
 // DELETE /api/business/orders
