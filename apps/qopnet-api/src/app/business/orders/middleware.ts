@@ -77,7 +77,6 @@ export const getAllPaidBusinessOrderItems = async (req, res) => {
           include: {
             owner: true,
             shipmentAddress: true,
-            shipmentCourier: true,
           },
         },
         supplierProduct: true,
@@ -136,7 +135,6 @@ export const getMyCart = async (req, res) => {
           },
         },
         shipmentAddress: true,
-        shipmentCourier: true,
         paymentMethod: true,
         paymentRecord: true,
         virtualAccountNumber: true,
@@ -521,24 +519,17 @@ export const patchMyCartAddress = async (req, res) => {
 export const patchMyCartCourier = async (req, res) => {
   const ownerId = req.profile.id
   const isCartExist = req.isCartExist
-  const businessOrder = req.businessOrder
+  const businessOrderItem = req.businessOrderItem
   const formData = req.body
 
   if (isCartExist) {
     try {
-      const updatedCart = await prisma.businessOrder.update({
+      const updatedCart = await prisma.businessOrderItem.update({
         where: {
-          id: businessOrder.id,
-        },
-        include: {
-          shipmentAddress: true,
-          shipmentCourier: true,
-          paymentMethod: true,
-          paymentRecord: true,
-          virtualAccountNumber: true,
+          id: businessOrderItem.id,
         },
         data: {
-          shipmentCourierId: formData.id, // Patch
+          courierId: formData.id, // Patch
         },
       })
 
@@ -631,17 +622,12 @@ export const processMyOrder = async (req, res) => {
        * This should not require any formData or req.body
        * But still need to check if these fields are available:
        * - shipmentAddress
-       * - shipmentCourier
        * - paymentMethod
        * Then finally:
        * - Change the status to WAITING_FOR_PAYMENT
        * - Create a payment record to be completed later
        */
-      if (
-        businessOrder.shipmentAddressId &&
-        businessOrder.shipmentCourierId &&
-        businessOrder.paymentMethodId
-      ) {
+      if (businessOrder.shipmentAddressId && businessOrder.paymentMethodId) {
         if (businessOrder.paymentMethod.paymentCategory === 'TRANSFER_MANUAL') {
           processTransferManual(req, res, formData, businessOrder)
         } else if (
@@ -667,7 +653,6 @@ export const processMyOrder = async (req, res) => {
           isCartExist,
           fields: {
             shipmentAddressId: businessOrder.shipmentAddressId,
-            shipmentCourierId: businessOrder.shipmentCourierId,
             paymentMethodId: businessOrder.paymentMethodId,
           },
           businessOrder,
@@ -1125,8 +1110,6 @@ export const checkMyCart = async (req, res, next) => {
         },
         include: {
           shipmentAddress: true,
-          shipmentCourier: true,
-          shipmentCourierVehicle: true,
           paymentMethod: true,
           paymentRecord: true,
           virtualAccountNumber: true,

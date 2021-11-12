@@ -100,15 +100,17 @@ model Address {
   countryCode   String? // Save as ID, not Indonesia
 
   // Relations
-  profileId              String?
-  profile                Profile?        @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  wholesalerId           String?
-  wholesaler             Wholesaler?     @relation(fields: [wholesalerId], references: [id])
-  supplierId             String?
-  supplier               Supplier?       @relation(fields: [supplierId], references: [id])
-  merchantId             String?
-  merchant               Merchant?       @relation(fields: [merchantId], references: [id])
-  shipmentBusinessOrders BusinessOrder[]
+  profileId    String?
+  profile      Profile?    @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  wholesalerId String?
+  wholesaler   Wholesaler? @relation(fields: [wholesalerId], references: [id])
+  supplierId   String?
+  supplier     Supplier?   @relation(fields: [supplierId], references: [id])
+  merchantId   String?
+  merchant     Merchant?   @relation(fields: [merchantId], references: [id])
+
+  // Relations
+  businessOrders BusinessOrder[]
 
   // Timestamp
   createdAt DateTime @default(now())
@@ -158,7 +160,7 @@ model Supplier {
   avatarUrl         String?
   nationalTax       String?
   certificationFile String?
-  category          SupplierCategory? @default(PRODUCER)
+  category          SupplierCategory?
 
   // Relations
   ownerId            String?
@@ -369,45 +371,23 @@ model FundBenefactor {
 // BUSINESS ORDER
 
 enum BusinessOrderStatus {
-  // order is still a cart
-  DRAFT
+  // Order is still a cart
+  DRAFT // "Keranjang Belanja"
 
-  // order is waiting to be paid by buyer
-  WAITING_FOR_PAYMENT
+  // Order is waiting to be paid by buyer
+  WAITING_FOR_PAYMENT // "Menunggu Pembayaran"
 
-  // payment has been made, but still in process
-  // PAYMENT_IN_PROCESS
+  // Payment has been made, but still in process or partially paid
+  PAYMENT_IN_PROCESS // "Pembayaran Diproses"
 
-  // order has been paid, confirmed by wholesaler/supplier
-  PAID
+  // Order has been paid, confirmed by wholesaler/supplier
+  PAID // "Telah Dibayar"
 
-  // waiting confirmation from wholesaler/supplier
-  WAITING_FOR_CONFIRMATION
+  // Should be before PAID
+  CANCELED // "Dibatalkan"
 
-  // supplier processed order internally
-  PROCESSED
-
-  // supplier waiting for pickup by courier
-  WAITING_FOR_PICKUP
-
-  // supplier product is on delivery by courier
-  ONDELIVERY
-  // ON_DELIVERY
-
-  // supplier product is delivered to shipment address
-  DELIVERED
-
-  // confirmed by recipient
-  CONFIRMED
-
-  // confirmed, product arrived but something wrong, include lost
-  COMPLAINED
-
-  // before PAID | PROCESSED | ONDELIVERY
-  CANCELED
-
-  // somewhere after PAID
-  REFUNDED
+  // Should be after PAID
+  REFUNDED // "Uang dikembalikan"
 }
 
 model BusinessOrder {
@@ -424,14 +404,6 @@ model BusinessOrder {
   // Relation: Shipment Address
   shipmentAddress   Address? @relation(fields: [shipmentAddressId], references: [id])
   shipmentAddressId String?
-
-  // Relation: Shipment Courier
-  shipmentCourier   Courier? @relation(fields: [shipmentCourierId], references: [id])
-  shipmentCourierId String?
-
-  // Relation: Shipment CourierVehicle
-  shipmentCourierVehicle   CourierVehicle? @relation(fields: [shipmentCourierVehicleId], references: [id])
-  shipmentCourierVehicleId String?
 
   // Relation: PaymentMethod
   paymentMethod   PaymentMethod? @relation(fields: [paymentMethodId], references: [id])
@@ -457,22 +429,37 @@ model BusinessOrder {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
+  Courier          Courier?        @relation(fields: [courierId], references: [id])
+  courierId        String?
+  CourierVehicle   CourierVehicle? @relation(fields: [courierVehicleId], references: [id])
+  courierVehicleId String?
   @@map(name: "business_orders")
 }
 
 enum BusinessOrderItemStatus {
-  DRAFT
-  WAITING_FOR_PAYMENT
-  PAID
-  WAITING_FOR_CONFIRMATION
-  PROCESSED
-  WAITING_FOR_PICKUP
-  ONDELIVERY
-  DELIVERED
-  CONFIRMED
-  COMPLAINED
-  CANCELED
-  REFUNDED
+  // Waiting for confirmation from Supplier
+  WAITING_FOR_CONFIRMATION // "Menunggu Konfirmasi Toko"
+
+  // Supplier processed the BusinessOrderItem
+  IN_PROCESS // "Sedang diproses"
+
+  // Supplier waiting for pickup by Courier
+  WAITING_FOR_PICKUP // "Menunggu penjemputan kurir"
+
+  // SupplierProduct is on delivery by Courier
+  ON_DELIVERY // "Dalam pengiriman"
+
+  // SupplierProduct is delivered to shipment address
+  DELIVERED // "Telah sampai dikirim"
+
+  // Confirmed by recipient
+  CONFIRMED // "Telah dikonfirmasi"
+
+  // Confirmed, product arrived but something wrong, include lost
+  COMPLAINED // "Terdapat komplain"
+
+  // Should be before IN_PROCESS
+  CANCELED // "Dibatalkan"
 }
 
 model BusinessOrderItem {
@@ -492,6 +479,14 @@ model BusinessOrderItem {
   // Relation: Supplier
   supplierId String
   supplier   Supplier @relation(fields: [supplierId], references: [id])
+
+  // Relation: Courier
+  courierId String?
+  courier   Courier? @relation(fields: [courierId], references: [id])
+
+  // Relation: CourierVehicle
+  courierVehicleId String?
+  courierVehicle   CourierVehicle? @relation(fields: [courierVehicleId], references: [id])
 
   // Timestamp
   createdAt DateTime @default(now())
@@ -516,6 +511,7 @@ model Courier {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
+  BusinessOrderItem BusinessOrderItem[]
   @@map(name: "couriers")
 }
 
@@ -531,8 +527,8 @@ model CourierVehicle {
   maxCargoDimensionWidth      Int? // in cm
   maxCargoDimensionCubicMeter Float? // in m^3
 
-  // Relation: BusinessOrder
-  businessOrders BusinessOrder[]
+  // Relation: BusinessOrderItem
+  businessOrderItems BusinessOrderItem[]
 
   // Relation: Courier
   courierId String?
@@ -542,6 +538,7 @@ model CourierVehicle {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
+  BusinessOrder BusinessOrder[]
   @@map(name: "courier_vehicles")
 }
 
