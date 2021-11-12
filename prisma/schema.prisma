@@ -496,6 +496,10 @@ model BusinessOrderItem {
   supplierId String
   supplier   Supplier @relation(fields: [supplierId], references: [id])
 
+  // Relation: Shipment Courier
+  shipmentCourier   Courier? @relation(fields: [shipmentCourierId], references: [id])
+  shipmentCourierId String?
+
   // Timestamp
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -512,8 +516,9 @@ model Courier {
   name String // Courier name: Lalamove, Deliveree, Mas Kargo
 
   // Relations
-  businessOrders  BusinessOrder[]
-  courierVehicles CourierVehicle[]
+  businessOrders     BusinessOrder[]
+  businessOrderItems BusinessOrderItem[]
+  courierVehicles    CourierVehicle[]
 
   // Timestamp
   createdAt DateTime @default(now())
