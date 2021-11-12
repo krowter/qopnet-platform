@@ -503,7 +503,7 @@ model Courier {
 
   // Relations
   businessOrderItems BusinessOrderItem[]
-  courierVehicle     CourierVehicle?
+  courierVehicles    CourierVehicle[]
 
   // Timestamp
   createdAt DateTime @default(now())
@@ -528,7 +528,7 @@ model CourierVehicle {
   businessOrderItems BusinessOrderItem[]
 
   // Relation: Courier
-  courierId String?  @unique
+  courierId String?
   courier   Courier? @relation(fields: [courierId], references: [id])
 
   // Timestamp
