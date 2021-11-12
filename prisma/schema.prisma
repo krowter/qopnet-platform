@@ -160,7 +160,7 @@ model Supplier {
   avatarUrl         String?
   nationalTax       String?
   certificationFile String?
-  category          SupplierCategory? @default(PRODUCER)
+  category          SupplierCategory?
 
   // Relations
   ownerId            String?
