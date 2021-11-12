@@ -529,8 +529,5 @@ CREATE OR REPLACE FUNCTION public.signup_copy_to_users_table() RETURNS TRIGGER A
 INSERT INTO public.users (id, email)
 VALUES(new.id, new.email);
 RETURN NEW;
-INSERT INTO public.profiles (userId)
-VALUES(new.userId);
-RETURN NEW;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
