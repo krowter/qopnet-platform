@@ -42,7 +42,7 @@ import {
   chakra,
   VStack,
 } from '@chakra-ui/react'
-
+import { Layout } from '@qopnet/qopnet-ui'
 import { Icon } from '@qopnet/qopnet-ui'
 import { formatMoney } from '@qopnet/util-format'
 import { UploadImageForm } from '../../../../components'
@@ -82,11 +82,11 @@ export type SupplierProductData = {
 /**
  * Create new Supplier form component
  */
-const SupplierProductForm = ({ supplierParam }) => {
+const SupplierProductForm = () => {
   const router = useRouter()
   const toast = useToast()
   const [loading, setLoading] = useState(false)
-  const { supplierProductParam } = router.query
+  const { supplierParam, supplierProductParam } = router.query
   const { data, error } = useSWR(
     `/api/suppliers/products/${supplierProductParam}`
   )
@@ -232,7 +232,7 @@ const SupplierProductForm = ({ supplierParam }) => {
 
       toast({ title: 'Berhasil mengedit produk supplier', status: 'success' })
 
-      const redirectPath = `/${supplierProduct?.supplier?.handle}/${data?.updatedSupplierProduct?.slug}`
+      const redirectPath = `/${supplierParam}/${data?.updatedSupplierProduct?.slug}`
       router.push(redirectPath)
     } catch (error) {
       console.log(error);
@@ -243,9 +243,9 @@ const SupplierProductForm = ({ supplierParam }) => {
   }
 
   return (
-    <>
-      <VStack spacing={10} mt={10}>
-        <NextSeo title={`Tambah produk supplier ${supplierParam} - Qopnet`} />
+    <Layout pt={10}>
+      <VStack spacing={10}>
+        <NextSeo title={`Edit produk supplier ${supplierParam} - Qopnet`} />
         <VStack>
           <Stack align="center">
             <Heading as="h1" size="xl">
@@ -716,7 +716,7 @@ const SupplierProductForm = ({ supplierParam }) => {
       {process.env.NODE_ENV === 'development' && (
         <DevTool control={control} placement="bottom-right" />
       )}
-    </>
+    </Layout>
   )
 }
 
