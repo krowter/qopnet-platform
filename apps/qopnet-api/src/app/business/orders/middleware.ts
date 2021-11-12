@@ -515,46 +515,34 @@ export const patchMyCartAddress = async (req, res) => {
   }
 }
 
-// Patch my cart courier
-export const patchMyCartCourier = async (req, res) => {
+// Patch one BusinessOrderItem's Courier
+export const patchOneBusinessOrderItemCourier = async (req, res) => {
   const ownerId = req.profile.id
-  const isCartExist = req.isCartExist
   const businessOrderItem = req.businessOrderItem
   const formData = req.body
 
-  if (isCartExist) {
-    try {
-      const updatedCart = await prisma.businessOrderItem.update({
-        where: {
-          id: businessOrderItem.id,
-        },
-        data: {
-          courierId: formData.id, // Patch
-        },
-      })
+  try {
+    const updatedCart = await prisma.businessOrderItem.update({
+      where: {
+        id: businessOrderItem.id,
+      },
+      data: {
+        courierId: formData.id, // Patch
+      },
+    })
 
-      res.status(200).json({
-        message: 'Patch my cart courier success',
-        ownerId,
-        isCartExist,
-        formData,
-        businessOrder: updatedCart,
-      })
-    } catch (error) {
-      res.status(400).json({
-        message:
-          'Patch my cart courier failed, might because courier id is invalid',
-        error,
-        ownerId,
-        isCartExist,
-        formData,
-      })
-    }
-  } else {
-    res.status(400).json({
-      message: 'Patch my cart courier failed because cart is not exist',
+    res.status(200).json({
+      message: 'Patch one business order item courier success',
       ownerId,
-      isCartExist,
+      formData,
+      businessOrder: updatedCart,
+    })
+  } catch (error) {
+    res.status(400).json({
+      message:
+        'Patch one business order item courier failed, might because courier id is invalid',
+      error,
+      ownerId,
       formData,
     })
   }
