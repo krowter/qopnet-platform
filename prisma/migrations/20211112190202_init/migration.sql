@@ -114,7 +114,7 @@ CREATE TABLE "suppliers" (
     "avatarUrl" TEXT,
     "nationalTax" TEXT,
     "certificationFile" TEXT,
-    "category" "SupplierCategory" DEFAULT 'PRODUCER',
+    "category" "SupplierCategory",
     "ownerId" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -231,7 +231,6 @@ CREATE TABLE "business_orders" (
     "totalBillPayment" MONEY,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "courierId" TEXT,
     "courierVehicleId" TEXT,
     CONSTRAINT "business_orders_pkey" PRIMARY KEY ("id")
 );
@@ -395,6 +394,8 @@ CREATE UNIQUE INDEX "fund_beneficiaries_profileId_key" ON "fund_beneficiaries"("
 -- CreateIndex
 CREATE UNIQUE INDEX "business_orders_paymentRecordId_key" ON "business_orders"("paymentRecordId");
 -- CreateIndex
+CREATE UNIQUE INDEX "courier_vehicles_courierId_key" ON "courier_vehicles"("courierId");
+-- CreateIndex
 CREATE UNIQUE INDEX "virtual_account_numbers_bussinessOrderId_key" ON "virtual_account_numbers"("bussinessOrderId");
 -- AddForeignKey
 ALTER TABLE "profiles"
@@ -475,10 +476,6 @@ SET NULL ON UPDATE CASCADE;
 -- AddForeignKey
 ALTER TABLE "business_orders"
 ADD CONSTRAINT "business_orders_paymentRecordId_fkey" FOREIGN KEY ("paymentRecordId") REFERENCES "payment_records"("id") ON DELETE
-SET NULL ON UPDATE CASCADE;
--- AddForeignKey
-ALTER TABLE "business_orders"
-ADD CONSTRAINT "business_orders_courierId_fkey" FOREIGN KEY ("courierId") REFERENCES "couriers"("id") ON DELETE
 SET NULL ON UPDATE CASCADE;
 -- AddForeignKey
 ALTER TABLE "business_orders"

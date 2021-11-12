@@ -429,8 +429,6 @@ model BusinessOrder {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
-  Courier          Courier?        @relation(fields: [courierId], references: [id])
-  courierId        String?
   CourierVehicle   CourierVehicle? @relation(fields: [courierVehicleId], references: [id])
   courierVehicleId String?
   @@map(name: "business_orders")
@@ -501,17 +499,16 @@ model BusinessOrderItem {
 model Courier {
   id String @id @default(cuid())
 
-  name String // Courier name: Lalamove, Deliveree, Mas Kargo
+  name String // Courier name: Kurir Toko, Lalamove, Deliveree, Mas Kargo
 
   // Relations
-  businessOrders  BusinessOrder[]
-  courierVehicles CourierVehicle[]
+  businessOrderItems BusinessOrderItem[]
+  courierVehicles    CourierVehicle[]
 
   // Timestamp
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
-  BusinessOrderItem BusinessOrderItem[]
   @@map(name: "couriers")
 }
 

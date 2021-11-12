@@ -831,7 +831,11 @@ export const getAllBusinessOrders = async (req, res) => {
         orderBy: [{ updatedAt: 'desc' }],
         include: {
           owner: true,
-          businessOrderItems: true,
+          businessOrderItems: {
+            include: {
+              supplierProduct: true,
+            },
+          },
           shipmentAddress: true,
           paymentMethod: true,
           paymentRecord: true,
