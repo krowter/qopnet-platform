@@ -203,7 +203,7 @@ const SupplierProductForm = ({ supplierParam }) => {
       const preparedFormData = {
         ...formData,
         // Be careful, supplier product uses slug, not handle
-        slug: slugify(formData.name.toLowerCase()),
+        slug: slugify(formData.name.toLowerCase(), { remove: /[*+~.()'"!:@]/g }),
         status: formData.status ? 'ACTIVE' : 'INACTIVE',
         minOrder: Number(formData.minOrder) || 1,
         price: Number(formData.price) || 100,
@@ -219,22 +219,24 @@ const SupplierProductForm = ({ supplierParam }) => {
       console.info({ preparedFormData })
 
       /**
-       * POST /api/suppliers/:supplierParam/products
-       * Create new supplier product for one supplier
+       * PUT /api/suppliers/products/:supplierProductId
+       * Edit a supplier product
        */
-      const data = await postToAPI(
-        `/api/suppliers/${supplierParam}/products`,
+      const data = await requestToAPI(
+        "PUT",
+        `/api/suppliers/products/${supplierProduct?.id}`,
         preparedFormData
       )
 
-      if (!data) throw new Error('Create supplier product response error')
+      if (!data) throw new Error('Edit supplier product response error')
 
-      toast({ title: 'Berhasil menambah produk supplier', status: 'success' })
+      toast({ title: 'Berhasil mengedit produk supplier', status: 'success' })
 
-      const redirectPath = `/${supplierParam}/${data.supplierProduct.slug}`
+      const redirectPath = `/${supplierProduct?.supplier?.handle}/${data?.updatedSupplierProduct?.slug}`
       router.push(redirectPath)
     } catch (error) {
-      toast({ title: 'Gagal membuat supplier', status: 'error' })
+      console.log(error);
+      toast({ title: 'Gagal mengedit produk supplier', status: 'error' })
     } finally {
       setLoading(false)
     }
