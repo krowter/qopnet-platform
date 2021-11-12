@@ -114,7 +114,7 @@ CREATE TABLE "suppliers" (
     "avatarUrl" TEXT,
     "nationalTax" TEXT,
     "certificationFile" TEXT,
-    "category" "SupplierCategory" DEFAULT E 'PRODUCER',
+    "category" "SupplierCategory" DEFAULT 'PRODUCER',
     "ownerId" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
