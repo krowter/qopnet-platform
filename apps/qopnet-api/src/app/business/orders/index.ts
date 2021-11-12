@@ -61,14 +61,6 @@ router.patch(
   businessOrder.patchMyCartAddress
 )
 
-// PATCH /api/business/orders/my/cart/courier
-router.patch(
-  '/my/cart/courier',
-  auth.checkUser,
-  businessOrder.checkMyCart,
-  businessOrder.patchMyCartCourier
-)
-
 // PATCH /api/business/orders/my/cart/payment/method
 // Only add PaymentMethod
 router.patch(
@@ -116,9 +108,16 @@ router.patch(
   businessOrder.patchOneBusinessOrderStatusToPaid
 )
 
+// PATCH /api/business/orders/my/cart/courier
+router.patch(
+  '/items/:businessOrderItemId/courier',
+  auth.checkUser,
+  businessOrder.patchOneBusinessOrderItemCourier
+)
+
 // PATCH /api/business/orders/items/:businessOrderItemId
 router.patch(
-  '/items/:businessOrderItemId',
+  '/items/:businessOrderItemId/status',
   auth.checkUser,
   businessOrder.patchOneBusinessOrderItemStatus
 )

@@ -77,7 +77,6 @@ export const getAllPaidBusinessOrderItems = async (req, res) => {
           include: {
             owner: true,
             shipmentAddress: true,
-            shipmentCourier: true,
           },
         },
         supplierProduct: true,
@@ -136,7 +135,6 @@ export const getMyCart = async (req, res) => {
           },
         },
         shipmentAddress: true,
-        shipmentCourier: true,
         paymentMethod: true,
         paymentRecord: true,
         virtualAccountNumber: true,
@@ -517,53 +515,34 @@ export const patchMyCartAddress = async (req, res) => {
   }
 }
 
-// Patch my cart courier
-export const patchMyCartCourier = async (req, res) => {
+// Patch one BusinessOrderItem's Courier
+export const patchOneBusinessOrderItemCourier = async (req, res) => {
   const ownerId = req.profile.id
-  const isCartExist = req.isCartExist
-  const businessOrder = req.businessOrder
+  const businessOrderItem = req.businessOrderItem
   const formData = req.body
 
-  if (isCartExist) {
-    try {
-      const updatedCart = await prisma.businessOrder.update({
-        where: {
-          id: businessOrder.id,
-        },
-        include: {
-          shipmentAddress: true,
-          shipmentCourier: true,
-          paymentMethod: true,
-          paymentRecord: true,
-          virtualAccountNumber: true,
-        },
-        data: {
-          shipmentCourierId: formData.id, // Patch
-        },
-      })
+  try {
+    const updatedCart = await prisma.businessOrderItem.update({
+      where: {
+        id: businessOrderItem.id,
+      },
+      data: {
+        courierId: formData.id, // Patch
+      },
+    })
 
-      res.status(200).json({
-        message: 'Patch my cart courier success',
-        ownerId,
-        isCartExist,
-        formData,
-        businessOrder: updatedCart,
-      })
-    } catch (error) {
-      res.status(400).json({
-        message:
-          'Patch my cart courier failed, might because courier id is invalid',
-        error,
-        ownerId,
-        isCartExist,
-        formData,
-      })
-    }
-  } else {
-    res.status(400).json({
-      message: 'Patch my cart courier failed because cart is not exist',
+    res.status(200).json({
+      message: 'Patch one business order item courier success',
       ownerId,
-      isCartExist,
+      formData,
+      businessOrder: updatedCart,
+    })
+  } catch (error) {
+    res.status(400).json({
+      message:
+        'Patch one business order item courier failed, might because courier id is invalid',
+      error,
+      ownerId,
       formData,
     })
   }
@@ -631,17 +610,12 @@ export const processMyOrder = async (req, res) => {
        * This should not require any formData or req.body
        * But still need to check if these fields are available:
        * - shipmentAddress
-       * - shipmentCourier
        * - paymentMethod
        * Then finally:
        * - Change the status to WAITING_FOR_PAYMENT
        * - Create a payment record to be completed later
        */
-      if (
-        businessOrder.shipmentAddressId &&
-        businessOrder.shipmentCourierId &&
-        businessOrder.paymentMethodId
-      ) {
+      if (businessOrder.shipmentAddressId && businessOrder.paymentMethodId) {
         if (businessOrder.paymentMethod.paymentCategory === 'TRANSFER_MANUAL') {
           processTransferManual(req, res, formData, businessOrder)
         } else if (
@@ -667,7 +641,6 @@ export const processMyOrder = async (req, res) => {
           isCartExist,
           fields: {
             shipmentAddressId: businessOrder.shipmentAddressId,
-            shipmentCourierId: businessOrder.shipmentCourierId,
             paymentMethodId: businessOrder.paymentMethodId,
           },
           businessOrder,
@@ -1209,8 +1182,6 @@ export const checkMyCart = async (req, res, next) => {
         },
         include: {
           shipmentAddress: true,
-          shipmentCourier: true,
-          shipmentCourierVehicle: true,
           paymentMethod: true,
           paymentRecord: true,
           virtualAccountNumber: true,
