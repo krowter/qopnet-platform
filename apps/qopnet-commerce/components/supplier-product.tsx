@@ -47,6 +47,7 @@ import { Icon } from '@qopnet/qopnet-ui'
 import { formatMoney } from '@qopnet/util-format'
 import { UploadImageForm } from '../components'
 import { postToAPI, requestToAPI } from '../utils/fetch'
+import { useSWR } from '../utils/swr'
 
 // SupplierProduct
 export type SupplierProductData = {
@@ -88,6 +89,8 @@ export const SupplierProductForm = (props) => {
   const router = useRouter()
   const toast = useToast()
   const [loading, setLoading] = useState(false)
+  const { data, error } = useSWR('/api/couriers')
+  const { couriers } = data || {}
 
   // React Hook Form
   const {
@@ -205,7 +208,9 @@ export const SupplierProductForm = (props) => {
       const preparedFormData = {
         ...formData,
         // Be careful, supplier product uses slug, not handle
-        slug: slugify(formData.name.toLowerCase(), { remove: /[*+~.()'"!:@]/g }),
+        slug: slugify(formData.name.toLowerCase(), {
+          remove: /[*+~.()'"!:@]/g,
+        }),
         status: formData.status ? 'ACTIVE' : 'INACTIVE',
         minOrder: Number(formData.minOrder) || 1,
         price: Number(formData.price) || 100,
@@ -674,9 +679,18 @@ export const SupplierProductForm = (props) => {
               <FormLabel>Layanan Kurir Pengiriman Produk</FormLabel>
               <CheckboxGroup colorScheme="orange" defaultValue={['DELIVEREE']}>
                 <Stack direction={['column', 'column', 'row']} spacing={3}>
-                  <Checkbox value="DELIVEREE">Deliveree</Checkbox>
-                  <Checkbox value="LALAMOVE">Lalamove</Checkbox>
-                  <Checkbox value="MASKARGO">Mas Kargo</Checkbox>
+                  {couriers &&
+                    couriers.map((courier) => {
+                      return (
+                        <Checkbox
+                          value={slugify(courier?.name.toUpperCase(), {
+                            replacement: '_',
+                          })}
+                        >
+                          {courier?.name}
+                        </Checkbox>
+                      )
+                    })}
                 </Stack>
               </CheckboxGroup>
 
