@@ -43,7 +43,9 @@ export const updatePaymentProofImages = async (req, res) => {
             id: formData.id,
           },
           data: {
-            proofImages: formData.proofImages,
+            proofImages: {
+              push: formData.proofImages,
+            },
           },
         })
 
