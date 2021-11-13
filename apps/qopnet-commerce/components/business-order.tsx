@@ -19,6 +19,8 @@ import {
   Text,
   useToast,
   chakra,
+  Image,
+  Link,
 } from '@chakra-ui/react'
 
 import {
@@ -364,16 +366,37 @@ export const BusinessOrderCard: React.FC<BusinessOrderCardProps> = ({
               </OrderedList>
             </Box>
 
-            <Box>
+            <Stack alignItems="flex-start">
               <Heading size="md" mb={2}>
                 Upload Bukti Pembayaran
               </Heading>
+              {businessOrder.paymentRecord.proofImages.map(
+                (imageUrl, index) => {
+                  return (
+                    <Link
+                      target="_blank"
+                      rel="noreferrer"
+                      href={imageUrl}
+                      key={index}
+                      display="block"
+                    >
+                      <Image
+                        border="1px solid black"
+                        h={200}
+                        w={200}
+                        src={imageUrl}
+                        alt={`Gambar bukti pembayaran ${index}`}
+                      />
+                    </Link>
+                  )
+                }
+              )}
               <UploadImageForm
                 appendImageUrl={(imageUrl) =>
                   handleReceiptUpload(imageUrl, businessOrder.paymentRecordId)
                 }
               />
-            </Box>
+            </Stack>
           </>
         )}
       </Stack>
