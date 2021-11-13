@@ -49,3 +49,6 @@ _*.json
 
 # Custom javscript runners to process data
 runner
+
+# Hidden files
+_*

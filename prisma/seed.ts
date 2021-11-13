@@ -353,7 +353,7 @@ async function main() {
   await seedBusinessOrder()
 
   await seedCouriers()
-  await seedCourierVehicles()
+  // await seedCourierVehicles()
 
   await seedPaymentMethods()
   await seedPaymentRecords()
