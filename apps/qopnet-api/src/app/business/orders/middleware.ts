@@ -63,6 +63,12 @@ export const getAllPaidBusinessOrderItems = async (req, res) => {
   const { supplierHandle } = req.params
 
   try {
+    const supplier = await prisma.supplier.findUnique({
+      where: {
+        handle: supplierHandle,
+      },
+    })
+
     const paidBusinessOrderItems = await prisma.businessOrderItem.findMany({
       where: {
         supplier: {
@@ -86,6 +92,7 @@ export const getAllPaidBusinessOrderItems = async (req, res) => {
 
     res.send({
       message: 'Get all paid business orders items by supplier handle success',
+      supplier,
       paidBusinessOrderItems,
     })
   } catch (error) {
