@@ -46,7 +46,7 @@ import {
 import { Icon } from '@qopnet/qopnet-ui'
 import { formatMoney } from '@qopnet/util-format'
 import { UploadImageForm } from '../components'
-import { postToAPI } from '../utils/fetch'
+import { postToAPI, requestToAPI } from '../utils/fetch'
 
 // SupplierProduct
 export type SupplierProductData = {
@@ -81,7 +81,10 @@ export type SupplierProductData = {
 /**
  * Create new Supplier form component
  */
-export const SupplierProductForm = ({ supplierParam }) => {
+export const SupplierProductForm = (props) => {
+  const { supplierParam, supplierProductParam, supplierProduct, formType } =
+    props
+
   const router = useRouter()
   const toast = useToast()
   const [loading, setLoading] = useState(false)
@@ -89,6 +92,7 @@ export const SupplierProductForm = ({ supplierParam }) => {
   // React Hook Form
   const {
     register,
+    reset,
     control,
     handleSubmit,
     setValue,
@@ -127,6 +131,48 @@ export const SupplierProductForm = ({ supplierParam }) => {
     },
   })
 
+  useEffect(() => {
+    if (formType === 'edit' && supplierProduct) {
+      if (supplierProduct === undefined) {
+        return
+      }
+
+      reset({
+        ...getValues(),
+        images: supplierProduct?.images,
+        slug: supplierProduct?.slug,
+        name: supplierProduct?.name,
+        subname: supplierProduct?.subname,
+        category: supplierProduct?.category,
+        sku: supplierProduct?.sku,
+        description: supplierProduct?.description,
+
+        price: supplierProduct?.price || 100,
+        discount: supplierProduct?.discount,
+        priceMax: supplierProduct?.priceMax,
+        priceMin: supplierProduct?.priceMin,
+        minOrder: supplierProduct?.minOrder || 1,
+
+        weight: supplierProduct?.weight || 1,
+        weightUnit: supplierProduct?.weightUnit,
+        weightDetails: supplierProduct?.weightDetails,
+        dimension: {
+          length: supplierProduct?.dimension.length,
+          width: supplierProduct?.dimension.width,
+          height: supplierProduct?.dimension.height,
+        },
+
+        status: supplierProduct?.status === 'ACTIVE',
+        stock: supplierProduct?.stock,
+      })
+    } else {
+      return
+    }
+  }, [reset, supplierProduct, formType, getValues])
+
+  if (formType === 'edit' && supplierProduct === undefined)
+    return <Spinner color="orange" />
+
   const price = watch('price')
   const discount = watch('discount')
   const priceDiscounted = price - Math.ceil((discount / 100) * price) || price
@@ -159,7 +205,7 @@ export const SupplierProductForm = ({ supplierParam }) => {
       const preparedFormData = {
         ...formData,
         // Be careful, supplier product uses slug, not handle
-        slug: slugify(formData.name.toLowerCase()),
+        slug: slugify(formData.name.toLowerCase(), { remove: /[*+~.()'"!:@]/g }),
         status: formData.status ? 'ACTIVE' : 'INACTIVE',
         minOrder: Number(formData.minOrder) || 1,
         price: Number(formData.price) || 100,
@@ -174,23 +220,46 @@ export const SupplierProductForm = ({ supplierParam }) => {
       }
       console.info({ preparedFormData })
 
-      /**
-       * POST /api/suppliers/:supplierParam/products
-       * Create new supplier product for one supplier
-       */
-      const data = await postToAPI(
-        `/api/suppliers/${supplierParam}/products`,
-        preparedFormData
-      )
+      if (formType === 'create') {
+        /**
+         * POST /api/suppliers/:supplierParam/products
+         * Create new supplier product for one supplier
+         */
+        const data = await postToAPI(
+          `/api/suppliers/${supplierParam}/products`,
+          preparedFormData
+        )
 
-      if (!data) throw new Error('Create supplier product response error')
+        if (!data) throw new Error('Create supplier product response error')
 
-      toast({ title: 'Berhasil menambah produk supplier', status: 'success' })
+        toast({ title: 'Berhasil menambah produk supplier', status: 'success' })
 
-      const redirectPath = `/${supplierParam}/${data.supplierProduct.slug}`
-      router.push(redirectPath)
+        const redirectPath = `/${supplierParam}/${data.supplierProduct.slug}`
+        router.push(redirectPath)
+      } else {
+        /**
+         * PUT /api/suppliers/products/:supplierProductId
+         * Edit a supplier product
+         */
+        const data = await requestToAPI(
+          'PUT',
+          `/api/suppliers/products/${supplierProduct?.id}`,
+          preparedFormData
+        )
+
+        if (!data) throw new Error('Edit supplier product response error')
+
+        toast({ title: 'Berhasil mengedit produk supplier', status: 'success' })
+
+        const redirectPath = `/${supplierParam}/${data?.updatedSupplierProduct?.slug}`
+        router.push(redirectPath)
+      }
     } catch (error) {
-      toast({ title: 'Gagal membuat supplier', status: 'error' })
+      if (formType === 'create') {
+        toast({ title: 'Gagal membuat supplier', status: 'error' })
+      } else {
+        toast({ title: 'Gagal mengedit produk supplier', status: 'error' })
+      }
     } finally {
       setLoading(false)
     }
@@ -199,11 +268,15 @@ export const SupplierProductForm = ({ supplierParam }) => {
   return (
     <>
       <VStack spacing={10}>
-        <NextSeo title={`Tambah produk supplier ${supplierParam} - Qopnet`} />
+        <NextSeo
+          title={`${
+            formType === 'create' ? 'Tambah' : 'Edit'
+          } produk supplier ${supplierParam} - Qopnet`}
+        />
         <VStack>
           <Stack align="center">
             <Heading as="h1" size="xl">
-              Tambah Produk Supplier
+              {formType === 'create' ? 'Tambah' : 'Edit'} Produk Supplier
             </Heading>
             <Text>
               Silakan lengkapi info produk untuk{' '}
@@ -658,11 +731,17 @@ export const SupplierProductForm = ({ supplierParam }) => {
 
           <Button
             isLoading={loading}
-            loadingText="Menyimpan dan menambah produk..."
+            loadingText={
+              formType === 'create'
+                ? 'Menyimpan dan menambah produk...'
+                : 'Menyimpan perubahan produk'
+            }
             colorScheme="orange"
             type="submit"
           >
-            Simpan dan Tambah Baru
+            {formType === 'create'
+              ? 'Simpan dan Tambah Produk Baru'
+              : 'Simpan Perubahan Produk'}
           </Button>
         </Stack>
       </VStack>
