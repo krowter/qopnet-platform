@@ -59,11 +59,11 @@ export const OrdersContainer = ({ supplierParam, user }) => {
     `/api/business/orders/items/paid/${supplierParam}`
   )
   const { supplier, paidBusinessOrderItems } = data || []
-  const supplierName = supplier?.name || supplierParam.toUpperCase()
+  const supplierName = supplier?.name || supplierParam
 
   return (
     <Stack>
-      <NextSeo title={`Dasbor daftar ${supplierName} - Qopnet`} />
+      <NextSeo title={`Daftar pesanan ${supplierName} - Qopnet`} />
 
       <Breadcrumb separator={<Icon name="chevron-right" />}>
         <BreadcrumbItem>
