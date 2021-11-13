@@ -19,6 +19,8 @@ import {
   Text,
   useToast,
   chakra,
+  Image,
+  Link,
 } from '@chakra-ui/react'
 
 import {
@@ -35,6 +37,8 @@ import { UploadImageForm } from '.'
 import { requestToAPI } from '../utils/fetch'
 
 import parse from 'html-react-parser'
+
+import { mutate } from 'swr'
 
 export type BusinessOrderCardProps = {
   // businessOrder: BusinessOrder & {
@@ -104,11 +108,33 @@ export const BusinessOrderCard: React.FC<BusinessOrderCardProps> = ({
     }
 
     try {
+      mutate(
+        `/api/business/orders/${businessOrder.id}`,
+        (data) => {
+          return {
+            ...data,
+            businessOrder: {
+              ...data.businessOrder,
+              paymentRecord: {
+                ...data.businessOrder.paymentRecord,
+                proofImages: [
+                  ...data.businessOrder.paymentRecord.proofImages,
+                  formData.proofImages,
+                ],
+              },
+            },
+          }
+        },
+        false
+      )
+
       const data = await requestToAPI(
         'PATCH',
         `/api/payments/records/proof`,
         formData
       )
+
+      mutate(`/api/business/orders/${businessOrder.id}`)
 
       if (!data.error) {
         toast({
@@ -364,16 +390,39 @@ export const BusinessOrderCard: React.FC<BusinessOrderCardProps> = ({
               </OrderedList>
             </Box>
 
-            <Box>
+            <Stack alignItems="flex-start">
               <Heading size="md" mb={2}>
                 Upload Bukti Pembayaran
               </Heading>
+              <Flex flexWrap="wrap" sx={{ gap: '10px' }}>
+                {businessOrder.paymentRecord.proofImages.map(
+                  (imageUrl, index) => {
+                    return (
+                      <Link
+                        target="_blank"
+                        rel="noreferrer"
+                        href={imageUrl}
+                        key={index}
+                        display="block"
+                      >
+                        <Image
+                          border="1px solid black"
+                          h={120}
+                          w={120}
+                          src={imageUrl}
+                          alt={`Gambar bukti pembayaran ${index}`}
+                        />
+                      </Link>
+                    )
+                  }
+                )}
+              </Flex>
               <UploadImageForm
                 appendImageUrl={(imageUrl) =>
                   handleReceiptUpload(imageUrl, businessOrder.paymentRecordId)
                 }
               />
-            </Box>
+            </Stack>
           </>
         )}
       </Stack>

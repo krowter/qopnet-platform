@@ -1,44 +1,31 @@
-import NextImage from 'next/image'
 import NextLink from 'next/link'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
 import {
-  Box,
-  chakra,
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
-  Alert,
-  AlertIcon,
-  AlertTitle,
-  AlertDescription,
-  Code,
-  OrderedList,
-  ListItem,
   HStack,
-  Tag,
   Link as ChakraLink,
   Heading,
-  Divider,
   Spinner,
   Stack,
   Text,
   useColorModeValue,
   Button,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  Image,
+  Select,
 } from '@chakra-ui/react'
 import { useUser } from 'use-supabase'
 
-import { Layout, Icon } from '@qopnet/qopnet-ui'
-import { formatBusinessOrderStatus } from '@qopnet/util-format'
-import {
-  calculateCart,
-  calculateSupplierProductItem,
-  formatDateTime,
-  formatRupiah,
-} from '@qopnet/util-format'
-
-import { BreadcrumbOrders } from '../../../components'
+import { Layout, Icon, formatPrice } from '@qopnet/qopnet-ui'
 import { useSWR } from '../../../utils'
 
 /**
@@ -68,13 +55,15 @@ const SupplierOrdersPage = () => {
 }
 
 export const OrdersContainer = ({ supplierParam, user }) => {
-  const { data, error } = useSWR(`/api/suppliers/${supplierParam}/orders`)
-  const { supplier, businessOrderItems } = data || []
-  const supplierName = supplier?.name || supplierParam.toUpperCase()
+  const { data, error } = useSWR(
+    `/api/business/orders/items/paid/${supplierParam}`
+  )
+  const { supplier, paidBusinessOrderItems } = data || []
+  const supplierName = supplier?.name || supplierParam
 
   return (
     <Stack>
-      <NextSeo title={`Dasbor daftar ${supplierName} - Qopnet`} />
+      <NextSeo title={`Daftar pesanan ${supplierName} - Qopnet`} />
 
       <Breadcrumb separator={<Icon name="chevron-right" />}>
         <BreadcrumbItem>
@@ -93,7 +82,7 @@ export const OrdersContainer = ({ supplierParam, user }) => {
         </BreadcrumbItem>
       </Breadcrumb>
 
-      <Stack spacing={10}>
+      <Stack spacing={5}>
         <Heading>Daftar pesanan {supplierName}</Heading>
         {error && !data && (
           <Text>Gagal memuat daftar pesanan di {supplierName}</Text>
@@ -104,10 +93,17 @@ export const OrdersContainer = ({ supplierParam, user }) => {
             <Text>Memuat daftar pesanan di {supplierName}...</Text>
           </HStack>
         )}
-        {!error && data && businessOrderItems.length !== 0 && (
-          <BusinessOrderItemsList businessOrderItems={businessOrderItems} />
+        {!error && data && paidBusinessOrderItems.length !== 0 && (
+          <>
+            <Heading as="h2" size="md">
+              {paidBusinessOrderItems.length} Pesanan
+            </Heading>
+            <BusinessOrderItemsList
+              businessOrderItems={paidBusinessOrderItems}
+            />
+          </>
         )}
-        {!error && data && businessOrderItems.length === 0 && (
+        {!error && data && paidBusinessOrderItems.length === 0 && (
           <Stack align="flex-start" spacing={5}>
             <Text>
               Maaf belum ada pesanan yang berhasil masuk di {supplierName}.
@@ -120,7 +116,85 @@ export const OrdersContainer = ({ supplierParam, user }) => {
 }
 
 export const BusinessOrderItemsList = ({ businessOrderItems }) => {
-  return <Stack spacing={5}>{JSON.stringify(businessOrderItems)}</Stack>
+  const [status, setStatus] = useState('')
+  const [courier, setCourier] = useState('')
+  const bg = useColorModeValue('gray.200', 'gray.900')
+
+  console.log(`status`, status)
+  console.log(`businessOrderItems`, businessOrderItems)
+  return (
+    <Table variant="simple">
+      <Thead>
+        <Tr>
+          <Th>No Pesanan</Th>
+          <Th>Pemesan</Th>
+          <Th>Produk</Th>
+          <Th>Subtotal</Th>
+          <Th>Status</Th>
+          <Th>Jasa Kirim</Th>
+          <Th>Aksi</Th>
+        </Tr>
+      </Thead>
+      {businessOrderItems.map((businessOrderItem) => {
+        return (
+          <Tbody>
+            <Tr
+              _hover={{
+                bg: bg,
+              }}
+            >
+              <Td>{businessOrderItem.businessOrderId}</Td>
+              <Td>{businessOrderItem.businessOrder.owner.handle}</Td>
+              <Td display="flex" alignItems="center">
+                <Image
+                  src={businessOrderItem.supplierProduct.images[0]}
+                  w={20}
+                  h={20}
+                />
+                <Text w={40} ml={2}>
+                  {businessOrderItem.supplierProduct.name}
+                </Text>
+                <Text w={10} ml={2}>
+                  x {businessOrderItem.quantity}
+                </Text>
+              </Td>
+              <Td>
+                {formatPrice(businessOrderItem.businessOrder.totalPayment)}
+              </Td>
+              <Td>
+                <Select
+                  size="sm"
+                  placeholder="Select option"
+                  defaultValue={businessOrderItem.businessOrder.status}
+                  onChange={(event) => setStatus(event.target.value)}
+                >
+                  <option value="PAID">Dibayar</option>
+                  <option value="pack">Dikemas</option>
+                  <option value="arrived">Arrived</option>
+                </Select>
+              </Td>
+              <Td>
+                <Select
+                  placeholder="Select option"
+                  defaultValue="Deliveree"
+                  size="sm"
+                  onChange={(event) => setCourier(event.target.value)}
+                >
+                  <option value="Deliveree">Deliveree</option>
+                  <option value="Kurir Toko">Kurir Toko</option>
+                </Select>
+              </Td>
+              <Td>
+                <Button bg="orange" size="sm">
+                  Periksa Rincian
+                </Button>
+              </Td>
+            </Tr>
+          </Tbody>
+        )
+      })}
+    </Table>
+  )
 }
 
 export default SupplierOrdersPage
