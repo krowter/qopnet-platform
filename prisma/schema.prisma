@@ -429,8 +429,6 @@ model BusinessOrder {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
-  CourierVehicle   CourierVehicle? @relation(fields: [courierVehicleId], references: [id])
-  courierVehicleId String?
   @@map(name: "business_orders")
 }
 
@@ -535,7 +533,6 @@ model CourierVehicle {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
-  BusinessOrder BusinessOrder[]
   @@map(name: "courier_vehicles")
 }
 
