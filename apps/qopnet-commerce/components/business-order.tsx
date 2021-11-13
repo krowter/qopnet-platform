@@ -370,27 +370,29 @@ export const BusinessOrderCard: React.FC<BusinessOrderCardProps> = ({
               <Heading size="md" mb={2}>
                 Upload Bukti Pembayaran
               </Heading>
-              {businessOrder.paymentRecord.proofImages.map(
-                (imageUrl, index) => {
-                  return (
-                    <Link
-                      target="_blank"
-                      rel="noreferrer"
-                      href={imageUrl}
-                      key={index}
-                      display="block"
-                    >
-                      <Image
-                        border="1px solid black"
-                        h={200}
-                        w={200}
-                        src={imageUrl}
-                        alt={`Gambar bukti pembayaran ${index}`}
-                      />
-                    </Link>
-                  )
-                }
-              )}
+              <Flex flexWrap="wrap" sx={{ gap: '10px' }}>
+                {businessOrder.paymentRecord.proofImages.map(
+                  (imageUrl, index) => {
+                    return (
+                      <Link
+                        target="_blank"
+                        rel="noreferrer"
+                        href={imageUrl}
+                        key={index}
+                        display="block"
+                      >
+                        <Image
+                          border="1px solid black"
+                          h={120}
+                          w={120}
+                          src={imageUrl}
+                          alt={`Gambar bukti pembayaran ${index}`}
+                        />
+                      </Link>
+                    )
+                  }
+                )}
+              </Flex>
               <UploadImageForm
                 appendImageUrl={(imageUrl) =>
                   handleReceiptUpload(imageUrl, businessOrder.paymentRecordId)
