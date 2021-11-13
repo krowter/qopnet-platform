@@ -18,6 +18,7 @@ import {
   Tag,
   Text,
   useToast,
+  chakra,
 } from '@chakra-ui/react'
 
 import {
@@ -186,7 +187,15 @@ export const BusinessOrderCard: React.FC<BusinessOrderCardProps> = ({
                         <ChakraLink size="sm" fontWeight="bold">
                           {item.supplierProduct?.name}
                         </ChakraLink>
-                      </NextLink>
+                      </NextLink>{' '}
+                      {item.supplier?.name && (
+                        <Text fontSize="sm">
+                          <chakra.span> dari </chakra.span>
+                          <NextLink href={`/${item.supplier?.handle}`} passHref>
+                            <ChakraLink>{item.supplier?.name}</ChakraLink>
+                          </NextLink>
+                        </Text>
+                      )}
                     </Stack>
                     <Text>
                       {item.quantity} barang × {formatRupiah(calculatedPrice)} ={' '}
@@ -199,81 +208,80 @@ export const BusinessOrderCard: React.FC<BusinessOrderCardProps> = ({
           </Stack>
         </Stack>
 
-        {businessOrder?.status === 'WAITING_FOR_PAYMENT' && (
-          <Stack spacing={2}>
-            <Heading size="md">Detail Pembayaran</Heading>
+        <Stack spacing={2}>
+          <Heading size="md">Detail Pembayaran</Heading>
+          <Box>
+            <Text color="gray" fontSize="sm">
+              Metode Pembayaran
+            </Text>
+            <Text fontSize="lg">{businessOrder?.paymentMethod?.name}</Text>
+          </Box>
+
+          {businessOrder?.paymentMethod?.paymentCategory ===
+            'TRANSFER_VIRTUAL_ACCOUNT' && (
             <Box>
               <Text color="gray" fontSize="sm">
-                Metode Pembayaran
+                Nomor Virtual Account
               </Text>
-              <Text fontSize="lg">{businessOrder?.paymentMethod?.name}</Text>
+              <Text fontSize="lg">
+                {businessOrder?.virtualAccountNumber?.vaNumber}
+              </Text>
             </Box>
+          )}
 
-            {businessOrder?.paymentMethod?.paymentCategory ===
-              'TRANSFER_VIRTUAL_ACCOUNT' && (
+          {businessOrder?.paymentMethod?.paymentCategory ===
+            'TRANSFER_MANUAL' && (
+            <>
               <Box>
                 <Text color="gray" fontSize="sm">
-                  Nomor Virtual Account
+                  Nomor Rekening
                 </Text>
                 <Text fontSize="lg">
-                  {businessOrder?.virtualAccountNumber?.vaNumber}
+                  {businessOrder?.paymentMethod?.accountNumber}
                 </Text>
               </Box>
-            )}
+              <Box>
+                <Text color="gray" fontSize="sm">
+                  Nama Pemilik Rekening
+                </Text>
+                <Text fontSize="lg">
+                  {businessOrder?.paymentMethod?.accountHolderName}
+                </Text>
+              </Box>
+            </>
+          )}
 
-            {businessOrder?.paymentMethod?.paymentCategory ===
-              'TRANSFER_MANUAL' && (
-              <>
-                <Box>
-                  <Text color="gray" fontSize="sm">
-                    Nomor Rekening
-                  </Text>
-                  <Text fontSize="lg">
-                    {businessOrder?.paymentMethod?.accountNumber}
-                  </Text>
-                </Box>
-                <Box>
-                  <Text color="gray" fontSize="sm">
-                    Nama Pemilik Rekening
-                  </Text>
-                  <Text fontSize="lg">
-                    {businessOrder?.paymentMethod?.accountHolderName}
-                  </Text>
-                </Box>
-              </>
-            )}
+          <Box>
+            <Text color="gray" fontSize="sm">
+              Rincian Pembayaran
+            </Text>
+            <Flex direction="row">
+              <Stack spacing={0}>
+                <Text fontSize="lg">Total Belanja</Text>
+                <Text fontSize="lg">Biaya Pengiriman</Text>
+                <Text fontSize="lg">Diskon Biaya Pengiriman</Text>
+                <Text fontSize="lg" fontWeight="bold">
+                  Total Pembayaran
+                </Text>
+              </Stack>
+              <Stack alignItems="flex-end" flex={1} spacing={0}>
+                <Text fontSize="lg">
+                  {formatRupiah(businessOrder?.totalPrice)}
+                </Text>
+                <Text fontSize="lg">
+                  {formatRupiah(businessOrder?.totalShippingCost)}
+                </Text>
+                <Text fontSize="lg">
+                  {formatRupiah(businessOrder?.totalShippingDiscount)}
+                </Text>
+                <Text fontSize="lg" fontWeight="bold">
+                  {formatRupiah(businessOrder?.totalBillPayment)}
+                </Text>
+              </Stack>
+            </Flex>
+          </Box>
+        </Stack>
 
-            <Box>
-              <Text color="gray" fontSize="sm">
-                Rincian Pembayaran
-              </Text>
-              <Flex direction="row">
-                <Stack spacing={0}>
-                  <Text fontSize="lg">Total Belanja</Text>
-                  <Text fontSize="lg">Biaya Pengiriman</Text>
-                  <Text fontSize="lg">Diskon Biaya Pengiriman</Text>
-                  <Text fontSize="lg" fontWeight="bold">
-                    Total Pembayaran
-                  </Text>
-                </Stack>
-                <Stack alignItems="flex-end" flex={1} spacing={0}>
-                  <Text fontSize="lg">
-                    {formatRupiah(businessOrder?.totalPrice)}
-                  </Text>
-                  <Text fontSize="lg">
-                    {formatRupiah(businessOrder?.totalShippingCost)}
-                  </Text>
-                  <Text fontSize="lg">
-                    {formatRupiah(businessOrder?.totalShippingDiscount)}
-                  </Text>
-                  <Text fontSize="lg" fontWeight="bold">
-                    {formatRupiah(businessOrder?.totalBillPayment)}
-                  </Text>
-                </Stack>
-              </Flex>
-            </Box>
-          </Stack>
-        )}
         <Badge
           fontSize="lg"
           p={3}
