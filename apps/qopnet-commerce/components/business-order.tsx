@@ -38,6 +38,8 @@ import { requestToAPI } from '../utils/fetch'
 
 import parse from 'html-react-parser'
 
+import { mutate } from 'swr'
+
 export type BusinessOrderCardProps = {
   // businessOrder: BusinessOrder & {
   //   businessOrderItems: (BusinessOrderItem & {
@@ -106,11 +108,32 @@ export const BusinessOrderCard: React.FC<BusinessOrderCardProps> = ({
     }
 
     try {
+      mutate(
+        `/api/business/orders/${businessOrder.id}`,
+        (data) => {
+          return {
+            ...data,
+            businessOrder: {
+              ...data.businessOrder,
+              paymentRecord: {
+                ...data.businessOrder.paymentRecord,
+                proofImages: [
+                  'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png',
+                ],
+              },
+            },
+          }
+        },
+        false
+      )
+
       const data = await requestToAPI(
         'PATCH',
         `/api/payments/records/proof`,
         formData
       )
+
+      mutate(`/api/business/orders/${businessOrder.id}`)
 
       if (!data.error) {
         toast({
