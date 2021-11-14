@@ -194,9 +194,18 @@ export const BusinessOrderItem = ({ item }) => {
   const {
     register,
     handleSubmit,
+    setValue,
     watch,
     formState: { errors },
   } = useForm()
+
+  const { data } = useSWR('/api/business/orders/my/cart')
+
+  const quantity = data.businessOrder.businessOrderItems?.filter(
+    (_item) => _item.id === item.id
+  )[0].quantity
+
+  setValue('customQuantity', quantity)
 
   const onSubmitCustomQuantity = (data) => {
     handleCustomQuantityBusinessOrderItem(
@@ -254,6 +263,7 @@ export const BusinessOrderItem = ({ item }) => {
               ...data.businessOrder,
               businessOrderItems: [...filtered],
             },
+            quantity: item.quantity + 1,
           }
         },
         false
@@ -289,6 +299,7 @@ export const BusinessOrderItem = ({ item }) => {
               ...data.businessOrder,
               businessOrderItems: [...filtered],
             },
+            quantity: item.quantity - 1,
           }
         },
         false
@@ -326,6 +337,7 @@ export const BusinessOrderItem = ({ item }) => {
               ...data.businessOrder,
               businessOrderItems: [...filtered],
             },
+            quantity: customQuantity,
           }
         },
         false
