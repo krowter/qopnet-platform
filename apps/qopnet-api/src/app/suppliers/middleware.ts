@@ -311,7 +311,7 @@ export const createSupplierProduct = async (req, res) => {
   const { supplierParam } = req.params
 
   // Setup supplier product data
-  const supplierProduct: SupplierProduct = req.body
+  const supplierProduct = req.body
   const supplierProductSlug = slugify(supplierProduct.name.toLowerCase())
 
   // Check if user exist by userId
@@ -336,26 +336,18 @@ export const createSupplierProduct = async (req, res) => {
           slug: supplierProductSlug,
           supplierId: supplier.id,
           ownerId: user.profile.id,
+          couriers: {
+            create: supplierProduct?.couriers?.map((courier) => {
+              const obj = { courier: { connect: { id: courier } } }
+              return obj
+            }),
+          },
         }
 
         const newSupplierProduct: SupplierProduct =
           await prisma.supplierProduct.create({
-            data: {
-              ...payloadData,
-              couriers: {
-                create: [
-                  { courier: { connect: { id: 'ckvwr0d0d0216zapjj6hay04r' } } },
-                  { courier: { connect: { id: 'ckvwr0d0d0215zapj4t4n7rhh' } } },
-                ],
-              },
-            },
-            include: {
-              couriers: {
-                include: {
-                  courier: true,
-                },
-              },
-            },
+            data: payloadData,
+            include: { couriers: { include: { courier: true } } },
           })
 
         res.json({
