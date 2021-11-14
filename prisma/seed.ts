@@ -107,10 +107,15 @@ async function createSupplierProducts({
   data: any
   supplier: any
 }) {
+  const defaultCourier = await prisma.courier.findFirst({
+    where: { name: 'Deliveree' },
+  })
+
   // Map to put the ownerId and supplierId per product
-  data = data.map((product: SupplierProduct) => {
+  data = data.map((product) => {
     product.ownerId = supplier.ownerId
     product.supplierId = supplier.id
+    product.couriers = { courier: { connect: { id: defaultCourier.id } } }
     return product
   })
 
@@ -341,6 +346,9 @@ async function main() {
   await deleteEverything()
 
   // Seed data
+  await seedCouriers()
+  // await seedCourierVehicles()
+
   await seedUsers()
   await seedProfiles()
   await seedAddresses()
@@ -351,9 +359,6 @@ async function main() {
   await seedArdenaProducts()
 
   await seedBusinessOrder()
-
-  await seedCouriers()
-  // await seedCourierVehicles()
 
   await seedPaymentMethods()
   await seedPaymentRecords()
