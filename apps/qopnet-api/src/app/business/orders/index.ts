@@ -28,6 +28,14 @@ router.get(
   businessOrder.getAllPaidBusinessOrderItems
 )
 
+// GET /api/business/orders/items/paid/:supplierHandle
+
+router.get(
+  '/items/paid/:supplierHandle/:businessOrderItemId',
+  auth.checkUser,
+  businessOrder.getOnePaidBusinessOrderItem
+)
+
 // POST /api/business/orders/my/cart
 router.post(
   '/my/cart',
