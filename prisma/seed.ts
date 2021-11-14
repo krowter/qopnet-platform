@@ -111,17 +111,22 @@ async function createSupplierProducts({
     where: { name: 'Deliveree' },
   })
 
+  console.log({ defaultCourier })
+
   // Map to put the ownerId and supplierId per product
-  data = data.map((product) => {
+  data = data.map((product: SupplierProduct) => {
     product.ownerId = supplier.ownerId
     product.supplierId = supplier.id
-    product.couriers = { courier: { connect: { id: defaultCourier.id } } }
+    // product.couriers = { courier: { connect: { id: defaultCourier?.id } } }
     return product
   })
 
   // Create Qopnet supplier products
   const qopnetSupplierProducts = await prisma.supplierProduct.createMany({
-    data: data,
+    data: {
+      ...data,
+      couriers: { courier: { connect: { id: defaultCourier?.id } } },
+    },
     skipDuplicates: true,
   })
 
