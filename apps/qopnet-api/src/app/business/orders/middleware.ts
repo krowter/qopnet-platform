@@ -40,7 +40,7 @@ export const getMyAllBusinessOrders = async (req, res) => {
           paymentRecord: true,
           virtualAccountNumber: true,
         },
-        orderBy: [{ createdAt: 'asc' }],
+        orderBy: [{ updatedAt: 'asc' }],
       })
 
     res.send({
@@ -138,6 +138,9 @@ export const getAllPaidBusinessOrderItems = async (req, res) => {
         },
         supplierProduct: true,
         supplier: true,
+      },
+      orderBy: {
+        updatedAt: 'desc',
       },
     })
 
