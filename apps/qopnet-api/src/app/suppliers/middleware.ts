@@ -340,7 +340,22 @@ export const createSupplierProduct = async (req, res) => {
 
         const newSupplierProduct: SupplierProduct =
           await prisma.supplierProduct.create({
-            data: payloadData,
+            data: {
+              ...payloadData,
+              couriers: {
+                create: [
+                  { courier: { connect: { id: 'ckvwr0d0d0216zapjj6hay04r' } } },
+                  { courier: { connect: { id: 'ckvwr0d0d0215zapj4t4n7rhh' } } },
+                ],
+              },
+            },
+            include: {
+              couriers: {
+                include: {
+                  courier: true,
+                },
+              },
+            },
           })
 
         res.json({
