@@ -228,6 +228,7 @@ model SupplierProduct {
   supplierId         String?
   supplier           Supplier?           @relation(fields: [supplierId], references: [id])
   businessOrderItems BusinessOrderItem[]
+  couriers           Courier[]
 
   // Timestamp
   createdAt DateTime @default(now())
@@ -502,6 +503,7 @@ model Courier {
   // Relations
   businessOrderItems BusinessOrderItem[]
   courierVehicles    CourierVehicle[]
+  supplierProducts   SupplierProduct[]
 
   // Timestamp
   createdAt DateTime @default(now())
