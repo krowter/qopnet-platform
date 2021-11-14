@@ -58,6 +58,57 @@ export const getMyAllBusinessOrders = async (req, res) => {
   }
 }
 
+// Get one paid business orders item by handle supplier and businessOrderItemId
+export const getOnePaidBusinessOrderItem = async (req, res) => {
+  const { supplierHandle, businessOrderItemId } = req.params
+
+  try {
+    const supplier = await prisma.supplier.findUnique({
+      where: {
+        handle: supplierHandle,
+      },
+    })
+
+    if (!supplier) throw new Error('Supplier not found')
+
+    const paidBusinessOrderItem = await prisma.businessOrderItem.findFirst({
+      where: {
+        id: businessOrderItemId,
+        supplier: {
+          handle: supplierHandle,
+        },
+        businessOrder: {
+          status: 'PAID',
+        },
+      },
+      include: {
+        businessOrder: {
+          include: {
+            shipmentAddress: true,
+          },
+        },
+        supplierProduct: true,
+        supplier: true,
+        courier: true,
+        courierVehicle: true,
+      },
+    })
+
+    res.send({
+      message:
+        'Get one paid business orders item by supplier handle and business order id success',
+      supplier,
+      paidBusinessOrderItem,
+    })
+  } catch (error) {
+    res.status(500).send({
+      message:
+        'Get one paid business orders item by supplier handle business order id failed',
+      error,
+    })
+  }
+}
+
 // Get all paid business orders items by handle supplier
 export const getAllPaidBusinessOrderItems = async (req, res) => {
   const { supplierHandle } = req.params
