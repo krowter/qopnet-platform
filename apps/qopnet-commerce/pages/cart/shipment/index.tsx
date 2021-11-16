@@ -249,20 +249,6 @@ export const CouriersContainer = ({ businessOrder }) => {
   const [availableCouriers, setAvailableCouriers] = useState([])
   const [selectedCourierId, setSelectedCourierId] = useState('')
 
-  // Only set couriers once data has been retrieved
-  useEffect(() => {
-    if (!error && data && couriers) {
-      setAvailableCouriers(couriers)
-      // When no courier selected yet, select the first one automatically
-      setSelectedCourierId(
-        businessOrder?.shipmentCourier?.id || availableCouriers[0]?.id
-      )
-      if (!businessOrder?.shipmentCourier?.id) {
-        patchCartWithCourier(availableCouriers[0]?.id)
-      }
-    }
-  }, [businessOrder, error, data, couriers, availableCouriers])
-
   // Handle select courier option with just courier id
   const handleSelectCourierOption = async (courierId) => {
     setSelectedCourierId(courierId)

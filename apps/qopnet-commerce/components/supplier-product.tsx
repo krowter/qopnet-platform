@@ -276,6 +276,9 @@ export const SupplierProductForm = (props) => {
         toast({ title: 'Berhasil mengedit produk supplier', status: 'success' })
 
         const redirectPath = `/${supplierParam}/${data?.updatedSupplierProduct?.slug}`
+
+        console.log(data)
+
         router.push(redirectPath)
       }
     } catch (error) {
