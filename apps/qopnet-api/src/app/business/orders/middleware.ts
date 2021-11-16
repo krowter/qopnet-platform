@@ -178,12 +178,19 @@ export const getMyCart = async (req, res) => {
     const businessOrder: Partial<BusinessOrder> & {
       businessOrderItems: BusinessOrderItem[]
     } = await prisma.businessOrder.findFirst({
-      where: { ownerId, status: 'DRAFT' },
+      where: {
+        ownerId,
+        status: 'DRAFT',
+      },
       include: {
         owner: true,
         businessOrderItems: {
           include: {
-            supplierProduct: true,
+            supplierProduct: {
+              include: {
+                couriers: { include: { courier: true } },
+              },
+            },
             supplier: {
               include: {
                 addresses: {
