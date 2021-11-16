@@ -91,6 +91,7 @@ export const SupplierProductForm = (props) => {
   const router = useRouter()
   const toast = useToast()
   const [loading, setLoading] = useState(false)
+
   const { data, error } = useSWR('/api/couriers')
   const { couriers } = data || {}
 
@@ -144,6 +145,8 @@ export const SupplierProductForm = (props) => {
         return
       }
 
+      console.log({ supplierProduct })
+
       reset({
         ...getValues(),
         images: supplierProduct?.images,
@@ -169,7 +172,9 @@ export const SupplierProductForm = (props) => {
           height: supplierProduct?.dimension.height,
         },
 
-        couriers: supplierProduct.couriers.map((courier) => courier.courierId),
+        couriers: supplierProduct?.couriers?.map(
+          (courier) => courier.courierId
+        ),
 
         status: supplierProduct?.status === 'ACTIVE',
         stock: supplierProduct?.stock,
@@ -340,7 +345,6 @@ export const SupplierProductForm = (props) => {
                     <ChakraLink
                       isExternal
                       href={uploadedImageUrl}
-                      passHref
                       display="block"
                     >
                       <ChakraImage
