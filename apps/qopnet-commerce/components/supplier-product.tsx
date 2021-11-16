@@ -145,7 +145,7 @@ export const SupplierProductForm = (props) => {
         return
       }
 
-      console.log({ supplierProduct })
+      console.log(JSON.stringify(supplierProduct, null, 2))
 
       reset({
         ...getValues(),
