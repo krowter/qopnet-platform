@@ -2,37 +2,30 @@
  * https://prisma.io/docs/guides/database/seed-database#seeding-your-database-with-typescript
  */
 
-import {
-  PrismaClient,
-  User,
-  Profile,
-  Address,
-  Courier,
-  CourierVehicle,
-  PaymentMethod,
-  PaymentRecord,
-  Supplier,
-  SupplierProduct,
-} from '@prisma/client'
+import { PrismaClient, SupplierProduct } from '@prisma/client'
 const prisma = new PrismaClient()
 
-import usersDevData from './data/users-dev.json'
-import usersStgData from './data/users-stg.json'
-import usersPrdData from './data/users-prd.json'
-import profilesDevData from './data/profiles-dev.json'
-import profilesStgData from './data/profiles-stg.json'
-import profilesPrdData from './data/profiles-prd.json'
-import addressesData from './data/addresses.json'
-import suppliersData from './data/suppliers.json'
-import businessOrdersData from './data/business-orders.json'
 import couriersData from './data/couriers.json'
 import courierVehiclesData from './data/courier-vehicles.json'
 import paymentMethodsData from './data/payments-methods.json'
 import paymentRecordsData from './data/payments-records.json'
 
+import usersDevData from './data/users-dev.json'
+import usersStgData from './data/users-stg.json'
+import usersPrdData from './data/users-prd.json'
+
+import profilesDevData from './data/profiles-dev.json'
+import profilesStgData from './data/profiles-stg.json'
+import profilesPrdData from './data/profiles-prd.json'
+
+import addressesData from './data/addresses.json'
+import suppliersData from './data/suppliers.json'
+
 import supplierProductsQopnetData from './data/supplier-products-qopnet.json'
 import supplierProductsAnekaBusaData from './data/supplier-products-anekabusa.json'
 import supplierProductsArdenaData from './data/supplier-products-ardena.json'
+
+import businessOrdersData from './data/business-orders.json'
 
 import promoEmployerData from './data/qopnet-promo-employer.json'
 import promoEmployeeData from './data/qopnet-promo-employee.json'
