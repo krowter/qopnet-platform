@@ -38,17 +38,6 @@ console.info({ env: process.env.NX_NODE_ENV })
 // Get storageUrl from env
 const storageUrl = process.env.NX_SUPABASE_URL
 
-// Default user for all environments: qopnetlabs@gmail.com
-// Set profile.id
-const qopnetlabsProfileId = 'ckr86vmxt005010pjeh4mqs6n'
-// Set id based on the environment
-const qopnetlabsUserId =
-  process.env.NX_NODE_ENV === 'production'
-    ? 'cb0a71e6-da95-4631-acc0-bbd3f0d39e5c' // production
-    : process.env.NX_NODE_ENV === 'staging'
-    ? '4f312b35-1554-4283-9d75-cd10d48cdfe7' // staging
-    : 'b09ea7f6-27aa-44ce-9354-68ed5bfdd195' // development
-
 // -----------------------------------------------------------------------------
 
 async function deleteEverything() {
@@ -103,16 +92,18 @@ async function createSupplierProducts({
   const defaultCourier = await prisma.courier.findFirst({
     where: { name: 'Deliveree' },
   })
-  console.info({ defaultCourier })
+  // console.info({ defaultCourier })
 
   // Loop over to put custom field per product
   supplierProducts.forEach(async (product) => {
     product.ownerId = supplier.ownerId
     product.supplierId = supplier.id
-    product.couriers = { courier: { connect: { id: defaultCourier?.id } } }
+    product.couriers = {
+      create: { courier: { connect: { id: defaultCourier?.id } } },
+    }
 
-    console.info(product.name)
-    await prisma.supplierProduct.create(product)
+    // console.info(product.name)
+    await prisma.supplierProduct.create({ data: product })
   })
 
   // console.info({ message })
@@ -212,7 +203,7 @@ const seedCouriers = async () => {
   const couriers = await prisma.courier.createMany({
     data: couriersData,
   })
-  console.info({ couriers })
+  // console.info({ couriers })
 }
 
 const seedCourierVehicles = async () => {

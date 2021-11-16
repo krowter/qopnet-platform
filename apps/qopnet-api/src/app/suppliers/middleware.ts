@@ -338,8 +338,8 @@ export const createSupplierProduct = async (req, res) => {
           ownerId: user.profile.id,
           couriers: {
             create: supplierProduct?.couriers?.map((courier) => {
-              const obj = { courier: { connect: { id: courier } } }
-              return obj
+              const courierObject = { courier: { connect: { id: courier } } }
+              return courierObject
             }),
           },
         }
