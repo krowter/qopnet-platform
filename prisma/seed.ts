@@ -102,7 +102,7 @@ async function createSupplierProducts({
       create: { courier: { connect: { id: defaultCourier?.id } } },
     }
 
-    // console.info(product.name)
+    console.info(product.slug)
     await prisma.supplierProduct.create({ data: product })
   })
 
@@ -113,19 +113,26 @@ async function createSupplierProducts({
   Dynamic environment aware to generate the image url automatically
 */
 async function createSupplierProductsDynamic({
-  data,
+  data: supplierProducts, // JSON data
   supplier,
 }: {
   data: any
   supplier: any
 }) {
-  // Add id and update storage url based on environment
-  const products = data.map((product: any) => {
+  const defaultCourier = await prisma.courier.findFirst({
+    where: { name: 'Kurir toko sendiri' },
+  })
+
+  // Loop over to put custom field per product
+  supplierProducts.forEach(async (product) => {
     product.ownerId = supplier.ownerId
     product.supplierId = supplier.id
+    product.couriers = {
+      create: { courier: { connect: { id: defaultCourier?.id } } },
+    }
 
     // Image URL example
-    // https://rryitovbrajppywbpmit.supabase.co/storage/v1/object/public/images/anekabusa/AB-001.jpeg
+    // https://abcdefghijklmno.supabase.co/storage/v1/object/public/images/supplier-name/XX-000.jpeg
     if (product.images) {
       product.images = product.images.map(
         (image: string) =>
@@ -133,12 +140,10 @@ async function createSupplierProductsDynamic({
       )
     }
 
-    return product
-  })
-
-  await prisma.supplierProduct.createMany({
-    data: products,
-    skipDuplicates: true,
+    console.info(product.slug)
+    await prisma.supplierProduct.create({
+      data: product,
+    })
   })
 }
 
