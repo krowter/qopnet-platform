@@ -75,6 +75,8 @@ export type SupplierProductData = {
     height?: number
   }
 
+  couriers?: string[]
+
   status?: boolean // Into database, convert to 'ACTIVE' | 'INACTIVE'
   stock?: number
 }
@@ -89,6 +91,7 @@ export const SupplierProductForm = (props) => {
   const router = useRouter()
   const toast = useToast()
   const [loading, setLoading] = useState(false)
+
   const { data, error } = useSWR('/api/couriers')
   const { couriers } = data || {}
 
@@ -129,6 +132,8 @@ export const SupplierProductForm = (props) => {
         height: 0,
       },
 
+      couriers: [],
+
       status: true,
       stock: 1000,
     },
@@ -165,6 +170,10 @@ export const SupplierProductForm = (props) => {
           height: supplierProduct?.dimension.height,
         },
 
+        couriers: supplierProduct?.couriers?.map(
+          (courier) => courier.courierId
+        ),
+
         status: supplierProduct?.status === 'ACTIVE',
         stock: supplierProduct?.stock,
       })
@@ -196,6 +205,16 @@ export const SupplierProductForm = (props) => {
     } else {
       setValue('images', [newUrl]) // ✅ performant
     }
+  }
+
+  const handleCheckBoxCourier = (courierId) => {
+    const couriers = getValues('couriers')
+    if (couriers.includes(courierId)) {
+      couriers.splice(couriers.indexOf(courierId), 1)
+    } else {
+      couriers.push(courierId)
+    }
+    setValue('couriers', couriers)
   }
 
   // Create supplier process and toast
@@ -324,7 +343,6 @@ export const SupplierProductForm = (props) => {
                     <ChakraLink
                       isExternal
                       href={uploadedImageUrl}
-                      passHref
                       display="block"
                     >
                       <ChakraImage
@@ -682,18 +700,30 @@ export const SupplierProductForm = (props) => {
                   {couriers &&
                     couriers.map((courier) => {
                       return (
-                        <Checkbox
-                          value={slugify(courier?.name.toUpperCase(), {
-                            replacement: '_',
-                          })}
-                        >
-                          {courier?.name}
-                        </Checkbox>
+                        <Controller
+                          key={courier?.id}
+                          name="couriers"
+                          control={control}
+                          rules={{ required: true }}
+                          render={({ field }) => (
+                            <Checkbox
+                              {...field}
+                              value={courier?.id}
+                              onChange={(e) =>
+                                handleCheckBoxCourier(e.target.value)
+                              }
+                            >
+                              {courier?.name}
+                            </Checkbox>
+                          )}
+                        />
                       )
                     })}
                 </Stack>
               </CheckboxGroup>
-
+              <FormHelperText color="red.500">
+                {errors.couriers && <span>Kurir pengiriman diperlukan</span>}
+              </FormHelperText>
               <FormHelperText>
                 Atur layanan kurir pengiriman sesuai jenis dan ukuran produkmu.
               </FormHelperText>

@@ -90,8 +90,9 @@ export const getSupplierProductBySupplierProductParam = async (req, res) => {
     const supplierProduct = await prisma.supplierProduct.findUnique({
       where: { slug: supplierProductParam },
       include: {
-        supplier: { include: { owner: true } },
         owner: true,
+        supplier: { include: { owner: true } },
+        couriers: { include: { courier: true } },
       },
     })
 
