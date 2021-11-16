@@ -94,7 +94,7 @@ async function deleteEverything() {
 // -----------------------------------------------------------------------------
 
 async function createSupplierProducts({
-  data, // JSON data
+  data: supplierProducts, // JSON data
   supplier,
 }: {
   data: any
@@ -103,27 +103,19 @@ async function createSupplierProducts({
   const defaultCourier = await prisma.courier.findFirst({
     where: { name: 'Deliveree' },
   })
+  console.info({ defaultCourier })
 
-  console.log({ defaultCourier })
-
-  // Map to put the ownerId and supplierId per product
-  data = data.map((product: SupplierProduct) => {
+  // Loop over to put custom field per product
+  supplierProducts.forEach(async (product) => {
     product.ownerId = supplier.ownerId
     product.supplierId = supplier.id
-    // product.couriers = { courier: { connect: { id: defaultCourier?.id } } }
-    return product
+    product.couriers = { courier: { connect: { id: defaultCourier?.id } } }
+
+    console.info(product.name)
+    await prisma.supplierProduct.create(product)
   })
 
-  // Create Qopnet supplier products
-  const qopnetSupplierProducts = await prisma.supplierProduct.createMany({
-    data: {
-      ...data,
-      couriers: { courier: { connect: { id: defaultCourier?.id } } },
-    },
-    skipDuplicates: true,
-  })
-
-  // console.info({ qopnetSupplierProducts })
+  // console.info({ message })
 }
 
 /* 
@@ -220,7 +212,7 @@ const seedCouriers = async () => {
   const couriers = await prisma.courier.createMany({
     data: couriersData,
   })
-  // console.info({ couriers })
+  console.info({ couriers })
 }
 
 const seedCourierVehicles = async () => {

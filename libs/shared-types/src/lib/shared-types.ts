@@ -1,3 +1,5 @@
+import { Courier } from '@prisma/client'
+
 export type User = {
   id: string
   email: string
@@ -101,6 +103,8 @@ export type SupplierProduct = {
   // Relations
   supplierId: string
   supplier: Supplier
+
+  couriers?: Courier[]
 
   // Timestamp
   createdAt?: string
