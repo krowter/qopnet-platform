@@ -699,6 +699,7 @@ export const SupplierProductForm = (props) => {
                     couriers.map((courier) => {
                       return (
                         <Controller
+                          key={courier?.id}
                           name="couriers"
                           control={control}
                           rules={{ required: true }}
