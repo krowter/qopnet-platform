@@ -32,6 +32,7 @@ export const EditSupplierProductContainer = ({
     `/api/suppliers/products/${supplierProductParam}`
   )
   const { supplierProduct } = data || {}
+  console.log({ supplierProduct })
 
   return (
     <>
