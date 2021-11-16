@@ -4,8 +4,6 @@
     "name": "Kasur Speq 300-200-180-38",
     "description": "",
     "price": 5000000,
-    "priceMax": null,
-    "priceMin": null,
     "images": [
       "AB-241-Kasur-AB-SPEQ-S300.jpg",
       "AB-241-kasur-SPEQ-S300-Set-Dipan-2.jpg",
@@ -23,8 +21,6 @@
     "name": "Kasur Speq Standar-200-180-20",
     "description": "",
     "price": 3750000,
-    "priceMax": null,
-    "priceMin": null,
     "images": [
       "AB-455-Kasur-AB-SPEQ-Std.jpg",
       "AB-455-kasur-SPEQ-Std-Set-Dipan-1.jpg",
@@ -43,8 +39,6 @@
     "name": "Kasur Speq Standar-200-160-20",
     "description": "",
     "price": 3450000,
-    "priceMax": null,
-    "priceMin": null,
     "images": [
       "AB-455-Kasur-AB-SPEQ-Std.jpg",
       "AB-455-kasur-SPEQ-Std-Set-Dipan-1.jpg",
@@ -63,8 +57,6 @@
     "name": "Kasur Aneka Busa Cover Katun-200-180-20",
     "description": "",
     "price": 3300000,
-    "priceMax": null,
-    "priceMin": null,
     "images": [
       "AB-001-katun-set-dipan-1.jpg",
       "AB-001-katun-set-dipan-2.jpg",
@@ -84,8 +76,6 @@
     "name": "Kasur Aneka Busa Cover Katun-200-180-15",
     "description": "",
     "price": 2600000,
-    "priceMax": null,
-    "priceMin": null,
     "images": [
       "AB-001-katun-set-dipan-1.jpg",
       "AB-001-katun-set-dipan-2.jpg",
@@ -105,8 +95,6 @@
     "name": "Kasur Aneka Busa Cover Katun-200-160-20",
     "description": "",
     "price": 3000000,
-    "priceMax": null,
-    "priceMin": null,
     "images": [
       "AB-001-katun-set-dipan-1.jpg",
       "AB-001-katun-set-dipan-2.jpg",
@@ -126,8 +114,6 @@
     "name": "Kasur Aneka Busa Cover Kwilting-200-180-20",
     "description": "",
     "price": 3550000,
-    "priceMax": null,
-    "priceMin": null,
     "images": [
       "AB-011-Kwilting-Set-Dipan-1.jpg",
       "AB-011-Kwilting-Set-Dipan-2.jpg",
@@ -149,8 +135,6 @@
     "name": "Kasur Aneka Busa Cover Kwilting-200-180-15",
     "description": "",
     "price": 2850000,
-    "priceMax": null,
-    "priceMin": null,
     "images": [
       "AB-011-Kwilting-Set-Dipan-1.jpg",
       "AB-011-Kwilting-Set-Dipan-2.jpg",
@@ -172,8 +156,6 @@
     "name": "Kasur Aneka Busa Cover Kwilting-200-160-20",
     "description": "",
     "price": 3250000,
-    "priceMax": null,
-    "priceMin": null,
     "images": [
       "AB-011-Kwilting-Set-Dipan-1.jpg",
       "AB-011-Kwilting-Set-Dipan-2.jpg",
@@ -195,8 +177,6 @@
     "name": "Kasur Aneka Busa Cover Wool-200-180-20",
     "description": "",
     "price": 3750000,
-    "priceMax": null,
-    "priceMin": null,
     "images": [
       "AB-031-Wool-Set-Dipan-1.jpg",
       "AB-031-Wool-Set-Dipan-2.jpg",
@@ -218,8 +198,6 @@
     "name": "Kasur Aneka Busa Cover Wool-200-180-15",
     "description": "",
     "price": 3050000,
-    "priceMax": null,
-    "priceMin": null,
     "images": [
       "AB-031-Wool-Set-Dipan-1.jpg",
       "AB-031-Wool-Set-Dipan-2.jpg",
@@ -241,8 +219,6 @@
     "name": "Kasur Aneka Busa Cover Wool-200-160-20",
     "description": "",
     "price": 3450000,
-    "priceMax": null,
-    "priceMin": null,
     "images": [
       "AB-031-Wool-Set-Dipan-1.jpg",
       "AB-031-Wool-Set-Dipan-2.jpg",
@@ -264,8 +240,6 @@
     "name": "Kasur Rebonded Fresh O cover Kwilting-200-180-20",
     "description": "",
     "price": 3350000,
-    "priceMax": null,
-    "priceMin": null,
     "images": [
       "AB-071-Kasur-Rebonded-Fresh-O-Kwilting-Set-Dipan-1.jpg",
       "AB-071-Kasur-Rebonded-Fresh-O-Kwilting-Set-Dipan-2.jpg",
@@ -284,8 +258,6 @@
     "name": "Kasur Rebonded Fresh O cover Kwilting-200-180-15",
     "description": "",
     "price": 2800000,
-    "priceMax": null,
-    "priceMin": null,
     "images": [
       "AB-071-Kasur-Rebonded-Fresh-O-Kwilting-Set-Dipan-1.jpg",
       "AB-071-Kasur-Rebonded-Fresh-O-Kwilting-Set-Dipan-2.jpg",
@@ -304,8 +276,6 @@
     "name": "Kasur Rebonded Fresh O cover Kwilting-200-160-20",
     "description": "",
     "price": 3100000,
-    "priceMax": null,
-    "priceMin": null,
     "images": [
       "AB-071-Kasur-Rebonded-Fresh-O-Kwilting-Set-Dipan-1.jpg",
       "AB-071-Kasur-Rebonded-Fresh-O-Kwilting-Set-Dipan-2.jpg",
@@ -324,8 +294,6 @@
     "name": "Sofa Bed Cover Katun-200-180-20",
     "description": "",
     "price": 3650000,
-    "priceMax": null,
-    "priceMin": null,
     "images": [
       "AB-041-Sofa-Bed-AB-Katun-2.jpg",
       "AB-041-Sofa-Bed-AB-Katun-1.jpg",
@@ -345,8 +313,6 @@
     "name": "Sofa Bed Cover Katun-200-160-20",
     "description": "",
     "price": 3350000,
-    "priceMax": null,
-    "priceMin": null,
     "images": [
       "AB-041-Sofa-Bed-AB-Katun-1.jpg",
       "AB-041-Sofa-Bed-AB-Katun-2.jpg",
@@ -366,8 +332,6 @@
     "name": "Sofa Bed Cover Raspur-200-180-20",
     "description": "",
     "price": 3900000,
-    "priceMax": null,
-    "priceMin": null,
     "images": [
       "AB-046-Sofa-Bed-AB-Raspur.jpg",
       "AB-046-Busa-Super-Yellow-dan-Kain-Raspur.jpg"
@@ -384,8 +348,6 @@
     "name": "Sofa Bed Cover Raspur-200-160-20",
     "description": "",
     "price": 3600000,
-    "priceMax": null,
-    "priceMin": null,
     "images": [
       "AB-046-Sofa-Bed-AB-Raspur.jpg",
       "AB-046-Busa-Super-Yellow-dan-Kain-Raspur.jpg"
@@ -402,8 +364,6 @@
     "name": "Sofa Bed Fresh O cover Katun-200-180-20",
     "description": "",
     "price": 3450000,
-    "priceMax": null,
-    "priceMin": null,
     "images": [
       "AB-101-Sofa-Bed-Rebonded-Fresh-O-Katun-2.jpg",
       "AB-101-Sofa-Bed-Rebonded-Fresh-O-Katun-3.jpg",
@@ -423,8 +383,6 @@
     "name": "Sofa Bed Fresh O cover Katun-200-160-20",
     "description": "",
     "price": 3200000,
-    "priceMax": null,
-    "priceMin": null,
     "images": [
       "AB-101-Sofa-Bed-Rebonded-Fresh-O-Katun-2.jpg",
       "AB-101-Sofa-Bed-Rebonded-Fresh-O-Katun-3.jpg",
@@ -444,8 +402,6 @@
     "name": "Sofa Bed Fresh O cover Raspur-200-180-20",
     "description": "",
     "price": 3700000,
-    "priceMax": null,
-    "priceMin": null,
     "images": [
       "AB-106-Sofa-Bed-Rebonded-Fresh-O--Raspur.jpg",
       "AB-106-Busa-Rebonded-Fresh-O.jpg"
@@ -462,8 +418,6 @@
     "name": "Sofa Bed Fresh O cover Raspur-200-160-20",
     "description": "",
     "price": 3450000,
-    "priceMax": null,
-    "priceMin": null,
     "images": [
       "AB-106-Sofa-Bed-Rebonded-Fresh-O--Raspur.jpg",
       "AB-106-Busa-Rebonded-Fresh-O.jpg"
@@ -480,8 +434,6 @@
     "name": "Sofa Set Minimalis + Meja Lama",
     "description": "",
     "price": 9000000,
-    "priceMax": null,
-    "priceMin": null,
     "images": ["AB-412.jpg"],
     "slug": "sofa-set-minimalis-+-meja-lama",
     "dimension": { "width": null, "length": null, "height": null }
@@ -491,8 +443,6 @@
     "name": "Sofa Minimalis ( 3 Seater + 2 Puff + Meja Lama )",
     "description": "",
     "price": 6800000,
-    "priceMax": null,
-    "priceMin": null,
     "images": ["AB-413.jpg"],
     "slug": "sofa-minimalis-(-3-seater-+-2-puff-+-meja-lama-)",
     "dimension": { "width": null, "length": null, "height": null }
@@ -502,8 +452,6 @@
     "name": "Sofa Minimalis ( 2 Seater + 1 Seater + 2 Puff + Meja Lama )",
     "description": "",
     "price": 7450000,
-    "priceMax": null,
-    "priceMin": null,
     "images": ["AB-414.jpg"],
     "slug": "sofa-minimalis-(-2-seater-+-1-seater-+-2-puff-+-meja-lama-)",
     "dimension": { "width": null, "length": null, "height": null }
@@ -513,8 +461,6 @@
     "name": "Sofa Minimalis ( 3 Seater + 2 Seater + 1 Puff + Meja Lama )",
     "description": "",
     "price": 8800000,
-    "priceMax": null,
-    "priceMin": null,
     "images": ["AB-415.jpg"],
     "slug": "sofa-minimalis-(-3-seater-+-2-seater-+-1-puff-+-meja-lama-)",
     "dimension": { "width": null, "length": null, "height": null }
@@ -524,8 +470,6 @@
     "name": "Sofa Set Minimalis + Meja Baru",
     "description": "",
     "price": 9500000,
-    "priceMax": null,
-    "priceMin": null,
     "images": ["AB-420.jpg"],
     "slug": "sofa-set-minimalis-+-meja-baru",
     "dimension": { "width": null, "length": null, "height": null }
@@ -535,8 +479,6 @@
     "name": "Sofa Minimalis ( 3 Seater + 2 Puff + Meja Baru )",
     "description": "",
     "price": 7300000,
-    "priceMax": null,
-    "priceMin": null,
     "images": ["AB-421.jpg"],
     "slug": "sofa-minimalis-(-3-seater-+-2-puff-+-meja-baru-)",
     "dimension": { "width": null, "length": null, "height": null }
@@ -546,8 +488,6 @@
     "name": "Sofa Minimalis ( 2 Seater + 1 Seater + 2 Puff + Meja Baru )",
     "description": "",
     "price": 7950000,
-    "priceMax": null,
-    "priceMin": null,
     "images": ["AB-422.jpg"],
     "slug": "sofa-minimalis-(-2-seater-+-1-seater-+-2-puff-+-meja-baru-)",
     "dimension": { "width": null, "length": null, "height": null }
@@ -557,8 +497,6 @@
     "name": "Sofa Minimalis ( 3 Seater + 2 Seater + 1 Puff + Meja Baru )",
     "description": "",
     "price": 9300000,
-    "priceMax": null,
-    "priceMin": null,
     "images": ["AB-423.jpg"],
     "slug": "sofa-minimalis-(-3-seater-+-2-seater-+-1-puff-+-meja-baru-)",
     "dimension": { "width": null, "length": null, "height": null }
@@ -568,8 +506,6 @@
     "name": "Sofa L Kiri + Meja Lama",
     "description": "",
     "price": 7000000,
-    "priceMax": null,
-    "priceMin": null,
     "images": ["AB-416.jpg"],
     "slug": "sofa-l-kiri-+-meja-lama",
     "dimension": { "width": null, "length": null, "height": null }
@@ -579,8 +515,6 @@
     "name": "Sofa L Kanan + Meja Lama",
     "description": "",
     "price": 7000000,
-    "priceMax": null,
-    "priceMin": null,
     "images": ["AB-417.jpg"],
     "slug": "sofa-l-kanan-+-meja-lama",
     "dimension": { "width": null, "length": null, "height": null }
@@ -590,8 +524,6 @@
     "name": "Sofa L Putus + Meja Lama",
     "description": "",
     "price": 7000000,
-    "priceMax": null,
-    "priceMin": null,
     "images": ["AB-418.jpg"],
     "slug": "sofa-l-putus-+-meja-lama",
     "dimension": { "width": null, "length": null, "height": null }
@@ -601,8 +533,6 @@
     "name": "Sofa L Kiri + Meja Baru",
     "description": "",
     "price": 7500000,
-    "priceMax": null,
-    "priceMin": null,
     "images": ["AB-424.jpg"],
     "slug": "sofa-l-kiri-+-meja-baru",
     "dimension": { "width": null, "length": null, "height": null }
@@ -612,8 +542,6 @@
     "name": "Sofa L Kanan + Meja Baru",
     "description": "",
     "price": 7500000,
-    "priceMax": null,
-    "priceMin": null,
     "images": ["AB-425.jpg"],
     "slug": "sofa-l-kanan-+-meja-baru",
     "dimension": { "width": null, "length": null, "height": null }
@@ -623,8 +551,6 @@
     "name": "Sofa L Putus + Meja Baru",
     "description": "",
     "price": 7500000,
-    "priceMax": null,
-    "priceMin": null,
     "images": ["AB-426.jpg"],
     "slug": "sofa-l-putus-+-meja-baru",
     "dimension": { "width": null, "length": null, "height": null }
@@ -634,10 +560,8 @@
     "name": "Sofa Sudut + Meja Lama",
     "description": "",
     "price": 7800000,
-    "priceMax": null,
-    "priceMin": null,
     "images": ["AB-419.jpg"],
-    "slug": "sofa-sudut-+-meja-baru",
+    "slug": "sofa-sudut-+-meja-lama",
     "dimension": { "width": null, "length": null, "height": null }
   },
   {
@@ -645,8 +569,6 @@
     "name": "Sofa Sudut + Meja Baru",
     "description": "",
     "price": 8300000,
-    "priceMax": null,
-    "priceMin": null,
     "images": ["AB-427.jpg"],
     "slug": "sofa-sudut-+-meja-baru",
     "dimension": { "width": null, "length": null, "height": null }
@@ -656,8 +578,6 @@
     "name": "Sofa Cozy Stainless + Meja",
     "description": "",
     "price": 14000000,
-    "priceMax": null,
-    "priceMin": null,
     "images": ["AB-428.jpg"],
     "slug": "sofa-cozy-stainless-+-meja",
     "dimension": { "width": null, "length": null, "height": null }
@@ -667,8 +587,6 @@
     "name": "Sofa Euki 100 1 Seater",
     "description": "",
     "price": 2250000,
-    "priceMax": null,
-    "priceMin": null,
     "images": ["AB-431.jpg"],
     "slug": "sofa-euki-100-1-seater",
     "dimension": { "width": null, "length": null, "height": null }
@@ -678,8 +596,6 @@
     "name": "Sofa Euki 100 2 Seater",
     "description": "",
     "price": 3700000,
-    "priceMax": null,
-    "priceMin": null,
     "images": ["AB-432.jpg"],
     "slug": "sofa-euki-100-2-seater",
     "dimension": { "width": null, "length": null, "height": null }
@@ -689,8 +605,6 @@
     "name": "Sofa Euki 100 3 Seater",
     "description": "",
     "price": 4600000,
-    "priceMax": null,
-    "priceMin": null,
     "images": ["AB-433.jpg"],
     "slug": "sofa-euki-100-3-seater",
     "dimension": { "width": null, "length": null, "height": null }
@@ -700,8 +614,6 @@
     "name": "Sofa Euki 200 1 Seater",
     "description": "",
     "price": 2250000,
-    "priceMax": null,
-    "priceMin": null,
     "images": ["AB-434.jpg"],
     "slug": "sofa-euki-200-1-seater",
     "dimension": { "width": null, "length": null, "height": null }
@@ -711,8 +623,6 @@
     "name": "Sofa Euki 200 2 Seater",
     "description": "",
     "price": 3700000,
-    "priceMax": null,
-    "priceMin": null,
     "images": ["AB-435.jpg"],
     "slug": "sofa-euki-200-2-seater",
     "dimension": { "width": null, "length": null, "height": null }
@@ -722,8 +632,6 @@
     "name": "Sofa Euki 200 3 Seater",
     "description": "",
     "price": 4600000,
-    "priceMax": null,
-    "priceMin": null,
     "images": ["AB-436.jpg"],
     "slug": "sofa-euki-200-3-seater",
     "dimension": { "width": null, "length": null, "height": null }
@@ -733,8 +641,6 @@
     "name": "Sofa Euki 300 1 Seater",
     "description": "",
     "price": 2250000,
-    "priceMax": null,
-    "priceMin": null,
     "images": ["AB-437.jpg"],
     "slug": "sofa-euki-300-1-seater",
     "dimension": { "width": null, "length": null, "height": null }
@@ -744,8 +650,6 @@
     "name": "Sofa Euki 300 2 Seater",
     "description": "",
     "price": 3700000,
-    "priceMax": null,
-    "priceMin": null,
     "images": ["AB-438.jpg"],
     "slug": "sofa-euki-300-2-seater",
     "dimension": { "width": null, "length": null, "height": null }
@@ -755,8 +659,6 @@
     "name": "Sofa Euki 300 3 Seater",
     "description": "",
     "price": 4600000,
-    "priceMax": null,
-    "priceMin": null,
     "images": ["AB-439.jpg"],
     "slug": "sofa-euki-300-3-seater",
     "dimension": { "width": null, "length": null, "height": null }
@@ -766,8 +668,6 @@
     "name": "Sofa Euki 1 Set + Meja Lama",
     "description": "",
     "price": 10300000,
-    "priceMax": null,
-    "priceMin": null,
     "images": ["AB-507-1.jpg", "AB-507-2.jpg", "AB-507-3.jpg"],
     "slug": "sofa-euki-1-set-+-meja-lama",
     "dimension": { "width": null, "length": null, "height": null }
@@ -777,8 +677,6 @@
     "name": "Sofa Euki 1 Set + Meja Baru",
     "description": "",
     "price": 10800000,
-    "priceMax": null,
-    "priceMin": null,
     "images": ["AB-507-1.jpg", "AB-507-2.jpg", "AB-507-3.jpg"],
     "slug": "sofa-euki-1-set-+-meja-baru",
     "dimension": { "width": null, "length": null, "height": null }

@@ -48,7 +48,7 @@
     "prisma:seed": "prisma db seed"
   },
   "prisma": {
-    "seed": "ts-node --compiler-options {\"resolveJsonModule\":true} prisma/seed.ts"
+    "seed": "ts-node --compiler-options {\"resolveJsonModule\":true,\"noImplicitAny\":false} prisma/seed.ts"
   },
   "dependencies": {
     "@chakra-ui/icons": "^1.0.15",
