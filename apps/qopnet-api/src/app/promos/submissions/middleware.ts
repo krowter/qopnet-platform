@@ -9,8 +9,7 @@ export const getAllSubmissions = async (req, res) => {
   try {
     const PromoSubmissions: Partial<PromoSubmission>[] =
       await prisma.promoSubmission.findMany({
-        where: {
-        },
+        where: {},
         skip: req.skip,
         take: req.take,
       })
@@ -49,12 +48,13 @@ export const createOneSubmission = async (req, res) => {
 
       status: formData?.status,
 
-      providerId: formData?.providerId
+      providerId: formData?.providerId,
     }
 
-    const createdPromoSubmission: Partial<PromoSubmission> = await prisma.promoSubmission.create({
-      data: payloadData
-    })
+    const createdPromoSubmission: Partial<PromoSubmission> =
+      await prisma.promoSubmission.create({
+        data: payloadData,
+      })
 
     res.json({
       message: 'Create new promo submission success',

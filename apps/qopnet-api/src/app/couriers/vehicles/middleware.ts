@@ -7,9 +7,8 @@ export const getAllCourierVehicles = async (req, res) => {
   try {
     const courierVehicles: CourierVehicle[] =
       await prisma.courierVehicle.findMany({
-        include: {
-          courier: true,
-        },
+        include: { courier: true },
+        orderBy: { updatedAt: 'desc' },
       })
 
     res.send({

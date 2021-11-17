@@ -5,7 +5,9 @@ import slugify from 'slugify'
 // Get all couriers
 export const getAllCouriers = async (req, res) => {
   try {
-    const couriers: Courier[] = await prisma.courier.findMany()
+    const couriers: Courier[] = await prisma.courier.findMany({
+      orderBy: { updatedAt: 'desc' },
+    })
 
     res.send({
       message: 'Get all couriers success',
