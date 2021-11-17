@@ -26,6 +26,7 @@ import {
   Tag,
   Divider,
   Box,
+  Flex,
 } from '@chakra-ui/react'
 import { useUser } from 'use-supabase'
 
@@ -161,6 +162,14 @@ export const BusinessOrderItemsList = ({ businessOrderItems }) => {
               </HStack>
               <HStack>
                 <Tag size="sm">{businessOrderItem.id}</Tag>
+              </HStack>
+              <HStack>
+                <Icon name="users" />
+              </HStack>
+              <HStack>
+                <Text fontSize="sm">
+                  {businessOrderItem.businessOrder.owner.name}
+                </Text>
               </HStack>
               <HStack>
                 <Text fontSize="sm">
