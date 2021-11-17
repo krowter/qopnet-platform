@@ -5,7 +5,9 @@ import slugify from 'slugify'
 // Get all addresss
 export const getAllAddresses = async (req, res) => {
   try {
-    const addresss: Address[] = await prisma.address.findMany()
+    const addresss: Address[] = await prisma.address.findMany({
+      orderBy: { updatedAt: 'desc' },
+    })
 
     res.send({
       message: 'Get all addresses success',

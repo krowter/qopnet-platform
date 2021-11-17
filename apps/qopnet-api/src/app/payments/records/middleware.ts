@@ -6,9 +6,8 @@ export const getAllPaymentRecords = async (req, res) => {
   try {
     const paymentRecords: PaymentRecord[] = await prisma.paymentRecord.findMany(
       {
-        include: {
-          paymentMethod: true,
-        },
+        include: { paymentMethod: true },
+        orderBy: { updatedAt: 'desc' },
       }
     )
 
