@@ -31,11 +31,11 @@ import {
 import { useUser } from 'use-supabase'
 
 import {
-  calculateSupplierProductItem,
+  formatBusinessOrderStatus,
   formatDateTime,
   formatRupiah,
 } from '@qopnet/util-format'
-import { Layout, Icon, formatPrice } from '@qopnet/qopnet-ui'
+import { Layout, Icon } from '@qopnet/qopnet-ui'
 import { useSWR } from '../../../utils'
 
 /**
@@ -126,13 +126,6 @@ export const OrdersContainer = ({ supplierParam, user }) => {
 }
 
 export const BusinessOrderItemsList = ({ businessOrderItems }) => {
-  const [status, setStatus] = useState('')
-  const [courier, setCourier] = useState('')
-  const bg = useColorModeValue('gray.200', 'gray.900')
-
-  console.log(`status`, status)
-  console.log(`businessOrderItems`, businessOrderItems)
-
   return (
     <>
       {businessOrderItems.map((businessOrderItem, index) => {
@@ -140,6 +133,8 @@ export const BusinessOrderItemsList = ({ businessOrderItems }) => {
         const { city, state, street, zip, ...partialObject } = address
         const subset = { street, city, state, zip }
 
+        const [businessOrderStatusText, statusColor] =
+          formatBusinessOrderStatus(businessOrderItem?.businessOrder?.status)
         return (
           <Stack
             key={businessOrderItem.id}
@@ -156,8 +151,8 @@ export const BusinessOrderItemsList = ({ businessOrderItems }) => {
                 <Heading as="h2" size="sm">
                   #{index + 1}
                 </Heading>
-                <Tag size="sm" colorScheme="red">
-                  {businessOrderItem.businessOrder.status}
+                <Tag size="sm" colorScheme={statusColor}>
+                  {businessOrderStatusText}
                 </Tag>
               </HStack>
               <HStack>
@@ -211,29 +206,36 @@ export const BusinessOrderItemsList = ({ businessOrderItems }) => {
                       {businessOrderItem.supplierProduct?.name}
                     </ChakraLink>
                   </NextLink>
-                  <Text>{businessOrderItem.quantity} barang X Rp.100.000</Text>
+                  <Text>
+                    {businessOrderItem.quantity} ×{' '}
+                    {formatRupiah(businessOrderItem.supplierProduct.price)}
+                  </Text>
                 </Stack>
               </Box>
-              <Box h="50px">
-                <Divider orientation="vertical" colorScheme="red" />
-              </Box>
-              <Stack>
-                <Text fontWeight="bold" size="sm">
-                  Kurir
-                </Text>
-                <Text fontSize="sm">Kurir toko</Text>
-              </Stack>
-              <Box h="50px">
-                <Divider orientation="vertical" colorScheme="red" />
-              </Box>
-              <Stack maxW="30%" justifyContent="center" border="medium">
-                <Text fontWeight="bold" size="sm">
-                  Alamat
-                </Text>
-                <Box as="span" fontSize="sm">
-                  {Object.values(subset).join(',')}
+              <Box display="flex">
+                <Box h="50px" mr={2}>
+                  <Divider orientation="vertical" colorScheme="red" />
                 </Box>
-              </Stack>
+                <Stack>
+                  <Text fontWeight="bold" size="sm">
+                    Kurir
+                  </Text>
+                  <Text fontSize="sm">Kurir toko</Text>
+                </Stack>
+              </Box>
+              <Box display="flex">
+                <Box h="50px" mr={2}>
+                  <Divider orientation="vertical" colorScheme="red" />
+                </Box>
+                <Stack justifyContent="center" border="medium">
+                  <Text fontWeight="bold" size="sm">
+                    Alamat
+                  </Text>
+                  <Box as="span" fontSize="sm">
+                    {Object.values(subset).join(',')}
+                  </Box>
+                </Stack>
+              </Box>
             </Box>
 
             <Box display="flex" justifyContent="flex-end">
@@ -251,77 +253,6 @@ export const BusinessOrderItemsList = ({ businessOrderItems }) => {
         )
       })}
     </>
-    // <Table variant="simple">
-    //   <Thead>
-    //     <Tr>
-    //       <Th>No Pesanan</Th>
-    //       <Th>Pemesan</Th>
-    //       <Th>Produk</Th>
-    //       <Th>Subtotal</Th>
-    //       <Th>Status</Th>
-    //       <Th>Jasa Kirim</Th>
-    //       <Th>Aksi</Th>
-    //     </Tr>
-    //   </Thead>
-    //   {businessOrderItems.map((businessOrderItem) => {
-    //     return (
-    //       <Tbody>
-    //         <Tr
-    //           _hover={{
-    //             bg: bg,
-    //           }}
-    //         >
-    //           <Td>{businessOrderItem.businessOrderId}</Td>
-    //           <Td>{businessOrderItem.businessOrder.owner.handle}</Td>
-    //           <Td display="flex" alignItems="center">
-    //             <Image
-    //               src={businessOrderItem.supplierProduct.images[0]}
-    //               w={20}
-    //               h={20}
-    //             />
-    //             <Text w={40} ml={2}>
-    //               {businessOrderItem.supplierProduct.name}
-    //             </Text>
-    //             <Text w={10} ml={2}>
-    //               x {businessOrderItem.quantity}
-    //             </Text>
-    //           </Td>
-    //           <Td>
-    //             {formatPrice(businessOrderItem.businessOrder.totalPayment)}
-    //           </Td>
-    //           <Td>
-    //             <Select
-    //               size="sm"
-    //               placeholder="Select option"
-    //               defaultValue={businessOrderItem.businessOrder.status}
-    //               onChange={(event) => setStatus(event.target.value)}
-    //             >
-    //               <option value="PAID">Dibayar</option>
-    //               <option value="pack">Dikemas</option>
-    //               <option value="arrived">Arrived</option>
-    //             </Select>
-    //           </Td>
-    //           <Td>
-    //             <Select
-    //               placeholder="Select option"
-    //               defaultValue="Deliveree"
-    //               size="sm"
-    //               onChange={(event) => setCourier(event.target.value)}
-    //             >
-    //               <option value="Deliveree">Deliveree</option>
-    //               <option value="Kurir Toko">Kurir Toko</option>
-    //             </Select>
-    //           </Td>
-    //           <Td>
-    //             <Button bg="orange" size="sm">
-    //               Periksa Rincian
-    //             </Button>
-    //           </Td>
-    //         </Tr>
-    //       </Tbody>
-    //     )
-    //   })}
-    // </Table>
   )
 }
 
