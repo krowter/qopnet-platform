@@ -1,4 +1,5 @@
 import NextLink from 'next/link'
+import NextImage from 'next/image'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
@@ -22,10 +23,19 @@ import {
   Td,
   Image,
   Select,
+  Tag,
+  Divider,
+  Box,
+  Flex,
 } from '@chakra-ui/react'
 import { useUser } from 'use-supabase'
 
-import { Layout, Icon, formatPrice } from '@qopnet/qopnet-ui'
+import {
+  formatBusinessOrderStatus,
+  formatDateTime,
+  formatRupiah,
+} from '@qopnet/util-format'
+import { Layout, Icon } from '@qopnet/qopnet-ui'
 import { useSWR } from '../../../utils'
 
 /**
@@ -116,84 +126,133 @@ export const OrdersContainer = ({ supplierParam, user }) => {
 }
 
 export const BusinessOrderItemsList = ({ businessOrderItems }) => {
-  const [status, setStatus] = useState('')
-  const [courier, setCourier] = useState('')
-  const bg = useColorModeValue('gray.200', 'gray.900')
-
-  console.log(`status`, status)
-  console.log(`businessOrderItems`, businessOrderItems)
   return (
-    <Table variant="simple">
-      <Thead>
-        <Tr>
-          <Th>No Pesanan</Th>
-          <Th>Pemesan</Th>
-          <Th>Produk</Th>
-          <Th>Subtotal</Th>
-          <Th>Status</Th>
-          <Th>Jasa Kirim</Th>
-          <Th>Aksi</Th>
-        </Tr>
-      </Thead>
-      {businessOrderItems.map((businessOrderItem) => {
+    <>
+      {businessOrderItems.map((businessOrderItem, index) => {
+        const address = businessOrderItem.businessOrder.shipmentAddress
+        const { city, state, street, zip, ...partialObject } = address
+        const subset = { street, city, state, zip }
+
+        const [businessOrderStatusText, statusColor] =
+          formatBusinessOrderStatus(businessOrderItem?.businessOrder?.status)
         return (
-          <Tbody>
-            <Tr
-              _hover={{
-                bg: bg,
-              }}
+          <Stack
+            key={businessOrderItem.id}
+            p={5}
+            border="2px solid"
+            borderColor="gray.200"
+            borderRadius="lg"
+          >
+            <Stack
+              direction={['column', 'column', 'row']}
+              align={['flex-start', 'flex-start', 'center']}
             >
-              <Td>{businessOrderItem.businessOrderId}</Td>
-              <Td>{businessOrderItem.businessOrder.owner.handle}</Td>
-              <Td display="flex" alignItems="center">
-                <Image
-                  src={businessOrderItem.supplierProduct.images[0]}
-                  w={20}
-                  h={20}
-                />
-                <Text w={40} ml={2}>
-                  {businessOrderItem.supplierProduct.name}
+              <HStack>
+                <Heading as="h2" size="sm">
+                  #{index + 1}
+                </Heading>
+                <Tag size="sm" colorScheme={statusColor}>
+                  {businessOrderStatusText}
+                </Tag>
+              </HStack>
+              <HStack>
+                <Tag size="sm">{businessOrderItem.id}</Tag>
+              </HStack>
+              <HStack>
+                <Icon name="users" />
+              </HStack>
+              <HStack>
+                <Text fontSize="sm">
+                  {businessOrderItem.businessOrder.owner.name}
                 </Text>
-                <Text w={10} ml={2}>
-                  x {businessOrderItem.quantity}
+              </HStack>
+              <HStack>
+                <Text fontSize="sm">
+                  {formatDateTime(businessOrderItem.updatedAt)}
                 </Text>
-              </Td>
-              <Td>
-                {formatPrice(businessOrderItem.businessOrder.totalPayment)}
-              </Td>
-              <Td>
-                <Select
-                  size="sm"
-                  placeholder="Select option"
-                  defaultValue={businessOrderItem.businessOrder.status}
-                  onChange={(event) => setStatus(event.target.value)}
-                >
-                  <option value="PAID">Dibayar</option>
-                  <option value="pack">Dikemas</option>
-                  <option value="arrived">Arrived</option>
-                </Select>
-              </Td>
-              <Td>
-                <Select
-                  placeholder="Select option"
-                  defaultValue="Deliveree"
-                  size="sm"
-                  onChange={(event) => setCourier(event.target.value)}
-                >
-                  <option value="Deliveree">Deliveree</option>
-                  <option value="Kurir Toko">Kurir Toko</option>
-                </Select>
-              </Td>
-              <Td>
-                <Button bg="orange" size="sm">
-                  Periksa Rincian
-                </Button>
-              </Td>
-            </Tr>
-          </Tbody>
+              </HStack>
+            </Stack>
+
+            <Divider />
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Box display="flex">
+                {businessOrderItem.supplierProduct?.images[0] && (
+                  <NextLink
+                    href={`/${businessOrderItem.supplier?.handle}/${businessOrderItem.supplierProduct?.slug}`}
+                    passHref
+                  >
+                    <Box as="a" className="next-image-container">
+                      <NextImage
+                        src={businessOrderItem.supplierProduct?.images[0]}
+                        key={businessOrderItem.supplierProduct?.slug}
+                        alt={businessOrderItem.supplierProduct?.name}
+                        layout="fixed"
+                        width={100}
+                        height={100}
+                      />
+                    </Box>
+                  </NextLink>
+                )}
+                <Stack justifyContent="center" ml="5">
+                  <NextLink
+                    href={`/${businessOrderItem.supplier?.handle}/${businessOrderItem.supplierProduct?.slug}`}
+                    passHref
+                  >
+                    <ChakraLink size="sm" fontWeight="bold">
+                      {businessOrderItem.supplierProduct?.name}
+                    </ChakraLink>
+                  </NextLink>
+                  <Text>
+                    {businessOrderItem.quantity} ×{' '}
+                    {formatRupiah(businessOrderItem.supplierProduct.price)}
+                  </Text>
+                </Stack>
+              </Box>
+              <Box display="flex">
+                <Box h="50px" mr={2}>
+                  <Divider orientation="vertical" colorScheme="red" />
+                </Box>
+                <Stack>
+                  <Text fontWeight="bold" size="sm">
+                    Kurir
+                  </Text>
+                  <Text fontSize="sm">Kurir toko</Text>
+                </Stack>
+              </Box>
+              <Box display="flex">
+                <Box h="50px" mr={2}>
+                  <Divider orientation="vertical" colorScheme="red" />
+                </Box>
+                <Stack justifyContent="center" border="medium">
+                  <Text fontWeight="bold" size="sm">
+                    Alamat
+                  </Text>
+                  <Box as="span" fontSize="sm">
+                    {Object.values(subset).join(',')}
+                  </Box>
+                </Stack>
+              </Box>
+            </Box>
+
+            <Box display="flex" justifyContent="flex-end">
+              <Button
+                // onClick={() =>
+                //   router.push(`/dashboard/orders/${businessOrderItem.id}`)
+                // }
+                size="sm"
+                colorScheme="orange"
+              >
+                Detail Pesanan
+              </Button>
+            </Box>
+          </Stack>
         )
       })}
-    </Table>
+    </>
   )
 }
 
