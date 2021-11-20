@@ -1,41 +1,44 @@
 import NextImage from 'next/image'
 import NextLink from 'next/link'
-// import {
-//   BusinessOrder,
-//   BusinessOrderItem,
-//   SupplierProduct,
-//   Supplier,
-// } from '@prisma/client'
 
 import {
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
+  Badge,
   Box,
-  chakra,
-  Alert,
-  AlertIcon,
-  Code,
-  OrderedList,
-  ListItem,
-  HStack,
-  Tag,
-  Link as ChakraLink,
+  Flex,
   Heading,
-  Divider,
+  Link as ChakraLink,
+  ListItem,
+  OrderedList,
   Stack,
+  Tag,
   Text,
-  useColorModeValue,
   useToast,
+  chakra,
+  Image,
+  Link,
 } from '@chakra-ui/react'
 
-import { formatBusinessOrderStatus } from '@qopnet/util-format'
 import {
-  calculateCart,
+  formatAddressComplete,
+  formatBusinessOrderStatus,
+} from '@qopnet/util-format'
+import {
   calculateSupplierProductItem,
   formatDateTime,
   formatRupiah,
 } from '@qopnet/util-format'
-import { UploadImageForm } from '.'
 
+import { UploadImageForm } from '.'
 import { requestToAPI } from '../utils/fetch'
+
+import parse from 'html-react-parser'
+
+import { mutate } from 'swr'
 
 export type BusinessOrderCardProps = {
   // businessOrder: BusinessOrder & {
@@ -45,19 +48,53 @@ export type BusinessOrderCardProps = {
   //   })[]
   // }
   businessOrder: any
-  index: number
 }
 
 export const BusinessOrderCard: React.FC<BusinessOrderCardProps> = ({
   businessOrder,
-  index,
 }) => {
-  const orderCardBackground = useColorModeValue('gray.50', 'gray.900')
-  const { totalCalculatedBill } = calculateCart(businessOrder)
-
   const [businessOrderStatusText, statusColor] = formatBusinessOrderStatus(
     businessOrder?.status
   )
+
+  const paymentInstructions = [
+    {
+      payment: 'ATM Permata',
+      instruction: [
+        'Pilih <strong>Transfer</strong>, lalu <strong>Transfer antar Rekening PermataBank</strong>',
+        'Masukkan <strong>nomor Virtual Account</strong>',
+        'Pilih <strong>Rekening</strong> yang akan di <strong>Debit</strong>',
+        '<strong>Konfirmasi</strong> dan selesaikan pembayaran',
+      ],
+    },
+    {
+      payment: 'ATM Bank Lain (Alto, Prima, ATM Bersama)',
+      instruction: [
+        'Pilih <strong>Transfer</strong>, lalu  <strong>Transfer antar Rekening PermataBank</strong>',
+        '(ATM Bersama Alto) Masukkan <strong>kode 013 + nomor Virtual Account</strong>',
+        '(Prima) Masukkan <strong>kode 013</strong>, lalu masukkan <strong> nomor Virtual Account</strong>',
+        '<strong>Konfirmasi</strong> dan selesaikan pembayaran',
+      ],
+    },
+    {
+      payment: 'Mobile Banking Permata',
+      instruction: [
+        'Buka  <strong>aplikasi Permata, pilih Transfer</strong>',
+        'Pilih <strong>Rekening PermataBank</strong>',
+        'Masukkan <strong>Rekening Asal & Virtual Account</strong>',
+        'Masukkan <strong>kode SMS/Token</strong> & transaksi selesai',
+      ],
+    },
+    {
+      payment: 'Internet Banking Permata',
+      instruction: [
+        'Login ke <strong>iBanking Permata, pilih Transfer</strong>',
+        'Pilih <strong>Rekening PermataBank</strong>',
+        'Masukkan <strong>Rekening Asal & Virtual Account</strong>',
+        'Masukkan <strong>kode SMS/Token</strong> & transaksi selesai',
+      ],
+    },
+  ]
 
   const toast = useToast()
 
@@ -71,11 +108,33 @@ export const BusinessOrderCard: React.FC<BusinessOrderCardProps> = ({
     }
 
     try {
+      mutate(
+        `/api/business/orders/${businessOrder.id}`,
+        (data) => {
+          return {
+            ...data,
+            businessOrder: {
+              ...data.businessOrder,
+              paymentRecord: {
+                ...data.businessOrder.paymentRecord,
+                proofImages: [
+                  ...data.businessOrder.paymentRecord.proofImages,
+                  formData.proofImages,
+                ],
+              },
+            },
+          }
+        },
+        false
+      )
+
       const data = await requestToAPI(
         'PATCH',
         `/api/payments/records/proof`,
         formData
       )
+
+      mutate(`/api/business/orders/${businessOrder.id}`)
 
       if (!data.error) {
         toast({
@@ -89,170 +148,284 @@ export const BusinessOrderCard: React.FC<BusinessOrderCardProps> = ({
   }
 
   return (
-    <Stack key={businessOrder.id} p={3} rounded="md" bg={orderCardBackground}>
+    <Stack direction={{ base: 'column', lg: 'row' }}>
       <Stack
-        direction={['column', 'column', 'row']}
-        align={['flex-start', 'flex-start', 'center']}
+        p={5}
+        border="2px solid"
+        borderColor="gray.200"
+        borderRadius="lg"
+        spacing={8}
+        w={{ lg: '70%' }}
+        mr={{ lg: 5 }}
+        mb={{ base: 5, lg: 0 }}
+        h="max-content"
       >
-        <HStack>
-          <Heading as="h2" size="sm">
-            #{index + 1}
-          </Heading>
-          <Tag size="sm" colorScheme={statusColor}>
-            {businessOrderStatusText}
-          </Tag>
-        </HStack>
-        <HStack>
-          <Code fontSize="xs">{businessOrder.id}</Code>
-        </HStack>
-        <HStack>
+        <Stack
+          direction={['column', 'column', 'row']}
+          align={['flex-start', 'flex-start', 'center']}
+        >
+          <Tag size="sm">{businessOrder.id}</Tag>
           <Text fontSize="sm">{formatDateTime(businessOrder.updatedAt)}</Text>
-        </HStack>
-      </Stack>
+        </Stack>
 
-      <Divider />
+        <Stack
+          className="business-order"
+          direction={['column', 'column', 'row']}
+        >
+          <Stack className="business-order-items" spacing={3}>
+            {businessOrder.businessOrderItems.map((item, index) => {
+              const { calculatedPrice, subTotalCalculatedPrice } =
+                calculateSupplierProductItem(item)
 
-      <Stack
-        pt={3}
-        className="business-order"
-        spacing={5}
-        direction={['column', 'column', 'row']}
-        justify="space-between"
-      >
-        <Stack className="business-order-items" spacing={3}>
-          {businessOrder.businessOrderItems.map((item, index) => {
-            const { calculatedPrice, subTotalCalculatedPrice } =
-              calculateSupplierProductItem(item)
-
-            return (
-              <Stack
-                key={item?.id || index}
-                direction={['column', 'column', 'row']}
-              >
-                {item.supplierProduct?.images[0] && (
-                  <NextLink
-                    href={`/${item.supplier?.handle}/${item.supplierProduct?.slug}`}
-                    passHref
-                  >
-                    <Box as="a" className="next-image-container">
-                      <NextImage
-                        src={item.supplierProduct?.images[0]}
-                        key={item.supplierProduct?.slug}
-                        alt={item.supplierProduct?.name}
-                        layout="fixed"
-                        width={50}
-                        height={50}
-                      />
-                    </Box>
-                  </NextLink>
-                )}
-
-                <Stack spacing={1}>
-                  <Stack
-                    align={['flex-start', 'flex-start', 'center']}
-                    direction={['column', 'column', 'row']}
-                    spacing={1}
-                  >
+              return (
+                <Stack
+                  key={item?.id || index}
+                  direction={['column', 'column', 'row']}
+                >
+                  {item.supplierProduct?.images[0] && (
                     <NextLink
                       href={`/${item.supplier?.handle}/${item.supplierProduct?.slug}`}
                       passHref
                     >
-                      <ChakraLink size="sm" fontWeight="bold">
-                        {item.supplierProduct?.name}
-                      </ChakraLink>
+                      <Box as="a" className="next-image-container">
+                        <NextImage
+                          src={item.supplierProduct?.images[0]}
+                          key={item.supplierProduct?.slug}
+                          alt={item.supplierProduct?.name}
+                          layout="fixed"
+                          width={100}
+                          height={100}
+                        />
+                      </Box>
                     </NextLink>
-                    {item.supplier?.name && (
-                      <Text fontSize="sm">
-                        <chakra.span> dari </chakra.span>
-                        <NextLink href={`/${item.supplier?.handle}`} passHref>
-                          <ChakraLink>{item.supplier?.name}</ChakraLink>
-                        </NextLink>
-                        {item.supplier?.addresses[0]?.city && (
-                          <chakra.span fontSize="sm">
-                            <chakra.span> di </chakra.span>
-                            <chakra.span fontWeight="bold">
-                              {item.supplier?.addresses[0]?.city}
-                            </chakra.span>
-                          </chakra.span>
-                        )}
-                      </Text>
-                    )}
+                  )}
+
+                  <Stack spacing={1} alignSelf="center">
+                    <Stack
+                      align={['flex-start', 'flex-start', 'center']}
+                      direction={['column', 'column', 'row']}
+                      spacing={1}
+                    >
+                      <NextLink
+                        href={`/${item.supplier?.handle}/${item.supplierProduct?.slug}`}
+                        passHref
+                      >
+                        <ChakraLink size="sm" fontWeight="bold">
+                          {item.supplierProduct?.name}
+                        </ChakraLink>
+                      </NextLink>{' '}
+                      {item.supplier?.name && (
+                        <Text fontSize="sm">
+                          <chakra.span> dari </chakra.span>
+                          <NextLink href={`/${item.supplier?.handle}`} passHref>
+                            <ChakraLink>{item.supplier?.name}</ChakraLink>
+                          </NextLink>
+                        </Text>
+                      )}
+                    </Stack>
+                    <Text>
+                      {item.quantity} barang × {formatRupiah(calculatedPrice)} ={' '}
+                      {formatRupiah(subTotalCalculatedPrice)}
+                    </Text>
                   </Stack>
-                  <Text>
-                    {item.quantity} barang × {formatRupiah(calculatedPrice)} ={' '}
-                    {formatRupiah(subTotalCalculatedPrice)}
-                  </Text>
                 </Stack>
-              </Stack>
-            )
-          })}
+              )
+            })}
+          </Stack>
         </Stack>
 
-        <Stack
-          className="businessOrder-total"
-          textAlign="right"
-          alignSelf="flex-end"
-        >
-          <Divider display={['block', 'block', 'none']} />
+        <Stack spacing={2}>
+          <Heading size="md">Detail Pembayaran</Heading>
           <Box>
-            <Heading as="h4" size="sm">
-              Total Belanja
-            </Heading>
-            <Text fontSize="xl">{formatRupiah(totalCalculatedBill)}</Text>
+            <Text color="gray" fontSize="sm">
+              Metode Pembayaran
+            </Text>
+            <Text fontSize="lg">{businessOrder?.paymentMethod?.name}</Text>
           </Box>
-          {/* <Button size="sm" colorScheme="orange">
-                    Detail Transaksi
-                  </Button> */}
+
+          {businessOrder?.paymentMethod?.paymentCategory ===
+            'TRANSFER_VIRTUAL_ACCOUNT' && (
+            <Box>
+              <Text color="gray" fontSize="sm">
+                Nomor Virtual Account
+              </Text>
+              <Text fontSize="lg">
+                {businessOrder?.virtualAccountNumber?.vaNumber}
+              </Text>
+            </Box>
+          )}
+
+          {businessOrder?.paymentMethod?.paymentCategory ===
+            'TRANSFER_MANUAL' && (
+            <>
+              <Box>
+                <Text color="gray" fontSize="sm">
+                  Nomor Rekening
+                </Text>
+                <Text fontSize="lg">
+                  {businessOrder?.paymentMethod?.accountNumber}
+                </Text>
+              </Box>
+              <Box>
+                <Text color="gray" fontSize="sm">
+                  Nama Pemilik Rekening
+                </Text>
+                <Text fontSize="lg">
+                  {businessOrder?.paymentMethod?.accountHolderName}
+                </Text>
+              </Box>
+            </>
+          )}
+
+          <Box>
+            <Text color="gray" fontSize="sm">
+              Rincian Pembayaran
+            </Text>
+            <Flex direction="row">
+              <Stack spacing={0}>
+                <Text fontSize="lg">Total Belanja</Text>
+                <Text fontSize="lg">Biaya Pengiriman</Text>
+                <Text fontSize="lg">Diskon Biaya Pengiriman</Text>
+                <Text fontSize="lg" fontWeight="bold">
+                  Total Pembayaran
+                </Text>
+              </Stack>
+              <Stack alignItems="flex-end" flex={1} spacing={0}>
+                <Text fontSize="lg">
+                  {formatRupiah(businessOrder?.totalPrice)}
+                </Text>
+                <Text fontSize="lg">
+                  {formatRupiah(businessOrder?.totalShippingCost)}
+                </Text>
+                <Text fontSize="lg">
+                  {formatRupiah(businessOrder?.totalShippingDiscount)}
+                </Text>
+                <Text fontSize="lg" fontWeight="bold">
+                  {formatRupiah(businessOrder?.totalBillPayment)}
+                </Text>
+              </Stack>
+            </Flex>
+          </Box>
         </Stack>
+
+        <Badge
+          fontSize="lg"
+          p={3}
+          w="max-content"
+          colorScheme={statusColor}
+          borderRadius="lg"
+        >
+          {businessOrderStatusText}
+        </Badge>
       </Stack>
-      {businessOrder?.status === 'WAITING_FOR_PAYMENT' && (
-        <Stack>
-          <Alert status="info">
-            <AlertIcon />
-            Selesaikan pembayaran dengan mentransfer ke detail berikut:
-          </Alert>
+
+      <Stack
+        w={{ lg: '30%' }}
+        p={5}
+        border="2px solid"
+        borderColor="gray.200"
+        borderRadius="lg"
+        spacing={8}
+        h="max-content"
+      >
+        <Box>
+          <Heading size="md" mb={2}>
+            Alamat Pengiriman
+          </Heading>
+          <Text>{formatAddressComplete(businessOrder?.shipmentAddress)}</Text>
+        </Box>
+
+        {businessOrder?.paymentMethod?.paymentCategory ===
+          'TRANSFER_VIRTUAL_ACCOUNT' && (
           <Box>
-            <Text>Nomor dan nama pemilik rekening:</Text>
-            <Text fontSize="lg" fontWeight="bold">
-              {businessOrder?.paymentMethod?.accountNumber}
-            </Text>
-            <Text>{businessOrder?.paymentMethod?.accountHolderName}</Text>
+            <Heading size="md" mb={2}>
+              Petunjuk Pembayaran:
+            </Heading>
+            <Accordion allowToggle>
+              {paymentInstructions.map(({ payment, instruction }) => {
+                return (
+                  <AccordionItem>
+                    <h2>
+                      <AccordionButton>
+                        <Box flex="1" textAlign="left">
+                          {payment}
+                        </Box>
+                        <AccordionIcon />
+                      </AccordionButton>
+                    </h2>
+                    <AccordionPanel pb={4}>
+                      <OrderedList>
+                        {instruction.map((step) => {
+                          return <ListItem>{parse(step)}</ListItem>
+                        })}
+                      </OrderedList>
+                    </AccordionPanel>
+                  </AccordionItem>
+                )
+              })}
+            </Accordion>
           </Box>
-          <Box>
-            <Text>Total pembayaran:</Text>
-            <Text fontSize="lg" fontWeight="bold">
-              {formatRupiah(businessOrder?.paymentRecord?.amountDue)}
-            </Text>
-          </Box>
-          <Stack
-            direction={['column', null, 'row']}
-            justifyContent="space-between"
-          >
-            <Box fontSize="xs">
-              <Text>Penting untuk:</Text>
+        )}
+
+        {businessOrder?.paymentMethod?.paymentCategory ===
+          'TRANSFER_MANUAL' && (
+          <>
+            <Box>
+              <Heading size="md" mb={2}>
+                Penting:
+              </Heading>
+
               <OrderedList>
                 <ListItem>
-                  Transfer tepat hingga <b>3 digit terakhir</b>
+                  Transfer tepat hingga <strong>3 digit terakhir</strong>
                 </ListItem>
                 <ListItem>
-                  Hanya disarankan untuk transfer melalui rekening langsung
+                  Hanya disarankan untuk transfer melalui{' '}
+                  <strong>rekening langsung</strong>
                 </ListItem>
                 <ListItem>
                   Menunggu pembayaran terkonfirmasi dari kami setelah transfer
-                  dalam waktu 2×24 jam
+                  dalam waktu <strong>2×24 jam</strong>
                 </ListItem>
               </OrderedList>
             </Box>
-            <Box>
+
+            <Stack alignItems="flex-start">
+              <Heading size="md" mb={2}>
+                Upload Bukti Pembayaran
+              </Heading>
+              <Flex flexWrap="wrap" sx={{ gap: '10px' }}>
+                {businessOrder.paymentRecord.proofImages.map(
+                  (imageUrl, index) => {
+                    return (
+                      <Link
+                        target="_blank"
+                        rel="noreferrer"
+                        href={imageUrl}
+                        key={index}
+                        display="block"
+                      >
+                        <Image
+                          border="1px solid black"
+                          h={120}
+                          w={120}
+                          src={imageUrl}
+                          alt={`Gambar bukti pembayaran ${index}`}
+                        />
+                      </Link>
+                    )
+                  }
+                )}
+              </Flex>
               <UploadImageForm
                 appendImageUrl={(imageUrl) =>
                   handleReceiptUpload(imageUrl, businessOrder.paymentRecordId)
                 }
               />
-            </Box>
-          </Stack>
-        </Stack>
-      )}
+            </Stack>
+          </>
+        )}
+      </Stack>
     </Stack>
   )
 }

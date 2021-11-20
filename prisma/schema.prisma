@@ -100,15 +100,17 @@ model Address {
   countryCode   String? // Save as ID, not Indonesia
 
   // Relations
-  profileId              String?
-  profile                Profile?        @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  wholesalerId           String?
-  wholesaler             Wholesaler?     @relation(fields: [wholesalerId], references: [id])
-  supplierId             String?
-  supplier               Supplier?       @relation(fields: [supplierId], references: [id])
-  merchantId             String?
-  merchant               Merchant?       @relation(fields: [merchantId], references: [id])
-  shipmentBusinessOrders BusinessOrder[]
+  profileId    String?
+  profile      Profile?    @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  wholesalerId String?
+  wholesaler   Wholesaler? @relation(fields: [wholesalerId], references: [id])
+  supplierId   String?
+  supplier     Supplier?   @relation(fields: [supplierId], references: [id])
+  merchantId   String?
+  merchant     Merchant?   @relation(fields: [merchantId], references: [id])
+
+  // Relations
+  businessOrders BusinessOrder[]
 
   // Timestamp
   createdAt DateTime @default(now())
@@ -158,7 +160,7 @@ model Supplier {
   avatarUrl         String?
   nationalTax       String?
   certificationFile String?
-  category          SupplierCategory? @default(PRODUCER)
+  category          SupplierCategory?
 
   // Relations
   ownerId            String?
@@ -222,14 +224,16 @@ model SupplierProduct {
 
   // Relations
   ownerId            String?
-  owner              Profile?            @relation(fields: [ownerId], references: [id])
+  owner              Profile?                     @relation(fields: [ownerId], references: [id])
   supplierId         String?
-  supplier           Supplier?           @relation(fields: [supplierId], references: [id])
+  supplier           Supplier?                    @relation(fields: [supplierId], references: [id])
   businessOrderItems BusinessOrderItem[]
+  couriers           CouriersOnSupplierProducts[]
 
   // Timestamp
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+
 
   @@map(name: "supplier_products")
 }
@@ -368,51 +372,29 @@ model FundBenefactor {
 // -----------------------------------------------------------------------------
 // BUSINESS ORDER
 
-enum OrderStatus {
-  // order is still a cart
-  DRAFT
+enum BusinessOrderStatus {
+  // Order is still a cart
+  DRAFT // "Keranjang Belanja"
 
-  // order is waiting to be paid by buyer
-  WAITING_FOR_PAYMENT
+  // Order is waiting to be paid by buyer
+  WAITING_FOR_PAYMENT // "Menunggu Pembayaran"
 
-  // payment has been made, but still in process
-  // PAYMENT_IN_PROCESS
+  // Payment has been made, but still in process or partially paid
+  PAYMENT_IN_PROCESS // "Pembayaran Diproses"
 
-  // order has been paid, confirmed by wholesaler/supplier
-  PAID
+  // Order has been paid, confirmed by wholesaler/supplier
+  PAID // "Telah Dibayar"
 
-  // waiting confirmation from wholesaler/supplier
-  WAITING_FOR_CONFIRMATION
+  // Should be before PAID
+  CANCELED // "Dibatalkan"
 
-  // supplier processed order internally
-  PROCESSED
-
-  // supplier waiting for pickup by courier
-  WAITING_FOR_PICKUP
-
-  // supplier product is on delivery by courier
-  ONDELIVERY
-  // ON_DELIVERY
-
-  // supplier product is delivered to shipment address
-  DELIVERED
-
-  // confirmed by recipient
-  CONFIRMED
-
-  // confirmed, product arrived but something wrong, include lost
-  COMPLAINED
-
-  // before PAID | PROCESSED | ONDELIVERY
-  CANCELED
-
-  // somewhere after PAID
-  REFUNDED
+  // Should be after PAID
+  REFUNDED // "Uang dikembalikan"
 }
 
 model BusinessOrder {
-  id     String       @id @default(cuid())
-  status OrderStatus?
+  id     String               @id @default(cuid())
+  status BusinessOrderStatus?
 
   // Relation: Profile
   ownerId String?
@@ -424,14 +406,6 @@ model BusinessOrder {
   // Relation: Shipment Address
   shipmentAddress   Address? @relation(fields: [shipmentAddressId], references: [id])
   shipmentAddressId String?
-
-  // Relation: Shipment Courier
-  shipmentCourier   Courier? @relation(fields: [shipmentCourierId], references: [id])
-  shipmentCourierId String?
-
-  // Relation: Shipment CourierVehicle
-  shipmentCourierVehicle   CourierVehicle? @relation(fields: [shipmentCourierVehicleId], references: [id])
-  shipmentCourierVehicleId String?
 
   // Relation: PaymentMethod
   paymentMethod   PaymentMethod? @relation(fields: [paymentMethodId], references: [id])
@@ -460,8 +434,35 @@ model BusinessOrder {
   @@map(name: "business_orders")
 }
 
+enum BusinessOrderItemStatus {
+  // Waiting for confirmation from Supplier
+  WAITING_FOR_CONFIRMATION // "Menunggu Konfirmasi Toko"
+
+  // Supplier processed the BusinessOrderItem
+  IN_PROCESS // "Sedang diproses"
+
+  // Supplier waiting for pickup by Courier
+  WAITING_FOR_PICKUP // "Menunggu penjemputan kurir"
+
+  // SupplierProduct is on delivery by Courier
+  ON_DELIVERY // "Dalam pengiriman"
+
+  // SupplierProduct is delivered to shipment address
+  DELIVERED // "Telah sampai dikirim"
+
+  // Confirmed by recipient
+  CONFIRMED // "Telah dikonfirmasi"
+
+  // Confirmed, product arrived but something wrong, include lost
+  COMPLAINED // "Terdapat komplain"
+
+  // Should be before IN_PROCESS
+  CANCELED // "Dibatalkan"
+}
+
 model BusinessOrderItem {
-  id String @id @default(cuid())
+  id     String                   @id @default(cuid())
+  status BusinessOrderItemStatus?
 
   quantity Int @default(1)
 
@@ -477,6 +478,14 @@ model BusinessOrderItem {
   supplierId String
   supplier   Supplier @relation(fields: [supplierId], references: [id])
 
+  // Relation: Courier
+  courierId String?
+  courier   Courier? @relation(fields: [courierId], references: [id])
+
+  // Relation: CourierVehicle
+  courierVehicleId String?
+  courierVehicle   CourierVehicle? @relation(fields: [courierVehicleId], references: [id])
+
   // Timestamp
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -490,17 +499,29 @@ model BusinessOrderItem {
 model Courier {
   id String @id @default(cuid())
 
-  name String // Courier name: Lalamove, Deliveree, Mas Kargo
+  name String // Courier name: Kurir Toko, Lalamove, Deliveree, Mas Kargo
 
   // Relations
-  businessOrders  BusinessOrder[]
-  courierVehicles CourierVehicle[]
+  businessOrderItems BusinessOrderItem[]
+  courierVehicles    CourierVehicle[]
+  supplierProducts   CouriersOnSupplierProducts[]
 
   // Timestamp
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
   @@map(name: "couriers")
+}
+
+model CouriersOnSupplierProducts {
+  courier   Courier @relation(fields: [courierId], references: [id])
+  courierId String // relation scalar field (used in the `@relation` attribute above)
+
+  supplierProduct   SupplierProduct @relation(fields: [supplierProductId], references: [id])
+  supplierProductId String // relation scalar field (used in the `@relation` attribute above)
+
+  @@id([courierId, supplierProductId])
+  @@map(name: "_couriers_on_suppplier_products")
 }
 
 model CourierVehicle {
@@ -515,8 +536,8 @@ model CourierVehicle {
   maxCargoDimensionWidth      Int? // in cm
   maxCargoDimensionCubicMeter Float? // in m^3
 
-  // Relation: BusinessOrder
-  businessOrders BusinessOrder[]
+  // Relation: BusinessOrderItem
+  businessOrderItems BusinessOrderItem[]
 
   // Relation: Courier
   courierId String?

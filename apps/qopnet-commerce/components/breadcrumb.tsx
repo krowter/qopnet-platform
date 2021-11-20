@@ -4,6 +4,7 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   Link as ChakraLink,
+  Text,
 } from '@chakra-ui/react'
 
 import { Icon } from '@qopnet/qopnet-ui'
@@ -40,7 +41,33 @@ export const BreadcrumbOrders = () => {
       </BreadcrumbItem>
       <BreadcrumbItem>
         <BreadcrumbLink as={NextLink} href="/dashboard/orders" passHref>
-          <ChakraLink>Orders</ChakraLink>
+          <ChakraLink>Semua Pesanan</ChakraLink>
+        </BreadcrumbLink>
+      </BreadcrumbItem>
+    </Breadcrumb>
+  )
+}
+
+export const BreadcrumbOrder = ({ businessOrderParam }) => {
+  return (
+    <Breadcrumb separator={<Icon name="chevron-right" />}>
+      <BreadcrumbItem>
+        <BreadcrumbLink as={NextLink} href="/dashboard" passHref>
+          <ChakraLink>Dashboard</ChakraLink>
+        </BreadcrumbLink>
+      </BreadcrumbItem>
+      <BreadcrumbItem>
+        <BreadcrumbLink as={NextLink} href="/dashboard/orders" passHref>
+          <ChakraLink>Semua Pesanan</ChakraLink>
+        </BreadcrumbLink>
+      </BreadcrumbItem>
+      <BreadcrumbItem>
+        <BreadcrumbLink
+          as={NextLink}
+          href={`/dashboard/orders/${businessOrderParam}`}
+          passHref
+        >
+          <ChakraLink>{businessOrderParam}</ChakraLink>
         </BreadcrumbLink>
       </BreadcrumbItem>
     </Breadcrumb>

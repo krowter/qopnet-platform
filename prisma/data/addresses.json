@@ -6,7 +6,8 @@
     "state": "DKI Jakarta",
     "zip": "12560",
     "countryCode": "ID",
-    "profileId": "ckr86vmxt005010pjeh4mqs6n"
+    "profileId": "ckr86vmxt005010pjeh4mqs6n",
+    "supplierId": "ckrqopnet0001swpjglh6i6nl"
   },
   {
     "street": "Jl. BSD Raya Utama No. 1",
@@ -15,6 +16,7 @@
     "state": "Banten",
     "zip": "15345",
     "countryCode": "ID",
-    "profileId": "ckr86vmxt005010pjeh4mqs6n"
+    "profileId": "ckr86vmxt005010pjeh4mqs6n",
+    "supplierId": "ckrzfccqz0001swpjglh6i6nl"
   }
 ]

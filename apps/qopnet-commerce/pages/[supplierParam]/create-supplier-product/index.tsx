@@ -21,7 +21,7 @@ export const CreateSupplierProductPage = () => {
   return (
     <Layout pt={10}>
       {user && supplierParam && (
-        <SupplierProductForm supplierParam={supplierParam} />
+        <SupplierProductForm supplierParam={supplierParam} formType="create" />
       )}
     </Layout>
   )

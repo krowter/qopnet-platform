@@ -4,7 +4,7 @@
 import { useState } from 'react'
 import NextLink from 'next/link'
 import NextImage from 'next/image'
-import { useRouter } from 'next/router'
+import router, { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
 import { SupplierProduct, Supplier, Profile, Address } from '@prisma/client'
 import { Decimal } from '@prisma/client/runtime'
@@ -42,6 +42,7 @@ import {
   formatWeight,
 } from '@qopnet/util-format'
 import { Icon } from '../icon/icon'
+import { EditIcon } from '@chakra-ui/icons'
 
 const env =
   process.env.NEXT_PUBLIC_ENV === 'production'
@@ -302,6 +303,7 @@ export const SupplierProductDetail = ({
     length: 0,
   }
   const hasDimension = width || height || length
+    const user = useUser()
 
   return (
     <Stack spacing={20} align={!isDesktop ? 'center' : ''}>
@@ -364,6 +366,8 @@ export const SupplierProductDetail = ({
 
         <Stack id="product-info-sections" spacing={5} w="100%" maxW="500px">
           <Stack id="product-info-name-price">
+            {user && user?.id === product?.supplier?.owner?.userId && (<Button colorScheme="orange" w="max-content" mb={2} leftIcon={<EditIcon/>} onClick={() => router.push(`/${product?.supplier?.handle}/${product?.slug}/edit-supplier-product`)}>Edit Produk</Button>)}
+            
             <Heading as="h2" size="lg">
               {product?.name}
             </Heading>

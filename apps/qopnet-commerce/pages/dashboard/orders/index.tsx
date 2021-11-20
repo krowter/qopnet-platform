@@ -2,12 +2,22 @@ import NextLink from 'next/link'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
-import { HStack, Heading, Spinner, Stack, Text, Button } from '@chakra-ui/react'
+import {
+  HStack,
+  Heading,
+  Spinner,
+  Stack,
+  Text,
+  Button,
+  Link as ChakraLink,
+} from '@chakra-ui/react'
 import { useUser } from 'use-supabase'
 
 import { Layout } from '@qopnet/qopnet-ui'
-import { BreadcrumbOrders, BusinessOrderCard } from '../../../components'
+
+import { BreadcrumbOrders } from '../../../components'
 import { useSWR } from '../../../utils'
+import { SimpleBusinessOrderCard } from '../../../components'
 
 /**
  * /dashboard/businessOrders
@@ -38,7 +48,7 @@ export const OrdersContainer = ({ user }) => {
 
       <BreadcrumbOrders />
       <Stack spacing={10}>
-        <Heading>Dasbor daftar pesanan saya</Heading>
+        <Heading>Semua Pesanan Saya</Heading>
         {error && !data && <Text>Gagal memuat daftar pesanan saya</Text>}
         {!error && !data && (
           <HStack>
@@ -68,13 +78,12 @@ export const BusinessOrdersList = ({ businessOrders }) => {
   return (
     <Stack spacing={5}>
       {businessOrders.map((businessOrder, index) => (
-        <BusinessOrderCard
+        <SimpleBusinessOrderCard
           businessOrder={businessOrder}
           key={businessOrder.id}
           index={index}
         />
       ))}
-      {/* <Text as="pre">{JSON.stringify(businessOrders, null, 2)}</Text> */}
     </Stack>
   )
 }

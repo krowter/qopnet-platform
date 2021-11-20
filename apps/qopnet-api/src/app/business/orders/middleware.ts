@@ -33,6 +33,8 @@ export const getMyAllBusinessOrders = async (req, res) => {
                   },
                 },
               },
+              courier: true,
+              courierVehicle: true,
             },
           },
           shipmentAddress: true,
@@ -40,7 +42,7 @@ export const getMyAllBusinessOrders = async (req, res) => {
           paymentRecord: true,
           virtualAccountNumber: true,
         },
-        orderBy: [{ createdAt: 'asc' }],
+        orderBy: { updatedAt: 'desc' },
       })
 
     res.send({
@@ -53,6 +55,107 @@ export const getMyAllBusinessOrders = async (req, res) => {
   } catch (error) {
     res.status(500).send({
       message: 'Get my all business orders failed',
+      error,
+    })
+  }
+}
+
+// Get one paid business orders item by handle supplier and businessOrderItemId
+export const getOnePaidBusinessOrderItem = async (req, res) => {
+  const { supplierHandle, businessOrderItemId } = req.params
+
+  try {
+    const supplier = await prisma.supplier.findUnique({
+      where: {
+        handle: supplierHandle,
+      },
+    })
+
+    if (!supplier) throw new Error('Supplier not found')
+
+    const paidBusinessOrderItem = await prisma.businessOrderItem.findFirst({
+      where: {
+        id: businessOrderItemId,
+        supplier: {
+          handle: supplierHandle,
+        },
+        businessOrder: {
+          status: 'PAID',
+        },
+      },
+      include: {
+        businessOrder: {
+          include: {
+            shipmentAddress: true,
+          },
+        },
+        supplierProduct: {
+          include: {
+            couriers: { include: { courier: true } },
+          },
+        },
+        supplier: true,
+        courier: true,
+        courierVehicle: true,
+      },
+    })
+
+    res.send({
+      message:
+        'Get one paid business orders item by supplier handle and business order id success',
+      supplier,
+      paidBusinessOrderItem,
+    })
+  } catch (error) {
+    res.status(500).send({
+      message:
+        'Get one paid business orders item by supplier handle business order id failed',
+      error,
+    })
+  }
+}
+
+// Get all paid business orders items by handle supplier
+export const getAllPaidBusinessOrderItems = async (req, res) => {
+  const { supplierHandle } = req.params
+
+  try {
+    const supplier = await prisma.supplier.findUnique({
+      where: {
+        handle: supplierHandle,
+      },
+    })
+
+    const paidBusinessOrderItems = await prisma.businessOrderItem.findMany({
+      where: {
+        supplier: {
+          handle: supplierHandle,
+        },
+        businessOrder: {
+          status: 'PAID',
+        },
+      },
+      include: {
+        businessOrder: {
+          include: {
+            owner: true,
+            shipmentAddress: true,
+          },
+        },
+        supplierProduct: true,
+        supplier: true,
+      },
+      orderBy: { updatedAt: 'desc' },
+    })
+
+    res.send({
+      message: 'Get all paid business orders items by supplier handle success',
+      supplier,
+      paidBusinessOrderItems,
+    })
+  } catch (error) {
+    res.status(500).send({
+      message: 'Get all paid business orders items by supplier handle failed',
       error,
     })
   }
@@ -79,12 +182,19 @@ export const getMyCart = async (req, res) => {
     const businessOrder: Partial<BusinessOrder> & {
       businessOrderItems: BusinessOrderItem[]
     } = await prisma.businessOrder.findFirst({
-      where: { ownerId, status: 'DRAFT' },
+      where: {
+        ownerId,
+        status: 'DRAFT',
+      },
       include: {
         owner: true,
         businessOrderItems: {
           include: {
-            supplierProduct: true,
+            supplierProduct: {
+              include: {
+                couriers: { include: { courier: true } },
+              },
+            },
             supplier: {
               include: {
                 addresses: {
@@ -97,7 +207,6 @@ export const getMyCart = async (req, res) => {
           },
         },
         shipmentAddress: true,
-        shipmentCourier: true,
         paymentMethod: true,
         paymentRecord: true,
         virtualAccountNumber: true,
@@ -214,7 +323,11 @@ export const updateMyCart = async (req, res) => {
           include: {
             businessOrderItems: {
               include: {
-                supplierProduct: true,
+                supplierProduct: {
+                  include: {
+                    couriers: { include: { courier: true } },
+                  },
+                },
                 supplier: {
                   include: {
                     addresses: {
@@ -224,6 +337,8 @@ export const updateMyCart = async (req, res) => {
                     },
                   },
                 },
+                courier: true,
+                courierVehicle: true,
               },
             },
           },
@@ -478,53 +593,34 @@ export const patchMyCartAddress = async (req, res) => {
   }
 }
 
-// Patch my cart courier
-export const patchMyCartCourier = async (req, res) => {
+// Patch one BusinessOrderItem's Courier
+export const patchOneBusinessOrderItemCourier = async (req, res) => {
   const ownerId = req.profile.id
-  const isCartExist = req.isCartExist
-  const businessOrder = req.businessOrder
+  const businessOrderItem = req.businessOrderItem
   const formData = req.body
 
-  if (isCartExist) {
-    try {
-      const updatedCart = await prisma.businessOrder.update({
-        where: {
-          id: businessOrder.id,
-        },
-        include: {
-          shipmentAddress: true,
-          shipmentCourier: true,
-          paymentMethod: true,
-          paymentRecord: true,
-          virtualAccountNumber: true,
-        },
-        data: {
-          shipmentCourierId: formData.id, // Patch
-        },
-      })
+  try {
+    const updatedCart = await prisma.businessOrderItem.update({
+      where: {
+        id: businessOrderItem.id,
+      },
+      data: {
+        courierId: formData.id, // Patch
+      },
+    })
 
-      res.status(200).json({
-        message: 'Patch my cart courier success',
-        ownerId,
-        isCartExist,
-        formData,
-        businessOrder: updatedCart,
-      })
-    } catch (error) {
-      res.status(400).json({
-        message:
-          'Patch my cart courier failed, might because courier id is invalid',
-        error,
-        ownerId,
-        isCartExist,
-        formData,
-      })
-    }
-  } else {
-    res.status(400).json({
-      message: 'Patch my cart courier failed because cart is not exist',
+    res.status(200).json({
+      message: 'Patch one business order item courier success',
       ownerId,
-      isCartExist,
+      formData,
+      businessOrder: updatedCart,
+    })
+  } catch (error) {
+    res.status(400).json({
+      message:
+        'Patch one business order item courier failed, might because courier id is invalid',
+      error,
+      ownerId,
       formData,
     })
   }
@@ -592,17 +688,12 @@ export const processMyOrder = async (req, res) => {
        * This should not require any formData or req.body
        * But still need to check if these fields are available:
        * - shipmentAddress
-       * - shipmentCourier
        * - paymentMethod
        * Then finally:
        * - Change the status to WAITING_FOR_PAYMENT
        * - Create a payment record to be completed later
        */
-      if (
-        businessOrder.shipmentAddressId &&
-        businessOrder.shipmentCourierId &&
-        businessOrder.paymentMethodId
-      ) {
+      if (businessOrder.shipmentAddressId && businessOrder.paymentMethodId) {
         if (businessOrder.paymentMethod.paymentCategory === 'TRANSFER_MANUAL') {
           processTransferManual(req, res, formData, businessOrder)
         } else if (
@@ -628,7 +719,6 @@ export const processMyOrder = async (req, res) => {
           isCartExist,
           fields: {
             shipmentAddressId: businessOrder.shipmentAddressId,
-            shipmentCourierId: businessOrder.shipmentCourierId,
             paymentMethodId: businessOrder.paymentMethodId,
           },
           businessOrder,
@@ -724,67 +814,84 @@ const processTransferVirtualAccount = async (
     })
   }
 
+  const billAmount = formData?.billAmount || formData?.totalCalculatedBill
+
+  const virtualAccountNumber =
+    '7301' +
+    req.profile.phone.substr(
+      req.profile.phone.length - 12,
+      req.profile.phone.length
+    )
+
   try {
-    const billAmount = formData?.billAmount || formData?.totalCalculatedBill
+    const unpaidOrder = await prisma.virtualAccountNumber.findFirst({
+      where: {
+        vaNumber: virtualAccountNumber,
+        bussinessOrder: {
+          status: 'WAITING_FOR_PAYMENT',
+        },
+      },
+    })
 
-    const virtualAccountNumber =
-      '7301' +
-      req.profile.phone.substr(
-        req.profile.phone.length - 12,
-        req.profile.phone.length
-      )
+    if (unpaidOrder) throw new Error('Unpaid order found')
 
-    const createdVirtualAccountNumber =
-      await prisma.virtualAccountNumber.create({
+    try {
+      const createdVirtualAccountNumber =
+        await prisma.virtualAccountNumber.create({
+          data: {
+            vaNumber: virtualAccountNumber,
+            instCode: '7301',
+            ownerId: req.profile.id,
+            bussinessOrderId: businessOrder.id,
+          },
+        })
+
+      const updatedCart = await prisma.businessOrder.update({
+        where: {
+          id: businessOrder.id,
+        },
+        include: {
+          paymentMethod: true,
+          paymentRecord: true,
+          virtualAccountNumber: true,
+        },
         data: {
-          vaNumber: virtualAccountNumber,
-          instCode: '7301',
-          ownerId: req.profile.id,
-          bussinessOrderId: businessOrder.id,
+          status: 'WAITING_FOR_PAYMENT',
+          totalItems: formData?.totalItems || 0,
+          totalWeight: formData?.totalWeight || 0,
+          totalPrice: formData?.totalPrice || 0,
+          totalShippingCost:
+            formData?.totalShippingCost || formData?.totalShipmentCost || 0,
+          totalShippingDiscount: formData?.totalShippingDiscount || 0,
+          totalPayment:
+            formData?.totalPayment || formData?.totalCalculatedBill || 0,
+          totalBillPayment: Number(billAmount) || 0,
+          paymentRecord: {
+            create: {
+              status: 'PENDING',
+              amountDue: Number(billAmount) || 0,
+              amountPaid: 0,
+            },
+          },
         },
       })
 
-    const updatedCart = await prisma.businessOrder.update({
-      where: {
-        id: businessOrder.id,
-      },
-      include: {
-        paymentMethod: true,
-        paymentRecord: true,
-        virtualAccountNumber: true,
-      },
-      data: {
-        status: 'WAITING_FOR_PAYMENT',
-        totalItems: formData?.totalItems || 0,
-        totalWeight: formData?.totalWeight || 0,
-        totalPrice: formData?.totalPrice || 0,
-        totalShippingCost:
-          formData?.totalShippingCost || formData?.totalShipmentCost || 0,
-        totalShippingDiscount: formData?.totalShippingDiscount || 0,
-        totalPayment:
-          formData?.totalPayment || formData?.totalCalculatedBill || 0,
-        totalBillPayment: Number(billAmount) || 0,
-        paymentRecord: {
-          create: {
-            status: 'PENDING',
-            amountDue: Number(billAmount) || 0,
-            amountPaid: 0,
-          },
-        },
-      },
-    })
-
-    res.status(200).json({
-      message:
-        'Process my order with Virtual Account success, order is waiting for payment, payment record is pending',
-      // ownerId,
-      // isCartExist,
-      virtualAccountNumber: createdVirtualAccountNumber,
-      businessOrder: updatedCart,
-    })
+      res.status(200).json({
+        message:
+          'Process my order with virtual account success, order is waiting for payment, payment record is pending',
+        virtualAccountNumber: createdVirtualAccountNumber,
+        businessOrder: updatedCart,
+      })
+    } catch (error) {
+      res.status(500).json({
+        message: 'Process my order with virtual account failed',
+        error,
+      })
+    }
   } catch (error) {
     res.status(500).json({
-      message: 'Process my order with Virtual Account failed',
+      message:
+        'Process my order with virtual account failed because you have unpaid order by virtual account',
       error,
     })
   }
@@ -799,10 +906,14 @@ export const getAllBusinessOrders = async (req, res) => {
   try {
     const businessOrders: Partial<BusinessOrder>[] =
       await prisma.businessOrder.findMany({
-        orderBy: [{ updatedAt: 'desc' }],
+        orderBy: { updatedAt: 'desc' },
         include: {
           owner: true,
-          businessOrderItems: true,
+          businessOrderItems: {
+            include: {
+              supplierProduct: true,
+            },
+          },
           shipmentAddress: true,
           paymentMethod: true,
           paymentRecord: true,
@@ -840,7 +951,13 @@ export const getOneBusinessOrder = async (req, res) => {
           businessOrderItems: {
             include: {
               supplier: true,
-              supplierProduct: true,
+              supplierProduct: {
+                include: {
+                  couriers: { include: { courier: true } },
+                },
+              },
+              courier: true,
+              courierVehicle: true,
             },
           },
           shipmentAddress: true,
@@ -989,6 +1106,45 @@ export const patchOneBusinessOrderStatusToPaid = async (req, res) => {
   }
 }
 
+// Patch one business order item status businessOrderItem (id)
+export const patchOneBusinessOrderItemStatus = async (req, res) => {
+  const { businessOrderItemId } = req.params
+  const { status } = req.body
+
+  try {
+    const businessOrderItem = await prisma.businessOrderItem.findUnique({
+      where: {
+        id: businessOrderItemId,
+      },
+    })
+
+    if (!businessOrderItem) throw new Error('Business order item not found')
+
+    const updatedBusinessOrderItem = await prisma.businessOrderItem.update({
+      where: {
+        id: businessOrderItemId,
+      },
+      data: {
+        status: status,
+      },
+      include: {
+        supplierProduct: true,
+        businessOrder: true,
+      },
+    })
+
+    res.status(200).json({
+      message: 'Patch one business order item status success',
+      updatedBusinessOrderItem,
+    })
+  } catch (error) {
+    res.status(404).json({
+      message:
+        'Patch one business order item status failed, because it is not found',
+    })
+  }
+}
+
 // Delete all business orders
 export const deleteAllBusinessOrders = async (req, res) => {
   try {
@@ -1069,8 +1225,6 @@ export const checkMyCart = async (req, res, next) => {
         },
         include: {
           shipmentAddress: true,
-          shipmentCourier: true,
-          shipmentCourierVehicle: true,
           paymentMethod: true,
           paymentRecord: true,
           virtualAccountNumber: true,

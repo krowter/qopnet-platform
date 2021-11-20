@@ -2,37 +2,30 @@
  * https://prisma.io/docs/guides/database/seed-database#seeding-your-database-with-typescript
  */
 
-import {
-  PrismaClient,
-  User,
-  Profile,
-  Address,
-  Courier,
-  CourierVehicle,
-  PaymentMethod,
-  PaymentRecord,
-  Supplier,
-  SupplierProduct,
-} from '@prisma/client'
+import { PrismaClient, SupplierProduct } from '@prisma/client'
 const prisma = new PrismaClient()
 
-import usersDevData from './data/users-dev.json'
-import usersStgData from './data/users-stg.json'
-import usersPrdData from './data/users-prd.json'
-import profilesDevData from './data/profiles-dev.json'
-import profilesStgData from './data/profiles-stg.json'
-import profilesPrdData from './data/profiles-prd.json'
-import addressesData from './data/addresses.json'
-import suppliersData from './data/suppliers.json'
-import businessOrdersData from './data/business-orders.json'
 import couriersData from './data/couriers.json'
 import courierVehiclesData from './data/courier-vehicles.json'
 import paymentMethodsData from './data/payments-methods.json'
 import paymentRecordsData from './data/payments-records.json'
 
+import usersDevData from './data/users-dev.json'
+import usersStgData from './data/users-stg.json'
+import usersPrdData from './data/users-prd.json'
+
+import profilesDevData from './data/profiles-dev.json'
+import profilesStgData from './data/profiles-stg.json'
+import profilesPrdData from './data/profiles-prd.json'
+
+import addressesData from './data/addresses.json'
+import suppliersData from './data/suppliers.json'
+
 import supplierProductsQopnetData from './data/supplier-products-qopnet.json'
 import supplierProductsAnekaBusaData from './data/supplier-products-anekabusa.json'
 import supplierProductsArdenaData from './data/supplier-products-ardena.json'
+
+import businessOrdersData from './data/business-orders.json'
 
 import promoEmployerData from './data/qopnet-promo-employer.json'
 import promoEmployeeData from './data/qopnet-promo-employee.json'
@@ -44,17 +37,6 @@ console.info({ env: process.env.NX_NODE_ENV })
 
 // Get storageUrl from env
 const storageUrl = process.env.NX_SUPABASE_URL
-
-// Default user for all environments: qopnetlabs@gmail.com
-// Set profile.id
-const qopnetlabsProfileId = 'ckr86vmxt005010pjeh4mqs6n'
-// Set id based on the environment
-const qopnetlabsUserId =
-  process.env.NX_NODE_ENV === 'production'
-    ? 'cb0a71e6-da95-4631-acc0-bbd3f0d39e5c' // production
-    : process.env.NX_NODE_ENV === 'staging'
-    ? '4f312b35-1554-4283-9d75-cd10d48cdfe7' // staging
-    : 'b09ea7f6-27aa-44ce-9354-68ed5bfdd195' // development
 
 // -----------------------------------------------------------------------------
 
@@ -73,8 +55,13 @@ async function deleteEverything() {
   await prisma.businessOrderItem.deleteMany()
   await prisma.businessOrder.deleteMany()
 
+  await prisma.couriersOnSupplierProducts.deleteMany()
+
   await prisma.supplier.deleteMany()
   await prisma.supplierProduct.deleteMany()
+
+  await prisma.courier.deleteMany()
+  await prisma.courierVehicle.deleteMany()
 
   await prisma.merchant.deleteMany()
   await prisma.merchantProduct.deleteMany()
@@ -82,9 +69,6 @@ async function deleteEverything() {
   await prisma.financingService.deleteMany()
   await prisma.fundBeneficiary.deleteMany()
   await prisma.fundBenefactor.deleteMany()
-
-  await prisma.courier.deleteMany()
-  await prisma.courierVehicle.deleteMany()
 
   await prisma.paymentMethod.deleteMany()
   await prisma.paymentRecord.deleteMany()
@@ -101,45 +85,56 @@ async function deleteEverything() {
 // -----------------------------------------------------------------------------
 
 async function createSupplierProducts({
-  data, // JSON data
+  data: supplierProducts, // JSON data
   supplier,
 }: {
   data: any
   supplier: any
 }) {
-  // Map to put the ownerId and supplierId per product
-  data = data.map((product: SupplierProduct) => {
+  const defaultCourier = await prisma.courier.findFirst({
+    where: { name: 'Deliveree' },
+  })
+  // console.info({ defaultCourier })
+
+  // Loop over to put custom field per product
+  supplierProducts.forEach(async (product) => {
     product.ownerId = supplier.ownerId
     product.supplierId = supplier.id
-    return product
+    product.couriers = {
+      create: { courier: { connect: { id: defaultCourier?.id } } },
+    }
+
+    console.info(product.slug)
+    await prisma.supplierProduct.create({ data: product })
   })
 
-  // Create Qopnet supplier products
-  const qopnetSupplierProducts = await prisma.supplierProduct.createMany({
-    data: data,
-    skipDuplicates: true,
-  })
-
-  // console.info({ qopnetSupplierProducts })
+  // console.info({ message })
 }
 
 /* 
   Dynamic environment aware to generate the image url automatically
 */
 async function createSupplierProductsDynamic({
-  data,
+  data: supplierProducts, // JSON data
   supplier,
 }: {
   data: any
   supplier: any
 }) {
-  // Add id and update storage url based on environment
-  const products = data.map((product: any) => {
+  const defaultCourier = await prisma.courier.findFirst({
+    where: { name: 'Kurir toko sendiri' },
+  })
+
+  // Loop over to put custom field per product
+  supplierProducts.forEach(async (product) => {
     product.ownerId = supplier.ownerId
     product.supplierId = supplier.id
+    product.couriers = {
+      create: { courier: { connect: { id: defaultCourier?.id } } },
+    }
 
     // Image URL example
-    // https://rryitovbrajppywbpmit.supabase.co/storage/v1/object/public/images/anekabusa/AB-001.jpeg
+    // https://abcdefghijklmno.supabase.co/storage/v1/object/public/images/supplier-name/XX-000.jpeg
     if (product.images) {
       product.images = product.images.map(
         (image: string) =>
@@ -147,12 +142,10 @@ async function createSupplierProductsDynamic({
       )
     }
 
-    return product
-  })
-
-  await prisma.supplierProduct.createMany({
-    data: products,
-    skipDuplicates: true,
+    console.info(product.slug)
+    await prisma.supplierProduct.create({
+      data: product,
+    })
   })
 }
 
@@ -341,19 +334,21 @@ async function main() {
   await deleteEverything()
 
   // Seed data
+  await seedCouriers()
+  // await seedCourierVehicles()
+
   await seedUsers()
   await seedProfiles()
-  await seedAddresses()
 
   await seedSuppliers()
+
+  await seedAddresses()
+
   await seedQopnetProducts()
   await seedAnekaBusaProducts()
   await seedArdenaProducts()
 
   await seedBusinessOrder()
-
-  await seedCouriers()
-  await seedCourierVehicles()
 
   await seedPaymentMethods()
   await seedPaymentRecords()

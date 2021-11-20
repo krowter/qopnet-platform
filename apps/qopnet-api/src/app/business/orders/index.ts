@@ -21,6 +21,21 @@ router.get(
   businessOrder.getMyCart
 )
 
+// GET /api/business/orders/items/paid/:supplierHandle
+router.get(
+  '/items/paid/:supplierHandle',
+  auth.checkUser,
+  businessOrder.getAllPaidBusinessOrderItems
+)
+
+// GET /api/business/orders/items/paid/:supplierHandle
+
+router.get(
+  '/items/paid/:supplierHandle/:businessOrderItemId',
+  auth.checkUser,
+  businessOrder.getOnePaidBusinessOrderItem
+)
+
 // POST /api/business/orders/my/cart
 router.post(
   '/my/cart',
@@ -52,14 +67,6 @@ router.patch(
   auth.checkUser,
   businessOrder.checkMyCart,
   businessOrder.patchMyCartAddress
-)
-
-// PATCH /api/business/orders/my/cart/courier
-router.patch(
-  '/my/cart/courier',
-  auth.checkUser,
-  businessOrder.checkMyCart,
-  businessOrder.patchMyCartCourier
 )
 
 // PATCH /api/business/orders/my/cart/payment/method
@@ -107,6 +114,27 @@ router.patch(
   auth.checkUser,
   businessOrder.checkOneBusinessOrder,
   businessOrder.patchOneBusinessOrderStatusToPaid
+)
+
+// PATCH /api/business/orders/my/cart/courier
+router.patch(
+  '/items/:businessOrderItemId/courier',
+  auth.checkUser,
+  businessOrder.patchOneBusinessOrderItemCourier
+)
+
+// PATCH /api/business/orders/items/:businessOrderItemId
+router.patch(
+  '/items/:businessOrderItemId/status',
+  auth.checkUser,
+  businessOrder.patchOneBusinessOrderItemStatus
+)
+
+// PATCH /api/business/orders/items/:businessOrderItemId/courier
+router.patch(
+  '/items/:businessOrderItemId/courier',
+  auth.checkUser,
+  businessOrder.patchOneBusinessOrderItemCourier
 )
 
 // DELETE /api/business/orders
