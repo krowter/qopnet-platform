@@ -33,6 +33,8 @@ export const getMyAllBusinessOrders = async (req, res) => {
                   },
                 },
               },
+              courier: true,
+              courierVehicle: true,
             },
           },
           shipmentAddress: true,
@@ -87,7 +89,11 @@ export const getOnePaidBusinessOrderItem = async (req, res) => {
             shipmentAddress: true,
           },
         },
-        supplierProduct: true,
+        supplierProduct: {
+          include: {
+            couriers: { include: { courier: true } },
+          },
+        },
         supplier: true,
         courier: true,
         courierVehicle: true,
@@ -176,12 +182,19 @@ export const getMyCart = async (req, res) => {
     const businessOrder: Partial<BusinessOrder> & {
       businessOrderItems: BusinessOrderItem[]
     } = await prisma.businessOrder.findFirst({
-      where: { ownerId, status: 'DRAFT' },
+      where: {
+        ownerId,
+        status: 'DRAFT',
+      },
       include: {
         owner: true,
         businessOrderItems: {
           include: {
-            supplierProduct: true,
+            supplierProduct: {
+              include: {
+                couriers: { include: { courier: true } },
+              },
+            },
             supplier: {
               include: {
                 addresses: {
@@ -310,7 +323,11 @@ export const updateMyCart = async (req, res) => {
           include: {
             businessOrderItems: {
               include: {
-                supplierProduct: true,
+                supplierProduct: {
+                  include: {
+                    couriers: { include: { courier: true } },
+                  },
+                },
                 supplier: {
                   include: {
                     addresses: {
@@ -320,6 +337,8 @@ export const updateMyCart = async (req, res) => {
                     },
                   },
                 },
+                courier: true,
+                courierVehicle: true,
               },
             },
           },
@@ -932,7 +951,13 @@ export const getOneBusinessOrder = async (req, res) => {
           businessOrderItems: {
             include: {
               supplier: true,
-              supplierProduct: true,
+              supplierProduct: {
+                include: {
+                  couriers: { include: { courier: true } },
+                },
+              },
+              courier: true,
+              courierVehicle: true,
             },
           },
           shipmentAddress: true,

@@ -12,6 +12,8 @@ import {
   StackDivider,
   Text,
   useColorModeValue,
+  FormControl,
+  Select,
 } from '@chakra-ui/react'
 import { mutate } from 'swr'
 
@@ -143,7 +145,7 @@ export const ShipmentContainer = ({ businessOrder }) => {
   return (
     <Stack flex={1} minW="420px" spacing={10}>
       <AddressesContainer businessOrder={businessOrder} />
-      <CouriersContainer businessOrder={businessOrder} />
+      {/* <CouriersContainer businessOrder={businessOrder} /> */}
       <BusinessOrderItemsContainer businessOrder={businessOrder} />
     </Stack>
   )
@@ -240,80 +242,6 @@ export const AddressesContainer = ({ businessOrder }) => {
   )
 }
 
-export const CouriersContainer = ({ businessOrder }) => {
-  // Fetch couriers
-  const { data, error } = useSWR('/api/couriers')
-  const { couriers } = data || {}
-
-  // Display couriers
-  const [availableCouriers, setAvailableCouriers] = useState([])
-  const [selectedCourierId, setSelectedCourierId] = useState('')
-
-  // Only set couriers once data has been retrieved
-  useEffect(() => {
-    if (!error && data && couriers) {
-      setAvailableCouriers(couriers)
-      // When no courier selected yet, select the first one automatically
-      setSelectedCourierId(
-        businessOrder?.shipmentCourier?.id || availableCouriers[0]?.id
-      )
-      if (!businessOrder?.shipmentCourier?.id) {
-        patchCartWithCourier(availableCouriers[0]?.id)
-      }
-    }
-  }, [businessOrder, error, data, couriers, availableCouriers])
-
-  // Handle select courier option with just courier id
-  const handleSelectCourierOption = async (courierId) => {
-    setSelectedCourierId(courierId)
-    patchCartWithCourier(courierId)
-  }
-
-  const patchCartWithCourier = (courierId) => {
-    mutate('/api/business/orders/my/cart', async (data) => {
-      const response = await requestToAPI(
-        'PATCH',
-        '/api/business/orders/my/cart/courier',
-        { id: courierId }
-      )
-      return {
-        ...data,
-        shipmentCourier: response?.businessOrder?.shipmentCourier,
-      }
-    })
-  }
-
-  return (
-    <Stack>
-      <Heading as="h3" size="md">
-        Pilih kurir pengiriman:
-      </Heading>
-      <Stack>
-        {/* {error && <div>Gagal memuat pilihan kurir pengiriman</div>} */}
-        {!error && !data && <div>Memuat pilihan kurir pengiriman...</div>}
-        {!error && data && availableCouriers?.length < 1 && (
-          <Stack>
-            <Text>Belum ada pilihan kurir pengiriman yang tersedia.</Text>
-          </Stack>
-        )}
-        {availableCouriers?.length > 0 &&
-          availableCouriers?.map((courier) => {
-            return (
-              <OptionBox
-                key={courier.id}
-                id={`courier-${courier.id}`}
-                selected={selectedCourierId === courier.id}
-                onClick={() => handleSelectCourierOption(courier.id)}
-              >
-                <Text>{courier.name}</Text>
-              </OptionBox>
-            )
-          })}
-      </Stack>
-    </Stack>
-  )
-}
-
 export const BusinessOrderItemsContainer = ({ businessOrder }) => {
   return (
     <Stack>
@@ -342,6 +270,16 @@ export const BusinessOrderItem = ({ item }) => {
     item.supplierProduct?.price -
     item.supplierProduct?.price * (item.supplierProduct?.discount / 100)
   const itemCalculatedPrice = item.quantity * itemDiscountedPrice
+
+  const handleCourierChange = (event) => {
+    if (event.target.value) {
+      const index = event.target.selectedIndex
+      const optionElement = event.target.childNodes[index]
+      const courierId = optionElement.getAttribute('id')
+
+      console.log(event.target.value, courierId)
+    }
+  }
 
   return (
     <Stack spacing={5}>
@@ -408,6 +346,21 @@ export const BusinessOrderItem = ({ item }) => {
           </Text>
         </Box>
       </Stack>
+
+      <FormControl>
+        <Select
+          placeholder="Pilih kurir"
+          onChange={(event) => handleCourierChange(event)}
+        >
+          {item?.supplierProduct?.couriers.map((courier) => {
+            return (
+              <option id={courier?.courier?.id} value={courier?.courier?.name}>
+                {courier?.courier?.name}
+              </option>
+            )
+          })}
+        </Select>
+      </FormControl>
     </Stack>
   )
 }
