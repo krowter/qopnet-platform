@@ -16,7 +16,7 @@
     "build": "prisma generate && nx build",
     "build:api": "prisma generate && nx build qopnet-api",
     "build:admin": "prisma generate && nx build qopnet-admin",
-    "build:commerce": "prisma generate && nx build qopnet-commerce",
+    "build:commerce": "prisma generate && bash apps/qopnet-commerce/build.sh",
     "start": "npm run start:api",
     "start:api": "node dist/apps/qopnet-api/main --port=4000",
     "start:admin": "serve dist/apps/qopnet-admin",
