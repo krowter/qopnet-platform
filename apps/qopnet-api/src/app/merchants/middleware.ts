@@ -16,6 +16,7 @@ export const getAllMerchants = async (req, res) => {
   try {
     const merchants: Partial<Merchant>[] = await prisma.merchant.findMany({
       ...merchantFields,
+      orderBy: { updatedAt: 'desc' },
     })
 
     res.send({

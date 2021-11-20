@@ -3,7 +3,7 @@ import { prisma } from '@qopnet/util-prisma'
 // Get all Users
 export const getAllUsers = async (req, res) => {
   try {
-    const users = await prisma.user.findMany({})
+    const users = await prisma.user.findMany({ orderBy: { updatedAt: 'desc' } })
 
     res.status(200).json({
       message: 'Get all users success',

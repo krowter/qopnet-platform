@@ -42,7 +42,7 @@ export const getMyAllBusinessOrders = async (req, res) => {
           paymentRecord: true,
           virtualAccountNumber: true,
         },
-        orderBy: [{ updatedAt: 'asc' }],
+        orderBy: { updatedAt: 'desc' },
       })
 
     res.send({
@@ -145,9 +145,7 @@ export const getAllPaidBusinessOrderItems = async (req, res) => {
         supplierProduct: true,
         supplier: true,
       },
-      orderBy: {
-        updatedAt: 'desc',
-      },
+      orderBy: { updatedAt: 'desc' },
     })
 
     res.send({
@@ -908,7 +906,7 @@ export const getAllBusinessOrders = async (req, res) => {
   try {
     const businessOrders: Partial<BusinessOrder>[] =
       await prisma.businessOrder.findMany({
-        orderBy: [{ updatedAt: 'desc' }],
+        orderBy: { updatedAt: 'desc' },
         include: {
           owner: true,
           businessOrderItems: {

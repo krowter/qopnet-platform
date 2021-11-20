@@ -15,6 +15,7 @@ export const getAllSuppliers = async (req, res) => {
       },
       skip: req.skip,
       take: req.take,
+      orderBy: { updatedAt: 'desc' },
     })
 
     res.status(200).json({
