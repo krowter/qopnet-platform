@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 # update the library dependency of @prisma/client 
 # and typing for TypeScript
